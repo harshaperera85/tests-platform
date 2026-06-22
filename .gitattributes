@@ -1,0 +1,35 @@
+# Normalize all text to LF in the repo (critical: this repo is edited on Windows
+# but its files run inside Linux containers — CRLF breaks shell scripts,
+# entrypoints, and Dockerfiles with "\r: command not found").
+* text=auto eol=lf
+
+# Force LF for files that execute in Linux containers
+*.sh        text eol=lf
+*.bash      text eol=lf
+Dockerfile  text eol=lf
+*.dockerfile text eol=lf
+*.py        text eol=lf
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.json      text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.sql       text eol=lf
+*.md        text eol=lf
+*.R         text eol=lf
+*.r         text eol=lf
+
+# Windows-only scripts keep CRLF
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+
+# Binary assets — never normalize
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.parquet binary

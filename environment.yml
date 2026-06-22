@@ -1,0 +1,30 @@
+name: tests-platform
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - nodejs=20
+  - pip
+  - pip:
+      # --- backend (FastAPI) ---
+      - fastapi
+      - "uvicorn[standard]"
+      - "pydantic>=2"
+      - "sqlalchemy>=2"
+      - alembic
+      - "psycopg[binary]"
+      - redis
+      - rq
+      - httpx
+      - python-dotenv
+      # --- assembly engine (owned MIP) ---
+      - ortools
+      # --- dev / quality ---
+      - pytest
+      - pytest-asyncio
+      - ruff
+      - mypy
+# NOTE: R (mirt scoring service + TestDesign/eatATA oracle harness) runs in
+# Docker containers via docker-compose, NOT on the host. You do not need R or
+# Rtools installed locally. The frontend (React/TS/Vite) installs its own deps
+# via npm inside frontend/ (Node is provided here for tooling parity).

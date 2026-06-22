@@ -1,0 +1,43 @@
+# --- secrets / env (never commit) ---
+.env
+.env.*
+*.pem
+*.key
+secrets/
+**/credentials*.json
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# --- node / frontend ---
+node_modules/
+dist/
+.vite/
+*.local
+frontend/src/api/generated/   # orval-generated client (regenerated from OpenAPI)
+
+# --- R ---
+.Rproj.user/
+.Rhistory
+.RData
+
+# --- docker / data ---
+data/
+*.sqlite
+*.db
+pgdata/
+
+# --- IDE / OS ---
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
