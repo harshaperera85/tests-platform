@@ -1,0 +1,54 @@
+name: oracle-parity
+
+# Dev-only R-oracle parity gate: assemble a fixture with the owned OR-Tools engine
+# AND with eatATA, and assert identical selection + objective agreement (plan §14).
+# Kept OUT of the fast lint/type/test job (ci.yml) so it never slows every push —
+# it runs only when the assembly engine or the oracle image changes, on demand, and
+# weekly. GPL oracle packages live solely in the engines/oracle-r image, never at
+# runtime (CLAUDE.md golden rule 2).
+
+on:
+  push:
+    paths:
+      - "backend/app/assembly/**"
+      - "engines/oracle-r/**"
+      - "backend/requirements.txt"
+      - ".github/workflows/oracle-parity.yml"
+  pull_request:
+    paths:
+      - "backend/app/assembly/**"
+      - "engines/oracle-r/**"
+      - "backend/requirements.txt"
+      - ".github/workflows/oracle-parity.yml"
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 * * 1" # weekly, Monday 06:00 UTC
+
+jobs:
+  r-oracle-parity:
+    name: R-oracle parity (eatATA vs OR-Tools)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build oracle-r image (layer-cached)
+        uses: docker/build-push-action@v6
+        with:
+          context: . # repo root: backend/requirements.txt must be in context
+          file: engines/oracle-r/Dockerfile
+          load: true
+          tags: oracle-r:ci
+          cache-from: type=gha,scope=oracle-r
+          cache-to: type=gha,mode=max,scope=oracle-r
+
+      - name: Run R-oracle parity test (must not skip)
+        run: |
+          docker run --rm \
+            -e PYTHONDONTWRITEBYTECODE=1 \
+            -v "${{ github.workspace }}/backend:/app" \
+            -w /app \
+            oracle-r:ci \
+            pytest app/tests/regression/test_oracle_parity.py::test_mip_matches_r_oracle \
+              -q -p no:cacheprovider
