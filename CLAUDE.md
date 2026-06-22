@@ -13,6 +13,12 @@ configure the administration model (item selection, stopping rule, exposure, rou
 - **Do NOT build yet:** LOFT, MST, hybrids. They are fast-follow. The architecture must *accommodate*
   them, but no v1 implementation.
 
+## Dev environment
+Development runs on an **AWS EC2 Ubuntu instance with native Docker** (mirroring the CAT platform).
+The conda env (`tests-platform`) and Claude Code run **on the instance**; the local machine is used
+only for light editing + git. The full stack (`docker compose up`) runs **on the instance, never
+locally**. See `SETUP.md`.
+
 ## Golden rules (do not violate)
 1. **Extensibility via the contract.** Every administration model is a module implementing the
    `AdministrationStrategy` interface, registered via the registry. **Adding/changing a model must

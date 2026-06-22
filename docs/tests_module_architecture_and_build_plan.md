@@ -440,15 +440,15 @@ tests-platform/
 
 ## 13. Deployment path
 
-- **Build (now):** local docker-compose. Built to production standards (containerized, tested, CI,
-  migrations, observability) but run locally where Claude Code + Positron are fastest.
-- **Staging / load test:** single EC2 instance — needed to exercise concurrency, since the mirtCAT R
-  service is the scaling bottleneck (~1 request per container → scale containers for N concurrent
-  examinees).
+- **Development (now):** an **EC2 Ubuntu instance with native Docker** — development is offloaded from
+  the local machine to the instance, consistent with the CAT platform. Built to production standards
+  (containerized, tested, CI, migrations, observability), with the full docker-compose stack running
+  on the instance. See `SETUP.md`.
+- **Staging / load test:** scale the instance up (larger type) or add instances to exercise
+  concurrency, since the mirtCAT R service is the scaling bottleneck (~1 request per container →
+  scale containers for N concurrent examinees).
 - **Production:** managed AWS — RDS (Postgres), ElastiCache (Redis), ASG/ECS for services. Promotion
   is configuration, not re-architecture.
-- **Machine check:** confirm the dev box runs the full compose stack (Docker Desktop on WSL2,
-  ~16 GB+ RAM comfortable). If tight, lean on EC2 earlier.
 
 ---
 

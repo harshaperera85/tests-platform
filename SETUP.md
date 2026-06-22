@@ -1,51 +1,109 @@
-# SETUP — Tests Platform
+# SETUP — Tests Platform (AWS EC2 development)
 
-Run-once setup for the monorepo. Do this in your Positron terminal.
+Development runs on an **AWS EC2 Ubuntu instance with native Docker** — not the local Windows
+machine. The instance mirrors the CAT platform's environment; your laptop is used only for light
+editing + git, while the conda env, Claude Code, and the full `docker compose` stack all run on the
+instance. This is a run-once setup guide; do it top to bottom.
 
-## 1. Prerequisites (install if missing)
-- **conda** (Miniconda/Anaconda) — you have this.
-- **Docker Desktop** with the **WSL2** backend (runs the full compose stack: postgres, redis,
-  backend, frontend, scoring-r). ~16 GB+ RAM recommended.
-- **Git** — you have this.
-- That's it for the host. **R is NOT installed locally** — the mirt scoring service and the
-  TestDesign/eatATA oracle harness run in containers. OR-Tools installs via pip in the conda env.
+## 1. Prerequisites
+- **An AWS account** with permission to launch EC2 instances.
+- **An SSH client** on your laptop (built into Windows 10/11, macOS, and Linux).
+- **A Claude Code-eligible account** (Claude subscription or API access) to run Claude Code on the
+  instance.
+- **Use the same AWS region as the CAT platform** — keeps the mirtCAT R service and neural services
+  close (low latency) and simplifies networking.
 
-## 2. Create the project directory + drop in these files
-Put the four scaffold files at the repo root, and the plan in `docs/`:
-```
-tests-platform/
-  environment.yml
-  .gitignore
-  CLAUDE.md
-  SETUP.md
-  docs/tests_module_architecture_and_build_plan.md
-```
+## 2. Launch the instance
+In the EC2 console, launch an instance with:
+- **AMI:** Ubuntu Server **24.04 LTS** (x86_64).
+- **Instance type:** **t3.xlarge** recommended (4 vCPU / 16 GB), **t3.large** minimum
+  (2 vCPU / 8 GB). The full compose stack (postgres, redis, backend, frontend, scoring-r) plus
+  Claude Code is comfortable at xlarge.
+- **Key pair:** create or select one; download the `.pem` and keep it safe — you SSH with it.
+- **Security group:** allow **SSH (port 22) from My IP only**. Do not open it to the world. The app
+  ports are reached via SSH tunnels (§9), so they need not be opened in the security group.
+- **Storage:** **50 GB gp3** (Docker images + conda env + repo need headroom).
+- **Elastic IP (optional but recommended):** associate one so the public IP survives stop/start. See
+  cost/lifecycle notes (§10).
+
+## 3. Connect
+From your laptop:
 ```bash
-mkdir tests-platform && cd tests-platform
-mkdir docs
-# copy environment.yml, .gitignore, CLAUDE.md, SETUP.md into ./
-# copy the plan into ./docs/
+ssh -i <key.pem> ubuntu@<PUBLIC_IP>
+```
+(`chmod 400 <key.pem>` first on macOS/Linux if SSH complains about key permissions.)
+
+## 4. Provision the instance
+Run these on the instance over SSH.
+
+Base packages:
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y git build-essential
 ```
 
-## 3. Create the conda environment
+Docker (native — the engine runs on Linux directly, no Docker Desktop):
+```bash
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+```
+Log out and back in (or `newgrp docker`) so the group change takes effect, then verify with
+`docker run hello-world`.
+
+Miniconda:
+```bash
+curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o ~/miniconda.sh
+bash ~/miniconda.sh -b -p ~/miniconda
+~/miniconda/bin/conda init bash
+```
+Re-open the shell so `conda` is on PATH.
+
+Claude Code:
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+Ensure `~/.local/bin` is on PATH (add `export PATH="$HOME/.local/bin:$PATH"` to `~/.bashrc` if
+needed), then run `claude` once to authenticate.
+
+## 5. Clone the repo (SSH deploy key)
+Generate a deploy key on the instance and add its public half to the GitHub repo
+(**Settings → Deploy keys**):
+```bash
+ssh-keygen -t ed25519 -C "ec2-tests-platform" -f ~/.ssh/id_ed25519 -N ""
+cat ~/.ssh/id_ed25519.pub   # paste this into GitHub → Deploy keys
+```
+Then clone over SSH:
+```bash
+git clone git@github.com:<you>/tests-platform.git
+cd tests-platform
+```
+
+## 6. Create the conda environment
 ```bash
 conda env create -f environment.yml
 conda activate tests-platform
 ```
 
-## 4. Initialize git and push
-Create an empty **private** repo on GitHub first (e.g. `tests-platform`), then:
-```bash
-git init
-git add .
-git commit -m "chore: project scaffold (env, gitignore, CLAUDE.md, plan)"
-git branch -M main
-git remote add origin https://github.com/<you>/tests-platform.git
-git push -u origin main
-```
+## 7. Run Phase 0 in Claude Code
+From the repo root on the instance, launch Claude Code and paste the Phase 0 kickoff prompt below.
+Docker is **native** here, so run the **full Phase 0** — including `docker compose up`. There is no
+step to skip; the full stack comes up on the instance, never on your laptop.
 
-## 5. Start the build in Claude Code (CLI)
-From the repo root, launch Claude Code and paste the Phase 0 kickoff prompt below.
+## 8. Access the running app from your laptop
+The app ports are not exposed publicly; reach them through SSH tunnels:
+```bash
+ssh -i <key.pem> -L 5173:localhost:5173 -L 8000:localhost:8000 ubuntu@<PUBLIC_IP>
+```
+Then open `http://localhost:5173` (frontend) and `http://localhost:8000` (backend) in your laptop
+browser — the traffic is forwarded to the instance.
+
+## 9. Cost & lifecycle hygiene
+- **Stop the instance when idle.** You pay for compute while it is running; stopped instances cost
+  only for EBS storage.
+- **The public IP changes on stop/start** unless you attached an **Elastic IP** (§2). With an
+  Elastic IP your `ssh`/tunnel commands stay constant.
+- **Resize** by stop → change instance type → start (e.g. t3.large ↔ t3.xlarge). The instance must
+  be stopped to change its type.
 
 ---
 
