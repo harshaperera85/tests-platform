@@ -1,0 +1,2 @@
+# The generated Orval client lands in src/api/generated/ (gitignored, regenerated
+# from the backend OpenAPI). Hand-written API helpers may live elsewhere in src/api/.

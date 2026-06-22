@@ -1,0 +1,14 @@
+# Runtime deps for the backend container image. The canonical dev environment is
+# the conda env (../environment.yml); this file pins what the Docker image needs.
+fastapi
+uvicorn[standard]
+pydantic>=2
+pydantic-settings>=2
+sqlalchemy>=2
+alembic
+psycopg[binary]
+redis
+rq
+httpx
+python-dotenv
+ortools

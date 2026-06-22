@@ -1,0 +1,43 @@
+[project]
+name = "tests-platform-backend"
+version = "0.1.0"
+description = "Tests Platform — assembly + administration engine backend."
+requires-python = ">=3.12"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+src = ["."]
+
+[tool.ruff.lint]
+# pycodestyle, pyflakes, isort, bugbear, pyupgrade, simplify
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests reach into registry internals and use loose annotations deliberately.
+"app/tests/**" = ["ANN", "SLF001"]
+
+[tool.mypy]
+python_version = "3.12"
+plugins = ["pydantic.mypy"]
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+# Alembic versions are generated and not worth typing strictly.
+exclude = ["alembic/versions/"]
+
+[[tool.mypy.overrides]]
+module = ["app.tests.*"]
+ignore_errors = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["app/tests"]
+addopts = "-q"
+markers = [
+    "unit: fast isolated tests",
+    "integration: cross-component tests",
+    "contract: API/schema contract tests",
+    "regression: guard against known regressions",
+]

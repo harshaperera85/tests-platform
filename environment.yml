@@ -10,6 +10,7 @@ dependencies:
       - fastapi
       - "uvicorn[standard]"
       - "pydantic>=2"
+      - "pydantic-settings>=2"
       - "sqlalchemy>=2"
       - alembic
       - "psycopg[binary]"
