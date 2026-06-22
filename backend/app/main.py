@@ -12,6 +12,7 @@ from fastapi import FastAPI
 from app import __version__
 from app.api.v1.router import api_router
 from app.core.config import settings
+from app.engine import strategies as _strategies  # noqa: F401  (registers strategies)
 
 
 def create_app() -> FastAPI:

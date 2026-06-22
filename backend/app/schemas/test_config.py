@@ -12,13 +12,33 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, Field
 
 
+class LinearNavigationConfig(BaseModel):
+    """How a test-taker may move through a linear form."""
+
+    can_review: bool = True
+    can_skip: bool = False
+    can_navigate_back: bool = True
+
+
+class LinearScoringConfig(BaseModel):
+    """How a completed linear form is scored on the canonical theta metric."""
+
+    method: Literal["eap"] = "eap"
+
+
 class LinearConfig(BaseModel):
-    """Linear fixed-form configuration (placeholder fields for Phase 0)."""
+    """Linear fixed-form configuration (Phase 1).
+
+    Either ``form_ref`` (a pre-assembled form) or ``assembly_request_id`` (a form
+    built from a blueprint) supplies the items; navigation/scoring control delivery.
+    """
 
     administration_model: Literal["linear"] = "linear"
     # A pre-assembled form, or an assembly request to build one from a blueprint.
     form_ref: str | None = None
     assembly_request_id: str | None = None
+    navigation: LinearNavigationConfig = Field(default_factory=LinearNavigationConfig)
+    scoring: LinearScoringConfig = Field(default_factory=LinearScoringConfig)
 
 
 class CatConfig(BaseModel):

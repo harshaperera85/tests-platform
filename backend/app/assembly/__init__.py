@@ -1,7 +1,43 @@
-"""Owned assembly engine (OR-Tools / CP-SAT).
+"""Owned assembly engine (OR-Tools / CP-SAT) — plan §6.
 
 Assembly is owned in Python (CLAUDE.md golden rule 2). TestDesign / eatATA (R) are
-dev-time validation oracles only, never a runtime dependency. Empty in Phase 0 —
-the blueprint compiler, CP-SAT model, objectives, strategies, and oracle harness
-land in Phase 1.
+dev-time validation oracles only (see ``oracles/``), never a runtime dependency.
+
+Public entry point: :func:`assemble`, the one call the rest of the backend (the
+LinearStrategy, the assembly-job worker/endpoint) uses to turn a blueprint + pool
+into selected forms via a named strategy.
 """
+
+from __future__ import annotations
+
+from app.assembly.blueprint_compiler import CompiledProblem, compile_blueprint
+from app.assembly.result import AssemblyResult, FormSolution
+from app.assembly.strategies import available_strategies, get_assembly_strategy
+from app.psychometrics.bank import ItemPool
+from app.schemas.blueprint import Blueprint
+
+
+def assemble(
+    blueprint: Blueprint,
+    pool: ItemPool,
+    *,
+    strategy: str = "mip",
+    time_limit_s: float = 10.0,
+    seed: int = 0,
+) -> AssemblyResult:
+    """Compile a blueprint against a pool and assemble form(s) with ``strategy``."""
+    problem = compile_blueprint(blueprint, pool)
+    return get_assembly_strategy(strategy).assemble(
+        problem, time_limit_s=time_limit_s, seed=seed
+    )
+
+
+__all__ = [
+    "AssemblyResult",
+    "CompiledProblem",
+    "FormSolution",
+    "assemble",
+    "available_strategies",
+    "compile_blueprint",
+    "get_assembly_strategy",
+]

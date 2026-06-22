@@ -15,3 +15,19 @@ def test_openapi_served(client: TestClient) -> None:
     schema = resp.json()
     assert schema["openapi"].startswith("3.")
     assert "/api/v1/health" in schema["paths"]
+
+
+def test_phase1_paths_present(client: TestClient) -> None:
+    """The Phase 1 resource paths Orval generates the client from (plan §9)."""
+    paths = client.get("/openapi.json").json()["paths"]
+    assert "/api/v1/blueprints" in paths
+    assert "/api/v1/blueprints/{blueprint_id}" in paths
+    assert "/api/v1/assembly-jobs" in paths
+    assert "/api/v1/assembly-jobs/{job_id}" in paths
+    assert "/api/v1/forms/{form_id}" in paths
+
+
+def test_blueprint_schema_exposed(client: TestClient) -> None:
+    """The Blueprint schema must be named in components for Zod generation."""
+    schema = client.get("/openapi.json").json()
+    assert "Blueprint" in schema["components"]["schemas"]

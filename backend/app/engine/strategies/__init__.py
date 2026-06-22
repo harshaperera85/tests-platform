@@ -1,6 +1,13 @@
 """Administration-model strategies.
 
-One file per model (``linear.py``, ``cat.py``, later ``loft.py``, ``mst.py``).
-Each implements ``AdministrationStrategy`` and self-registers via ``@register``.
-Empty in Phase 0 — concrete strategies arrive in Phase 1 (Linear) and Phase 2 (CAT).
+One file per model (``linear.py``, later ``cat.py``, ``loft.py``, ``mst.py``). Each
+implements ``AdministrationStrategy`` and self-registers via ``@register``. Importing
+this package registers all built-in strategies, so the engine can resolve them by
+``model_type``.
 """
+
+from __future__ import annotations
+
+from app.engine.strategies import linear  # noqa: F401  (registers LinearStrategy)
+
+__all__ = ["linear"]
