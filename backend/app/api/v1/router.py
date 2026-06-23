@@ -16,10 +16,12 @@ from app.api.v1 import (
     pool,
     preview,
     scenarios,
+    tests,
 )
 
 api_router = APIRouter()
 api_router.include_router(health.router)
+api_router.include_router(tests.router)
 api_router.include_router(blueprints.router)
 api_router.include_router(assembly_jobs.router)
 api_router.include_router(forms.router)

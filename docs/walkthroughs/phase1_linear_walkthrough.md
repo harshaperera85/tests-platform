@@ -87,17 +87,19 @@ can comfortably hit a target around 8–12 information.
 
 ## Navigation (the IA)
 
-The app uses real routes:
-- **`/`** — **Test List (A-030)**: your tests (stored in this browser until a backend
-  tests resource lands). Click **+ New test** to create one and open its editor.
+The app uses real routes, **server-backed by the `tests` resource** (`/api/v1/tests`):
+- **`/`** — **Test List (A-030)**: tests persisted in the database. **+ New test**
+  creates one (`POST /tests`) and opens its editor.
 - **`/tests/:id/assembly`** — **Test Editor**, with tabs **Assembly (A-031)**,
-  **About (A-032)**, **Scoring (A-034)**, **History (A-033)**. Deep links work on refresh.
+  **About (A-032)**, **Scoring (A-034)**, **History (A-033)**. Deep links work on
+  refresh. The editor's **Save draft** persists the blueprint (`PATCH /tests/{id}`);
+  **Assemble** snapshots the draft and runs the engine (`POST /tests/{id}/assemble`).
+- The editor header has **Lock / Unlock / Duplicate** (status workflow).
 - **`/tests/:id/walk/:formId`** — the step-through walkthrough, reachable from the
   Assembly preview, the Scoring tab, or History.
 
-> A "test" is a client-side record pointing at the immutable blueprints/forms it
-> assembles; the Test List/History are local registries (a backend `tests` list
-> endpoint is a fast-follow).
+> A "test" owns an editable blueprint draft + its assembled forms (history), all
+> persisted server-side — drafts survive refresh and are visible across browsers.
 
 ## 1. Blueprint editor + assemble (Test Editor → Assembly tab, A-031)
 

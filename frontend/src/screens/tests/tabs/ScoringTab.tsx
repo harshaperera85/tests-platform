@@ -1,16 +1,13 @@
-// A-034 Scoring tab — the linear scoring model. Linear fixed-form scores via the
-// canonical θ metric (psychometrics): EAP over the answered items. A scored
-// walkthrough is reachable once a form is assembled.
+// A-034 Scoring tab — the linear scoring model + a scored walkthrough link.
 import { Link, useParams } from "react-router-dom";
 
+import { useListTestForms } from "../../../api/generated/endpoints/tests/tests";
 import { Button, Card, Pill } from "../../../components/ui";
-import { useTest } from "../../../lib/testStore";
 
 export function ScoringTab() {
   const { testId } = useParams();
-  const test = useTest(testId);
-  if (!test) return null;
-  const latestForm = test.forms[0];
+  const forms = useListTestForms(testId ?? "", { query: { enabled: Boolean(testId) } });
+  const latest = forms.data?.[0];
 
   return (
     <div className="space-y-5">
@@ -32,8 +29,8 @@ export function ScoringTab() {
       </Card>
 
       <Card title="Scored walkthrough" subtitle="Drive the engine and watch θ̂ converge.">
-        {latestForm ? (
-          <Link to={`/tests/${testId}/walk/${latestForm.formId}`}>
+        {latest ? (
+          <Link to={`/tests/${testId}/walk/${latest.id}`}>
             <Button>Open walkthrough →</Button>
           </Link>
         ) : (

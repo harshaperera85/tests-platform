@@ -2,16 +2,17 @@
 // editor (Assembly preview, Scoring, or History).
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Alert, Card } from "../../../components/ui";
-import { useTest } from "../../../lib/testStore";
+import { useListTestForms } from "../../../api/generated/endpoints/tests/tests";
+import { Alert, Card, Spinner } from "../../../components/ui";
 import { SessionNavigatorScreen } from "../SessionNavigatorScreen";
 
 export function WalkTab() {
   const { testId, formId } = useParams();
-  const test = useTest(testId);
+  const forms = useListTestForms(testId ?? "", { query: { enabled: Boolean(testId) } });
   const navigate = useNavigate();
-  const form = test?.forms.find((f) => f.formId === formId);
 
+  if (forms.isLoading) return <Card title="Walkthrough"><Spinner /></Card>;
+  const form = forms.data?.find((f) => f.id === formId);
   if (!testId || !formId || !form) {
     return (
       <Card title="Walkthrough">
@@ -23,7 +24,7 @@ export function WalkTab() {
   return (
     <SessionNavigatorScreen
       formId={formId}
-      poolId={form.poolId}
+      poolId={form.pool_id}
       onBack={() => navigate(`/tests/${testId}/assembly?form=${formId}`)}
     />
   );

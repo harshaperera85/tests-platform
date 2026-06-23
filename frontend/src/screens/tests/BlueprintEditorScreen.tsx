@@ -1,33 +1,42 @@
-// A-031 Test Editor — Assembly tab. Pick a simulated item pool, optionally load a
-// named demo scenario, edit the blueprint (content + TIF target + length + parallel
-// forms/exposure), and assemble. Inline validation, clear success/warning/error
-// states, tag-availability hints. All API calls go through generated hooks (golden
-// rule 5). Seeds from an optional draft and reports a rich result on assemble.
+// A-031 Test Editor — Assembly tab. Pick a pool, optionally load a scenario, edit
+// the blueprint, save the draft, and assemble — all against the server-backed test
+// (PATCH /tests/{id}, POST /tests/{id}/assemble). Generated client only (golden
+// rule 5).
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { useCreateAssemblyJob } from "../../api/generated/endpoints/assembly-jobs/assembly-jobs";
-import { useCreateBlueprint } from "../../api/generated/endpoints/blueprints/blueprints";
 import { useGetPoolCatalog, useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
 import { useListScenarios } from "../../api/generated/endpoints/scenarios/scenarios";
+import {
+  getGetTestQueryKey,
+  getListTestFormsQueryKey,
+  getListTestsQueryKey,
+  useAssembleTest,
+  useUpdateTest,
+} from "../../api/generated/endpoints/tests/tests";
 import type { Blueprint, ScenarioRead } from "../../api/generated/model";
 import { Alert, Button, Card, Field, Pill, Select, Spinner, TextInput } from "../../components/ui";
-import type { ConstraintDraft, EditorDraft } from "../../lib/testStore";
 
-export type AssembledResult = {
-  blueprintId: string;
-  formId: string;
-  jobId: string;
-  poolId: string;
-  status: string;
-  nForms: number;
-  draft: EditorDraft;
+type ConstraintRow = {
+  tag_type: string;
+  tag_value: string;
+  minimum: string;
+  maximum: string;
 };
-
 type Method = "minimax" | "maximin";
 
-const DEFAULT_DRAFT: EditorDraft = {
-  name: "linear-demo",
-  poolId: "demo_mixed",
+type Fields = {
+  length: string;
+  numForms: string;
+  maxUse: string;
+  thetaText: string;
+  infoText: string;
+  tolerance: string;
+  method: Method;
+  constraints: ConstraintRow[];
+};
+
+const DEFAULT_FIELDS: Fields = {
   length: "20",
   numForms: "1",
   maxUse: "",
@@ -51,34 +60,64 @@ const numOrUndef = (s: string): number | undefined => {
   return Number.isNaN(n) ? undefined : n;
 };
 
+function fieldsFromBlueprint(bp: Blueprint): Fields {
+  const t = bp.statistical_target;
+  return {
+    length: String(bp.length),
+    numForms: String(bp.num_forms ?? 1),
+    maxUse:
+      bp.exposure_target?.max_use_per_item != null
+        ? String(bp.exposure_target.max_use_per_item)
+        : "",
+    thetaText: (t.theta_points ?? []).join(", "),
+    infoText: (t.target_info ?? []).join(", "),
+    tolerance: t.tolerance != null ? String(t.tolerance) : "",
+    method: (t.method as Method) ?? "minimax",
+    constraints: (bp.content_constraints ?? []).map((c) => ({
+      tag_type: c.tag_type,
+      tag_value: c.tag_value,
+      minimum: c.minimum != null ? String(c.minimum) : "",
+      maximum: c.maximum != null ? String(c.maximum) : "",
+    })),
+  };
+}
+
 export function BlueprintEditorScreen({
-  initialDraft,
+  testId,
+  initialName,
+  initialPoolId,
+  initialBlueprint,
   onAssembled,
 }: {
-  initialDraft?: EditorDraft;
-  onAssembled: (r: AssembledResult) => void;
+  testId: string;
+  initialName: string;
+  initialPoolId: string;
+  initialBlueprint?: Blueprint | null;
+  onAssembled: (formId: string) => void;
 }) {
-  const seed = initialDraft ?? DEFAULT_DRAFT;
-  const [poolId, setPoolId] = useState(seed.poolId);
-  const [name, setName] = useState(seed.name);
-  const [length, setLength] = useState(seed.length);
-  const [numForms, setNumForms] = useState(seed.numForms);
-  const [maxUse, setMaxUse] = useState(seed.maxUse);
-  const [constraints, setConstraints] = useState<ConstraintDraft[]>(seed.constraints);
-  const [thetaText, setThetaText] = useState(seed.thetaText);
-  const [infoText, setInfoText] = useState(seed.infoText);
-  const [tolerance, setTolerance] = useState(seed.tolerance);
-  const [method, setMethod] = useState<Method>(seed.method);
+  const base = initialBlueprint ? fieldsFromBlueprint(initialBlueprint) : DEFAULT_FIELDS;
+  const [name, setName] = useState(initialName);
+  const [poolId, setPoolId] = useState(initialPoolId);
+  const [length, setLength] = useState(base.length);
+  const [numForms, setNumForms] = useState(base.numForms);
+  const [maxUse, setMaxUse] = useState(base.maxUse);
+  const [constraints, setConstraints] = useState<ConstraintRow[]>(base.constraints);
+  const [thetaText, setThetaText] = useState(base.thetaText);
+  const [infoText, setInfoText] = useState(base.infoText);
+  const [tolerance, setTolerance] = useState(base.tolerance);
+  const [method, setMethod] = useState<Method>(base.method);
+  const [savedAt, setSavedAt] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [infeasible, setInfeasible] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
 
+  const qc = useQueryClient();
   const catalog = useGetPoolCatalog();
   const scenarios = useListScenarios();
   const pool = useGetPoolItems({ pool_id: poolId });
-  const createBlueprint = useCreateBlueprint();
-  const createJob = useCreateAssemblyJob();
-  const busy = createBlueprint.isPending || createJob.isPending;
+  const updateTest = useUpdateTest();
+  const assembleTest = useAssembleTest();
+  const busy = updateTest.isPending || assembleTest.isPending;
 
   const theta = parseNums(thetaText);
   const info = parseNums(infoText);
@@ -98,44 +137,24 @@ export function BlueprintEditorScreen({
   });
   const valid = Object.keys(errors).length === 0;
 
-  function currentDraft(): EditorDraft {
-    return {
-      name, poolId, length, numForms, maxUse, thetaText, infoText, tolerance, method,
-      constraints,
-    };
-  }
-
   function applyScenario(s: ScenarioRead) {
-    const bp = s.blueprint;
+    const f = fieldsFromBlueprint(s.blueprint);
     setPoolId(s.pool_id);
-    setName(bp.name ?? "scenario");
-    setLength(String(bp.length));
-    setNumForms(String(bp.num_forms ?? 1));
-    setMaxUse(
-      bp.exposure_target?.max_use_per_item != null
-        ? String(bp.exposure_target.max_use_per_item)
-        : "",
-    );
-    setThetaText((bp.statistical_target.theta_points ?? []).join(", "));
-    setInfoText((bp.statistical_target.target_info ?? []).join(", "));
-    setMethod((bp.statistical_target.method as Method) ?? "minimax");
-    setTolerance(
-      bp.statistical_target.tolerance != null ? String(bp.statistical_target.tolerance) : "",
-    );
-    setConstraints(
-      (bp.content_constraints ?? []).map((c) => ({
-        tag_type: c.tag_type,
-        tag_value: c.tag_value,
-        minimum: c.minimum != null ? String(c.minimum) : "",
-        maximum: c.maximum != null ? String(c.maximum) : "",
-      })),
-    );
+    setName(s.blueprint.name ?? "scenario");
+    setLength(f.length);
+    setNumForms(f.numForms);
+    setMaxUse(f.maxUse);
+    setThetaText(f.thetaText);
+    setInfoText(f.infoText);
+    setMethod(f.method);
+    setTolerance(f.tolerance);
+    setConstraints(f.constraints);
     setInfeasible(null);
     setSubmitError(null);
     setWarnings([]);
   }
 
-  function updateConstraint(i: number, patch: Partial<ConstraintDraft>) {
+  function updateConstraint(i: number, patch: Partial<ConstraintRow>) {
     setConstraints((rows) => rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
   }
 
@@ -163,14 +182,34 @@ export function BlueprintEditorScreen({
     };
   }
 
+  async function persistDraft() {
+    await updateTest.mutateAsync({
+      testId,
+      data: { name, pool_id: poolId, blueprint: buildBlueprint() },
+    });
+    qc.invalidateQueries({ queryKey: getGetTestQueryKey(testId) });
+    qc.invalidateQueries({ queryKey: getListTestsQueryKey() });
+  }
+
+  async function saveDraft() {
+    setSubmitError(null);
+    try {
+      await persistDraft();
+      setSavedAt(new Date().toLocaleTimeString());
+    } catch (e) {
+      setSubmitError(e instanceof Error ? e.message : "Save failed.");
+    }
+  }
+
   async function assemble() {
     setSubmitError(null);
     setInfeasible(null);
     setWarnings([]);
     try {
-      const created = await createBlueprint.mutateAsync({ data: buildBlueprint() });
-      const job = await createJob.mutateAsync({
-        data: { blueprint_id: created.id, pool_id: poolId, strategy: "mip", time_limit_s: 12 },
+      await persistDraft();
+      const job = await assembleTest.mutateAsync({
+        testId,
+        data: { strategy: "mip", seed: 0, time_limit_s: 12 },
       });
       setWarnings(job.warnings ?? []);
       const formIds = job.form_ids ?? [];
@@ -181,15 +220,10 @@ export function BlueprintEditorScreen({
         );
         return;
       }
-      onAssembled({
-        blueprintId: created.id,
-        formId: formIds[0],
-        jobId: job.id,
-        poolId,
-        status: job.status,
-        nForms: formIds.length,
-        draft: currentDraft(),
-      });
+      qc.invalidateQueries({ queryKey: getListTestFormsQueryKey(testId) });
+      qc.invalidateQueries({ queryKey: getGetTestQueryKey(testId) });
+      qc.invalidateQueries({ queryKey: getListTestsQueryKey() });
+      onAssembled(formIds[0]);
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "Assembly request failed.");
     }
@@ -238,7 +272,7 @@ export function BlueprintEditorScreen({
         )}
       </Card>
 
-      <Card title="Blueprint" subtitle="Length, parallel forms, and exposure.">
+      <Card title="Blueprint" subtitle="Name, length, parallel forms, and exposure.">
         <div className="grid grid-cols-4 gap-4">
           <Field label="Name">
             <TextInput value={name} onChange={(e) => setName(e.target.value)} />
@@ -339,9 +373,13 @@ export function BlueprintEditorScreen({
       <div className="space-y-3">
         <div className="flex items-center gap-3">
           <Button onClick={assemble} disabled={busy || !valid}>
-            {busy ? "Assembling…" : "Assemble form"}
+            {assembleTest.isPending ? "Assembling…" : "Assemble form"}
           </Button>
-          {busy && <Spinner label="OR-Tools CP-SAT solving…" />}
+          <Button variant="secondary" onClick={saveDraft} disabled={busy || !valid}>
+            Save draft
+          </Button>
+          {busy && <Spinner label={assembleTest.isPending ? "OR-Tools CP-SAT solving…" : "Saving…"} />}
+          {!busy && savedAt && <Pill tone="ok">saved {savedAt}</Pill>}
           {!valid && !busy && <Pill tone="warn">Fix the highlighted fields</Pill>}
         </div>
         {infeasible && <Alert tone="warn" title="Infeasible blueprint">{infeasible}</Alert>}

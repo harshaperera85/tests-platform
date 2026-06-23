@@ -20,6 +20,10 @@ def test_openapi_served(client: TestClient) -> None:
 def test_phase1_paths_present(client: TestClient) -> None:
     """The Phase 1 resource paths Orval generates the client from (plan §9)."""
     paths = client.get("/openapi.json").json()["paths"]
+    assert "/api/v1/tests" in paths
+    assert "/api/v1/tests/{test_id}" in paths
+    assert "/api/v1/tests/{test_id}/assemble" in paths
+    assert "/api/v1/tests/{test_id}/forms" in paths
     assert "/api/v1/blueprints" in paths
     assert "/api/v1/blueprints/{blueprint_id}" in paths
     assert "/api/v1/assembly-jobs" in paths

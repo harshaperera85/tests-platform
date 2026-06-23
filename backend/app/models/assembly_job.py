@@ -22,6 +22,10 @@ class AssemblyJobRow(PkUuidMixin, TimestampMixin, Base):
     blueprint_id: Mapped[str] = mapped_column(
         ForeignKey("blueprint.id", ondelete="CASCADE"), index=True
     )
+    #: owning test (nullable — standalone jobs have no test)
+    test_id: Mapped[str | None] = mapped_column(
+        ForeignKey("test.id", ondelete="CASCADE"), nullable=True, index=True
+    )
     strategy: Mapped[str] = mapped_column(default="mip")
     #: which item pool the job assembled from (catalog id, plan §8 item_pool_ref)
     pool_id: Mapped[str] = mapped_column(

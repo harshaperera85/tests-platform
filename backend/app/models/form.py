@@ -23,6 +23,10 @@ class FormRow(PkUuidMixin, TimestampMixin, Base):
     assembly_job_id: Mapped[str] = mapped_column(
         ForeignKey("assembly_job.id", ondelete="CASCADE"), index=True
     )
+    #: owning test (nullable — standalone forms have no test)
+    test_id: Mapped[str | None] = mapped_column(
+        ForeignKey("test.id", ondelete="CASCADE"), nullable=True, index=True
+    )
     form_index: Mapped[int] = mapped_column(default=0)
     status: Mapped[str] = mapped_column(default="draft")  # draft/locked
     #: pool this form was assembled from — item_ids resolve against it

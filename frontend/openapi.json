@@ -27,6 +27,419 @@
         }
       }
     },
+    "/api/v1/tests": {
+      "get": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "List Tests",
+        "operationId": "list_tests",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TestSummary"
+                  },
+                  "type": "array",
+                  "title": "Response List Tests"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Create Test",
+        "operationId": "create_test",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tests/{test_id}": {
+      "get": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Get Test",
+        "operationId": "get_test",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Update Test",
+        "operationId": "update_test",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Delete Test",
+        "operationId": "delete_test",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tests/{test_id}/assemble": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Assemble Test",
+        "operationId": "assemble_test",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestAssembleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssemblyJobRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tests/{test_id}/forms": {
+      "get": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "List Test Forms",
+        "operationId": "list_test_forms",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FormSummary"
+                  },
+                  "title": "Response List Test Forms"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tests/{test_id}/lock": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Lock Test",
+        "operationId": "lock_test",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tests/{test_id}/unlock": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Unlock Test",
+        "operationId": "unlock_test",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tests/{test_id}/duplicate": {
+      "post": {
+        "tags": [
+          "tests"
+        ],
+        "summary": "Duplicate Test",
+        "operationId": "duplicate_test",
+        "parameters": [
+          {
+            "name": "test_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Test Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/blueprints": {
       "post": {
         "tags": [
@@ -968,6 +1381,55 @@
         ],
         "title": "FormRead"
       },
+      "FormSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "assembly_job_id": {
+            "type": "string",
+            "title": "Assembly Job Id"
+          },
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "form_index": {
+            "type": "integer",
+            "title": "Form Index"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "assembly_job_id",
+          "blueprint_id",
+          "pool_id",
+          "form_index",
+          "status",
+          "n_items",
+          "created_at"
+        ],
+        "title": "FormSummary"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -1808,6 +2270,223 @@
         ],
         "title": "TerminationDecision",
         "description": "Whether the session is complete and why."
+      },
+      "TestAssembleRequest": {
+        "properties": {
+          "strategy": {
+            "type": "string",
+            "title": "Strategy",
+            "default": "mip"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 0
+          },
+          "time_limit_s": {
+            "type": "number",
+            "title": "Time Limit S",
+            "default": 12.0
+          }
+        },
+        "type": "object",
+        "title": "TestAssembleRequest"
+      },
+      "TestCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": "Untitled test"
+          },
+          "administration_model": {
+            "type": "string",
+            "title": "Administration Model",
+            "default": "linear"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id",
+            "default": "demo_mixed"
+          },
+          "blueprint": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Blueprint"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "TestCreate"
+      },
+      "TestRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "administration_model": {
+            "type": "string",
+            "title": "Administration Model"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "blueprint": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Blueprint"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "form_count": {
+            "type": "integer",
+            "title": "Form Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "administration_model",
+          "status",
+          "pool_id",
+          "version",
+          "blueprint",
+          "form_count",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TestRead"
+      },
+      "TestSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "administration_model": {
+            "type": "string",
+            "title": "Administration Model"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "form_count": {
+            "type": "integer",
+            "title": "Form Count"
+          },
+          "has_blueprint": {
+            "type": "boolean",
+            "title": "Has Blueprint"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "administration_model",
+          "status",
+          "pool_id",
+          "version",
+          "form_count",
+          "has_blueprint",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TestSummary"
+      },
+      "TestUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "pool_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pool Id"
+          },
+          "blueprint": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Blueprint"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "TestUpdate",
+        "description": "PATCH \u2014 only provided fields are applied."
       },
       "ValidationError": {
         "properties": {

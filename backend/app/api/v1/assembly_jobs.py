@@ -10,14 +10,13 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.assembly import assemble
 from app.core.db import get_db
 from app.models.assembly_job import AssemblyJobRow
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
 from app.psychometrics import pools
-from app.schemas.blueprint import Blueprint
 from app.schemas.responses import AssemblyJobCreate, AssemblyJobRead
+from app.services.assembly_run import run_assembly
 
 router = APIRouter(prefix="/assembly-jobs", tags=["assembly-jobs"])
 
@@ -52,51 +51,15 @@ def create_assembly_job(
             status_code=404, detail=f"unknown pool_id {payload.pool_id!r}"
         )
 
-    blueprint = Blueprint.model_validate(bp_row.spec)
-    pool = pools.load_pool_by_id(payload.pool_id)
-    result = assemble(
-        blueprint,
-        pool,
-        strategy=payload.strategy,
-        time_limit_s=payload.time_limit_s,
-        seed=payload.seed,
-    )
-
-    job = AssemblyJobRow(
-        blueprint_id=bp_row.id,
+    job, forms = run_assembly(
+        db,
+        blueprint_row=bp_row,
         pool_id=payload.pool_id,
         strategy=payload.strategy,
-        status=result.status,
-        params={"seed": payload.seed, "time_limit_s": payload.time_limit_s},
-        result={
-            "method": result.method,
-            "objective_value": result.objective_value,
-            "theta_points": result.theta_points,
-            "target_info": result.target_info,
-            "warnings": result.warnings,
-        },
+        seed=payload.seed,
+        time_limit_s=payload.time_limit_s,
     )
-    db.add(job)
-    db.flush()  # assign job.id before forms reference it
-
-    form_ids: list[str] = []
-    for idx, form in enumerate(result.forms):
-        row = FormRow(
-            blueprint_id=bp_row.id,
-            assembly_job_id=job.id,
-            form_index=idx,
-            status="draft",
-            pool_id=payload.pool_id,
-            item_ids=form.item_ids,
-            tif_actual=form.tif_actual,
-        )
-        db.add(row)
-        db.flush()
-        form_ids.append(row.id)
-
-    db.commit()
-    db.refresh(job)
-    return _to_read(job, form_ids)
+    return _to_read(job, [f.id for f in forms])
 
 
 @router.get("/{job_id}", response_model=AssemblyJobRead)
