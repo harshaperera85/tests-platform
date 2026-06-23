@@ -224,6 +224,7 @@ def assemble_test(
         theta_points=result.get("theta_points", []),
         target_info=result.get("target_info", []),
         warnings=result.get("warnings", []),
+        error=result.get("error"),
         form_ids=form_ids,
         created_at=job.created_at,
     )

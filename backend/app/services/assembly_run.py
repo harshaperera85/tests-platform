@@ -109,6 +109,8 @@ def dispatch(db: Session, job: AssemblyJobRow) -> None:
     if settings.assembly_async:
         from app.workers.tasks import execute_assembly_job
 
-        get_queue().enqueue(execute_assembly_job, job.id)
+        get_queue().enqueue(
+            execute_assembly_job, job.id, job_timeout=settings.assembly_job_timeout_s
+        )
     else:
         execute_job(db, job)

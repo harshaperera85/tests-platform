@@ -41,5 +41,9 @@ class TestRow(PkUuidMixin, TimestampMixin, Base):
         JSONColumn, nullable=True
     )
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=_utcnow, onupdate=_utcnow, nullable=False
+        DateTime(timezone=True),
+        default=_utcnow,
+        onupdate=_utcnow,
+        nullable=False,
+        index=True,  # GET /tests sorts by updated_at desc
     )

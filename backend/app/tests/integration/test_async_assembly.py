@@ -66,7 +66,7 @@ def test_dispatch_async_enqueues(client: TestClient, monkeypatch) -> None:
     enqueued: list[tuple] = []
 
     class _FakeQueue:
-        def enqueue(self, fn, *args):  # noqa: ANN001
+        def enqueue(self, fn, *args, **kwargs):  # noqa: ANN001
             enqueued.append((fn.__name__, args))
 
     monkeypatch.setattr(settings, "assembly_async", True)

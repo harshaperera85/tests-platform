@@ -41,6 +41,7 @@ class AssemblyJobRead(BaseModel):
     theta_points: list[float] = []
     target_info: list[float] = []
     warnings: list[str] = []
+    error: str | None = None  # set when status == "error"
     form_ids: list[str] = []
     created_at: datetime
 

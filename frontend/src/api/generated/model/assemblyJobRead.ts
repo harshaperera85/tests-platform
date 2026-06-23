@@ -7,6 +7,7 @@
  */
 import type { AssemblyJobReadMethod } from './assemblyJobReadMethod';
 import type { AssemblyJobReadObjectiveValue } from './assemblyJobReadObjectiveValue';
+import type { AssemblyJobReadError } from './assemblyJobReadError';
 
 export interface AssemblyJobRead {
   id: string;
@@ -19,6 +20,7 @@ export interface AssemblyJobRead {
   theta_points?: number[];
   target_info?: number[];
   warnings?: string[];
+  error?: AssemblyJobReadError;
   form_ids?: string[];
   created_at: string;
 }

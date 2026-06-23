@@ -227,6 +227,19 @@ export function BlueprintEditorScreen({
       setJobStatus(null);
 
       setWarnings(job.warnings ?? []);
+      // Distinguish the terminal outcomes: still-running (timed out polling),
+      // engine error, infeasible, vs success.
+      if (job.status === "queued" || job.status === "running") {
+        setSubmitError(
+          "Assembly is taking longer than expected — it's still running. Check the " +
+            "History tab in a moment for the result.",
+        );
+        return;
+      }
+      if (job.status === "error") {
+        setSubmitError(`Assembly failed: ${job.error ?? "engine error"}.`);
+        return;
+      }
       const formIds = job.form_ids ?? [];
       if (!formIds.length || (job.status !== "optimal" && job.status !== "feasible")) {
         setInfeasible(

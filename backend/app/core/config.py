@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     # when false they run inline in-request. Default false so the API works
     # without a worker/Redis (tests); docker-compose sets it true.
     assembly_async: bool = False
+    # Hard ceiling (seconds) for a queued solve; RQ kills the job past this.
+    assembly_job_timeout_s: int = 300
 
     # --- capability services ---
     scoring_r_url: str = "http://scoring-r:8000"

@@ -41,6 +41,7 @@ export const getAssemblyJobResponse = zod.object({
   "theta_points": zod.array(zod.number()).default(getAssemblyJobResponseThetaPointsDefault),
   "target_info": zod.array(zod.number()).default(getAssemblyJobResponseTargetInfoDefault),
   "warnings": zod.array(zod.string()).default(getAssemblyJobResponseWarningsDefault),
+  "error": zod.union([zod.string(),zod.null()]).optional(),
   "form_ids": zod.array(zod.string()).default(getAssemblyJobResponseFormIdsDefault),
   "created_at": zod.string().datetime({})
 })

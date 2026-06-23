@@ -45,6 +45,7 @@ def _to_read(job: AssemblyJobRow, form_ids: list[str]) -> AssemblyJobRead:
         theta_points=result.get("theta_points", []),
         target_info=result.get("target_info", []),
         warnings=result.get("warnings", []),
+        error=result.get("error"),
         form_ids=form_ids,
         created_at=job.created_at,
     )

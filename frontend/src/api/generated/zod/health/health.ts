@@ -19,6 +19,15 @@ export const healthResponse = zod.object({
 })
 
 /**
+ * Verify dependencies (Postgres, Redis). 503 if any are unreachable.
+ * @summary Readiness check
+ */
+export const readinessResponse = zod.object({
+  "status": zod.enum(['ready', 'degraded']),
+  "checks": zod.record(zod.string(), zod.string())
+})
+
+/**
  * @summary Root liveness check
  */
 export const rootHealthResponse = zod.record(zod.string(), zod.string())
