@@ -104,9 +104,19 @@ The app uses real routes, **server-backed by the `tests` resource** (`/api/v1/te
 - The editor header has **Lock / Unlock / Duplicate** (status workflow).
 - **`/tests/:id/walk/:formId`** — the step-through walkthrough, reachable from the
   Assembly preview, the Scoring tab, or History.
+- **`/pool`** — **Item pools** viewer (header nav): browse the simulated bank(s) —
+  IRT params, tags, content — with a filter. Use this to *see the demo data*.
 
 > A "test" owns an editable blueprint draft + its assembled forms (history), all
 > persisted server-side — drafts survive refresh and are visible across browsers.
+
+### Content constraints — marginal, cross-classified, count or proportion
+In the Assembly tab, each content constraint can be:
+- a **marginal** (one tag): `where KC = algebra`;
+- a **cross-classified cell** (click **+ AND tag**): `where KC = algebra AND Bloom = apply`
+  — an item must match *all* predicates (a content × cognitive table cell);
+and its min/max can be a **count** or a **proportion** (0–1 of the form length, resolved
+to a count at assembly). Mix freely across constraints in one blueprint.
 
 ## 1. Blueprint editor + assemble (Test Editor → Assembly tab, A-031)
 

@@ -18,11 +18,13 @@ import {
 import type { Blueprint, ScenarioRead } from "../../api/generated/model";
 import { Alert, Button, Card, Field, Pill, Select, Spinner, TextInput } from "../../components/ui";
 
+type Predicate = { tag_type: string; tag_value: string };
 type ConstraintRow = {
-  tag_type: string;
-  tag_value: string;
+  // one predicate = marginal; multiple = cross-classified cell (AND)
+  predicates: Predicate[];
   minimum: string;
   maximum: string;
+  mode: "count" | "proportion";
 };
 type Method = "minimax" | "maximin";
 
@@ -46,9 +48,9 @@ const DEFAULT_FIELDS: Fields = {
   tolerance: "",
   method: "minimax",
   constraints: [
-    { tag_type: "KC", tag_value: "algebra", minimum: "4", maximum: "8" },
-    { tag_type: "KC", tag_value: "geometry", minimum: "4", maximum: "" },
-    { tag_type: "Bloom", tag_value: "analyze", minimum: "3", maximum: "" },
+    { predicates: [{ tag_type: "KC", tag_value: "algebra" }], minimum: "4", maximum: "8", mode: "count" },
+    { predicates: [{ tag_type: "KC", tag_value: "geometry" }], minimum: "4", maximum: "", mode: "count" },
+    { predicates: [{ tag_type: "Bloom", tag_value: "analyze" }], minimum: "3", maximum: "", mode: "count" },
   ],
 };
 
@@ -74,12 +76,17 @@ function fieldsFromBlueprint(bp: Blueprint): Fields {
     infoText: (t.target_info ?? []).join(", "),
     tolerance: t.tolerance != null ? String(t.tolerance) : "",
     method: (t.method as Method) ?? "minimax",
-    constraints: (bp.content_constraints ?? []).map((c) => ({
-      tag_type: c.tag_type,
-      tag_value: c.tag_value,
-      minimum: c.minimum != null ? String(c.minimum) : "",
-      maximum: c.maximum != null ? String(c.maximum) : "",
-    })),
+    constraints: (bp.content_constraints ?? []).map((c) => {
+      const predicates: Predicate[] = c.tags
+        ? Object.entries(c.tags).map(([tag_type, tag_value]) => ({ tag_type, tag_value }))
+        : [{ tag_type: c.tag_type ?? "", tag_value: c.tag_value ?? "" }];
+      return {
+        predicates,
+        minimum: c.minimum != null ? String(c.minimum) : "",
+        maximum: c.maximum != null ? String(c.maximum) : "",
+        mode: (c.mode as "count" | "proportion") ?? "count",
+      };
+    }),
   };
 }
 
@@ -135,8 +142,18 @@ export function BlueprintEditorScreen({
   constraints.forEach((c, i) => {
     const mn = numOrUndef(c.minimum);
     const mx = numOrUndef(c.maximum);
-    if (mn != null && mx != null && mn > mx) errors[`c${i}`] = "min > max";
-    if (mn != null && mn > len) errors[`c${i}`] = `min ${mn} > length ${len}`;
+    const hasPred = c.predicates.some((p) => p.tag_type && p.tag_value);
+    if (!hasPred) errors[`c${i}`] = "set a tag type and value";
+    else if (mn == null && mx == null) errors[`c${i}`] = "set a min and/or max";
+    else if (mn != null && mx != null && mn > mx) errors[`c${i}`] = "min > max";
+    else if (c.mode === "proportion") {
+      if ([mn, mx].some((v) => v != null && (v < 0 || v > 1)))
+        errors[`c${i}`] = "proportions must be 0–1";
+    } else {
+      if ([mn, mx].some((v) => v != null && !Number.isInteger(v)))
+        errors[`c${i}`] = "counts must be whole numbers";
+      else if (mn != null && mn > len) errors[`c${i}`] = `min ${mn} > length ${len}`;
+    }
   });
   const valid = Object.keys(errors).length === 0;
 
@@ -161,6 +178,32 @@ export function BlueprintEditorScreen({
     setConstraints((rows) => rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
   }
 
+  function updatePredicate(ci: number, pi: number, patch: Partial<Predicate>) {
+    setConstraints((rows) =>
+      rows.map((r, idx) =>
+        idx === ci
+          ? { ...r, predicates: r.predicates.map((p, j) => (j === pi ? { ...p, ...patch } : p)) }
+          : r,
+      ),
+    );
+  }
+
+  function addPredicate(ci: number) {
+    setConstraints((rows) =>
+      rows.map((r, idx) =>
+        idx === ci ? { ...r, predicates: [...r.predicates, { tag_type: "", tag_value: "" }] } : r,
+      ),
+    );
+  }
+
+  function removePredicate(ci: number, pi: number) {
+    setConstraints((rows) =>
+      rows.map((r, idx) =>
+        idx === ci ? { ...r, predicates: r.predicates.filter((_, j) => j !== pi) } : r,
+      ),
+    );
+  }
+
   function buildBlueprint(): Blueprint {
     const maxUseNum = numOrUndef(maxUse);
     return {
@@ -175,13 +218,23 @@ export function BlueprintEditorScreen({
       },
       exposure_target: maxUseNum != null ? { max_use_per_item: maxUseNum } : undefined,
       content_constraints: constraints
-        .filter((c) => c.tag_type && c.tag_value)
-        .map((c) => ({
-          tag_type: c.tag_type,
-          tag_value: c.tag_value,
-          minimum: numOrUndef(c.minimum),
-          maximum: numOrUndef(c.maximum),
-        })),
+        .map((c) => {
+          const preds = c.predicates.filter((p) => p.tag_type && p.tag_value);
+          if (preds.length === 0) return null;
+          const bounds = {
+            minimum: numOrUndef(c.minimum),
+            maximum: numOrUndef(c.maximum),
+            mode: c.mode,
+          };
+          // one predicate → marginal; many → cross-classified cell (tags map)
+          return preds.length === 1
+            ? { ...bounds, tag_type: preds[0].tag_type, tag_value: preds[0].tag_value }
+            : {
+                ...bounds,
+                tags: Object.fromEntries(preds.map((p) => [p.tag_type, p.tag_value])),
+              };
+        })
+        .filter((c): c is NonNullable<typeof c> => c !== null),
     };
   }
 
@@ -324,50 +377,90 @@ export function BlueprintEditorScreen({
 
       <Card
         title="Content constraints"
-        subtitle="Min/max item counts by tag (KC, Bloom, TIMSS, domain)."
+        subtitle="Bound items by tag. One tag = marginal; '+ AND tag' = a content × cognitive cell. Count or proportion per row."
         actions={
-          <Button variant="secondary"
+          <Button
+            variant="secondary"
             onClick={() =>
-              setConstraints((r) => [...r, { tag_type: "", tag_value: "", minimum: "", maximum: "" }])
-            }>
-            + Add
+              setConstraints((r) => [
+                ...r,
+                { predicates: [{ tag_type: "", tag_value: "" }], minimum: "", maximum: "", mode: "count" },
+              ])
+            }
+          >
+            + Add constraint
           </Button>
         }
       >
-        <div className="space-y-2">
-          <div className="grid grid-cols-12 gap-2 text-xs font-medium text-ink-400">
-            <span className="col-span-3">Tag type</span>
-            <span className="col-span-4">Tag value</span>
-            <span className="col-span-2">Min</span>
-            <span className="col-span-2">Max</span>
-            <span className="col-span-1" />
-          </div>
+        <div className="space-y-3">
           {constraints.map((c, i) => (
-            <div key={i} className="grid grid-cols-12 items-center gap-2">
-              <div className="col-span-3">
-                <TextInput value={c.tag_type} placeholder="KC"
-                  onChange={(e) => updateConstraint(i, { tag_type: e.target.value })} />
+            <div key={i} className="rounded-lg border border-ink-200 p-3">
+              <div className="space-y-2">
+                {c.predicates.map((p, pi) => (
+                  <div key={pi} className="flex items-center gap-2">
+                    <span className="w-10 text-xs text-ink-400">{pi === 0 ? "where" : "AND"}</span>
+                    <TextInput
+                      className="flex-1"
+                      value={p.tag_type}
+                      placeholder="KC"
+                      onChange={(e) => updatePredicate(i, pi, { tag_type: e.target.value })}
+                    />
+                    <span className="text-ink-400">=</span>
+                    <TextInput
+                      className="flex-1"
+                      value={p.tag_value}
+                      placeholder="algebra"
+                      onChange={(e) => updatePredicate(i, pi, { tag_value: e.target.value })}
+                    />
+                    {c.predicates.length > 1 && (
+                      <Button variant="ghost" aria-label="remove tag" onClick={() => removePredicate(i, pi)}>
+                        ✕
+                      </Button>
+                    )}
+                  </div>
+                ))}
               </div>
-              <div className="col-span-4">
-                <TextInput value={c.tag_value} placeholder="algebra"
-                  onChange={(e) => updateConstraint(i, { tag_value: e.target.value })} />
-              </div>
-              <div className="col-span-2">
-                <TextInput type="number" value={c.minimum} aria-invalid={Boolean(errors[`c${i}`])}
-                  onChange={(e) => updateConstraint(i, { minimum: e.target.value })} />
-              </div>
-              <div className="col-span-2">
-                <TextInput type="number" value={c.maximum} aria-invalid={Boolean(errors[`c${i}`])}
-                  onChange={(e) => updateConstraint(i, { maximum: e.target.value })} />
-              </div>
-              <div className="col-span-1 text-right">
-                <Button variant="ghost" aria-label={`remove constraint ${i + 1}`}
-                  onClick={() => setConstraints((rows) => rows.filter((_, idx) => idx !== i))}>
-                  ✕
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <Button variant="ghost" onClick={() => addPredicate(i)}>
+                  + AND tag
+                </Button>
+                <span className="ml-2 text-xs text-ink-400">min</span>
+                <input
+                  type="number"
+                  className="w-20 rounded border border-ink-200 px-2 py-1 text-sm"
+                  value={c.minimum}
+                  aria-invalid={Boolean(errors[`c${i}`])}
+                  onChange={(e) => updateConstraint(i, { minimum: e.target.value })}
+                />
+                <span className="text-xs text-ink-400">max</span>
+                <input
+                  type="number"
+                  className="w-20 rounded border border-ink-200 px-2 py-1 text-sm"
+                  value={c.maximum}
+                  aria-invalid={Boolean(errors[`c${i}`])}
+                  onChange={(e) => updateConstraint(i, { maximum: e.target.value })}
+                />
+                <Select
+                  className="w-36"
+                  value={c.mode}
+                  onChange={(e) =>
+                    updateConstraint(i, { mode: e.target.value as "count" | "proportion" })
+                  }
+                >
+                  <option value="count">count</option>
+                  <option value="proportion">proportion</option>
+                </Select>
+                <Button
+                  variant="ghost"
+                  aria-label={`remove constraint ${i + 1}`}
+                  className="ml-auto"
+                  onClick={() => setConstraints((rows) => rows.filter((_, idx) => idx !== i))}
+                >
+                  Remove
                 </Button>
               </div>
               {errors[`c${i}`] && (
-                <span className="col-span-12 text-xs text-rose-600">{errors[`c${i}`]}</span>
+                <p className="mt-1 text-xs text-rose-600">{errors[`c${i}`]}</p>
               )}
             </div>
           ))}

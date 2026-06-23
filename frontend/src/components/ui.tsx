@@ -81,12 +81,18 @@ export function Field({
 const inputCls =
   "mt-1 w-full rounded-lg border border-ink-200 px-3 py-2 text-sm text-ink-900 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500";
 
-export function TextInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={inputCls} {...props} />;
+export function TextInput({
+  className = "",
+  ...props
+}: InputHTMLAttributes<HTMLInputElement>) {
+  return <input className={`${inputCls} ${className}`} {...props} />;
 }
 
-export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select className={inputCls} {...props} />;
+export function Select({
+  className = "",
+  ...props
+}: SelectHTMLAttributes<HTMLSelectElement>) {
+  return <select className={`${inputCls} ${className}`} {...props} />;
 }
 
 export function Pill({

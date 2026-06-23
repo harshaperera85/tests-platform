@@ -14,6 +14,12 @@ Durable to-do list. Status as of the latest commit on `main`.
 - **Tier 1** — server-backed `tests` resource (CRUD, list, draft persistence, assemble,
   form history, lock/unlock/duplicate).
 - **Tier 2** — async assembly via RQ worker (queued → running → done; UI polls).
+- **Hardening H1–H7** — observability/readiness, audit log, job robustness, DB index +
+  Postgres migration CI, determinism guards, frontend tests + ErrorBoundary, security
+  posture (CORS/secrets; auth flagged).
+- **Blueprint constraints** — cross-classified cells (content × cognitive, AND of tags)
+  alongside marginals; per-constraint **count or proportion**. Read-only **item-pool
+  viewer** (`/pool`).
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
 
 ## Next up

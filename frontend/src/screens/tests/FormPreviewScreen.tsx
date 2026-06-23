@@ -22,7 +22,7 @@ import {
   useGetFormTifCurve,
 } from "../../api/generated/endpoints/forms/forms";
 import { useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
-import type { PoolItem } from "../../api/generated/model";
+import type { Blueprint, PoolItem } from "../../api/generated/model";
 import { Alert, Button, Card, Pill, Spinner } from "../../components/ui";
 
 export function FormPreviewScreen({
@@ -173,7 +173,7 @@ export function FormPreviewScreen({
         </div>
       </Card>
 
-      <ConstraintCheck blueprintSpec={blueprint.data?.blueprint} form={f} byId={byId} />
+      <ConstraintCheck blueprint={blueprint.data?.blueprint} form={f} byId={byId} />
 
       <Card
         title="Assembled items"
@@ -206,43 +206,46 @@ export function FormPreviewScreen({
 }
 
 function ConstraintCheck({
-  blueprintSpec,
+  blueprint,
   form,
   byId,
 }: {
-  blueprintSpec?: {
-    content_constraints?: {
-      tag_type: string;
-      tag_value: string;
-      minimum?: number | null;
-      maximum?: number | null;
-    }[];
-  };
+  blueprint?: Blueprint | null;
   form: { item_ids: string[] };
   byId: Map<string, PoolItem>;
 }) {
-  const constraints = blueprintSpec?.content_constraints ?? [];
+  const constraints = blueprint?.content_constraints ?? [];
   if (!constraints.length) return null;
+  const length = blueprint?.length ?? form.item_ids.length;
 
   return (
     <Card title="Content constraints" subtitle="Satisfaction in the assembled form">
       <ul className="space-y-1.5 text-sm">
         {constraints.map((c, i) => {
-          const count = form.item_ids.filter(
-            (id) => byId.get(id)?.tags?.[c.tag_type] === c.tag_value,
-          ).length;
-          const okMin = c.minimum == null || count >= c.minimum;
-          const okMax = c.maximum == null || count <= c.maximum;
-          const ok = okMin && okMax;
-          const bounds = `${c.minimum ?? 0}..${c.maximum ?? "∞"}`;
+          // predicates: tags map (cell) or a single tag_type/tag_value (marginal)
+          const preds: [string, string][] = c.tags
+            ? Object.entries(c.tags)
+            : c.tag_type && c.tag_value
+              ? [[c.tag_type, c.tag_value]]
+              : [];
+          const count = form.item_ids.filter((id) => {
+            const tags = byId.get(id)?.tags ?? {};
+            return preds.every(([k, v]) => tags[k] === v);
+          }).length;
+          // proportion bounds resolve to counts against the form length
+          const resolve = (v: number | null | undefined): number | null =>
+            v == null ? null : c.mode === "proportion" ? Math.round(v * length) : v;
+          const mn = resolve(c.minimum);
+          const mx = resolve(c.maximum);
+          const ok = (mn == null || count >= mn) && (mx == null || count <= mx);
+          const label = preds.map(([k, v]) => `${k}=${v}`).join(" & ") || "(empty)";
+          const unit = c.mode === "proportion" ? " ·prop" : "";
           return (
             <li key={i} className="flex items-center gap-2">
               <Pill tone={ok ? "ok" : "warn"}>{ok ? "✓" : "✗"}</Pill>
-              <span className="font-medium text-ink-800">
-                {c.tag_type}={c.tag_value}
-              </span>
+              <span className="font-medium text-ink-800">{label}</span>
               <span className="text-ink-600">
-                {count} in form (need {bounds})
+                {count} in form (need {mn ?? 0}..{mx ?? "∞"}{unit})
               </span>
             </li>
           );

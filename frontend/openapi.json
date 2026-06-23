@@ -1405,17 +1405,45 @@
       "ContentConstraint": {
         "properties": {
           "tag_type": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Tag Type"
           },
           "tag_value": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Tag Value"
+          },
+          "tags": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tags"
           },
           "minimum": {
             "anyOf": [
               {
-                "type": "integer",
+                "type": "number",
                 "minimum": 0.0
               },
               {
@@ -1427,7 +1455,7 @@
           "maximum": {
             "anyOf": [
               {
-                "type": "integer",
+                "type": "number",
                 "minimum": 0.0
               },
               {
@@ -1435,6 +1463,15 @@
               }
             ],
             "title": "Maximum"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "count",
+              "proportion"
+            ],
+            "title": "Mode",
+            "default": "count"
           },
           "label": {
             "anyOf": [
@@ -1449,12 +1486,8 @@
           }
         },
         "type": "object",
-        "required": [
-          "tag_type",
-          "tag_value"
-        ],
         "title": "ContentConstraint",
-        "description": "A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set."
+        "description": "A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` \u2014 e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content \u00d7 cognitive table cell): set ``tags`` to a\n  mapping of dimension \u2192 value \u2014 e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set."
       },
       "EnemyPolicy": {
         "properties": {

@@ -28,7 +28,7 @@ export const listTestsResponse = zod.array(listTestsResponseItem)
 /**
  * @summary Create Test
  */
-export const createTestBodyNameDefault = "Untitled test";export const createTestBodyAdministrationModelDefault = "linear";export const createTestBodyPoolIdDefault = "demo_mixed";export const createTestBodyBlueprintNameDefault = "untitled-blueprint";export const createTestBodyBlueprintNumFormsDefault = 1;export const createTestBodyBlueprintContentConstraintsItemMinimumMinOne = 0;export const createTestBodyBlueprintContentConstraintsItemMaximumMinOne = 0;export const createTestBodyBlueprintStatisticalTargetMethodDefault = "minimax";export const createTestBodyBlueprintEnemyPolicyEnforceDefault = true;
+export const createTestBodyNameDefault = "Untitled test";export const createTestBodyAdministrationModelDefault = "linear";export const createTestBodyPoolIdDefault = "demo_mixed";export const createTestBodyBlueprintNameDefault = "untitled-blueprint";export const createTestBodyBlueprintNumFormsDefault = 1;export const createTestBodyBlueprintContentConstraintsItemMinimumMinOne = 0;export const createTestBodyBlueprintContentConstraintsItemMaximumMinOne = 0;export const createTestBodyBlueprintContentConstraintsItemModeDefault = "count";export const createTestBodyBlueprintStatisticalTargetMethodDefault = "minimax";export const createTestBodyBlueprintEnemyPolicyEnforceDefault = true;
 
 export const createTestBody = zod.object({
   "name": zod.string().default(createTestBodyNameDefault),
@@ -39,12 +39,14 @@ export const createTestBody = zod.object({
   "length": zod.number().describe('items per form'),
   "num_forms": zod.number().min(1).default(createTestBodyBlueprintNumFormsDefault),
   "content_constraints": zod.array(zod.object({
-  "tag_type": zod.string(),
-  "tag_value": zod.string(),
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
   "minimum": zod.union([zod.number().min(createTestBodyBlueprintContentConstraintsItemMinimumMinOne),zod.null()]).optional(),
   "maximum": zod.union([zod.number().min(createTestBodyBlueprintContentConstraintsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(createTestBodyBlueprintContentConstraintsItemModeDefault),
   "label": zod.union([zod.string(),zod.null()]).optional()
-}).describe('A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set.')).optional(),
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
   "statistical_target": zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),
@@ -67,7 +69,7 @@ export const getTestParams = zod.object({
   "test_id": zod.string()
 })
 
-export const getTestResponseBlueprintNameDefault = "untitled-blueprint";export const getTestResponseBlueprintNumFormsDefault = 1;export const getTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const getTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const getTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const getTestResponseBlueprintEnemyPolicyEnforceDefault = true;
+export const getTestResponseBlueprintNameDefault = "untitled-blueprint";export const getTestResponseBlueprintNumFormsDefault = 1;export const getTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const getTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const getTestResponseBlueprintContentConstraintsItemModeDefault = "count";export const getTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const getTestResponseBlueprintEnemyPolicyEnforceDefault = true;
 
 export const getTestResponse = zod.object({
   "id": zod.string(),
@@ -81,12 +83,14 @@ export const getTestResponse = zod.object({
   "length": zod.number().describe('items per form'),
   "num_forms": zod.number().min(1).default(getTestResponseBlueprintNumFormsDefault),
   "content_constraints": zod.array(zod.object({
-  "tag_type": zod.string(),
-  "tag_value": zod.string(),
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
   "minimum": zod.union([zod.number().min(getTestResponseBlueprintContentConstraintsItemMinimumMinOne),zod.null()]).optional(),
   "maximum": zod.union([zod.number().min(getTestResponseBlueprintContentConstraintsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(getTestResponseBlueprintContentConstraintsItemModeDefault),
   "label": zod.union([zod.string(),zod.null()]).optional()
-}).describe('A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set.')).optional(),
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
   "statistical_target": zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),
@@ -112,7 +116,7 @@ export const updateTestParams = zod.object({
   "test_id": zod.string()
 })
 
-export const updateTestBodyBlueprintNameDefault = "untitled-blueprint";export const updateTestBodyBlueprintNumFormsDefault = 1;export const updateTestBodyBlueprintContentConstraintsItemMinimumMinOne = 0;export const updateTestBodyBlueprintContentConstraintsItemMaximumMinOne = 0;export const updateTestBodyBlueprintStatisticalTargetMethodDefault = "minimax";export const updateTestBodyBlueprintEnemyPolicyEnforceDefault = true;
+export const updateTestBodyBlueprintNameDefault = "untitled-blueprint";export const updateTestBodyBlueprintNumFormsDefault = 1;export const updateTestBodyBlueprintContentConstraintsItemMinimumMinOne = 0;export const updateTestBodyBlueprintContentConstraintsItemMaximumMinOne = 0;export const updateTestBodyBlueprintContentConstraintsItemModeDefault = "count";export const updateTestBodyBlueprintStatisticalTargetMethodDefault = "minimax";export const updateTestBodyBlueprintEnemyPolicyEnforceDefault = true;
 
 export const updateTestBody = zod.object({
   "name": zod.union([zod.string(),zod.null()]).optional(),
@@ -122,12 +126,14 @@ export const updateTestBody = zod.object({
   "length": zod.number().describe('items per form'),
   "num_forms": zod.number().min(1).default(updateTestBodyBlueprintNumFormsDefault),
   "content_constraints": zod.array(zod.object({
-  "tag_type": zod.string(),
-  "tag_value": zod.string(),
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
   "minimum": zod.union([zod.number().min(updateTestBodyBlueprintContentConstraintsItemMinimumMinOne),zod.null()]).optional(),
   "maximum": zod.union([zod.number().min(updateTestBodyBlueprintContentConstraintsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(updateTestBodyBlueprintContentConstraintsItemModeDefault),
   "label": zod.union([zod.string(),zod.null()]).optional()
-}).describe('A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set.')).optional(),
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
   "statistical_target": zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),
@@ -143,7 +149,7 @@ export const updateTestBody = zod.object({
 }).describe('Full assembly specification for one (or several parallel) forms.'),zod.null()]).optional()
 }).describe('PATCH — only provided fields are applied.')
 
-export const updateTestResponseBlueprintNameDefault = "untitled-blueprint";export const updateTestResponseBlueprintNumFormsDefault = 1;export const updateTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const updateTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const updateTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const updateTestResponseBlueprintEnemyPolicyEnforceDefault = true;
+export const updateTestResponseBlueprintNameDefault = "untitled-blueprint";export const updateTestResponseBlueprintNumFormsDefault = 1;export const updateTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const updateTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const updateTestResponseBlueprintContentConstraintsItemModeDefault = "count";export const updateTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const updateTestResponseBlueprintEnemyPolicyEnforceDefault = true;
 
 export const updateTestResponse = zod.object({
   "id": zod.string(),
@@ -157,12 +163,14 @@ export const updateTestResponse = zod.object({
   "length": zod.number().describe('items per form'),
   "num_forms": zod.number().min(1).default(updateTestResponseBlueprintNumFormsDefault),
   "content_constraints": zod.array(zod.object({
-  "tag_type": zod.string(),
-  "tag_value": zod.string(),
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
   "minimum": zod.union([zod.number().min(updateTestResponseBlueprintContentConstraintsItemMinimumMinOne),zod.null()]).optional(),
   "maximum": zod.union([zod.number().min(updateTestResponseBlueprintContentConstraintsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(updateTestResponseBlueprintContentConstraintsItemModeDefault),
   "label": zod.union([zod.string(),zod.null()]).optional()
-}).describe('A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set.')).optional(),
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
   "statistical_target": zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),
@@ -229,7 +237,7 @@ export const lockTestParams = zod.object({
   "test_id": zod.string()
 })
 
-export const lockTestResponseBlueprintNameDefault = "untitled-blueprint";export const lockTestResponseBlueprintNumFormsDefault = 1;export const lockTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const lockTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const lockTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const lockTestResponseBlueprintEnemyPolicyEnforceDefault = true;
+export const lockTestResponseBlueprintNameDefault = "untitled-blueprint";export const lockTestResponseBlueprintNumFormsDefault = 1;export const lockTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const lockTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const lockTestResponseBlueprintContentConstraintsItemModeDefault = "count";export const lockTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const lockTestResponseBlueprintEnemyPolicyEnforceDefault = true;
 
 export const lockTestResponse = zod.object({
   "id": zod.string(),
@@ -243,12 +251,14 @@ export const lockTestResponse = zod.object({
   "length": zod.number().describe('items per form'),
   "num_forms": zod.number().min(1).default(lockTestResponseBlueprintNumFormsDefault),
   "content_constraints": zod.array(zod.object({
-  "tag_type": zod.string(),
-  "tag_value": zod.string(),
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
   "minimum": zod.union([zod.number().min(lockTestResponseBlueprintContentConstraintsItemMinimumMinOne),zod.null()]).optional(),
   "maximum": zod.union([zod.number().min(lockTestResponseBlueprintContentConstraintsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(lockTestResponseBlueprintContentConstraintsItemModeDefault),
   "label": zod.union([zod.string(),zod.null()]).optional()
-}).describe('A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set.')).optional(),
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
   "statistical_target": zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),
@@ -274,7 +284,7 @@ export const unlockTestParams = zod.object({
   "test_id": zod.string()
 })
 
-export const unlockTestResponseBlueprintNameDefault = "untitled-blueprint";export const unlockTestResponseBlueprintNumFormsDefault = 1;export const unlockTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const unlockTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const unlockTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const unlockTestResponseBlueprintEnemyPolicyEnforceDefault = true;
+export const unlockTestResponseBlueprintNameDefault = "untitled-blueprint";export const unlockTestResponseBlueprintNumFormsDefault = 1;export const unlockTestResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const unlockTestResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const unlockTestResponseBlueprintContentConstraintsItemModeDefault = "count";export const unlockTestResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const unlockTestResponseBlueprintEnemyPolicyEnforceDefault = true;
 
 export const unlockTestResponse = zod.object({
   "id": zod.string(),
@@ -288,12 +298,14 @@ export const unlockTestResponse = zod.object({
   "length": zod.number().describe('items per form'),
   "num_forms": zod.number().min(1).default(unlockTestResponseBlueprintNumFormsDefault),
   "content_constraints": zod.array(zod.object({
-  "tag_type": zod.string(),
-  "tag_value": zod.string(),
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
   "minimum": zod.union([zod.number().min(unlockTestResponseBlueprintContentConstraintsItemMinimumMinOne),zod.null()]).optional(),
   "maximum": zod.union([zod.number().min(unlockTestResponseBlueprintContentConstraintsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(unlockTestResponseBlueprintContentConstraintsItemModeDefault),
   "label": zod.union([zod.string(),zod.null()]).optional()
-}).describe('A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set.')).optional(),
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
   "statistical_target": zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),

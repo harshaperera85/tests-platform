@@ -5,6 +5,7 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NewTestScreen } from "./screens/tests/NewTestScreen";
+import { PoolBrowserScreen } from "./screens/tests/PoolBrowserScreen";
 import { TestEditorLayout } from "./screens/tests/TestEditorLayout";
 import { TestListScreen } from "./screens/tests/TestListScreen";
 import { AboutTab } from "./screens/tests/tabs/AboutTab";
@@ -22,6 +23,10 @@ export default function App() {
             <h1 className="text-xl font-semibold tracking-tight">Tests Platform</h1>
             <p className="text-sm text-ink-600">Linear fixed-form authoring</p>
           </Link>
+          <nav className="flex items-center gap-4 text-sm" aria-label="primary">
+            <Link to="/" className="text-ink-600 hover:text-ink-900">Tests</Link>
+            <Link to="/pool" className="text-ink-600 hover:text-ink-900">Item pools</Link>
+          </nav>
         </div>
       </header>
 
@@ -29,6 +34,7 @@ export default function App() {
         <ErrorBoundary>
         <Routes>
           <Route path="/" element={<TestListScreen />} />
+          <Route path="/pool" element={<PoolBrowserScreen />} />
           <Route path="/tests/new" element={<NewTestScreen />} />
           <Route path="/tests/:testId" element={<TestEditorLayout />}>
             <Route index element={<Navigate to="assembly" replace />} />

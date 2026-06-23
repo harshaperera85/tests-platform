@@ -5,21 +5,34 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
+import type { ContentConstraintTagType } from './contentConstraintTagType';
+import type { ContentConstraintTagValue } from './contentConstraintTagValue';
+import type { ContentConstraintTags } from './contentConstraintTags';
 import type { ContentConstraintMinimum } from './contentConstraintMinimum';
 import type { ContentConstraintMaximum } from './contentConstraintMaximum';
+import type { ContentConstraintMode } from './contentConstraintMode';
 import type { ContentConstraintLabel } from './contentConstraintLabel';
 
 /**
- * A min/max count of items carrying a given tag value.
+ * A min/max bound on the items satisfying a tag predicate.
 
-``tag_type`` is the tag dimension (e.g. ``"KC"``, ``"Bloom"``, ``"TIMSS"``,
-``"domain"``); ``tag_value`` is the required value on that dimension. At least
-one of ``minimum`` / ``maximum`` must be set.
+Two ways to target items (an item must match **all** predicates):
+- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.
+  ``KC=algebra`` or ``Bloom=apply``.
+- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a
+  mapping of dimension → value — e.g. ``{"KC": "algebra", "Bloom": "apply"}``
+  means *algebra AND apply*.
+
+Bounds are interpreted per ``mode``: ``count`` = absolute item counts;
+``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by
+the compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.
  */
 export interface ContentConstraint {
-  tag_type: string;
-  tag_value: string;
+  tag_type?: ContentConstraintTagType;
+  tag_value?: ContentConstraintTagValue;
+  tags?: ContentConstraintTags;
   minimum?: ContentConstraintMinimum;
   maximum?: ContentConstraintMaximum;
+  mode?: ContentConstraintMode;
   label?: ContentConstraintLabel;
 }

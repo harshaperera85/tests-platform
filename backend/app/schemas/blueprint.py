@@ -18,37 +18,77 @@ from pydantic import BaseModel, Field, model_validator
 
 
 class ContentConstraint(BaseModel):
-    """A min/max count of items carrying a given tag value.
+    """A min/max bound on the items satisfying a tag predicate.
 
-    ``tag_type`` is the tag dimension (e.g. ``"KC"``, ``"Bloom"``, ``"TIMSS"``,
-    ``"domain"``); ``tag_value`` is the required value on that dimension. At least
-    one of ``minimum`` / ``maximum`` must be set.
+    Two ways to target items (an item must match **all** predicates):
+    - **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.
+      ``KC=algebra`` or ``Bloom=apply``.
+    - **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a
+      mapping of dimension → value — e.g. ``{"KC": "algebra", "Bloom": "apply"}``
+      means *algebra AND apply*.
+
+    Bounds are interpreted per ``mode``: ``count`` = absolute item counts;
+    ``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by
+    the compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.
     """
 
-    tag_type: str
-    tag_value: str
-    minimum: int | None = Field(default=None, ge=0)
-    maximum: int | None = Field(default=None, ge=0)
+    tag_type: str | None = None
+    tag_value: str | None = None
+    tags: dict[str, str] | None = None
+    minimum: float | None = Field(default=None, ge=0)
+    maximum: float | None = Field(default=None, ge=0)
+    mode: Literal["count", "proportion"] = "count"
     label: str | None = None
 
+    @property
+    def predicates(self) -> dict[str, str]:
+        """Normalized tag predicates (item must match all)."""
+        if self.tags:
+            return dict(self.tags)
+        if self.tag_type is not None and self.tag_value is not None:
+            return {self.tag_type: self.tag_value}
+        return {}
+
+    @property
+    def key(self) -> str:
+        if self.label:
+            return self.label
+        return " & ".join(f"{k}={v}" for k, v in sorted(self.predicates.items()))
+
+    def _resolve(self, value: float | None, length: int) -> int | None:
+        if value is None:
+            return None
+        return round(value * length) if self.mode == "proportion" else int(value)
+
+    def resolved_minimum(self, length: int) -> int | None:
+        return self._resolve(self.minimum, length)
+
+    def resolved_maximum(self, length: int) -> int | None:
+        return self._resolve(self.maximum, length)
+
     @model_validator(mode="after")
-    def _check_bounds(self) -> ContentConstraint:
+    def _check(self) -> ContentConstraint:
+        if not self.predicates:
+            raise ValueError(
+                "content constraint needs tag_type+tag_value or a non-empty tags map"
+            )
         if self.minimum is None and self.maximum is None:
             raise ValueError("content constraint needs a minimum and/or a maximum")
+        if self.mode == "proportion":
+            for v in (self.minimum, self.maximum):
+                if v is not None and not (0.0 <= v <= 1.0):
+                    raise ValueError("proportion bounds must be in [0, 1]")
+        else:  # count
+            for v in (self.minimum, self.maximum):
+                if v is not None and float(v) != int(v):
+                    raise ValueError("count bounds must be whole numbers")
         if (
             self.minimum is not None
             and self.maximum is not None
             and self.minimum > self.maximum
         ):
-            raise ValueError(
-                f"minimum ({self.minimum}) > maximum ({self.maximum}) "
-                f"for {self.tag_type}={self.tag_value}"
-            )
+            raise ValueError(f"minimum ({self.minimum}) > maximum ({self.maximum})")
         return self
-
-    @property
-    def key(self) -> str:
-        return self.label or f"{self.tag_type}={self.tag_value}"
 
 
 class TIFTarget(BaseModel):
@@ -109,12 +149,12 @@ class Blueprint(BaseModel):
 
     @model_validator(mode="after")
     def _check_feasible_shape(self) -> Blueprint:
-        # Cheap structural feasibility: per-tag minimums can't exceed the length,
-        # and the sum of mutually-exclusive-looking minimums is left to the solver.
+        # Cheap structural feasibility: a single tag minimum (resolved to a count)
+        # can't exceed the length; the rest is left to the solver.
         for c in self.content_constraints:
-            if c.minimum is not None and c.minimum > self.length:
+            mn = c.resolved_minimum(self.length)
+            if mn is not None and mn > self.length:
                 raise ValueError(
-                    f"constraint {c.key} minimum {c.minimum} exceeds form length "
-                    f"{self.length}"
+                    f"constraint {c.key} minimum {mn} exceeds form length {self.length}"
                 )
         return self

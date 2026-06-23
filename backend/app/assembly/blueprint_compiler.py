@@ -80,18 +80,26 @@ def compile_blueprint(blueprint: Blueprint, pool: ItemPool) -> CompiledProblem:
     warnings: list[str] = []
 
     # --- content constraints -> index member sets ---
+    # An item is a member iff it matches ALL of the constraint's tag predicates
+    # (marginal = one predicate; cross-classified cell = several). Proportion bounds
+    # are resolved to counts against the form length here.
     content_sets: list[ContentSet] = []
     for c in blueprint.content_constraints:
+        preds = c.predicates
         members = tuple(
-            i for i, it in enumerate(items) if it.tags.get(c.tag_type) == c.tag_value
+            i
+            for i, it in enumerate(items)
+            if all(it.tags.get(k) == v for k, v in preds.items())
         )
-        if not members and c.minimum:
+        minimum = c.resolved_minimum(blueprint.length)
+        maximum = c.resolved_maximum(blueprint.length)
+        if not members and minimum:
             warnings.append(
-                f"content constraint {c.key} has minimum {c.minimum} but no pool "
-                f"items match {c.tag_type}={c.tag_value}"
+                f"content constraint {c.key} has minimum {minimum} but no pool "
+                f"items match {c.key}"
             )
         content_sets.append(
-            ContentSet(key=c.key, members=members, minimum=c.minimum, maximum=c.maximum)
+            ContentSet(key=c.key, members=members, minimum=minimum, maximum=maximum)
         )
 
     # --- enemy relations -> symmetric, deduped index pairs ---
