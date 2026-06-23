@@ -72,6 +72,8 @@ docs/tests_module_architecture_and_build_plan.md
 (postgres, redis, backend, frontend, scoring-r), FastAPI app + Alembic baseline, and the engine
 `contract.py` + `registry.py`. Then Phase 1 = Linear end-to-end (incl. OR-Tools MIP + oracle harness),
 then Phase 2 = CAT adapter. See the plan doc, §11 and §17.
+**Immediate intent before Phase 2:** a hands-on operational walkthrough of the Linear
+path as built — see [`docs/walkthroughs/phase1_linear_walkthrough.md`](docs/walkthroughs/phase1_linear_walkthrough.md).
 
 ## Seams to pin (before Phase 2; not blocking Phase 0/1)
 - Item-bank export contract (item-factory `live` items + IRT params + tags + `enemy_of`).
