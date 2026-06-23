@@ -1,84 +1,44 @@
-// Linear path IA (rebuilt in TS from the platform prototype's screen map):
-//   A-031 Test Editor (Assembly) → A-033 Form preview → session walkthrough.
-// A lightweight staged flow keeps the dependency surface small (no router).
-import { useState } from "react";
+// Linear-path IA (rebuilt in TS from the platform prototype's screen map):
+//   A-030 Test List → A-031..034 Test Editor tabs (Assembly / About / Scoring /
+//   History) → step-through walkthrough. Real routes via react-router.
+import { Link, Navigate, Route, Routes } from "react-router-dom";
 
-import { Pill } from "./components/ui";
-import { BlueprintEditorScreen } from "./screens/tests/BlueprintEditorScreen";
-import { FormPreviewScreen } from "./screens/tests/FormPreviewScreen";
-import { SessionNavigatorScreen } from "./screens/tests/SessionNavigatorScreen";
-
-type Stage =
-  | { name: "editor" }
-  | { name: "preview"; formId: string; blueprintId: string; poolId: string }
-  | { name: "navigate"; formId: string; blueprintId: string; poolId: string };
-
-const STEPS: { id: string; label: string; stage: Stage["name"] }[] = [
-  { id: "A-031", label: "Blueprint & assemble", stage: "editor" },
-  { id: "A-033", label: "Form preview", stage: "preview" },
-  { id: "—", label: "Walkthrough", stage: "navigate" },
-];
+import { NewTestScreen } from "./screens/tests/NewTestScreen";
+import { TestEditorLayout } from "./screens/tests/TestEditorLayout";
+import { TestListScreen } from "./screens/tests/TestListScreen";
+import { AboutTab } from "./screens/tests/tabs/AboutTab";
+import { AssemblyTab } from "./screens/tests/tabs/AssemblyTab";
+import { HistoryTab } from "./screens/tests/tabs/HistoryTab";
+import { ScoringTab } from "./screens/tests/tabs/ScoringTab";
+import { WalkTab } from "./screens/tests/tabs/WalkTab";
 
 export default function App() {
-  const [stage, setStage] = useState<Stage>({ name: "editor" });
-
   return (
-    <main className="min-h-screen bg-ink-50 text-ink-900">
+    <div className="min-h-screen bg-ink-50 text-ink-900">
       <header className="border-b border-ink-200 bg-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <div>
+          <Link to="/" className="block">
             <h1 className="text-xl font-semibold tracking-tight">Tests Platform</h1>
-            <p className="text-sm text-ink-600">Linear fixed-form — Test Editor</p>
-          </div>
-          <nav className="flex items-center gap-2">
-            {STEPS.map((s) => (
-              <Pill key={s.label} tone={s.stage === stage.name ? "info" : "neutral"}>
-                {s.id} {s.label}
-              </Pill>
-            ))}
-          </nav>
+            <p className="text-sm text-ink-600">Linear fixed-form authoring</p>
+          </Link>
         </div>
       </header>
 
       <div className="mx-auto max-w-5xl px-6 py-8">
-        {stage.name === "editor" && (
-          <BlueprintEditorScreen
-            onAssembled={({ formId, blueprintId, poolId }) =>
-              setStage({ name: "preview", formId, blueprintId, poolId })
-            }
-          />
-        )}
-        {stage.name === "preview" && (
-          <FormPreviewScreen
-            formId={stage.formId}
-            blueprintId={stage.blueprintId}
-            poolId={stage.poolId}
-            onWalk={() =>
-              setStage({
-                name: "navigate",
-                formId: stage.formId,
-                blueprintId: stage.blueprintId,
-                poolId: stage.poolId,
-              })
-            }
-            onBack={() => setStage({ name: "editor" })}
-          />
-        )}
-        {stage.name === "navigate" && (
-          <SessionNavigatorScreen
-            formId={stage.formId}
-            poolId={stage.poolId}
-            onBack={() =>
-              setStage({
-                name: "preview",
-                formId: stage.formId,
-                blueprintId: stage.blueprintId,
-                poolId: stage.poolId,
-              })
-            }
-          />
-        )}
+        <Routes>
+          <Route path="/" element={<TestListScreen />} />
+          <Route path="/tests/new" element={<NewTestScreen />} />
+          <Route path="/tests/:testId" element={<TestEditorLayout />}>
+            <Route index element={<Navigate to="assembly" replace />} />
+            <Route path="assembly" element={<AssemblyTab />} />
+            <Route path="about" element={<AboutTab />} />
+            <Route path="scoring" element={<ScoringTab />} />
+            <Route path="history" element={<HistoryTab />} />
+            <Route path="walk/:formId" element={<WalkTab />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </div>
-    </main>
+    </div>
   );
 }

@@ -36,7 +36,7 @@ export function FormPreviewScreen({
   blueprintId: string;
   poolId: string;
   onWalk: () => void;
-  onBack: () => void;
+  onBack?: () => void;
 }) {
   const form = useGetForm(formId);
   const curve = useGetFormTifCurve(formId, { theta_min: -3, theta_max: 3, n: 61 });
@@ -77,7 +77,9 @@ export function FormPreviewScreen({
         subtitle={`Form ${f.id.slice(0, 8)} · ${f.item_ids.length} items · status ${f.status}`}
         actions={
           <div className="flex gap-2">
-            <Button variant="secondary" onClick={onBack}>← Edit blueprint</Button>
+            {onBack && (
+              <Button variant="secondary" onClick={onBack}>← Back</Button>
+            )}
             <Button onClick={onWalk}>Walk the form →</Button>
           </div>
         }

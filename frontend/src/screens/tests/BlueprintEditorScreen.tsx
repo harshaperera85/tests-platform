@@ -2,7 +2,7 @@
 // named demo scenario, edit the blueprint (content + TIF target + length + parallel
 // forms/exposure), and assemble. Inline validation, clear success/warning/error
 // states, tag-availability hints. All API calls go through generated hooks (golden
-// rule 5).
+// rule 5). Seeds from an optional draft and reports a rich result on assemble.
 import { useState } from "react";
 
 import { useCreateAssemblyJob } from "../../api/generated/endpoints/assembly-jobs/assembly-jobs";
@@ -11,20 +11,36 @@ import { useGetPoolCatalog, useGetPoolItems } from "../../api/generated/endpoint
 import { useListScenarios } from "../../api/generated/endpoints/scenarios/scenarios";
 import type { Blueprint, ScenarioRead } from "../../api/generated/model";
 import { Alert, Button, Card, Field, Pill, Select, Spinner, TextInput } from "../../components/ui";
+import type { ConstraintDraft, EditorDraft } from "../../lib/testStore";
 
-type ConstraintRow = {
-  tag_type: string;
-  tag_value: string;
-  minimum: string;
-  maximum: string;
+export type AssembledResult = {
+  blueprintId: string;
+  formId: string;
+  jobId: string;
+  poolId: string;
+  status: string;
+  nForms: number;
+  draft: EditorDraft;
 };
+
 type Method = "minimax" | "maximin";
 
-const DEFAULT_CONSTRAINTS: ConstraintRow[] = [
-  { tag_type: "KC", tag_value: "algebra", minimum: "4", maximum: "8" },
-  { tag_type: "KC", tag_value: "geometry", minimum: "4", maximum: "" },
-  { tag_type: "Bloom", tag_value: "analyze", minimum: "3", maximum: "" },
-];
+const DEFAULT_DRAFT: EditorDraft = {
+  name: "linear-demo",
+  poolId: "demo_mixed",
+  length: "20",
+  numForms: "1",
+  maxUse: "",
+  thetaText: "-1, 0, 1",
+  infoText: "8, 11, 8",
+  tolerance: "",
+  method: "minimax",
+  constraints: [
+    { tag_type: "KC", tag_value: "algebra", minimum: "4", maximum: "8" },
+    { tag_type: "KC", tag_value: "geometry", minimum: "4", maximum: "" },
+    { tag_type: "Bloom", tag_value: "analyze", minimum: "3", maximum: "" },
+  ],
+};
 
 const parseNums = (text: string): number[] =>
   text.split(",").map((s) => s.trim()).filter(Boolean).map(Number);
@@ -36,20 +52,23 @@ const numOrUndef = (s: string): number | undefined => {
 };
 
 export function BlueprintEditorScreen({
+  initialDraft,
   onAssembled,
 }: {
-  onAssembled: (args: { formId: string; blueprintId: string; poolId: string }) => void;
+  initialDraft?: EditorDraft;
+  onAssembled: (r: AssembledResult) => void;
 }) {
-  const [poolId, setPoolId] = useState("demo_mixed");
-  const [name, setName] = useState("linear-demo");
-  const [length, setLength] = useState("20");
-  const [numForms, setNumForms] = useState("1");
-  const [maxUse, setMaxUse] = useState("");
-  const [constraints, setConstraints] = useState<ConstraintRow[]>(DEFAULT_CONSTRAINTS);
-  const [thetaText, setThetaText] = useState("-1, 0, 1");
-  const [infoText, setInfoText] = useState("8, 11, 8");
-  const [tolerance, setTolerance] = useState("");
-  const [method, setMethod] = useState<Method>("minimax");
+  const seed = initialDraft ?? DEFAULT_DRAFT;
+  const [poolId, setPoolId] = useState(seed.poolId);
+  const [name, setName] = useState(seed.name);
+  const [length, setLength] = useState(seed.length);
+  const [numForms, setNumForms] = useState(seed.numForms);
+  const [maxUse, setMaxUse] = useState(seed.maxUse);
+  const [constraints, setConstraints] = useState<ConstraintDraft[]>(seed.constraints);
+  const [thetaText, setThetaText] = useState(seed.thetaText);
+  const [infoText, setInfoText] = useState(seed.infoText);
+  const [tolerance, setTolerance] = useState(seed.tolerance);
+  const [method, setMethod] = useState<Method>(seed.method);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [infeasible, setInfeasible] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
@@ -61,7 +80,6 @@ export function BlueprintEditorScreen({
   const createJob = useCreateAssemblyJob();
   const busy = createBlueprint.isPending || createJob.isPending;
 
-  // --- inline validation ---
   const theta = parseNums(thetaText);
   const info = parseNums(infoText);
   const len = Number(length);
@@ -79,6 +97,13 @@ export function BlueprintEditorScreen({
     if (mn != null && mn > len) errors[`c${i}`] = `min ${mn} > length ${len}`;
   });
   const valid = Object.keys(errors).length === 0;
+
+  function currentDraft(): EditorDraft {
+    return {
+      name, poolId, length, numForms, maxUse, thetaText, infoText, tolerance, method,
+      constraints,
+    };
+  }
 
   function applyScenario(s: ScenarioRead) {
     const bp = s.blueprint;
@@ -110,7 +135,7 @@ export function BlueprintEditorScreen({
     setWarnings([]);
   }
 
-  function updateConstraint(i: number, patch: Partial<ConstraintRow>) {
+  function updateConstraint(i: number, patch: Partial<ConstraintDraft>) {
     setConstraints((rows) => rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
   }
 
@@ -156,7 +181,15 @@ export function BlueprintEditorScreen({
         );
         return;
       }
-      onAssembled({ formId: formIds[0], blueprintId: created.id, poolId });
+      onAssembled({
+        blueprintId: created.id,
+        formId: formIds[0],
+        jobId: job.id,
+        poolId,
+        status: job.status,
+        nForms: formIds.length,
+        draft: currentDraft(),
+      });
     } catch (e) {
       setSubmitError(e instanceof Error ? e.message : "Assembly request failed.");
     }
@@ -184,9 +217,7 @@ export function BlueprintEditorScreen({
             <Select
               value=""
               onChange={(e) => {
-                const s = (scenarios.data ?? []).find(
-                  (x) => x.scenario_id === e.target.value,
-                );
+                const s = (scenarios.data ?? []).find((x) => x.scenario_id === e.target.value);
                 if (s) applyScenario(s);
               }}
             >
@@ -202,9 +233,7 @@ export function BlueprintEditorScreen({
         {pool.data && (
           <p className="mt-3 text-xs text-ink-400">
             {pool.data.simulated ? "Simulated bank" : "Bank"}: {pool.data.n_items} items
-            {tagSummary?.domain &&
-              " · domains " + Object.keys(tagSummary.domain).join(", ")}
-            {tagSummary?.KC && " · KC " + Object.entries(tagSummary.KC).map(([k, v]) => `${k}:${v}`).join(", ")}
+            {tagSummary?.domain && " · domains " + Object.keys(tagSummary.domain).join(", ")}
           </p>
         )}
       </Card>
@@ -215,13 +244,11 @@ export function BlueprintEditorScreen({
             <TextInput value={name} onChange={(e) => setName(e.target.value)} />
           </Field>
           <Field label="Length" hint={errors.length}>
-            <TextInput type="number" min={1} value={length}
-              aria-invalid={Boolean(errors.length)}
+            <TextInput type="number" min={1} value={length} aria-invalid={Boolean(errors.length)}
               onChange={(e) => setLength(e.target.value)} />
           </Field>
           <Field label="Parallel forms" hint={errors.numForms}>
-            <TextInput type="number" min={1} value={numForms}
-              aria-invalid={Boolean(errors.numForms)}
+            <TextInput type="number" min={1} value={numForms} aria-invalid={Boolean(errors.numForms)}
               onChange={(e) => setNumForms(e.target.value)} />
           </Field>
           <Field label="Max use / item" hint="exposure (optional)">
@@ -235,12 +262,10 @@ export function BlueprintEditorScreen({
         title="Content constraints"
         subtitle="Min/max item counts by tag (KC, Bloom, TIMSS, domain)."
         actions={
-          <Button
-            variant="secondary"
+          <Button variant="secondary"
             onClick={() =>
               setConstraints((r) => [...r, { tag_type: "", tag_value: "", minimum: "", maximum: "" }])
-            }
-          >
+            }>
             + Add
           </Button>
         }

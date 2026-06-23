@@ -38,7 +38,7 @@ Keep that session open. Then open in your browser:
 
 | URL | What |
 |---|---|
-| http://localhost:5173 | **Frontend** — the Test Editor app (A-031 → A-033 → walkthrough) |
+| http://localhost:5173 | **Frontend** — Test List (A-030) → Test Editor tabs (A-031..034) → walkthrough |
 | http://localhost:8000/docs | **Swagger UI** — try the API directly |
 | http://localhost:8000/openapi.json | OpenAPI contract (source of the generated client) |
 
@@ -85,9 +85,24 @@ can comfortably hit a target around 8–12 information.
 
 ---
 
-## 1. Blueprint editor + assemble (A-031 Test Editor → Assembly)
+## Navigation (the IA)
 
-Open **http://localhost:5173**. At the top, **Pool & scenario**:
+The app uses real routes:
+- **`/`** — **Test List (A-030)**: your tests (stored in this browser until a backend
+  tests resource lands). Click **+ New test** to create one and open its editor.
+- **`/tests/:id/assembly`** — **Test Editor**, with tabs **Assembly (A-031)**,
+  **About (A-032)**, **Scoring (A-034)**, **History (A-033)**. Deep links work on refresh.
+- **`/tests/:id/walk/:formId`** — the step-through walkthrough, reachable from the
+  Assembly preview, the Scoring tab, or History.
+
+> A "test" is a client-side record pointing at the immutable blueprints/forms it
+> assembles; the Test List/History are local registries (a backend `tests` list
+> endpoint is a fast-follow).
+
+## 1. Blueprint editor + assemble (Test Editor → Assembly tab, A-031)
+
+Open **http://localhost:5173** → **Test List**. Click **+ New test**, which opens the
+**Assembly** tab. At the top, **Pool & scenario**:
 - **Item pool** — defaults to `demo_mixed` (252 items). You can switch to `small_2pl`.
 - **Demo scenario** — a dropdown of curated presets (`GET /api/v1/scenarios`). Selecting
   one **populates the whole blueprint + pool** in one click. Use these to exercise each
