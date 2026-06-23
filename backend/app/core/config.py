@@ -24,6 +24,14 @@ class Settings(BaseSettings):
     environment: str = "development"
     debug: bool = True
     api_v1_prefix: str = "/api/v1"
+    # Comma-separated allowed CORS origins. Empty (default) = no cross-origin access
+    # (dev uses the same-origin Vite proxy). Set in production when the SPA is served
+    # from a different origin, e.g. "https://tests.example.com".
+    cors_origins: str = ""
+
+    @property
+    def cors_origin_list(self) -> list[str]:
+        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
     # --- datastores ---
     database_url: str = "postgresql+psycopg://tests:tests@postgres:5432/tests"
