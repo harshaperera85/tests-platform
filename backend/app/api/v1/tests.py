@@ -26,6 +26,7 @@ from app.schemas.tests import (
     TestSummary,
     TestUpdate,
 )
+from app.services import audit
 from app.services.assembly_run import create_job, dispatch
 
 router = APIRouter(prefix="/tests", tags=["tests"])
@@ -85,6 +86,13 @@ def create_test(payload: TestCreate, db: Session = Depends(get_db)) -> TestRead:
     db.add(test)
     db.commit()
     db.refresh(test)
+    audit.record(
+        db,
+        action="test.create",
+        entity_type="test",
+        entity_id=test.id,
+        detail={"name": test.name, "pool_id": test.pool_id},
+    )
     return _to_read(test, 0)
 
 
@@ -150,6 +158,7 @@ def delete_test(test_id: str, db: Session = Depends(get_db)) -> None:
     test = _get_or_404(db, test_id)
     db.delete(test)
     db.commit()
+    audit.record(db, action="test.delete", entity_type="test", entity_id=test_id)
 
 
 @router.post(
@@ -197,6 +206,13 @@ def assemble_test(
         .all()
     ]
     result = job.result or {}
+    audit.record(
+        db,
+        action="test.assemble",
+        entity_type="test",
+        entity_id=test.id,
+        detail={"job_id": job.id, "status": job.status, "n_forms": len(form_ids)},
+    )
     return AssemblyJobRead(
         id=job.id,
         blueprint_id=job.blueprint_id,
@@ -245,6 +261,7 @@ def lock_test(test_id: str, db: Session = Depends(get_db)) -> TestRead:
     test.status = "locked"
     db.commit()
     db.refresh(test)
+    audit.record(db, action="test.lock", entity_type="test", entity_id=test_id)
     return _to_read(test, _form_count(db, test_id))
 
 
@@ -254,6 +271,7 @@ def unlock_test(test_id: str, db: Session = Depends(get_db)) -> TestRead:
     test.status = "draft"
     db.commit()
     db.refresh(test)
+    audit.record(db, action="test.unlock", entity_type="test", entity_id=test_id)
     return _to_read(test, _form_count(db, test_id))
 
 
@@ -271,4 +289,11 @@ def duplicate_test(test_id: str, db: Session = Depends(get_db)) -> TestRead:
     db.add(copy)
     db.commit()
     db.refresh(copy)
+    audit.record(
+        db,
+        action="test.duplicate",
+        entity_type="test",
+        entity_id=copy.id,
+        detail={"from": test_id},
+    )
     return _to_read(copy, 0)

@@ -5,9 +5,17 @@ model (plan §8): test, blueprint, assembly_job, form.
 """
 
 from app.models.assembly_job import AssemblyJobRow
+from app.models.audit_event import AuditEventRow
 from app.models.base import Base
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
 from app.models.test import TestRow
 
-__all__ = ["AssemblyJobRow", "Base", "BlueprintRow", "FormRow", "TestRow"]
+__all__ = [
+    "AssemblyJobRow",
+    "AuditEventRow",
+    "Base",
+    "BlueprintRow",
+    "FormRow",
+    "TestRow",
+]
