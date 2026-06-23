@@ -8,11 +8,14 @@ from __future__ import annotations
 
 from typing import Literal
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 from pydantic import BaseModel
+from sqlalchemy import text
 
 from app import __version__
 from app.core.config import settings
+from app.core.db import get_engine
+from app.core.redis import get_redis
 
 router = APIRouter(tags=["health"])
 
@@ -24,6 +27,11 @@ class HealthResponse(BaseModel):
     environment: str
 
 
+class ReadinessResponse(BaseModel):
+    status: Literal["ready", "degraded"]
+    checks: dict[str, str]  # dependency -> "ok" | "error: ..."
+
+
 @router.get("/health", response_model=HealthResponse, summary="Liveness check")
 def health() -> HealthResponse:
     return HealthResponse(
@@ -32,3 +40,27 @@ def health() -> HealthResponse:
         version=__version__,
         environment=settings.environment,
     )
+
+
+@router.get(
+    "/health/ready", response_model=ReadinessResponse, summary="Readiness check"
+)
+def readiness(response: Response) -> ReadinessResponse:
+    """Verify dependencies (Postgres, Redis). 503 if any are unreachable."""
+    checks: dict[str, str] = {}
+    try:
+        with get_engine().connect() as conn:
+            conn.execute(text("SELECT 1"))
+        checks["postgres"] = "ok"
+    except Exception as exc:  # noqa: BLE001 - report any connectivity failure
+        checks["postgres"] = f"error: {exc}"
+    try:
+        get_redis().ping()
+        checks["redis"] = "ok"
+    except Exception as exc:  # noqa: BLE001
+        checks["redis"] = f"error: {exc}"
+
+    ready = all(v == "ok" for v in checks.values())
+    if not ready:
+        response.status_code = 503
+    return ReadinessResponse(status="ready" if ready else "degraded", checks=checks)

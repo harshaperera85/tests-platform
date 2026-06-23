@@ -13,6 +13,8 @@ from fastapi.routing import APIRoute
 from app import __version__
 from app.api.v1.router import api_router
 from app.core.config import settings
+from app.core.logging import setup_logging
+from app.core.middleware import RequestIdMiddleware
 from app.engine import strategies as _strategies  # noqa: F401  (registers strategies)
 
 
@@ -27,12 +29,14 @@ def _operation_id(route: APIRoute) -> str:
 
 
 def create_app() -> FastAPI:
+    setup_logging(level="DEBUG" if settings.debug else "INFO")
     app = FastAPI(
         title="Tests Platform API",
         version=__version__,
         description="Assembly + administration engine for a large testing program.",
         generate_unique_id_function=_operation_id,
     )
+    app.add_middleware(RequestIdMiddleware)
     app.include_router(api_router, prefix=settings.api_v1_prefix)
 
     @app.get("/health", tags=["health"], summary="Root liveness check")
