@@ -375,14 +375,48 @@
         }
       }
     },
+    "/api/v1/pool/catalog": {
+      "get": {
+        "tags": [
+          "pool"
+        ],
+        "summary": "Get Pool Catalog",
+        "description": "List the selectable simulated banks (for the pool selector).",
+        "operationId": "get_pool_catalog",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolCatalog"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/pool/items": {
       "get": {
         "tags": [
           "pool"
         ],
         "summary": "Get Pool Items",
-        "description": "Return the simulated item bank with params, tags, and synthetic content.",
+        "description": "Return a simulated bank with params, tags, and synthetic content.",
         "operationId": "get_pool_items",
+        "parameters": [
+          {
+            "name": "pool_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "small_2pl",
+              "title": "Pool Id"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -390,6 +424,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/PoolDocument"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/scenarios": {
+      "get": {
+        "tags": [
+          "scenarios"
+        ],
+        "summary": "List Scenarios",
+        "operationId": "list_scenarios",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ScenarioRead"
+                  },
+                  "type": "array",
+                  "title": "Response List Scenarios"
                 }
               }
             }
@@ -554,6 +623,11 @@
             "type": "string",
             "title": "Blueprint Id"
           },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id",
+            "default": "small_2pl"
+          },
           "strategy": {
             "type": "string",
             "title": "Strategy",
@@ -585,6 +659,10 @@
           "blueprint_id": {
             "type": "string",
             "title": "Blueprint Id"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
           },
           "strategy": {
             "type": "string",
@@ -658,6 +736,7 @@
         "required": [
           "id",
           "blueprint_id",
+          "pool_id",
           "strategy",
           "status",
           "created_at"
@@ -996,8 +1075,33 @@
         "title": "NextAction",
         "description": "What the engine should do next: present item(s)/module, or complete."
       },
+      "PoolCatalog": {
+        "properties": {
+          "default_pool_id": {
+            "type": "string",
+            "title": "Default Pool Id"
+          },
+          "pools": {
+            "items": {
+              "$ref": "#/components/schemas/PoolSummary"
+            },
+            "type": "array",
+            "title": "Pools"
+          }
+        },
+        "type": "object",
+        "required": [
+          "default_pool_id",
+          "pools"
+        ],
+        "title": "PoolCatalog"
+      },
       "PoolDocument": {
         "properties": {
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
           "simulated": {
             "type": "boolean",
             "title": "Simulated"
@@ -1045,6 +1149,7 @@
         },
         "type": "object",
         "required": [
+          "pool_id",
           "simulated",
           "model",
           "scaling_d",
@@ -1151,6 +1256,58 @@
         ],
         "title": "PoolItemOption"
       },
+      "PoolSummary": {
+        "properties": {
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "simulated": {
+            "type": "boolean",
+            "title": "Simulated"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "n_3pl": {
+            "type": "integer",
+            "title": "N 3Pl"
+          },
+          "domains": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Domains"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pool_id",
+          "title",
+          "description",
+          "model",
+          "simulated",
+          "n_items",
+          "n_3pl",
+          "domains"
+        ],
+        "title": "PoolSummary",
+        "description": "One entry in the pool catalog (no item payload) \u2014 for the pool selector."
+      },
       "PreviewRespondRequest": {
         "properties": {
           "state": {
@@ -1217,6 +1374,11 @@
             ],
             "title": "Form Id"
           },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id",
+            "default": "small_2pl"
+          },
           "assembly_strategy": {
             "type": "string",
             "title": "Assembly Strategy",
@@ -1258,6 +1420,44 @@
         ],
         "title": "PreviewStep",
         "description": "One step of the walkthrough: the new state + what to do next.\n\n``next_action.navigation`` carries the strategy's capabilities, so no separate\ncapabilities call is needed."
+      },
+      "ScenarioRead": {
+        "properties": {
+          "scenario_id": {
+            "type": "string",
+            "title": "Scenario Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "blueprint": {
+            "$ref": "#/components/schemas/Blueprint"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "title",
+          "description",
+          "pool_id",
+          "blueprint",
+          "note"
+        ],
+        "title": "ScenarioRead",
+        "description": "A named demo scenario: a pool + blueprint preset exercising one capability."
       },
       "ScoreResult": {
         "properties": {

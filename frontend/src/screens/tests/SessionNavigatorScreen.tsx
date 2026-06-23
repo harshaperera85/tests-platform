@@ -31,13 +31,15 @@ type TracePoint = { position: number; theta: number; se: number };
 
 export function SessionNavigatorScreen({
   formId,
+  poolId,
   onBack,
 }: {
   formId: string;
+  poolId: string;
   onBack: () => void;
 }) {
   const [mode, setMode] = useState<"manual" | "sim">("manual");
-  const pool = useGetPoolItems();
+  const pool = useGetPoolItems({ pool_id: poolId });
   const byId = new Map<string, PoolItem>(
     (pool.data?.items ?? []).map((it) => [it.item_id, it]),
   );

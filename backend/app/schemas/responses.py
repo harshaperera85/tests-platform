@@ -24,6 +24,7 @@ class BlueprintRead(BaseModel):
 
 class AssemblyJobCreate(BaseModel):
     blueprint_id: str
+    pool_id: str = "small_2pl"
     strategy: str = "mip"
     seed: int = 0
     time_limit_s: float = 10.0
@@ -32,6 +33,7 @@ class AssemblyJobCreate(BaseModel):
 class AssemblyJobRead(BaseModel):
     id: str
     blueprint_id: str
+    pool_id: str
     strategy: str
     status: str
     method: str | None = None
@@ -41,6 +43,17 @@ class AssemblyJobRead(BaseModel):
     warnings: list[str] = []
     form_ids: list[str] = []
     created_at: datetime
+
+
+class ScenarioRead(BaseModel):
+    """A named demo scenario: a pool + blueprint preset exercising one capability."""
+
+    scenario_id: str
+    title: str
+    description: str
+    pool_id: str
+    blueprint: Blueprint
+    note: str  # what to look for when assembling/previewing it
 
 
 class TIFPoint(BaseModel):

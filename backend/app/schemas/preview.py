@@ -19,6 +19,7 @@ class PreviewStartRequest(BaseModel):
 
     blueprint_id: str | None = None
     form_id: str | None = None
+    pool_id: str = "small_2pl"  # used when starting from a blueprint_id
     assembly_strategy: str = "mip"
     session_id: str | None = None
 

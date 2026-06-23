@@ -55,12 +55,23 @@ curl -s http://localhost:8000/api/v1/health
 
 ---
 
-## The fixture pool (what your blueprints can ask for)
+## The simulated pools (what your blueprints can ask for)
 
-Until the item-factory export is wired, assembly runs against
-`small_2pl_bank.json` — **48 calibrated 2PL items**, canonical metric (mirt `D=1.702`).
-Tag counts you can constrain on:
+Until the item-factory export is wired, the platform ships two **simulated** banks,
+selectable in the editor (and via `GET /api/v1/pool/catalog`):
 
+| Pool id | Items | Notes |
+|---|---|---|
+| `small_2pl` | 48 | 2PL only, single domain (`math`) — minimal smoke bank. |
+| `demo_mixed` | 252 | **Default in the UI.** 3 domains (math/science/ela), 2PL **+ 79 3PL** items, wide symmetric difficulty, multi-item enemy sets — exercises every linear use case. |
+
+The **`demo_mixed`** bank is what makes multi-domain balancing, guessing (3PL),
+extreme cut scores, and several parallel forms + exposure demonstrable. The tables
+below describe **`small_2pl`** (used by the §1 default + the §5 curl examples); the
+demo bank's tag values differ per domain (e.g. KC `algebra/geometry/number/data`,
+`biology/chemistry/physics/earth`, `reading/writing/grammar/vocab`).
+
+### `small_2pl` tag counts
 | Tag dimension | Values (count each) |
 |---|---|
 | `KC` | algebra (12), geometry (12), number (12), data (12) |
@@ -76,8 +87,19 @@ can comfortably hit a target around 8–12 information.
 
 ## 1. Blueprint editor + assemble (A-031 Test Editor → Assembly)
 
-Open **http://localhost:5173**. The editor loads pre-filled with a **known-feasible**
-blueprint (this is the default):
+Open **http://localhost:5173**. At the top, **Pool & scenario**:
+- **Item pool** — defaults to `demo_mixed` (252 items). You can switch to `small_2pl`.
+- **Demo scenario** — a dropdown of curated presets (`GET /api/v1/scenarios`). Selecting
+  one **populates the whole blueprint + pool** in one click. Use these to exercise each
+  capability deliberately:
+  - `multi_domain` — equal math/science/ela coverage (10/10/10).
+  - `mastery_cut` — maximin information at a high cut score (θ = 1.5).
+  - `parallel_exposure` — **3 parallel forms**, each item used at most once.
+  - `guessing_3pl` — reasoning-heavy form drawn from 3PL items.
+  - `infeasible_demo` — the deliberate failure case (see §4).
+
+For the baseline, leave the default (or load `smoke_small` for the small bank). The
+editor is pre-filled with a **known-feasible** blueprint:
 
 | Field | Value |
 |---|---|
@@ -94,10 +116,20 @@ Click **Assemble form**.
 **Checkpoint 1 — PASS** if:
 - A blue "OR-Tools CP-SAT solving…" pill appears briefly, then the app advances to the
   **Form preview** screen (no error pill).
-- (This blueprint is verified: status `optimal`, objective `0.000`, actual TIF exactly
-  `8.0 / 11.0 / 8.0`.)
+- (On `small_2pl` this is verified: status `optimal`, objective `0.000`, actual TIF
+  exactly `8.0 / 11.0 / 8.0`. On `demo_mixed` it also assembles `optimal` with different
+  items.)
 
 **FAIL** if you get a red warn pill, a spinner that never resolves, or a blank screen.
+
+**Checkpoint 1b (scenarios) — PASS** if loading each preset and clicking **Assemble form**
+behaves as its note says:
+- `multi_domain` → preview's **Content constraints** card shows math/science/ela each ✓ at
+  exactly 10.
+- `parallel_exposure` → the assembly job reports **3 forms** (the preview shows the first);
+  verify zero overlap via the API in §5 if you wish.
+- `guessing_3pl` → assembles `optimal`/`feasible` from the 3PL-bearing bank.
+- `mastery_cut` → assembles; information concentrates near θ = 1.5 (visible in §2's curve).
 
 ---
 
@@ -230,8 +262,14 @@ S=$(curl -s -X POST $BASE/preview/start -H 'content-type: application/json' -d "
 
 ### 5b′. Simulated-data endpoints (genuine demo data, no real export wired)
 ```bash
-# the simulated item bank: params + tags + synthetic content + provenance
-curl -s $BASE/pool/items | python3 -c 'import sys,json;d=json.load(sys.stdin);print("simulated",d["simulated"],"n",d["n_items"],"KC",d["tag_summary"]["KC"])'
+# catalog of selectable simulated banks
+curl -s $BASE/pool/catalog | python3 -c 'import sys,json;d=json.load(sys.stdin);print("default",d["default_pool_id"]);[print(" ",p["pool_id"],p["n_items"],"items",p["n_3pl"],"3PL",p["domains"]) for p in d["pools"]]'
+
+# curated demo scenarios (bank + blueprint presets)
+curl -s $BASE/scenarios | python3 -c 'import sys,json;[print(" ",s["scenario_id"],"->",s["pool_id"]) for s in json.load(sys.stdin)]'
+
+# the simulated item bank (select with ?pool_id=demo_mixed): params + tags + content
+curl -s "$BASE/pool/items?pool_id=demo_mixed" | python3 -c 'import sys,json;d=json.load(sys.stdin);print("pool",d["pool_id"],"simulated",d["simulated"],"n",d["n_items"],"domains",list(d["tag_summary"]["domain"]))'
 
 # dense actual TIF over a theta grid (server-computed on the canonical metric)
 curl -s "$BASE/forms/$FID/tif-curve?theta_min=-3&theta_max=3&n=61" | python3 -c 'import sys,json;d=json.load(sys.stdin);print("curve points",len(d["curve"]),"method",d["method"],"tol",d["tolerance"])'

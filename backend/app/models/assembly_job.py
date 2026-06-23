@@ -23,6 +23,10 @@ class AssemblyJobRow(PkUuidMixin, TimestampMixin, Base):
         ForeignKey("blueprint.id", ondelete="CASCADE"), index=True
     )
     strategy: Mapped[str] = mapped_column(default="mip")
+    #: which item pool the job assembled from (catalog id, plan §8 item_pool_ref)
+    pool_id: Mapped[str] = mapped_column(
+        default="small_2pl", server_default="small_2pl"
+    )
     status: Mapped[str] = mapped_column(
         default="pending"
     )  # pending/optimal/feasible/infeasible/error

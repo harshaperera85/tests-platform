@@ -9,12 +9,37 @@ import * as zod from 'zod';
 
 
 /**
- * Return the simulated item bank with params, tags, and synthetic content.
+ * List the selectable simulated banks (for the pool selector).
+ * @summary Get Pool Catalog
+ */
+export const getPoolCatalogResponse = zod.object({
+  "default_pool_id": zod.string(),
+  "pools": zod.array(zod.object({
+  "pool_id": zod.string(),
+  "title": zod.string(),
+  "description": zod.string(),
+  "model": zod.string(),
+  "simulated": zod.boolean(),
+  "n_items": zod.number(),
+  "n_3pl": zod.number(),
+  "domains": zod.array(zod.string())
+}).describe('One entry in the pool catalog (no item payload) — for the pool selector.'))
+})
+
+/**
+ * Return a simulated bank with params, tags, and synthetic content.
  * @summary Get Pool Items
  */
+export const getPoolItemsQueryPoolIdDefault = "small_2pl";
+
+export const getPoolItemsQueryParams = zod.object({
+  "pool_id": zod.string().default(getPoolItemsQueryPoolIdDefault)
+})
+
 export const getPoolItemsResponseItemsItemCDefault = 0;export const getPoolItemsResponseItemsItemTagsDefault = {  };export const getPoolItemsResponseItemsItemEnemyOfDefault = [];export const getPoolItemsResponseItemsItemOptionsDefault = [];
 
 export const getPoolItemsResponse = zod.object({
+  "pool_id": zod.string(),
   "simulated": zod.boolean(),
   "provenance": zod.union([zod.string(),zod.null()]).optional(),
   "model": zod.string(),

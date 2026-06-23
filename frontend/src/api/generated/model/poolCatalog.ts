@@ -5,11 +5,9 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
+import type { PoolSummary } from './poolSummary';
 
-export interface AssemblyJobCreate {
-  blueprint_id: string;
-  pool_id?: string;
-  strategy?: string;
-  seed?: number;
-  time_limit_s?: number;
+export interface PoolCatalog {
+  default_pool_id: string;
+  pools: PoolSummary[];
 }

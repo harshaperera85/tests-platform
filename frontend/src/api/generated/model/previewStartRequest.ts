@@ -15,6 +15,7 @@ import type { PreviewStartRequestSessionId } from './previewStartRequestSessionI
 export interface PreviewStartRequest {
   blueprint_id?: PreviewStartRequestBlueprintId;
   form_id?: PreviewStartRequestFormId;
+  pool_id?: string;
   assembly_strategy?: string;
   session_id?: PreviewStartRequestSessionId;
 }

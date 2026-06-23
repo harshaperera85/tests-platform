@@ -11,6 +11,7 @@ import type { AssemblyJobReadObjectiveValue } from './assemblyJobReadObjectiveVa
 export interface AssemblyJobRead {
   id: string;
   blueprint_id: string;
+  pool_id: string;
   strategy: string;
   status: string;
   method?: AssemblyJobReadMethod;

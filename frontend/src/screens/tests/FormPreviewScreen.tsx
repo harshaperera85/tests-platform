@@ -28,11 +28,13 @@ import { Alert, Button, Card, Pill, Spinner } from "../../components/ui";
 export function FormPreviewScreen({
   formId,
   blueprintId,
+  poolId,
   onWalk,
   onBack,
 }: {
   formId: string;
   blueprintId: string;
+  poolId: string;
   onWalk: () => void;
   onBack: () => void;
 }) {
@@ -41,7 +43,7 @@ export function FormPreviewScreen({
   const blueprint = useGetBlueprint(blueprintId, {
     query: { enabled: Boolean(blueprintId) },
   });
-  const pool = useGetPoolItems();
+  const pool = useGetPoolItems({ pool_id: poolId });
 
   if (form.isLoading) return <Card title="Form preview"><Spinner label="Loading form…" /></Card>;
   if (form.isError || !form.data)

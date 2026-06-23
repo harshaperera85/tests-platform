@@ -21,6 +21,9 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  GetPoolItemsParams,
+  HTTPValidationError,
+  PoolCatalog,
   PoolDocument
 } from '../../model';
 
@@ -33,17 +36,17 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * Return the simulated item bank with params, tags, and synthetic content.
- * @summary Get Pool Items
+ * List the selectable simulated banks (for the pool selector).
+ * @summary Get Pool Catalog
  */
-export const getPoolItems = (
+export const getPoolCatalog = (
     
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
       
-      return customInstance<PoolDocument>(
-      {url: `/api/v1/pool/items`, method: 'GET', signal
+      return customInstance<PoolCatalog>(
+      {url: `/api/v1/pool/catalog`, method: 'GET', signal
     },
       options);
     }
@@ -51,23 +54,116 @@ export const getPoolItems = (
 
 
 
-export const getGetPoolItemsQueryKey = () => {
+export const getGetPoolCatalogQueryKey = () => {
     return [
-    `/api/v1/pool/items`
+    `/api/v1/pool/catalog`
     ] as const;
     }
 
     
-export const getGetPoolItemsQueryOptions = <TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export const getGetPoolCatalogQueryOptions = <TData = Awaited<ReturnType<typeof getPoolCatalog>>, TError = ErrorType<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolCatalog>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetPoolItemsQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetPoolCatalogQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPoolItems>>> = ({ signal }) => getPoolItems(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPoolCatalog>>> = ({ signal }) => getPoolCatalog(requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPoolCatalog>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetPoolCatalogQueryResult = NonNullable<Awaited<ReturnType<typeof getPoolCatalog>>>
+export type GetPoolCatalogQueryError = ErrorType<unknown>
+
+
+export function useGetPoolCatalog<TData = Awaited<ReturnType<typeof getPoolCatalog>>, TError = ErrorType<unknown>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolCatalog>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPoolCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof getPoolCatalog>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetPoolCatalog<TData = Awaited<ReturnType<typeof getPoolCatalog>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolCatalog>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPoolCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof getPoolCatalog>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetPoolCatalog<TData = Awaited<ReturnType<typeof getPoolCatalog>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolCatalog>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Pool Catalog
+ */
+
+export function useGetPoolCatalog<TData = Awaited<ReturnType<typeof getPoolCatalog>>, TError = ErrorType<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolCatalog>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetPoolCatalogQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Return a simulated bank with params, tags, and synthetic content.
+ * @summary Get Pool Items
+ */
+export const getPoolItems = (
+    params?: GetPoolItemsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<PoolDocument>(
+      {url: `/api/v1/pool/items`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetPoolItemsQueryKey = (params?: GetPoolItemsParams,) => {
+    return [
+    `/api/v1/pool/items`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetPoolItemsQueryOptions = <TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<HTTPValidationError>>(params?: GetPoolItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPoolItemsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPoolItems>>> = ({ signal }) => getPoolItems(params, requestOptions, signal);
 
       
 
@@ -77,11 +173,11 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 }
 
 export type GetPoolItemsQueryResult = NonNullable<Awaited<ReturnType<typeof getPoolItems>>>
-export type GetPoolItemsQueryError = ErrorType<unknown>
+export type GetPoolItemsQueryError = ErrorType<HTTPValidationError>
 
 
-export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<unknown>>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>> & Pick<
+export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<HTTPValidationError>>(
+ params: undefined |  GetPoolItemsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPoolItems>>,
           TError,
@@ -90,8 +186,8 @@ export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>> & Pick<
+export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<HTTPValidationError>>(
+ params?: GetPoolItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPoolItems>>,
           TError,
@@ -100,20 +196,20 @@ export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>
       >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
-export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<HTTPValidationError>>(
+ params?: GetPoolItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
 /**
  * @summary Get Pool Items
  */
 
-export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<unknown>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+export function useGetPoolItems<TData = Awaited<ReturnType<typeof getPoolItems>>, TError = ErrorType<HTTPValidationError>>(
+ params?: GetPoolItemsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolItems>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
-  const queryOptions = getGetPoolItemsQueryOptions(options)
+  const queryOptions = getGetPoolItemsQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 

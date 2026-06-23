@@ -29,6 +29,8 @@ def test_phase1_paths_present(client: TestClient) -> None:
     assert "/api/v1/preview/respond" in paths
     assert "/api/v1/preview/score" in paths
     assert "/api/v1/pool/items" in paths
+    assert "/api/v1/pool/catalog" in paths
+    assert "/api/v1/scenarios" in paths
     assert "/api/v1/forms/{form_id}/tif-curve" in paths
     assert "/api/v1/forms/{form_id}/simulate" in paths
 

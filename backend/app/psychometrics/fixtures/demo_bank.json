@@ -1,0 +1,8470 @@
+{
+  "metric": {
+    "model": "mixed-2PL-3PL",
+    "scaling_d": 1.702,
+    "scale": "canonical"
+  },
+  "simulated": true,
+  "provenance": "Auto-generated mixed 2PL/3PL simulated bank for end-to-end demonstration (multi-domain, guessing, wide difficulty, enemy sets). Synthetic content; not real items.",
+  "items": [
+    {
+      "item_id": "D0001",
+      "a": 0.912,
+      "b": 2.335,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0001: solve for the unknown in part A (b=2.335, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0002",
+      "a": 1.098,
+      "b": -2.527,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0002: find the measure of part B (b=-2.527, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0003",
+      "a": 0.652,
+      "b": 1.309,
+      "c": 0.15,
+      "tags": {
+        "KC": "number",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0003: evaluate the expression in part C (b=1.309, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0004",
+      "a": 1.227,
+      "b": -1.423,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0004: interpret the dataset in part D (b=-1.423, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0005",
+      "a": 0.453,
+      "b": -1.779,
+      "c": 0.2,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0005: solve for the unknown in part A (b=-1.779, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0006",
+      "a": 1.912,
+      "b": -1.441,
+      "c": 0.15,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0006: find the measure of part B (b=-1.441, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0007",
+      "a": 2.145,
+      "b": -2.501,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0132",
+        "D0129"
+      ],
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0007: evaluate the expression in part C (b=-2.501, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0008",
+      "a": 0.989,
+      "b": 0.046,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0008: interpret the dataset in part D (b=0.046, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0009",
+      "a": 1.957,
+      "b": 1.7,
+      "c": 0.25,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0223",
+        "D0054",
+        "D0224"
+      ],
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0009: solve for the unknown in part A (b=1.7, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0010",
+      "a": 0.74,
+      "b": 0.273,
+      "c": 0.1,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0010: find the measure of part B (b=0.273, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0011",
+      "a": 1.886,
+      "b": 1.151,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0011: evaluate the expression in part C (b=1.151, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0012",
+      "a": 0.509,
+      "b": 2.063,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0012: interpret the dataset in part D (b=2.063, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0013",
+      "a": 0.51,
+      "b": 1.829,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0013: solve for the unknown in part A (b=1.829, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0014",
+      "a": 1.814,
+      "b": 1.601,
+      "c": 0.25,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0014: find the measure of part B (b=1.601, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0015",
+      "a": 1.122,
+      "b": -2.558,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0015: evaluate the expression in part C (b=-2.558, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0016",
+      "a": 1.065,
+      "b": -0.598,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0016: interpret the dataset in part D (b=-0.598, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0017",
+      "a": 0.479,
+      "b": -0.402,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0017: solve for the unknown in part A (b=-0.402, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0018",
+      "a": 1.144,
+      "b": -0.551,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0018: find the measure of part B (b=-0.551, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0019",
+      "a": 1.846,
+      "b": -0.998,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0019: evaluate the expression in part C (b=-0.998, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0020",
+      "a": 1.617,
+      "b": 2.575,
+      "c": 0.1,
+      "tags": {
+        "KC": "data",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0020: interpret the dataset in part D (b=2.575, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0021",
+      "a": 1.709,
+      "b": -1.944,
+      "c": 0.15,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0021: solve for the unknown in part A (b=-1.944, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0022",
+      "a": 1.515,
+      "b": 1.796,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0050",
+        "D0159"
+      ],
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0022: find the measure of part B (b=1.796, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0023",
+      "a": 0.9,
+      "b": -1.887,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0023: evaluate the expression in part C (b=-1.887, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0024",
+      "a": 1.892,
+      "b": -0.305,
+      "c": 0.1,
+      "tags": {
+        "KC": "data",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0024: interpret the dataset in part D (b=-0.305, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0025",
+      "a": 0.423,
+      "b": -2.449,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0226",
+        "D0101",
+        "D0127"
+      ],
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0025: solve for the unknown in part A (b=-2.449, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0026",
+      "a": 0.982,
+      "b": 0.139,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0026: find the measure of part B (b=0.139, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0027",
+      "a": 1.801,
+      "b": 0.972,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0027: evaluate the expression in part C (b=0.972, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0028",
+      "a": 0.826,
+      "b": 0.603,
+      "c": 0.2,
+      "tags": {
+        "KC": "data",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0028: interpret the dataset in part D (b=0.603, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0029",
+      "a": 2.108,
+      "b": -1.132,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0029: solve for the unknown in part A (b=-1.132, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0030",
+      "a": 1.881,
+      "b": -2.267,
+      "c": 0.25,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0105"
+      ],
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0030: find the measure of part B (b=-2.267, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0031",
+      "a": 1.007,
+      "b": -1.703,
+      "c": 0.2,
+      "tags": {
+        "KC": "number",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0217"
+      ],
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0031: evaluate the expression in part C (b=-1.703, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0032",
+      "a": 0.785,
+      "b": 2.564,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0032: interpret the dataset in part D (b=2.564, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0033",
+      "a": 1.072,
+      "b": 0.878,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0033: solve for the unknown in part A (b=0.878, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0034",
+      "a": 1.49,
+      "b": -2.449,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0034: find the measure of part B (b=-2.449, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0035",
+      "a": 1.46,
+      "b": 1.528,
+      "c": 0.25,
+      "tags": {
+        "KC": "number",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0035: evaluate the expression in part C (b=1.528, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0036",
+      "a": 0.828,
+      "b": 1.408,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0036: interpret the dataset in part D (b=1.408, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0037",
+      "a": 1.357,
+      "b": 1.431,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0141",
+        "D0214"
+      ],
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0037: solve for the unknown in part A (b=1.431, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0038",
+      "a": 0.616,
+      "b": 1.593,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0038: find the measure of part B (b=1.593, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0039",
+      "a": 0.663,
+      "b": -2.41,
+      "c": 0.2,
+      "tags": {
+        "KC": "number",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0039: evaluate the expression in part C (b=-2.41, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0040",
+      "a": 1.329,
+      "b": -1.217,
+      "c": 0.2,
+      "tags": {
+        "KC": "data",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0040: interpret the dataset in part D (b=-1.217, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0041",
+      "a": 2.171,
+      "b": -1.682,
+      "c": 0.1,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0041: solve for the unknown in part A (b=-1.682, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0042",
+      "a": 1.145,
+      "b": 2.561,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0042: find the measure of part B (b=2.561, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0043",
+      "a": 1.609,
+      "b": -1.514,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0043: evaluate the expression in part C (b=-1.514, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0044",
+      "a": 1.77,
+      "b": -2.43,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0044: interpret the dataset in part D (b=-2.43, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0045",
+      "a": 1.352,
+      "b": -1.302,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0045: solve for the unknown in part A (b=-1.302, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0046",
+      "a": 2.079,
+      "b": 1.227,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0046: find the measure of part B (b=1.227, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0047",
+      "a": 1.895,
+      "b": -2.458,
+      "c": 0.25,
+      "tags": {
+        "KC": "number",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0047: evaluate the expression in part C (b=-2.458, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0048",
+      "a": 2.048,
+      "b": -1.319,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0048: interpret the dataset in part D (b=-1.319, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0049",
+      "a": 1.699,
+      "b": -0.975,
+      "c": 0.25,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0049: solve for the unknown in part A (b=-0.975, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0050",
+      "a": 2.043,
+      "b": -2.213,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0022",
+        "D0159"
+      ],
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0050: find the measure of part B (b=-2.213, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0051",
+      "a": 1.756,
+      "b": 0.058,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0051: evaluate the expression in part C (b=0.058, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0052",
+      "a": 0.713,
+      "b": -0.177,
+      "c": 0.2,
+      "tags": {
+        "KC": "data",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0052: interpret the dataset in part D (b=-0.177, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0053",
+      "a": 1.882,
+      "b": 0.38,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0053: solve for the unknown in part A (b=0.38, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0054",
+      "a": 0.805,
+      "b": 0.191,
+      "c": 0.1,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0223",
+        "D0009",
+        "D0224"
+      ],
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0054: find the measure of part B (b=0.191, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0055",
+      "a": 0.783,
+      "b": 0.012,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0055: evaluate the expression in part C (b=0.012, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0056",
+      "a": 0.974,
+      "b": -0.514,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0056: interpret the dataset in part D (b=-0.514, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0057",
+      "a": 1.849,
+      "b": -2.15,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0057: solve for the unknown in part A (b=-2.15, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0058",
+      "a": 1.219,
+      "b": -0.16,
+      "c": 0.2,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0058: find the measure of part B (b=-0.16, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0059",
+      "a": 0.829,
+      "b": 2.329,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0188"
+      ],
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0059: evaluate the expression in part C (b=2.329, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0060",
+      "a": 1.524,
+      "b": -1.642,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0060: interpret the dataset in part D (b=-1.642, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0061",
+      "a": 0.872,
+      "b": 2.619,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0061: solve for the unknown in part A (b=2.619, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0062",
+      "a": 0.765,
+      "b": 0.531,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0062: find the measure of part B (b=0.531, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0063",
+      "a": 0.523,
+      "b": -2.703,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0063: evaluate the expression in part C (b=-2.703, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0064",
+      "a": 0.707,
+      "b": 0.01,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0064: interpret the dataset in part D (b=0.01, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0065",
+      "a": 1.583,
+      "b": -0.752,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0183",
+        "D0163"
+      ],
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0065: solve for the unknown in part A (b=-0.752, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0066",
+      "a": 0.926,
+      "b": -2.336,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0066: find the measure of part B (b=-2.336, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0067",
+      "a": 0.608,
+      "b": 1.174,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0067: evaluate the expression in part C (b=1.174, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0068",
+      "a": 1.721,
+      "b": -0.281,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0068: interpret the dataset in part D (b=-0.281, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0069",
+      "a": 2.058,
+      "b": 1.155,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0069: solve for the unknown in part A (b=1.155, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0070",
+      "a": 1.549,
+      "b": 1.13,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0070: find the measure of part B (b=1.13, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0071",
+      "a": 1.932,
+      "b": 0.3,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0071: evaluate the expression in part C (b=0.3, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0072",
+      "a": 1.754,
+      "b": -1.361,
+      "c": 0.2,
+      "tags": {
+        "KC": "data",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0072: interpret the dataset in part D (b=-1.361, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0073",
+      "a": 1.282,
+      "b": -2.566,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0073: solve for the unknown in part A (b=-2.566, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0074",
+      "a": 1.513,
+      "b": -0.561,
+      "c": 0.15,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0074: find the measure of part B (b=-0.561, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0075",
+      "a": 1.767,
+      "b": -0.8,
+      "c": 0.25,
+      "tags": {
+        "KC": "number",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0075: evaluate the expression in part C (b=-0.8, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0076",
+      "a": 1.931,
+      "b": 0.637,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0076: interpret the dataset in part D (b=0.637, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0077",
+      "a": 1.891,
+      "b": 1.17,
+      "c": 0.1,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0077: solve for the unknown in part A (b=1.17, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0078",
+      "a": 1.772,
+      "b": -0.476,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0078: find the measure of part B (b=-0.476, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0079",
+      "a": 1.798,
+      "b": 1.499,
+      "c": 0.25,
+      "tags": {
+        "KC": "number",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0079: evaluate the expression in part C (b=1.499, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0080",
+      "a": 1.349,
+      "b": 1.455,
+      "c": 0.0,
+      "tags": {
+        "KC": "data",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0238"
+      ],
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0080: interpret the dataset in part D (b=1.455, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0081",
+      "a": 1.58,
+      "b": -1.717,
+      "c": 0.0,
+      "tags": {
+        "KC": "algebra",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0081: solve for the unknown in part A (b=-1.717, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0082",
+      "a": 0.919,
+      "b": -2.096,
+      "c": 0.0,
+      "tags": {
+        "KC": "geometry",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0121",
+        "D0109"
+      ],
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0082: find the measure of part B (b=-2.096, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0083",
+      "a": 0.628,
+      "b": 2.505,
+      "c": 0.0,
+      "tags": {
+        "KC": "number",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "math"
+      },
+      "enemy_of": [
+        "D0112",
+        "D0102",
+        "D0140"
+      ],
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0083: evaluate the expression in part C (b=2.505, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0084",
+      "a": 1.892,
+      "b": 2.39,
+      "c": 0.15,
+      "tags": {
+        "KC": "data",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "math"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0084: interpret the dataset in part D (b=2.39, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0085",
+      "a": 1.55,
+      "b": 1.702,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0149",
+        "D0181"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0085: identify the structure in part A (b=1.702, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0086",
+      "a": 1.966,
+      "b": 0.905,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0086: balance the reaction in part B (b=0.905, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0087",
+      "a": 0.78,
+      "b": 1.335,
+      "c": 0.1,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0087: compute the quantity in part C (b=1.335, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0088",
+      "a": 2.196,
+      "b": 0.702,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0088: explain the process in part D (b=0.702, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0089",
+      "a": 0.65,
+      "b": 1.28,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0172"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0089: identify the structure in part A (b=1.28, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0090",
+      "a": 2.189,
+      "b": 0.596,
+      "c": 0.25,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0090: balance the reaction in part B (b=0.596, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0091",
+      "a": 1.107,
+      "b": -0.011,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0091: compute the quantity in part C (b=-0.011, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0092",
+      "a": 1.68,
+      "b": 0.696,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0092: explain the process in part D (b=0.696, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0093",
+      "a": 1.258,
+      "b": -0.394,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0093: identify the structure in part A (b=-0.394, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0094",
+      "a": 1.919,
+      "b": 0.703,
+      "c": 0.1,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0094: balance the reaction in part B (b=0.703, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0095",
+      "a": 0.838,
+      "b": 0.595,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0095: compute the quantity in part C (b=0.595, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0096",
+      "a": 1.062,
+      "b": -0.87,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0096: explain the process in part D (b=-0.87, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0097",
+      "a": 1.537,
+      "b": 1.436,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0097: identify the structure in part A (b=1.436, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0098",
+      "a": 0.935,
+      "b": -2.457,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0098: balance the reaction in part B (b=-2.457, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0099",
+      "a": 1.666,
+      "b": -0.918,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0099: compute the quantity in part C (b=-0.918, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0100",
+      "a": 0.755,
+      "b": -0.959,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0100: explain the process in part D (b=-0.959, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0101",
+      "a": 1.726,
+      "b": -0.155,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0226",
+        "D0025",
+        "D0127"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0101: identify the structure in part A (b=-0.155, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0102",
+      "a": 0.496,
+      "b": -0.456,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0112",
+        "D0140",
+        "D0083"
+      ],
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0102: balance the reaction in part B (b=-0.456, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0103",
+      "a": 0.917,
+      "b": 1.995,
+      "c": 0.25,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0103: compute the quantity in part C (b=1.995, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0104",
+      "a": 1.161,
+      "b": 1.583,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0104: explain the process in part D (b=1.583, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0105",
+      "a": 1.747,
+      "b": 0.854,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0030"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0105: identify the structure in part A (b=0.854, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0106",
+      "a": 0.564,
+      "b": 2.569,
+      "c": 0.1,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0106: balance the reaction in part B (b=2.569, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0107",
+      "a": 0.524,
+      "b": -1.987,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0107: compute the quantity in part C (b=-1.987, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0108",
+      "a": 1.015,
+      "b": 0.003,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0108: explain the process in part D (b=0.003, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0109",
+      "a": 1.046,
+      "b": 0.918,
+      "c": 0.25,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0082",
+        "D0121"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0109: identify the structure in part A (b=0.918, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0110",
+      "a": 1.242,
+      "b": -0.132,
+      "c": 0.25,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0110: balance the reaction in part B (b=-0.132, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0111",
+      "a": 1.295,
+      "b": -0.036,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0111: compute the quantity in part C (b=-0.036, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0112",
+      "a": 1.717,
+      "b": 1.681,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0102",
+        "D0140",
+        "D0083"
+      ],
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0112: explain the process in part D (b=1.681, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0113",
+      "a": 1.943,
+      "b": -1.498,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0113: identify the structure in part A (b=-1.498, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0114",
+      "a": 1.877,
+      "b": 1.252,
+      "c": 0.1,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0114: balance the reaction in part B (b=1.252, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0115",
+      "a": 1.436,
+      "b": 0.588,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0115: compute the quantity in part C (b=0.588, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0116",
+      "a": 1.651,
+      "b": -1.472,
+      "c": 0.2,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0116: explain the process in part D (b=-1.472, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0117",
+      "a": 1.71,
+      "b": 1.511,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0117: identify the structure in part A (b=1.511, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0118",
+      "a": 0.597,
+      "b": 2.406,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0118: balance the reaction in part B (b=2.406, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0119",
+      "a": 0.61,
+      "b": 2.192,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0119: compute the quantity in part C (b=2.192, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0120",
+      "a": 1.084,
+      "b": 1.224,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0120: explain the process in part D (b=1.224, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0121",
+      "a": 1.768,
+      "b": 0.491,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0082",
+        "D0109"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0121: identify the structure in part A (b=0.491, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0122",
+      "a": 1.517,
+      "b": -0.891,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0122: balance the reaction in part B (b=-0.891, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0123",
+      "a": 1.436,
+      "b": -2.552,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0123: compute the quantity in part C (b=-2.552, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0124",
+      "a": 0.528,
+      "b": 0.858,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0124: explain the process in part D (b=0.858, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0125",
+      "a": 0.607,
+      "b": 0.924,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0125: identify the structure in part A (b=0.924, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0126",
+      "a": 0.692,
+      "b": 2.494,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0126: balance the reaction in part B (b=2.494, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0127",
+      "a": 0.847,
+      "b": -0.321,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0226",
+        "D0025",
+        "D0101"
+      ],
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0127: compute the quantity in part C (b=-0.321, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0128",
+      "a": 2.103,
+      "b": 1.537,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0128: explain the process in part D (b=1.537, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0129",
+      "a": 2.105,
+      "b": 0.725,
+      "c": 0.25,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0132",
+        "D0007"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0129: identify the structure in part A (b=0.725, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0130",
+      "a": 0.666,
+      "b": -2.241,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0130: balance the reaction in part B (b=-2.241, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0131",
+      "a": 2.175,
+      "b": -0.89,
+      "c": 0.2,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0131: compute the quantity in part C (b=-0.89, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0132",
+      "a": 1.982,
+      "b": 0.28,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0007",
+        "D0129"
+      ],
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0132: explain the process in part D (b=0.28, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0133",
+      "a": 1.868,
+      "b": 1.765,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0133: identify the structure in part A (b=1.765, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0134",
+      "a": 1.914,
+      "b": 0.33,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0134: balance the reaction in part B (b=0.33, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0135",
+      "a": 1.454,
+      "b": -0.105,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0135: compute the quantity in part C (b=-0.105, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0136",
+      "a": 0.575,
+      "b": 1.491,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0136: explain the process in part D (b=1.491, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0137",
+      "a": 2.018,
+      "b": 0.083,
+      "c": 0.2,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0137: identify the structure in part A (b=0.083, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0138",
+      "a": 1.7,
+      "b": -0.151,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0138: balance the reaction in part B (b=-0.151, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0139",
+      "a": 1.886,
+      "b": 1.156,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0139: compute the quantity in part C (b=1.156, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0140",
+      "a": 0.58,
+      "b": -2.402,
+      "c": 0.25,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0112",
+        "D0102",
+        "D0083"
+      ],
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0140: explain the process in part D (b=-2.402, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0141",
+      "a": 1.924,
+      "b": 2.637,
+      "c": 0.1,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0214",
+        "D0037"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0141: identify the structure in part A (b=2.637, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0142",
+      "a": 1.497,
+      "b": 1.31,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0142: balance the reaction in part B (b=1.31, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0143",
+      "a": 1.06,
+      "b": 2.683,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0143: compute the quantity in part C (b=2.683, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0144",
+      "a": 0.886,
+      "b": 0.877,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0144: explain the process in part D (b=0.877, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0145",
+      "a": 0.794,
+      "b": -2.461,
+      "c": 0.1,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0145: identify the structure in part A (b=-2.461, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0146",
+      "a": 0.473,
+      "b": 0.883,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0146: balance the reaction in part B (b=0.883, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0147",
+      "a": 2.113,
+      "b": 1.056,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0147: compute the quantity in part C (b=1.056, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0148",
+      "a": 0.404,
+      "b": -2.489,
+      "c": 0.1,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0148: explain the process in part D (b=-2.489, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0149",
+      "a": 1.444,
+      "b": -0.769,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0181",
+        "D0085"
+      ],
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0149: identify the structure in part A (b=-0.769, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0150",
+      "a": 1.446,
+      "b": 2.614,
+      "c": 0.15,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0150: balance the reaction in part B (b=2.614, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0151",
+      "a": 1.036,
+      "b": -1.719,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0151: compute the quantity in part C (b=-1.719, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0152",
+      "a": 0.554,
+      "b": -2.482,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0152: explain the process in part D (b=-2.482, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0153",
+      "a": 1.075,
+      "b": 2.251,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0153: identify the structure in part A (b=2.251, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0154",
+      "a": 1.453,
+      "b": -2.162,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0154: balance the reaction in part B (b=-2.162, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0155",
+      "a": 1.708,
+      "b": 0.128,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0155: compute the quantity in part C (b=0.128, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0156",
+      "a": 1.106,
+      "b": 0.83,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0156: explain the process in part D (b=0.83, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0157",
+      "a": 1.663,
+      "b": 1.294,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0157: identify the structure in part A (b=1.294, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0158",
+      "a": 1.23,
+      "b": 0.072,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0158: balance the reaction in part B (b=0.072, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0159",
+      "a": 1.716,
+      "b": 2.642,
+      "c": 0.15,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0022",
+        "D0050"
+      ],
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0159: compute the quantity in part C (b=2.642, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0160",
+      "a": 0.473,
+      "b": 1.304,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0160: explain the process in part D (b=1.304, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0161",
+      "a": 1.786,
+      "b": 1.715,
+      "c": 0.0,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0161: identify the structure in part A (b=1.715, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0162",
+      "a": 0.768,
+      "b": 1.656,
+      "c": 0.25,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0162: balance the reaction in part B (b=1.656, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0163",
+      "a": 1.028,
+      "b": -0.58,
+      "c": 0.2,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [
+        "D0183",
+        "D0065"
+      ],
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0163: compute the quantity in part C (b=-0.58, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0164",
+      "a": 1.953,
+      "b": -2.684,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0164: explain the process in part D (b=-2.684, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0165",
+      "a": 0.681,
+      "b": -1.166,
+      "c": 0.1,
+      "tags": {
+        "KC": "biology",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0165: identify the structure in part A (b=-1.166, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0166",
+      "a": 1.986,
+      "b": 0.632,
+      "c": 0.0,
+      "tags": {
+        "KC": "chemistry",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0166: balance the reaction in part B (b=0.632, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0167",
+      "a": 0.777,
+      "b": -0.374,
+      "c": 0.0,
+      "tags": {
+        "KC": "physics",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0167: compute the quantity in part C (b=-0.374, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0168",
+      "a": 1.791,
+      "b": -2.416,
+      "c": 0.0,
+      "tags": {
+        "KC": "earth",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "science"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0168: explain the process in part D (b=-2.416, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0169",
+      "a": 2.074,
+      "b": -1.215,
+      "c": 0.1,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0169: infer the meaning in part A (b=-1.215, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0170",
+      "a": 1.242,
+      "b": -0.732,
+      "c": 0.15,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0170: revise the passage in part B (b=-0.732, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0171",
+      "a": 0.557,
+      "b": -1.156,
+      "c": 0.25,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0171: correct the sentence in part C (b=-1.156, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0172",
+      "a": 2.004,
+      "b": 0.798,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0089"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0172: choose the best word for part D (b=0.798, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0173",
+      "a": 1.493,
+      "b": 1.943,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0173: infer the meaning in part A (b=1.943, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0174",
+      "a": 0.737,
+      "b": 2.552,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0174: revise the passage in part B (b=2.552, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0175",
+      "a": 0.927,
+      "b": -0.362,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0175: correct the sentence in part C (b=-0.362, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0176",
+      "a": 1.629,
+      "b": -1.485,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0176: choose the best word for part D (b=-1.485, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0177",
+      "a": 0.94,
+      "b": -0.766,
+      "c": 0.1,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0177: infer the meaning in part A (b=-0.766, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0178",
+      "a": 1.92,
+      "b": 2.496,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0178: revise the passage in part B (b=2.496, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0179",
+      "a": 1.928,
+      "b": -2.366,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0179: correct the sentence in part C (b=-2.366, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0180",
+      "a": 1.077,
+      "b": -0.863,
+      "c": 0.2,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0180: choose the best word for part D (b=-0.863, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0181",
+      "a": 2.112,
+      "b": -1.584,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0149",
+        "D0085"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0181: infer the meaning in part A (b=-1.584, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0182",
+      "a": 1.301,
+      "b": -1.411,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0182: revise the passage in part B (b=-1.411, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0183",
+      "a": 0.403,
+      "b": 2.241,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0065",
+        "D0163"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0183: correct the sentence in part C (b=2.241, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0184",
+      "a": 0.854,
+      "b": 1.254,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0239",
+        "D0240"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0184: choose the best word for part D (b=1.254, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0185",
+      "a": 2.097,
+      "b": 0.034,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0185: infer the meaning in part A (b=0.034, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0186",
+      "a": 1.1,
+      "b": -2.626,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0186: revise the passage in part B (b=-2.626, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0187",
+      "a": 0.791,
+      "b": 1.661,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0187: correct the sentence in part C (b=1.661, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0188",
+      "a": 0.694,
+      "b": -2.286,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0059"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0188: choose the best word for part D (b=-2.286, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0189",
+      "a": 1.557,
+      "b": 2.308,
+      "c": 0.2,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0189: infer the meaning in part A (b=2.308, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0190",
+      "a": 1.04,
+      "b": 1.872,
+      "c": 0.15,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0209"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0190: revise the passage in part B (b=1.872, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0191",
+      "a": 1.98,
+      "b": 0.209,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0191: correct the sentence in part C (b=0.209, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0192",
+      "a": 1.103,
+      "b": -0.216,
+      "c": 0.15,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0192: choose the best word for part D (b=-0.216, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0193",
+      "a": 0.505,
+      "b": -2.6,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0193: infer the meaning in part A (b=-2.6, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0194",
+      "a": 1.045,
+      "b": 2.697,
+      "c": 0.25,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0194: revise the passage in part B (b=2.697, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0195",
+      "a": 1.461,
+      "b": 0.884,
+      "c": 0.25,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0195: correct the sentence in part C (b=0.884, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0196",
+      "a": 0.898,
+      "b": 0.411,
+      "c": 0.1,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0196: choose the best word for part D (b=0.411, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0197",
+      "a": 1.055,
+      "b": 0.915,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0197: infer the meaning in part A (b=0.915, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0198",
+      "a": 0.448,
+      "b": 1.484,
+      "c": 0.25,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0245"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0198: revise the passage in part B (b=1.484, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0199",
+      "a": 2.08,
+      "b": -1.85,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0199: correct the sentence in part C (b=-1.85, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0200",
+      "a": 2.036,
+      "b": 0.48,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0200: choose the best word for part D (b=0.48, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0201",
+      "a": 1.502,
+      "b": 0.625,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0201: infer the meaning in part A (b=0.625, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0202",
+      "a": 1.882,
+      "b": -0.998,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0202: revise the passage in part B (b=-0.998, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0203",
+      "a": 1.91,
+      "b": 1.137,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0251"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0203: correct the sentence in part C (b=1.137, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0204",
+      "a": 1.697,
+      "b": 2.041,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0204: choose the best word for part D (b=2.041, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0205",
+      "a": 1.689,
+      "b": 1.254,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0205: infer the meaning in part A (b=1.254, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0206",
+      "a": 1.434,
+      "b": 1.263,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0206: revise the passage in part B (b=1.263, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0207",
+      "a": 1.462,
+      "b": 0.516,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0207: correct the sentence in part C (b=0.516, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0208",
+      "a": 1.581,
+      "b": 1.584,
+      "c": 0.25,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0208: choose the best word for part D (b=1.584, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0209",
+      "a": 0.591,
+      "b": -0.951,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0190"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0209: infer the meaning in part A (b=-0.951, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0210",
+      "a": 0.981,
+      "b": 0.044,
+      "c": 0.15,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0210: revise the passage in part B (b=0.044, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0211",
+      "a": 1.744,
+      "b": -1.73,
+      "c": 0.25,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0211: correct the sentence in part C (b=-1.73, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0212",
+      "a": 1.391,
+      "b": -0.685,
+      "c": 0.2,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0212: choose the best word for part D (b=-0.685, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0213",
+      "a": 1.283,
+      "b": 2.715,
+      "c": 0.15,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0213: infer the meaning in part A (b=2.715, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0214",
+      "a": 1.8,
+      "b": 0.411,
+      "c": 0.2,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0141",
+        "D0037"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0214: revise the passage in part B (b=0.411, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0215",
+      "a": 1.69,
+      "b": -1.17,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0215: correct the sentence in part C (b=-1.17, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0216",
+      "a": 1.656,
+      "b": 1.314,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0216: choose the best word for part D (b=1.314, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0217",
+      "a": 0.832,
+      "b": 2.321,
+      "c": 0.1,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0031"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0217: infer the meaning in part A (b=2.321, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0218",
+      "a": 2.05,
+      "b": -0.722,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0218: revise the passage in part B (b=-0.722, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0219",
+      "a": 0.664,
+      "b": -0.691,
+      "c": 0.1,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0219: correct the sentence in part C (b=-0.691, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0220",
+      "a": 1.95,
+      "b": 1.591,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0220: choose the best word for part D (b=1.591, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0221",
+      "a": 1.732,
+      "b": -1.698,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0221: infer the meaning in part A (b=-1.698, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0222",
+      "a": 1.978,
+      "b": -1.02,
+      "c": 0.25,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0222: revise the passage in part B (b=-1.02, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0223",
+      "a": 2.076,
+      "b": -1.573,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0054",
+        "D0009",
+        "D0224"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0223: correct the sentence in part C (b=-1.573, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0224",
+      "a": 1.634,
+      "b": -1.65,
+      "c": 0.2,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0223",
+        "D0054",
+        "D0009"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0224: choose the best word for part D (b=-1.65, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0225",
+      "a": 0.849,
+      "b": -0.32,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0225: infer the meaning in part A (b=-0.32, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0226",
+      "a": 0.886,
+      "b": 1.998,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0025",
+        "D0101",
+        "D0127"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0226: revise the passage in part B (b=1.998, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0227",
+      "a": 0.455,
+      "b": 2.038,
+      "c": 0.25,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0227: correct the sentence in part C (b=2.038, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0228",
+      "a": 1.508,
+      "b": -1.121,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0228: choose the best word for part D (b=-1.121, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0229",
+      "a": 1.179,
+      "b": 1.09,
+      "c": 0.2,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0229: infer the meaning in part A (b=1.09, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0230",
+      "a": 1.529,
+      "b": 0.741,
+      "c": 0.2,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0230: revise the passage in part B (b=0.741, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0231",
+      "a": 1.884,
+      "b": -2.147,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0231: correct the sentence in part C (b=-2.147, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0232",
+      "a": 0.903,
+      "b": 0.597,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0232: choose the best word for part D (b=0.597, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0233",
+      "a": 0.457,
+      "b": 1.259,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0233: infer the meaning in part A (b=1.259, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0234",
+      "a": 0.998,
+      "b": -0.173,
+      "c": 0.1,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0234: revise the passage in part B (b=-0.173, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0235",
+      "a": 0.858,
+      "b": 1.512,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0235: correct the sentence in part C (b=1.512, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0236",
+      "a": 1.947,
+      "b": 2.285,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0236: choose the best word for part D (b=2.285, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0237",
+      "a": 2.091,
+      "b": -1.528,
+      "c": 0.1,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0237: infer the meaning in part A (b=-1.528, c=0.1).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0238",
+      "a": 0.638,
+      "b": 1.359,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "evaluate",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0080"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0238: revise the passage in part B (b=1.359, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0239",
+      "a": 0.909,
+      "b": 0.082,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "remember",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0184",
+        "D0240"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0239: correct the sentence in part C (b=0.082, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0240",
+      "a": 0.88,
+      "b": -2.164,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "understand",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0184",
+        "D0239"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0240: choose the best word for part D (b=-2.164, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0241",
+      "a": 2.133,
+      "b": -0.982,
+      "c": 0.0,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "apply",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0241: infer the meaning in part A (b=-0.982, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0242",
+      "a": 1.891,
+      "b": -2.198,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "analyze",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0242: revise the passage in part B (b=-2.198, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0243",
+      "a": 0.928,
+      "b": 1.863,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "evaluate",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0243: correct the sentence in part C (b=1.863, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0244",
+      "a": 1.936,
+      "b": 0.764,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "remember",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0244: choose the best word for part D (b=0.764, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0245",
+      "a": 0.682,
+      "b": -2.702,
+      "c": 0.15,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "understand",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0198"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0245: infer the meaning in part A (b=-2.702, c=0.15).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0246",
+      "a": 1.158,
+      "b": -0.779,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "apply",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0246: revise the passage in part B (b=-0.779, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0247",
+      "a": 1.249,
+      "b": 2.465,
+      "c": 0.0,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "analyze",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0247: correct the sentence in part C (b=2.465, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0248",
+      "a": 1.206,
+      "b": 0.6,
+      "c": 0.2,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "evaluate",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0248: choose the best word for part D (b=0.6, c=0.2).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    },
+    {
+      "item_id": "D0249",
+      "a": 1.557,
+      "b": -1.88,
+      "c": 0.25,
+      "tags": {
+        "KC": "reading",
+        "Bloom": "remember",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0249: infer the meaning in part A (b=-1.88, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
+    },
+    {
+      "item_id": "D0250",
+      "a": 1.442,
+      "b": 2.032,
+      "c": 0.0,
+      "tags": {
+        "KC": "writing",
+        "Bloom": "understand",
+        "TIMSS": "knowing",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0250: revise the passage in part B (b=2.032, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
+    },
+    {
+      "item_id": "D0251",
+      "a": 2.189,
+      "b": 2.759,
+      "c": 0.25,
+      "tags": {
+        "KC": "grammar",
+        "Bloom": "apply",
+        "TIMSS": "applying",
+        "domain": "ela"
+      },
+      "enemy_of": [
+        "D0203"
+      ],
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0251: correct the sentence in part C (b=2.759, c=0.25).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
+    },
+    {
+      "item_id": "D0252",
+      "a": 1.185,
+      "b": -1.254,
+      "c": 0.0,
+      "tags": {
+        "KC": "vocab",
+        "Bloom": "analyze",
+        "TIMSS": "reasoning",
+        "domain": "ela"
+      },
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0252: choose the best word for part D (b=-1.254, c=0.0).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
+    }
+  ]
+}

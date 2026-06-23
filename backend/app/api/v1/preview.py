@@ -23,7 +23,7 @@ from app.engine import registry
 from app.engine.contract import AdministrationStrategy, ScoreResult
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
-from app.psychometrics.bank import load_default_pool
+from app.psychometrics import pools
 from app.schemas.blueprint import Blueprint
 from app.schemas.preview import (
     PreviewRespondRequest,
@@ -61,18 +61,24 @@ def start_preview(
         if form is None:
             raise HTTPException(status_code=404, detail="form not found")
         context["form_item_ids"] = form.item_ids
+        pool_id = form.pool_id  # resolve against the pool the form was built from
     elif payload.blueprint_id:
         bp = db.get(BlueprintRow, payload.blueprint_id)
         if bp is None:
             raise HTTPException(status_code=404, detail="blueprint not found")
+        if not pools.is_known(payload.pool_id):
+            raise HTTPException(
+                status_code=404, detail=f"unknown pool_id {payload.pool_id!r}"
+            )
         context["blueprint"] = Blueprint.model_validate(bp.spec)
         context["assembly_strategy"] = payload.assembly_strategy
+        pool_id = payload.pool_id
     else:
         raise HTTPException(
             status_code=422, detail="provide either blueprint_id or form_id"
         )
 
-    state = strategy.initialize(LinearConfig(), load_default_pool(), context)
+    state = strategy.initialize(LinearConfig(), pools.load_pool_by_id(pool_id), context)
     return _step(strategy, state)
 
 

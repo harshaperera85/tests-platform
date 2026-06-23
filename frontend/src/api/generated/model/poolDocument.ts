@@ -10,6 +10,7 @@ import type { PoolDocumentTagSummary } from './poolDocumentTagSummary';
 import type { PoolItem } from './poolItem';
 
 export interface PoolDocument {
+  pool_id: string;
   simulated: boolean;
   provenance?: PoolDocumentProvenance;
   model: string;

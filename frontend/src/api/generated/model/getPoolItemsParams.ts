@@ -6,10 +6,6 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface AssemblyJobCreate {
-  blueprint_id: string;
-  pool_id?: string;
-  strategy?: string;
-  seed?: number;
-  time_limit_s?: number;
-}
+export type GetPoolItemsParams = {
+pool_id?: string;
+};

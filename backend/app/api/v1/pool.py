@@ -1,28 +1,57 @@
-"""Read-only access to the **simulated** item bank (plan §8).
+"""Read-only access to the **simulated** item banks (plan §8).
 
 Additive surface so the UI can demonstrate the linear workflow end-to-end with
-genuine simulated data (item metadata, tag availability, content) when no real
-item-factory export is wired. Reads the fixture document; changes nothing.
+genuine simulated data when no real item-factory export is wired. Lists the pool
+catalog and serves a selected bank by ``pool_id``. Reads fixtures; changes nothing.
 """
 
 from __future__ import annotations
 
 from collections import Counter
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query
 
-from app.psychometrics.bank import load_bank_document
-from app.schemas.pool import PoolDocument, PoolItem
+from app.psychometrics import pools
+from app.schemas.pool import PoolCatalog, PoolDocument, PoolItem, PoolSummary
 
 router = APIRouter(prefix="/pool", tags=["pool"])
 
 _TAG_DIMENSIONS = ("KC", "Bloom", "TIMSS", "domain")
 
 
+@router.get("/catalog", response_model=PoolCatalog)
+def get_pool_catalog() -> PoolCatalog:
+    """List the selectable simulated banks (for the pool selector)."""
+    summaries: list[PoolSummary] = []
+    for entry in pools.catalog():
+        doc = pools.load_document_by_id(entry.pool_id)
+        raw = doc["items"]
+        domains = sorted(
+            {it["tags"]["domain"] for it in raw if "domain" in it.get("tags", {})}
+        )
+        summaries.append(
+            PoolSummary(
+                pool_id=entry.pool_id,
+                title=entry.title,
+                description=entry.description,
+                model=doc.get("metric", {}).get("model", "2PL"),
+                simulated=bool(doc.get("simulated", False)),
+                n_items=len(raw),
+                n_3pl=sum(1 for it in raw if it.get("c", 0.0) > 0),
+                domains=domains,
+            )
+        )
+    return PoolCatalog(default_pool_id=pools.DEFAULT_POOL_ID, pools=summaries)
+
+
 @router.get("/items", response_model=PoolDocument)
-def get_pool_items() -> PoolDocument:
-    """Return the simulated item bank with params, tags, and synthetic content."""
-    doc = load_bank_document()
+def get_pool_items(
+    pool_id: str = Query(default=pools.DEFAULT_POOL_ID),
+) -> PoolDocument:
+    """Return a simulated bank with params, tags, and synthetic content."""
+    if not pools.is_known(pool_id):
+        raise HTTPException(status_code=404, detail=f"unknown pool_id {pool_id!r}")
+    doc = pools.load_document_by_id(pool_id)
     raw_items = doc["items"]
     metric = doc.get("metric", {})
     scaling_d = float(metric.get("scaling_d", 1.702))
@@ -52,6 +81,7 @@ def get_pool_items() -> PoolDocument:
             tag_summary[dim] = dict(sorted(counts.items()))
 
     return PoolDocument(
+        pool_id=pool_id,
         simulated=bool(doc.get("simulated", False)),
         provenance=doc.get("provenance"),
         model=metric.get("model", "2PL"),

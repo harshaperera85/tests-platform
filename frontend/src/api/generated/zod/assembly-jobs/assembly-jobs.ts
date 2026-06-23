@@ -11,10 +11,11 @@ import * as zod from 'zod';
 /**
  * @summary Create Assembly Job
  */
-export const createAssemblyJobBodyStrategyDefault = "mip";export const createAssemblyJobBodySeedDefault = 0;export const createAssemblyJobBodyTimeLimitSDefault = 10;
+export const createAssemblyJobBodyPoolIdDefault = "small_2pl";export const createAssemblyJobBodyStrategyDefault = "mip";export const createAssemblyJobBodySeedDefault = 0;export const createAssemblyJobBodyTimeLimitSDefault = 10;
 
 export const createAssemblyJobBody = zod.object({
   "blueprint_id": zod.string(),
+  "pool_id": zod.string().default(createAssemblyJobBodyPoolIdDefault),
   "strategy": zod.string().default(createAssemblyJobBodyStrategyDefault),
   "seed": zod.number().optional(),
   "time_limit_s": zod.number().default(createAssemblyJobBodyTimeLimitSDefault)
@@ -32,6 +33,7 @@ export const getAssemblyJobResponseThetaPointsDefault = [];export const getAssem
 export const getAssemblyJobResponse = zod.object({
   "id": zod.string(),
   "blueprint_id": zod.string(),
+  "pool_id": zod.string(),
   "strategy": zod.string(),
   "status": zod.string(),
   "method": zod.union([zod.string(),zod.null()]).optional(),

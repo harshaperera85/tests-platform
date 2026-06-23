@@ -11,11 +11,12 @@ import * as zod from 'zod';
 /**
  * @summary Start Preview
  */
-export const startPreviewBodyAssemblyStrategyDefault = "mip";
+export const startPreviewBodyPoolIdDefault = "small_2pl";export const startPreviewBodyAssemblyStrategyDefault = "mip";
 
 export const startPreviewBody = zod.object({
   "blueprint_id": zod.union([zod.string(),zod.null()]).optional(),
   "form_id": zod.union([zod.string(),zod.null()]).optional(),
+  "pool_id": zod.string().default(startPreviewBodyPoolIdDefault),
   "assembly_strategy": zod.string().default(startPreviewBodyAssemblyStrategyDefault),
   "session_id": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Start a dry-run from a stored blueprint (assemble now) or a stored form.')

@@ -10,8 +10,8 @@ import { SessionNavigatorScreen } from "./screens/tests/SessionNavigatorScreen";
 
 type Stage =
   | { name: "editor" }
-  | { name: "preview"; formId: string; blueprintId: string }
-  | { name: "navigate"; formId: string; blueprintId: string };
+  | { name: "preview"; formId: string; blueprintId: string; poolId: string }
+  | { name: "navigate"; formId: string; blueprintId: string; poolId: string };
 
 const STEPS: { id: string; label: string; stage: Stage["name"] }[] = [
   { id: "A-031", label: "Blueprint & assemble", stage: "editor" },
@@ -43,8 +43,8 @@ export default function App() {
       <div className="mx-auto max-w-5xl px-6 py-8">
         {stage.name === "editor" && (
           <BlueprintEditorScreen
-            onAssembled={({ formId, blueprintId }) =>
-              setStage({ name: "preview", formId, blueprintId })
+            onAssembled={({ formId, blueprintId, poolId }) =>
+              setStage({ name: "preview", formId, blueprintId, poolId })
             }
           />
         )}
@@ -52,11 +52,13 @@ export default function App() {
           <FormPreviewScreen
             formId={stage.formId}
             blueprintId={stage.blueprintId}
+            poolId={stage.poolId}
             onWalk={() =>
               setStage({
                 name: "navigate",
                 formId: stage.formId,
                 blueprintId: stage.blueprintId,
+                poolId: stage.poolId,
               })
             }
             onBack={() => setStage({ name: "editor" })}
@@ -65,11 +67,13 @@ export default function App() {
         {stage.name === "navigate" && (
           <SessionNavigatorScreen
             formId={stage.formId}
+            poolId={stage.poolId}
             onBack={() =>
               setStage({
                 name: "preview",
                 formId: stage.formId,
                 blueprintId: stage.blueprintId,
+                poolId: stage.poolId,
               })
             }
           />

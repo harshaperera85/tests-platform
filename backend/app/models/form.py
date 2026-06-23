@@ -25,5 +25,9 @@ class FormRow(PkUuidMixin, TimestampMixin, Base):
     )
     form_index: Mapped[int] = mapped_column(default=0)
     status: Mapped[str] = mapped_column(default="draft")  # draft/locked
+    #: pool this form was assembled from — item_ids resolve against it
+    pool_id: Mapped[str] = mapped_column(
+        default="small_2pl", server_default="small_2pl"
+    )
     item_ids: Mapped[list[str]] = mapped_column(JSONColumn)
     tif_actual: Mapped[list[float]] = mapped_column(JSONColumn)

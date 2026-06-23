@@ -15,7 +15,7 @@ from app.core.db import get_db
 from app.models.assembly_job import AssemblyJobRow
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
-from app.psychometrics.bank import load_default_pool
+from app.psychometrics import pools
 from app.schemas.blueprint import Blueprint
 from app.schemas.responses import AssemblyJobCreate, AssemblyJobRead
 
@@ -27,6 +27,7 @@ def _to_read(job: AssemblyJobRow, form_ids: list[str]) -> AssemblyJobRead:
     return AssemblyJobRead(
         id=job.id,
         blueprint_id=job.blueprint_id,
+        pool_id=job.pool_id,
         strategy=job.strategy,
         status=job.status,
         method=result.get("method"),
@@ -46,9 +47,13 @@ def create_assembly_job(
     bp_row = db.get(BlueprintRow, payload.blueprint_id)
     if bp_row is None:
         raise HTTPException(status_code=404, detail="blueprint not found")
+    if not pools.is_known(payload.pool_id):
+        raise HTTPException(
+            status_code=404, detail=f"unknown pool_id {payload.pool_id!r}"
+        )
 
     blueprint = Blueprint.model_validate(bp_row.spec)
-    pool = load_default_pool()
+    pool = pools.load_pool_by_id(payload.pool_id)
     result = assemble(
         blueprint,
         pool,
@@ -59,6 +64,7 @@ def create_assembly_job(
 
     job = AssemblyJobRow(
         blueprint_id=bp_row.id,
+        pool_id=payload.pool_id,
         strategy=payload.strategy,
         status=result.status,
         params={"seed": payload.seed, "time_limit_s": payload.time_limit_s},
@@ -80,6 +86,7 @@ def create_assembly_job(
             assembly_job_id=job.id,
             form_index=idx,
             status="draft",
+            pool_id=payload.pool_id,
             item_ids=form.item_ids,
             tif_actual=form.tif_actual,
         )

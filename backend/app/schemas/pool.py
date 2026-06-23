@@ -32,6 +32,7 @@ class PoolItem(BaseModel):
 
 
 class PoolDocument(BaseModel):
+    pool_id: str
     simulated: bool
     provenance: str | None = None
     model: str
@@ -40,3 +41,21 @@ class PoolDocument(BaseModel):
     # counts per tag dimension -> value -> count (drives feasibility hints in the UI)
     tag_summary: dict[str, dict[str, int]]
     items: list[PoolItem]
+
+
+class PoolSummary(BaseModel):
+    """One entry in the pool catalog (no item payload) — for the pool selector."""
+
+    pool_id: str
+    title: str
+    description: str
+    model: str
+    simulated: bool
+    n_items: int
+    n_3pl: int
+    domains: list[str]
+
+
+class PoolCatalog(BaseModel):
+    default_pool_id: str
+    pools: list[PoolSummary]

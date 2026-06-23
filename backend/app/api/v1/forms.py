@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from app.core.db import get_db
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
-from app.psychometrics.bank import load_default_pool
+from app.psychometrics import pools
 from app.psychometrics.information import test_information
 from app.schemas.blueprint import Blueprint
 from app.schemas.responses import (
@@ -82,7 +82,7 @@ def get_form_tif_curve(
         raise HTTPException(status_code=404, detail="blueprint not found")
     target = Blueprint.model_validate(bp_row.spec).statistical_target
 
-    pool = load_default_pool()
+    pool = pools.load_pool_by_id(row.pool_id)
     items = pool.subset(row.item_ids)
     step = (theta_max - theta_min) / (n - 1)
     curve = [
@@ -113,7 +113,8 @@ def simulate_form(
     if row is None:
         raise HTTPException(status_code=404, detail="form not found")
 
-    result = simulate_linear(load_default_pool(), row.item_ids, theta, seed=seed)
+    pool = pools.load_pool_by_id(row.pool_id)
+    result = simulate_linear(pool, row.item_ids, theta, seed=seed)
     return SimulationRead(
         form_id=form_id,
         true_theta=result.true_theta,
