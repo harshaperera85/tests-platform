@@ -36,7 +36,9 @@ if [ -z "${GH_TOKEN:-}" ]; then
 fi
 export GH_TOKEN  # ensure child gh/curl inherit it
 
-SHA="${SHA:-$(git rev-parse HEAD)}"
+# Resolve to a full 40-char SHA — the Actions API head_sha filter doesn't match
+# abbreviated SHAs.
+SHA="$(git rev-parse --verify "${SHA:-HEAD}^{commit}" 2>/dev/null || echo "${SHA}")"
 REPO="$(git remote get-url origin \
   | sed -E 's#(git@github.com:|https://github.com/)##; s#\.git$##')"
 
@@ -79,7 +81,7 @@ runs = json.load(sys.stdin)["workflow_runs"]
 if not runs:
     print("  (no workflow runs found for this commit yet)")
 for r in runs:
-    print(f"  • {r[\"name\"]}: {r[\"status\"]} -> {r.get(\"conclusion\")}  (run {r[\"id\"]})")
+    print("  - %s: %s -> %s  (run %s)" % (r["name"], r["status"], r.get("conclusion"), r["id"]))
 '
 
 # Per-job breakdown for each run.
@@ -89,7 +91,7 @@ for id in $ids; do
   api "repos/${REPO}/actions/runs/${id}/jobs" | python3 -c '
 import json, sys
 for j in json.load(sys.stdin)["jobs"]:
-    print(f"      - {j[\"name\"]}: {j[\"status\"]} -> {j.get(\"conclusion\")}")
+    print("      - %s: %s -> %s" % (j["name"], j["status"], j.get("conclusion")))
 '
 done
 
