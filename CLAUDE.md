@@ -42,6 +42,12 @@ locally**. See `SETUP.md`.
 7. **Containerize from day one.** Everything runs in docker-compose; promotion to EC2/AWS is config,
    not a rewrite. **Never commit secrets** (.env, keys).
 8. **Quality gates.** ruff + mypy clean; tests in unit/integration/contract/regression tiers must pass.
+9. **Verification means BOTH CI jobs green.** Before pushing, run locally: **backend** (`ruff` +
+   `mypy` + `pytest` + `docker compose up`) **AND frontend** (`npm install && npm run lint`, i.e.
+   `tsc -b`). After pushing, check the *actual* workflow run with `gh run list` / `gh run view`
+   (or `scripts/ci-status.sh`) and confirm **both** the `CI` workflow's backend and frontend jobs
+   passed — and any path-triggered job (e.g. `oracle-parity`) — before reporting a phase complete.
+   Read `GH_TOKEN` from the environment only; never print, hardcode, or commit a token value.
 
 ## Stack
 - Backend: Python 3.12, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, Redis + RQ, PostgreSQL.

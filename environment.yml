@@ -4,6 +4,7 @@ channels:
 dependencies:
   - python=3.12
   - nodejs=20
+  - gh            # GitHub CLI — CI-result checks (scripts/ci-status.sh, golden rule 9)
   - pip
   - pip:
       # --- backend (FastAPI) ---
