@@ -3,6 +3,7 @@
 //   History) → step-through walkthrough. Real routes via react-router.
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { NewTestScreen } from "./screens/tests/NewTestScreen";
 import { TestEditorLayout } from "./screens/tests/TestEditorLayout";
 import { TestListScreen } from "./screens/tests/TestListScreen";
@@ -24,7 +25,8 @@ export default function App() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-5xl px-6 py-8">
+      <main className="mx-auto max-w-5xl px-6 py-8">
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={<TestListScreen />} />
           <Route path="/tests/new" element={<NewTestScreen />} />
@@ -38,7 +40,8 @@ export default function App() {
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </div>
+        </ErrorBoundary>
+      </main>
     </div>
   );
 }
