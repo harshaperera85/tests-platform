@@ -39,6 +39,7 @@ services:
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
       SCORING_R_URL: ${SCORING_R_URL:-http://scoring-r:8000}
       ENVIRONMENT: ${ENVIRONMENT:-development}
+      ASSEMBLY_ASYNC: ${ASSEMBLY_ASYNC:-true}
     ports:
       - "8000:8000"
     volumes:
@@ -52,6 +53,25 @@ services:
     command: >
       sh -c "alembic upgrade head &&
              uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  worker:
+    # Same image/code as backend; consumes the RQ 'assembly' queue. Assembly
+    # solves run here, not in the API request (plan §6/§7).
+    build:
+      context: ../backend
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://tests:tests@postgres:5432/tests}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      ASSEMBLY_ASYNC: ${ASSEMBLY_ASYNC:-true}
+    volumes:
+      - ../backend:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "rq worker --url $${REDIS_URL:-redis://redis:6379/0} assembly"
 
   scoring-r:
     build:

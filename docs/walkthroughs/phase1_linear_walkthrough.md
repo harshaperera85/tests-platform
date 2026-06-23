@@ -24,9 +24,16 @@ docker compose -f infra/docker-compose.yml up --build
 ```
 
 This starts `postgres`, `redis`, `backend` (FastAPI, applies Alembic migrations then
-serves on :8000), `scoring-r` (stub), and `frontend` (Vite dev server on :5173). Wait
-until you see the backend log `Uvicorn running on http://0.0.0.0:8000` and the frontend
-log `VITE … ready`.
+serves on :8000), `worker` (RQ — runs assembly solves off the request), `scoring-r`
+(stub), and `frontend` (Vite dev server on :5173). Wait until you see the backend log
+`Uvicorn running on http://0.0.0.0:8000`, the worker log `Worker … listening on
+assembly`, and the frontend log `VITE … ready`.
+
+> **Assembly is asynchronous** in compose (`ASSEMBLY_ASYNC=true`): **Assemble**
+> enqueues the solve and returns a **queued** job; the `worker` runs it and the job
+> moves `queued → running → optimal/feasible` (or `infeasible`). The UI polls and
+> shows "Assembling… (running)" until it's done. (Without a worker, set
+> `ASSEMBLY_ASYNC=false` to solve inline.)
 
 ### Tunnel the ports (from your laptop)
 
@@ -131,8 +138,9 @@ editor is pre-filled with a **known-feasible** blueprint:
 Click **Assemble form**.
 
 **Checkpoint 1 — PASS** if:
-- A blue "OR-Tools CP-SAT solving…" pill appears briefly, then the app advances to the
-  **Form preview** screen (no error pill).
+- An "Assembling…" spinner shows the job status (`queued` → `running`) while the worker
+  solves, then the **Form preview** appears below the editor (no error pill). For small
+  blueprints this is a second or two.
 - (On `small_2pl` this is verified: status `optimal`, objective `0.000`, actual TIF
   exactly `8.0 / 11.0 / 8.0`. On `demo_mixed` it also assembles `optimal` with different
   items.)

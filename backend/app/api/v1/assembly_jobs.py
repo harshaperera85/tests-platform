@@ -16,7 +16,18 @@ from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
 from app.psychometrics import pools
 from app.schemas.responses import AssemblyJobCreate, AssemblyJobRead
-from app.services.assembly_run import run_assembly
+from app.services.assembly_run import create_job, dispatch
+
+
+def _form_ids(db: Session, job_id: str) -> list[str]:
+    return [
+        r.id
+        for r in db.query(FormRow)
+        .filter(FormRow.assembly_job_id == job_id)
+        .order_by(FormRow.form_index)
+        .all()
+    ]
+
 
 router = APIRouter(prefix="/assembly-jobs", tags=["assembly-jobs"])
 
@@ -51,7 +62,7 @@ def create_assembly_job(
             status_code=404, detail=f"unknown pool_id {payload.pool_id!r}"
         )
 
-    job, forms = run_assembly(
+    job = create_job(
         db,
         blueprint_row=bp_row,
         pool_id=payload.pool_id,
@@ -59,7 +70,9 @@ def create_assembly_job(
         seed=payload.seed,
         time_limit_s=payload.time_limit_s,
     )
-    return _to_read(job, [f.id for f in forms])
+    dispatch(db, job)
+    db.refresh(job)
+    return _to_read(job, _form_ids(db, job.id))
 
 
 @router.get("/{job_id}", response_model=AssemblyJobRead)
@@ -67,11 +80,4 @@ def get_assembly_job(job_id: str, db: Session = Depends(get_db)) -> AssemblyJobR
     job = db.get(AssemblyJobRow, job_id)
     if job is None:
         raise HTTPException(status_code=404, detail="assembly job not found")
-    form_ids = [
-        r.id
-        for r in db.query(FormRow)
-        .filter(FormRow.assembly_job_id == job_id)
-        .order_by(FormRow.form_index)
-        .all()
-    ]
-    return _to_read(job, form_ids)
+    return _to_read(job, _form_ids(db, job_id))

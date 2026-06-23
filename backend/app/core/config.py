@@ -29,6 +29,12 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://tests:tests@postgres:5432/tests"
     redis_url: str = "redis://redis:6379/0"
 
+    # --- jobs ---
+    # When true, assembly solves are enqueued to RQ (a worker executes them);
+    # when false they run inline in-request. Default false so the API works
+    # without a worker/Redis (tests); docker-compose sets it true.
+    assembly_async: bool = False
+
     # --- capability services ---
     scoring_r_url: str = "http://scoring-r:8000"
     # CAT platform endpoints are pinned before Phase 2 (see plan §16). Adapter

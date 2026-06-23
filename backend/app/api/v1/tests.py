@@ -26,7 +26,7 @@ from app.schemas.tests import (
     TestSummary,
     TestUpdate,
 )
-from app.services.assembly_run import run_assembly
+from app.services.assembly_run import create_job, dispatch
 
 router = APIRouter(prefix="/tests", tags=["tests"])
 
@@ -176,9 +176,9 @@ def assemble_test(
         spec=test.blueprint_spec,
     )
     db.add(bp_row)
-    db.flush()
+    db.commit()
 
-    job, forms = run_assembly(
+    job = create_job(
         db,
         blueprint_row=bp_row,
         pool_id=test.pool_id,
@@ -187,6 +187,15 @@ def assemble_test(
         time_limit_s=payload.time_limit_s,
         test_id=test.id,
     )
+    dispatch(db, job)
+    db.refresh(job)
+    form_ids = [
+        r.id
+        for r in db.query(FormRow)
+        .filter(FormRow.assembly_job_id == job.id)
+        .order_by(FormRow.form_index)
+        .all()
+    ]
     result = job.result or {}
     return AssemblyJobRead(
         id=job.id,
@@ -199,7 +208,7 @@ def assemble_test(
         theta_points=result.get("theta_points", []),
         target_info=result.get("target_info", []),
         warnings=result.get("warnings", []),
-        form_ids=[f.id for f in forms],
+        form_ids=form_ids,
         created_at=job.created_at,
     )
 

@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { getAssemblyJob } from "../../api/generated/endpoints/assembly-jobs/assembly-jobs";
 import { useGetPoolCatalog, useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
 import { useListScenarios } from "../../api/generated/endpoints/scenarios/scenarios";
 import {
@@ -110,6 +111,8 @@ export function BlueprintEditorScreen({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [infeasible, setInfeasible] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
+  const [polling, setPolling] = useState(false);
+  const [jobStatus, setJobStatus] = useState<string | null>(null);
 
   const qc = useQueryClient();
   const catalog = useGetPoolCatalog();
@@ -117,7 +120,7 @@ export function BlueprintEditorScreen({
   const pool = useGetPoolItems({ pool_id: poolId });
   const updateTest = useUpdateTest();
   const assembleTest = useAssembleTest();
-  const busy = updateTest.isPending || assembleTest.isPending;
+  const busy = updateTest.isPending || assembleTest.isPending || polling;
 
   const theta = parseNums(thetaText);
   const info = parseNums(infoText);
@@ -207,10 +210,22 @@ export function BlueprintEditorScreen({
     setWarnings([]);
     try {
       await persistDraft();
-      const job = await assembleTest.mutateAsync({
+      let job = await assembleTest.mutateAsync({
         testId,
         data: { strategy: "mip", seed: 0, time_limit_s: 12 },
       });
+      // Async path: the API returns a queued job; poll until the worker finishes.
+      setPolling(true);
+      let tries = 0;
+      while ((job.status === "queued" || job.status === "running") && tries < 200) {
+        setJobStatus(job.status);
+        await new Promise((r) => setTimeout(r, 700));
+        tries += 1;
+        job = await getAssemblyJob(job.id);
+      }
+      setPolling(false);
+      setJobStatus(null);
+
       setWarnings(job.warnings ?? []);
       const formIds = job.form_ids ?? [];
       if (!formIds.length || (job.status !== "optimal" && job.status !== "feasible")) {
@@ -225,6 +240,8 @@ export function BlueprintEditorScreen({
       qc.invalidateQueries({ queryKey: getListTestsQueryKey() });
       onAssembled(formIds[0]);
     } catch (e) {
+      setPolling(false);
+      setJobStatus(null);
       setSubmitError(e instanceof Error ? e.message : "Assembly request failed.");
     }
   }
@@ -373,12 +390,17 @@ export function BlueprintEditorScreen({
       <div className="space-y-3">
         <div className="flex items-center gap-3">
           <Button onClick={assemble} disabled={busy || !valid}>
-            {assembleTest.isPending ? "Assembling…" : "Assemble form"}
+            {assembleTest.isPending || polling ? "Assembling…" : "Assemble form"}
           </Button>
           <Button variant="secondary" onClick={saveDraft} disabled={busy || !valid}>
             Save draft
           </Button>
-          {busy && <Spinner label={assembleTest.isPending ? "OR-Tools CP-SAT solving…" : "Saving…"} />}
+          {(assembleTest.isPending || polling) && (
+            <Spinner label={jobStatus ? `OR-Tools CP-SAT solving… (${jobStatus})` : "Queuing…"} />
+          )}
+          {updateTest.isPending && !assembleTest.isPending && !polling && (
+            <Spinner label="Saving…" />
+          )}
           {!busy && savedAt && <Pill tone="ok">saved {savedAt}</Pill>}
           {!valid && !busy && <Pill tone="warn">Fix the highlighted fields</Pill>}
         </div>
