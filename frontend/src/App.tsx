@@ -1,17 +1,68 @@
-// Phase 0 placeholder shell. The Tests screens (A-030 Test List, A-031..034 Test
-// Editor, A-036/037 Section Templates, A-038..041 review) and the generated API
-// client land in Phase 1.
+// Linear path IA (rebuilt in TS from the platform prototype's screen map):
+//   A-031 Test Editor (Assembly) → A-033 Form preview → session walkthrough.
+// A lightweight staged flow keeps the dependency surface small (no router).
+import { useState } from "react";
+
+import { Pill } from "./components/ui";
+import { BlueprintEditorScreen } from "./screens/tests/BlueprintEditorScreen";
+import { FormPreviewScreen } from "./screens/tests/FormPreviewScreen";
+import { SessionNavigatorScreen } from "./screens/tests/SessionNavigatorScreen";
+
+type Stage =
+  | { name: "editor" }
+  | { name: "preview"; formId: string; blueprintId: string }
+  | { name: "navigate"; formId: string };
+
+const STEPS: { id: string; label: string; stage: Stage["name"] }[] = [
+  { id: "A-031", label: "Blueprint & assemble", stage: "editor" },
+  { id: "A-033", label: "Form preview", stage: "preview" },
+  { id: "—", label: "Walkthrough", stage: "navigate" },
+];
+
 export default function App() {
+  const [stage, setStage] = useState<Stage>({ name: "editor" });
+
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-900">
-      <div className="mx-auto max-w-3xl px-6 py-16">
-        <h1 className="text-3xl font-semibold tracking-tight">Tests Platform</h1>
-        <p className="mt-3 text-slate-600">
-          Assembly + administration engine — Phase 0 scaffold.
-        </p>
-        <span className="mt-6 inline-block rounded bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-800">
-          scaffold online
-        </span>
+    <main className="min-h-screen bg-ink-50 text-ink-900">
+      <header className="border-b border-ink-200 bg-white">
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight">Tests Platform</h1>
+            <p className="text-sm text-ink-600">Linear fixed-form — Test Editor</p>
+          </div>
+          <nav className="flex items-center gap-2">
+            {STEPS.map((s) => (
+              <Pill key={s.label} tone={s.stage === stage.name ? "info" : "neutral"}>
+                {s.id} {s.label}
+              </Pill>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      <div className="mx-auto max-w-5xl px-6 py-8">
+        {stage.name === "editor" && (
+          <BlueprintEditorScreen
+            onAssembled={({ formId, blueprintId }) =>
+              setStage({ name: "preview", formId, blueprintId })
+            }
+          />
+        )}
+        {stage.name === "preview" && (
+          <FormPreviewScreen
+            formId={stage.formId}
+            onWalk={() => setStage({ name: "navigate", formId: stage.formId })}
+            onBack={() => setStage({ name: "editor" })}
+          />
+        )}
+        {stage.name === "navigate" && (
+          <SessionNavigatorScreen
+            formId={stage.formId}
+            onBack={() =>
+              setStage({ name: "preview", formId: stage.formId, blueprintId: "" })
+            }
+          />
+        )}
       </div>
     </main>
   );

@@ -63,7 +63,10 @@ services:
     build:
       context: ../frontend
     environment:
-      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+      # Empty base URL -> same-origin; the Vite dev-server proxy forwards /api to
+      # the backend service (no CORS, no backend change).
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+      VITE_PROXY_TARGET: ${VITE_PROXY_TARGET:-http://backend:8000}
     ports:
       - "5173:5173"
     volumes:

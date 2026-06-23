@@ -25,6 +25,21 @@ def test_phase1_paths_present(client: TestClient) -> None:
     assert "/api/v1/assembly-jobs" in paths
     assert "/api/v1/assembly-jobs/{job_id}" in paths
     assert "/api/v1/forms/{form_id}" in paths
+    assert "/api/v1/preview/start" in paths
+    assert "/api/v1/preview/respond" in paths
+    assert "/api/v1/preview/score" in paths
+
+
+def test_operation_ids_are_clean_for_orval(client: TestClient) -> None:
+    """operationIds = route function names, so Orval emits clean hook names."""
+    schema = client.get("/openapi.json").json()
+    op_ids = {
+        op["operationId"]
+        for path in schema["paths"].values()
+        for op in path.values()
+    }
+    expected = {"create_blueprint", "create_assembly_job", "get_form", "start_preview"}
+    assert expected <= op_ids
 
 
 def test_blueprint_schema_exposed(client: TestClient) -> None:

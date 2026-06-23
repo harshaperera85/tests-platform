@@ -1,0 +1,49 @@
+"""Wire schemas for the dry-run preview endpoint (plan §9 ``/api/v1/preview``).
+
+The preview is **stateless on the server**: the JSON-serializable
+``SessionState`` (engine contract) is the round-trip token. The client sends the
+state it last received back with each call. This keeps the endpoint thin — it owns
+no session storage and no sequencing/scoring logic; all of that stays in
+``LinearStrategy`` (CLAUDE.md golden rule 1).
+"""
+
+from __future__ import annotations
+
+from pydantic import BaseModel
+
+from app.engine.contract import NextAction, SessionState, TerminationDecision
+
+
+class PreviewStartRequest(BaseModel):
+    """Start a dry-run from a stored blueprint (assemble now) or a stored form."""
+
+    blueprint_id: str | None = None
+    form_id: str | None = None
+    assembly_strategy: str = "mip"
+    session_id: str | None = None
+
+
+class PreviewRespondRequest(BaseModel):
+    """Record one response against the carried-back session state."""
+
+    state: SessionState
+    item_id: str | None = None
+    correct: int
+
+
+class PreviewScoreRequest(BaseModel):
+    """Score the carried-back session state."""
+
+    state: SessionState
+
+
+class PreviewStep(BaseModel):
+    """One step of the walkthrough: the new state + what to do next.
+
+    ``next_action.navigation`` carries the strategy's capabilities, so no separate
+    capabilities call is needed.
+    """
+
+    state: SessionState
+    next_action: NextAction
+    termination: TerminationDecision

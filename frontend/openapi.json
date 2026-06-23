@@ -1,0 +1,1161 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Tests Platform API",
+    "description": "Assembly + administration engine for a large testing program.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Liveness check",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprints": {
+      "post": {
+        "tags": [
+          "blueprints"
+        ],
+        "summary": "Create Blueprint",
+        "operationId": "create_blueprint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Blueprint"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlueprintRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/blueprints/{blueprint_id}": {
+      "get": {
+        "tags": [
+          "blueprints"
+        ],
+        "summary": "Get Blueprint",
+        "operationId": "get_blueprint",
+        "parameters": [
+          {
+            "name": "blueprint_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Blueprint Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlueprintRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assembly-jobs": {
+      "post": {
+        "tags": [
+          "assembly-jobs"
+        ],
+        "summary": "Create Assembly Job",
+        "operationId": "create_assembly_job",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssemblyJobCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssemblyJobRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assembly-jobs/{job_id}": {
+      "get": {
+        "tags": [
+          "assembly-jobs"
+        ],
+        "summary": "Get Assembly Job",
+        "operationId": "get_assembly_job",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssemblyJobRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{form_id}": {
+      "get": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Get Form",
+        "operationId": "get_form",
+        "parameters": [
+          {
+            "name": "form_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Form Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/preview/start": {
+      "post": {
+        "tags": [
+          "preview"
+        ],
+        "summary": "Start Preview",
+        "operationId": "start_preview",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewStartRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviewStep"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/preview/respond": {
+      "post": {
+        "tags": [
+          "preview"
+        ],
+        "summary": "Respond Preview",
+        "operationId": "respond_preview",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewRespondRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PreviewStep"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/preview/score": {
+      "post": {
+        "tags": [
+          "preview"
+        ],
+        "summary": "Score Preview",
+        "operationId": "score_preview",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PreviewScoreRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScoreResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Root liveness check",
+        "operationId": "root_health",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Root Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssemblyJobCreate": {
+        "properties": {
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "strategy": {
+            "type": "string",
+            "title": "Strategy",
+            "default": "mip"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 0
+          },
+          "time_limit_s": {
+            "type": "number",
+            "title": "Time Limit S",
+            "default": 10.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "blueprint_id"
+        ],
+        "title": "AssemblyJobCreate"
+      },
+      "AssemblyJobRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "strategy": {
+            "type": "string",
+            "title": "Strategy"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          },
+          "objective_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective Value"
+          },
+          "theta_points": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Theta Points",
+            "default": []
+          },
+          "target_info": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Target Info",
+            "default": []
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings",
+            "default": []
+          },
+          "form_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Form Ids",
+            "default": []
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "blueprint_id",
+          "strategy",
+          "status",
+          "created_at"
+        ],
+        "title": "AssemblyJobRead"
+      },
+      "Blueprint": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "default": "untitled-blueprint"
+          },
+          "length": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Length",
+            "description": "items per form"
+          },
+          "num_forms": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Num Forms",
+            "default": 1
+          },
+          "content_constraints": {
+            "items": {
+              "$ref": "#/components/schemas/ContentConstraint"
+            },
+            "type": "array",
+            "title": "Content Constraints"
+          },
+          "statistical_target": {
+            "$ref": "#/components/schemas/TIFTarget"
+          },
+          "enemy_policy": {
+            "$ref": "#/components/schemas/EnemyPolicy"
+          },
+          "exposure_target": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExposureTarget"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "length",
+          "statistical_target"
+        ],
+        "title": "Blueprint",
+        "description": "Full assembly specification for one (or several parallel) forms."
+      },
+      "BlueprintRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "length": {
+            "type": "integer",
+            "title": "Length"
+          },
+          "num_forms": {
+            "type": "integer",
+            "title": "Num Forms"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "blueprint": {
+            "$ref": "#/components/schemas/Blueprint"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "length",
+          "num_forms",
+          "created_at",
+          "blueprint"
+        ],
+        "title": "BlueprintRead"
+      },
+      "ContentConstraint": {
+        "properties": {
+          "tag_type": {
+            "type": "string",
+            "title": "Tag Type"
+          },
+          "tag_value": {
+            "type": "string",
+            "title": "Tag Value"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tag_type",
+          "tag_value"
+        ],
+        "title": "ContentConstraint",
+        "description": "A min/max count of items carrying a given tag value.\n\n``tag_type`` is the tag dimension (e.g. ``\"KC\"``, ``\"Bloom\"``, ``\"TIMSS\"``,\n``\"domain\"``); ``tag_value`` is the required value on that dimension. At least\none of ``minimum`` / ``maximum`` must be set."
+      },
+      "EnemyPolicy": {
+        "properties": {
+          "enforce": {
+            "type": "boolean",
+            "title": "Enforce",
+            "default": true
+          }
+        },
+        "type": "object",
+        "title": "EnemyPolicy",
+        "description": "How to honor ``enemy_of`` relations from the bank.\n\nWhen ``enforce`` is true, two items that are enemies of each other may not both\nappear in the same form (declared one-directionally in the bank; the compiler\nsymmetrizes)."
+      },
+      "ExposureTarget": {
+        "properties": {
+          "max_use_per_item": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Max Use Per Item"
+          }
+        },
+        "type": "object",
+        "required": [
+          "max_use_per_item"
+        ],
+        "title": "ExposureTarget",
+        "description": "Optional cap on how often an item may be used across assembled forms.\n\nOnly meaningful when assembling multiple parallel forms in one job."
+      },
+      "FormRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "assembly_job_id": {
+            "type": "string",
+            "title": "Assembly Job Id"
+          },
+          "form_index": {
+            "type": "integer",
+            "title": "Form Index"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "item_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Item Ids"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "tif": {
+            "items": {
+              "$ref": "#/components/schemas/TIFPoint"
+            },
+            "type": "array",
+            "title": "Tif"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "blueprint_id",
+          "assembly_job_id",
+          "form_index",
+          "status",
+          "item_ids",
+          "created_at",
+          "tif"
+        ],
+        "title": "FormRead"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          },
+          "service": {
+            "type": "string",
+            "title": "Service"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "environment": {
+            "type": "string",
+            "title": "Environment"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "service",
+          "version",
+          "environment"
+        ],
+        "title": "HealthResponse"
+      },
+      "Navigation": {
+        "properties": {
+          "can_review": {
+            "type": "boolean",
+            "title": "Can Review",
+            "default": false
+          },
+          "can_skip": {
+            "type": "boolean",
+            "title": "Can Skip",
+            "default": false
+          },
+          "can_navigate_back": {
+            "type": "boolean",
+            "title": "Can Navigate Back",
+            "default": false
+          },
+          "fixed_length": {
+            "type": "boolean",
+            "title": "Fixed Length",
+            "default": true
+          },
+          "total_items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Items"
+          }
+        },
+        "type": "object",
+        "title": "Navigation",
+        "description": "Navigation capabilities exposed to the test-taker / Sessions module."
+      },
+      "NextAction": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "present",
+              "complete"
+            ],
+            "title": "Kind"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          },
+          "navigation": {
+            "$ref": "#/components/schemas/Navigation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "navigation"
+        ],
+        "title": "NextAction",
+        "description": "What the engine should do next: present item(s)/module, or complete."
+      },
+      "PreviewRespondRequest": {
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/SessionState"
+          },
+          "item_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Id"
+          },
+          "correct": {
+            "type": "integer",
+            "title": "Correct"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "correct"
+        ],
+        "title": "PreviewRespondRequest",
+        "description": "Record one response against the carried-back session state."
+      },
+      "PreviewScoreRequest": {
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/SessionState"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state"
+        ],
+        "title": "PreviewScoreRequest",
+        "description": "Score the carried-back session state."
+      },
+      "PreviewStartRequest": {
+        "properties": {
+          "blueprint_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blueprint Id"
+          },
+          "form_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Form Id"
+          },
+          "assembly_strategy": {
+            "type": "string",
+            "title": "Assembly Strategy",
+            "default": "mip"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id"
+          }
+        },
+        "type": "object",
+        "title": "PreviewStartRequest",
+        "description": "Start a dry-run from a stored blueprint (assemble now) or a stored form."
+      },
+      "PreviewStep": {
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/SessionState"
+          },
+          "next_action": {
+            "$ref": "#/components/schemas/NextAction"
+          },
+          "termination": {
+            "$ref": "#/components/schemas/TerminationDecision"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "next_action",
+          "termination"
+        ],
+        "title": "PreviewStep",
+        "description": "One step of the walkthrough: the new state + what to do next.\n\n``next_action.navigation`` carries the strategy's capabilities, so no separate\ncapabilities call is needed."
+      },
+      "ScoreResult": {
+        "properties": {
+          "theta": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Theta"
+          },
+          "standard_error": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard Error"
+          },
+          "scale": {
+            "type": "string",
+            "title": "Scale",
+            "default": "canonical"
+          },
+          "detail": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "ScoreResult",
+        "description": "Result of scoring a session on the canonical theta metric.\n\nAll theta values are normalized through ``psychometrics/`` (the single source\nof truth = the mirt scoring service). Mind the D-scaling mismatch."
+      },
+      "SessionState": {
+        "properties": {
+          "model_type": {
+            "type": "string",
+            "title": "Model Type"
+          },
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position",
+            "default": 0
+          },
+          "completed": {
+            "type": "boolean",
+            "title": "Completed",
+            "default": false
+          },
+          "data": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "model_type",
+          "session_id"
+        ],
+        "title": "SessionState",
+        "description": "Opaque-to-the-core administration state for one in-flight session.\n\nThe engine core treats this as a black box and only passes it back to the\nowning strategy. Concrete strategies refine ``data`` with their own typed\npayloads in Phase 1+."
+      },
+      "TIFPoint": {
+        "properties": {
+          "theta": {
+            "type": "number",
+            "title": "Theta"
+          },
+          "target": {
+            "type": "number",
+            "title": "Target"
+          },
+          "actual": {
+            "type": "number",
+            "title": "Actual"
+          },
+          "gap": {
+            "type": "number",
+            "title": "Gap"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta",
+          "target",
+          "actual",
+          "gap"
+        ],
+        "title": "TIFPoint"
+      },
+      "TIFTarget": {
+        "properties": {
+          "theta_points": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Theta Points"
+          },
+          "target_info": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Target Info"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "minimax",
+              "maximin"
+            ],
+            "title": "Method",
+            "default": "minimax"
+          },
+          "tolerance": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tolerance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta_points",
+          "target_info"
+        ],
+        "title": "TIFTarget",
+        "description": "Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss \u2014 the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point, using\n``target_info`` as a floor). ``tolerance`` is an optional absolute band; when\nset, the compiler adds hard ``|actual - target| <= tolerance`` constraints in\naddition to the objective."
+      },
+      "TerminationDecision": {
+        "properties": {
+          "complete": {
+            "type": "boolean",
+            "title": "Complete"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "complete"
+        ],
+        "title": "TerminationDecision",
+        "description": "Whether the session is complete and why."
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
