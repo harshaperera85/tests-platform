@@ -60,3 +60,40 @@ class FormRead(BaseModel):
     created_at: datetime
     #: actual-vs-target TIF, point by point — drives the preview plot.
     tif: list[TIFPoint]
+
+
+class TIFCurvePoint(BaseModel):
+    theta: float
+    actual: float
+
+
+class TIFCurve(BaseModel):
+    """Dense actual TIF over a theta grid (server-computed via psychometrics) plus
+    the discrete blueprint target points — for a smooth actual-vs-target plot."""
+
+    theta_points: list[float]  # blueprint target thetas
+    target_info: list[float]
+    tolerance: float | None = None
+    method: str
+    curve: list[TIFCurvePoint]
+
+
+class SimulationStepRead(BaseModel):
+    position: int
+    item_id: str
+    prob_correct: float
+    response: int
+    theta: float | None = None
+    standard_error: float | None = None
+
+
+class SimulationRead(BaseModel):
+    """A genuine simulated examinee session over a form (real engine + 2PL model)."""
+
+    form_id: str
+    true_theta: float
+    seed: int
+    n_items: int
+    final_theta: float | None = None
+    final_standard_error: float | None = None
+    trace: list[SimulationStepRead]

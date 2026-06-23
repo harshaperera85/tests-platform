@@ -1,12 +1,15 @@
 // A-031 Test Editor — Assembly tab. Edit a blueprint (content constraints + TIF
-// target + length) and assemble a linear form via the generated client. All API
-// calls go through Orval-generated hooks (CLAUDE.md golden rule 5).
+// target + length) and assemble a linear form via the generated client. Inline
+// validation, clear success/warning/error states, and tag-availability hints drawn
+// from the simulated bank. All API calls go through Orval-generated hooks (golden
+// rule 5).
 import { useState } from "react";
 
 import { useCreateAssemblyJob } from "../../api/generated/endpoints/assembly-jobs/assembly-jobs";
 import { useCreateBlueprint } from "../../api/generated/endpoints/blueprints/blueprints";
+import { useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
 import type { Blueprint } from "../../api/generated/model";
-import { Button, Card, Field, Pill, Select, TextInput } from "../../components/ui";
+import { Alert, Button, Card, Field, Pill, Select, Spinner, TextInput } from "../../components/ui";
 
 type ConstraintRow = {
   tag_type: string;
@@ -49,27 +52,38 @@ export function BlueprintEditorScreen({
   const [infoText, setInfoText] = useState("8, 11, 8");
   const [tolerance, setTolerance] = useState("");
   const [method, setMethod] = useState<Method>("minimax");
-  const [error, setError] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [infeasible, setInfeasible] = useState<string | null>(null);
+  const [warnings, setWarnings] = useState<string[]>([]);
 
+  const pool = useGetPoolItems();
   const createBlueprint = useCreateBlueprint();
   const createJob = useCreateAssemblyJob();
   const busy = createBlueprint.isPending || createJob.isPending;
 
+  // --- inline validation (before any request) ---
+  const theta = parseNums(thetaText);
+  const info = parseNums(infoText);
+  const len = Number(length);
+  const errors: Record<string, string> = {};
+  if (!Number.isInteger(len) || len <= 0) errors.length = "Length must be a positive integer.";
+  if (theta.length === 0) errors.theta = "Enter at least one θ point.";
+  if (info.length !== theta.length)
+    errors.info = "Target info must have the same count as θ points.";
+  if (info.some((v) => Number.isNaN(v) || v < 0)) errors.info = "Target info must be ≥ 0.";
+  constraints.forEach((c, i) => {
+    const mn = numOrUndef(c.minimum);
+    const mx = numOrUndef(c.maximum);
+    if (mn != null && mx != null && mn > mx) errors[`c${i}`] = "min > max";
+    if (mn != null && mn > len) errors[`c${i}`] = `min ${mn} > length ${len}`;
+  });
+  const valid = Object.keys(errors).length === 0;
+
   function updateConstraint(i: number, patch: Partial<ConstraintRow>) {
-    setConstraints((rows) =>
-      rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)),
-    );
+    setConstraints((rows) => rows.map((r, idx) => (idx === i ? { ...r, ...patch } : r)));
   }
 
   function buildBlueprint(): Blueprint {
-    const theta = parseNums(thetaText);
-    const info = parseNums(infoText);
-    if (theta.length === 0 || theta.length !== info.length) {
-      throw new Error("Theta points and target info must be non-empty, equal-length lists.");
-    }
-    const len = Number(length);
-    if (!Number.isInteger(len) || len <= 0) throw new Error("Length must be a positive integer.");
-
     return {
       name,
       length: len,
@@ -91,23 +105,31 @@ export function BlueprintEditorScreen({
   }
 
   async function assemble() {
-    setError(null);
+    setSubmitError(null);
+    setInfeasible(null);
+    setWarnings([]);
     try {
-      const blueprint = buildBlueprint();
-      const created = await createBlueprint.mutateAsync({ data: blueprint });
+      const created = await createBlueprint.mutateAsync({ data: buildBlueprint() });
       const job = await createJob.mutateAsync({
         data: { blueprint_id: created.id, strategy: "mip", time_limit_s: 8 },
       });
+      setWarnings(job.warnings ?? []);
       const formIds = job.form_ids ?? [];
       if (!formIds.length || (job.status !== "optimal" && job.status !== "feasible")) {
-        setError(`Assembly ${job.status}: no feasible form. Loosen constraints or TIF target.`);
+        setInfeasible(
+          `Assembly ${job.status}: no feasible form for these constraints + TIF target. ` +
+            `Loosen a constraint or lower the target.`,
+        );
         return;
       }
       onAssembled({ formId: formIds[0], blueprintId: created.id });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Assembly failed.");
+      // HTTP/validation failure (e.g. schema 422) — distinct from "infeasible".
+      setSubmitError(e instanceof Error ? e.message : "Assembly request failed.");
     }
   }
+
+  const kcCounts = pool.data?.tag_summary?.KC;
 
   return (
     <div className="space-y-5">
@@ -119,15 +141,26 @@ export function BlueprintEditorScreen({
           <Field label="Name">
             <TextInput value={name} onChange={(e) => setName(e.target.value)} />
           </Field>
-          <Field label="Length (items per form)">
+          <Field label="Length (items per form)" hint={errors.length}>
             <TextInput
               type="number"
               min={1}
               value={length}
+              aria-invalid={Boolean(errors.length)}
               onChange={(e) => setLength(e.target.value)}
             />
           </Field>
         </div>
+        {pool.data && (
+          <p className="mt-3 text-xs text-ink-400">
+            Simulated bank: {pool.data.n_items} items.{" "}
+            {kcCounts &&
+              "KC available — " +
+                Object.entries(kcCounts)
+                  .map(([k, v]) => `${k}:${v}`)
+                  .join(", ")}
+          </p>
+        )}
       </Card>
 
       <Card
@@ -175,6 +208,7 @@ export function BlueprintEditorScreen({
                 <TextInput
                   type="number"
                   value={c.minimum}
+                  aria-invalid={Boolean(errors[`c${i}`])}
                   onChange={(e) => updateConstraint(i, { minimum: e.target.value })}
                 />
               </div>
@@ -182,20 +216,22 @@ export function BlueprintEditorScreen({
                 <TextInput
                   type="number"
                   value={c.maximum}
+                  aria-invalid={Boolean(errors[`c${i}`])}
                   onChange={(e) => updateConstraint(i, { maximum: e.target.value })}
                 />
               </div>
               <div className="col-span-1 text-right">
                 <Button
                   variant="ghost"
-                  aria-label="remove"
-                  onClick={() =>
-                    setConstraints((rows) => rows.filter((_, idx) => idx !== i))
-                  }
+                  aria-label={`remove constraint ${i + 1}`}
+                  onClick={() => setConstraints((rows) => rows.filter((_, idx) => idx !== i))}
                 >
                   ✕
                 </Button>
               </div>
+              {errors[`c${i}`] && (
+                <span className="col-span-12 text-xs text-rose-600">{errors[`c${i}`]}</span>
+              )}
             </div>
           ))}
         </div>
@@ -203,14 +239,22 @@ export function BlueprintEditorScreen({
 
       <Card
         title="Statistical target (TIF)"
-        subtitle="Target test information at theta points — what makes forms psychometrically parallel."
+        subtitle="Target test information at θ points — what makes forms psychometrically parallel."
       >
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Theta points" hint="comma-separated">
-            <TextInput value={thetaText} onChange={(e) => setThetaText(e.target.value)} />
+          <Field label="Theta points" hint={errors.theta ?? "comma-separated"}>
+            <TextInput
+              value={thetaText}
+              aria-invalid={Boolean(errors.theta)}
+              onChange={(e) => setThetaText(e.target.value)}
+            />
           </Field>
-          <Field label="Target info" hint="comma-separated, same length">
-            <TextInput value={infoText} onChange={(e) => setInfoText(e.target.value)} />
+          <Field label="Target info" hint={errors.info ?? "comma-separated, same length"}>
+            <TextInput
+              value={infoText}
+              aria-invalid={Boolean(errors.info)}
+              onChange={(e) => setInfoText(e.target.value)}
+            />
           </Field>
           <Field label="Method">
             <Select value={method} onChange={(e) => setMethod(e.target.value as Method)}>
@@ -229,12 +273,27 @@ export function BlueprintEditorScreen({
         </div>
       </Card>
 
-      <div className="flex items-center gap-3">
-        <Button onClick={assemble} disabled={busy}>
-          {busy ? "Assembling…" : "Assemble form"}
-        </Button>
-        {busy && <Pill tone="info">OR-Tools CP-SAT solving…</Pill>}
-        {error && <Pill tone="warn">{error}</Pill>}
+      <div className="space-y-3">
+        <div className="flex items-center gap-3">
+          <Button onClick={assemble} disabled={busy || !valid}>
+            {busy ? "Assembling…" : "Assemble form"}
+          </Button>
+          {busy && <Spinner label="OR-Tools CP-SAT solving…" />}
+          {!valid && !busy && <Pill tone="warn">Fix the highlighted fields</Pill>}
+        </div>
+        {infeasible && <Alert tone="warn" title="Infeasible blueprint">{infeasible}</Alert>}
+        {submitError && (
+          <Alert tone="error" title="Request failed">{submitError}</Alert>
+        )}
+        {warnings.length > 0 && (
+          <Alert tone="info" title="Assembly warnings">
+            <ul className="list-disc pl-4">
+              {warnings.map((w, i) => (
+                <li key={i}>{w}</li>
+              ))}
+            </ul>
+          </Alert>
+        )}
       </div>
     </div>
   );

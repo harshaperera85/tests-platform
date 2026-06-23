@@ -22,7 +22,11 @@ import type {
 
 import type {
   FormRead,
-  HTTPValidationError
+  GetFormTifCurveParams,
+  HTTPValidationError,
+  SimulateFormParams,
+  SimulationRead,
+  TIFCurve
 } from '../../model';
 
 import { customInstance } from '../../../mutator';
@@ -114,6 +118,208 @@ export function useGetForm<TData = Awaited<ReturnType<typeof getForm>>, TError =
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
 
   const queryOptions = getGetFormQueryOptions(formId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Dense actual TIF over a theta grid (computed via the canonical metric).
+
+Lets the UI draw a smooth actual curve against the discrete blueprint target.
+ * @summary Get Form Tif Curve
+ */
+export const getFormTifCurve = (
+    formId: string,
+    params?: GetFormTifCurveParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<TIFCurve>(
+      {url: `/api/v1/forms/${formId}/tif-curve`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetFormTifCurveQueryKey = (formId?: string,
+    params?: GetFormTifCurveParams,) => {
+    return [
+    `/api/v1/forms/${formId}/tif-curve`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetFormTifCurveQueryOptions = <TData = Awaited<ReturnType<typeof getFormTifCurve>>, TError = ErrorType<HTTPValidationError>>(formId: string,
+    params?: GetFormTifCurveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormTifCurve>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFormTifCurveQueryKey(formId,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFormTifCurve>>> = ({ signal }) => getFormTifCurve(formId,params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(formId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFormTifCurve>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetFormTifCurveQueryResult = NonNullable<Awaited<ReturnType<typeof getFormTifCurve>>>
+export type GetFormTifCurveQueryError = ErrorType<HTTPValidationError>
+
+
+export function useGetFormTifCurve<TData = Awaited<ReturnType<typeof getFormTifCurve>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params: undefined |  GetFormTifCurveParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormTifCurve>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFormTifCurve>>,
+          TError,
+          Awaited<ReturnType<typeof getFormTifCurve>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFormTifCurve<TData = Awaited<ReturnType<typeof getFormTifCurve>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params?: GetFormTifCurveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormTifCurve>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFormTifCurve>>,
+          TError,
+          Awaited<ReturnType<typeof getFormTifCurve>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFormTifCurve<TData = Awaited<ReturnType<typeof getFormTifCurve>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params?: GetFormTifCurveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormTifCurve>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Form Tif Curve
+ */
+
+export function useGetFormTifCurve<TData = Awaited<ReturnType<typeof getFormTifCurve>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params?: GetFormTifCurveParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormTifCurve>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetFormTifCurveQueryOptions(formId,params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Simulate an examinee at ``theta`` walking this form (real engine + 2PL).
+ * @summary Simulate Form
+ */
+export const simulateForm = (
+    formId: string,
+    params?: SimulateFormParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<SimulationRead>(
+      {url: `/api/v1/forms/${formId}/simulate`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getSimulateFormQueryKey = (formId?: string,
+    params?: SimulateFormParams,) => {
+    return [
+    `/api/v1/forms/${formId}/simulate`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getSimulateFormQueryOptions = <TData = Awaited<ReturnType<typeof simulateForm>>, TError = ErrorType<HTTPValidationError>>(formId: string,
+    params?: SimulateFormParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof simulateForm>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getSimulateFormQueryKey(formId,params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof simulateForm>>> = ({ signal }) => simulateForm(formId,params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(formId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof simulateForm>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type SimulateFormQueryResult = NonNullable<Awaited<ReturnType<typeof simulateForm>>>
+export type SimulateFormQueryError = ErrorType<HTTPValidationError>
+
+
+export function useSimulateForm<TData = Awaited<ReturnType<typeof simulateForm>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params: undefined |  SimulateFormParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof simulateForm>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof simulateForm>>,
+          TError,
+          Awaited<ReturnType<typeof simulateForm>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useSimulateForm<TData = Awaited<ReturnType<typeof simulateForm>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params?: SimulateFormParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof simulateForm>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof simulateForm>>,
+          TError,
+          Awaited<ReturnType<typeof simulateForm>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useSimulateForm<TData = Awaited<ReturnType<typeof simulateForm>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params?: SimulateFormParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof simulateForm>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Simulate Form
+ */
+
+export function useSimulateForm<TData = Awaited<ReturnType<typeof simulateForm>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string,
+    params?: SimulateFormParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof simulateForm>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getSimulateFormQueryOptions(formId,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
 

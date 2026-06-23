@@ -235,6 +235,168 @@
         }
       }
     },
+    "/api/v1/forms/{form_id}/tif-curve": {
+      "get": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Get Form Tif Curve",
+        "description": "Dense actual TIF over a theta grid (computed via the canonical metric).\n\nLets the UI draw a smooth actual curve against the discrete blueprint target.",
+        "operationId": "get_form_tif_curve",
+        "parameters": [
+          {
+            "name": "form_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Form Id"
+            }
+          },
+          {
+            "name": "theta_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": -3.0,
+              "title": "Theta Min"
+            }
+          },
+          {
+            "name": "theta_max",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 3.0,
+              "title": "Theta Max"
+            }
+          },
+          {
+            "name": "n",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 400,
+              "minimum": 2,
+              "default": 61,
+              "title": "N"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TIFCurve"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{form_id}/simulate": {
+      "get": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Simulate Form",
+        "description": "Simulate an examinee at ``theta`` walking this form (real engine + 2PL).",
+        "operationId": "simulate_form",
+        "parameters": [
+          {
+            "name": "form_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Form Id"
+            }
+          },
+          {
+            "name": "theta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "description": "examinee's true theta",
+              "default": 0.0,
+              "title": "Theta"
+            },
+            "description": "examinee's true theta"
+          },
+          {
+            "name": "seed",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Seed"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/pool/items": {
+      "get": {
+        "tags": [
+          "pool"
+        ],
+        "summary": "Get Pool Items",
+        "description": "Return the simulated item bank with params, tags, and synthetic content.",
+        "operationId": "get_pool_items",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolDocument"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/preview/start": {
       "post": {
         "tags": [
@@ -834,6 +996,161 @@
         "title": "NextAction",
         "description": "What the engine should do next: present item(s)/module, or complete."
       },
+      "PoolDocument": {
+        "properties": {
+          "simulated": {
+            "type": "boolean",
+            "title": "Simulated"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provenance"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "scaling_d": {
+            "type": "number",
+            "title": "Scaling D"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "tag_summary": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            "type": "object",
+            "title": "Tag Summary"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PoolItem"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "simulated",
+          "model",
+          "scaling_d",
+          "n_items",
+          "tag_summary",
+          "items"
+        ],
+        "title": "PoolDocument"
+      },
+      "PoolItem": {
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "a": {
+            "type": "number",
+            "title": "A"
+          },
+          "b": {
+            "type": "number",
+            "title": "B"
+          },
+          "c": {
+            "type": "number",
+            "title": "C",
+            "default": 0.0
+          },
+          "scaling_d": {
+            "type": "number",
+            "title": "Scaling D"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Tags",
+            "default": {}
+          },
+          "enemy_of": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Enemy Of",
+            "default": []
+          },
+          "stem": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stem"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/PoolItemOption"
+            },
+            "type": "array",
+            "title": "Options",
+            "default": []
+          },
+          "answer_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answer Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_id",
+          "a",
+          "b",
+          "scaling_d"
+        ],
+        "title": "PoolItem"
+      },
+      "PoolItemOption": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "text"
+        ],
+        "title": "PoolItemOption"
+      },
       "PreviewRespondRequest": {
         "properties": {
           "state": {
@@ -1014,6 +1331,182 @@
         ],
         "title": "SessionState",
         "description": "Opaque-to-the-core administration state for one in-flight session.\n\nThe engine core treats this as a black box and only passes it back to the\nowning strategy. Concrete strategies refine ``data`` with their own typed\npayloads in Phase 1+."
+      },
+      "SimulationRead": {
+        "properties": {
+          "form_id": {
+            "type": "string",
+            "title": "Form Id"
+          },
+          "true_theta": {
+            "type": "number",
+            "title": "True Theta"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "final_theta": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Theta"
+          },
+          "final_standard_error": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Final Standard Error"
+          },
+          "trace": {
+            "items": {
+              "$ref": "#/components/schemas/SimulationStepRead"
+            },
+            "type": "array",
+            "title": "Trace"
+          }
+        },
+        "type": "object",
+        "required": [
+          "form_id",
+          "true_theta",
+          "seed",
+          "n_items",
+          "trace"
+        ],
+        "title": "SimulationRead",
+        "description": "A genuine simulated examinee session over a form (real engine + 2PL model)."
+      },
+      "SimulationStepRead": {
+        "properties": {
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "prob_correct": {
+            "type": "number",
+            "title": "Prob Correct"
+          },
+          "response": {
+            "type": "integer",
+            "title": "Response"
+          },
+          "theta": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Theta"
+          },
+          "standard_error": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position",
+          "item_id",
+          "prob_correct",
+          "response"
+        ],
+        "title": "SimulationStepRead"
+      },
+      "TIFCurve": {
+        "properties": {
+          "theta_points": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Theta Points"
+          },
+          "target_info": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Target Info"
+          },
+          "tolerance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tolerance"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "curve": {
+            "items": {
+              "$ref": "#/components/schemas/TIFCurvePoint"
+            },
+            "type": "array",
+            "title": "Curve"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta_points",
+          "target_info",
+          "method",
+          "curve"
+        ],
+        "title": "TIFCurve",
+        "description": "Dense actual TIF over a theta grid (server-computed via psychometrics) plus\nthe discrete blueprint target points \u2014 for a smooth actual-vs-target plot."
+      },
+      "TIFCurvePoint": {
+        "properties": {
+          "theta": {
+            "type": "number",
+            "title": "Theta"
+          },
+          "actual": {
+            "type": "number",
+            "title": "Actual"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta",
+          "actual"
+        ],
+        "title": "TIFCurvePoint"
       },
       "TIFPoint": {
         "properties": {

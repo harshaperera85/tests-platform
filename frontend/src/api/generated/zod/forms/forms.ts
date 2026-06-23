@@ -31,3 +31,66 @@ export const getFormResponse = zod.object({
 }))
 })
 
+/**
+ * Dense actual TIF over a theta grid (computed via the canonical metric).
+
+Lets the UI draw a smooth actual curve against the discrete blueprint target.
+ * @summary Get Form Tif Curve
+ */
+export const getFormTifCurveParams = zod.object({
+  "form_id": zod.string()
+})
+
+export const getFormTifCurveQueryThetaMinDefault = -3;export const getFormTifCurveQueryThetaMaxDefault = 3;export const getFormTifCurveQueryNDefault = 61;
+export const getFormTifCurveQueryNMin = 2;
+export const getFormTifCurveQueryNMax = 400;
+
+export const getFormTifCurveQueryParams = zod.object({
+  "theta_min": zod.number().default(getFormTifCurveQueryThetaMinDefault),
+  "theta_max": zod.number().default(getFormTifCurveQueryThetaMaxDefault),
+  "n": zod.number().min(getFormTifCurveQueryNMin).max(getFormTifCurveQueryNMax).default(getFormTifCurveQueryNDefault)
+})
+
+export const getFormTifCurveResponse = zod.object({
+  "theta_points": zod.array(zod.number()),
+  "target_info": zod.array(zod.number()),
+  "tolerance": zod.union([zod.number(),zod.null()]).optional(),
+  "method": zod.string(),
+  "curve": zod.array(zod.object({
+  "theta": zod.number(),
+  "actual": zod.number()
+}))
+}).describe('Dense actual TIF over a theta grid (server-computed via psychometrics) plus\nthe discrete blueprint target points — for a smooth actual-vs-target plot.')
+
+/**
+ * Simulate an examinee at ``theta`` walking this form (real engine + 2PL).
+ * @summary Simulate Form
+ */
+export const simulateFormParams = zod.object({
+  "form_id": zod.string()
+})
+
+export const simulateFormQueryThetaDefault = 0;export const simulateFormQuerySeedDefault = 0;
+
+export const simulateFormQueryParams = zod.object({
+  "theta": zod.number().optional().describe('examinee\'s true theta'),
+  "seed": zod.number().optional()
+})
+
+export const simulateFormResponse = zod.object({
+  "form_id": zod.string(),
+  "true_theta": zod.number(),
+  "seed": zod.number(),
+  "n_items": zod.number(),
+  "final_theta": zod.union([zod.number(),zod.null()]).optional(),
+  "final_standard_error": zod.union([zod.number(),zod.null()]).optional(),
+  "trace": zod.array(zod.object({
+  "position": zod.number(),
+  "item_id": zod.string(),
+  "prob_correct": zod.number(),
+  "response": zod.number(),
+  "theta": zod.union([zod.number(),zod.null()]).optional(),
+  "standard_error": zod.union([zod.number(),zod.null()]).optional()
+}))
+}).describe('A genuine simulated examinee session over a form (real engine + 2PL model).')
+

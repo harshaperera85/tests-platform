@@ -48,6 +48,16 @@ class ItemPool:
         return iter(self._items)
 
 
+def load_bank_document(path: Path | str = DEFAULT_BANK) -> dict:
+    """Return the raw bank JSON, including simulated demo content + provenance.
+
+    ``load_pool`` keeps only the psychometric fields; this preserves everything
+    (stem/options/answer_key, ``simulated``, ``provenance``) for the read-only
+    demo/pool endpoint that surfaces the simulated bank to the UI.
+    """
+    return json.loads(Path(path).read_text())
+
+
 def load_pool(path: Path | str = DEFAULT_BANK) -> ItemPool:
     """Load a pool from a bank JSON file (fixture shape)."""
     data = json.loads(Path(path).read_text())

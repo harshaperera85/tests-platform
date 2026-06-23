@@ -28,6 +28,9 @@ def test_phase1_paths_present(client: TestClient) -> None:
     assert "/api/v1/preview/start" in paths
     assert "/api/v1/preview/respond" in paths
     assert "/api/v1/preview/score" in paths
+    assert "/api/v1/pool/items" in paths
+    assert "/api/v1/forms/{form_id}/tif-curve" in paths
+    assert "/api/v1/forms/{form_id}/simulate" in paths
 
 
 def test_operation_ids_are_clean_for_orval(client: TestClient) -> None:

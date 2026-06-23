@@ -11,7 +11,7 @@ import { SessionNavigatorScreen } from "./screens/tests/SessionNavigatorScreen";
 type Stage =
   | { name: "editor" }
   | { name: "preview"; formId: string; blueprintId: string }
-  | { name: "navigate"; formId: string };
+  | { name: "navigate"; formId: string; blueprintId: string };
 
 const STEPS: { id: string; label: string; stage: Stage["name"] }[] = [
   { id: "A-031", label: "Blueprint & assemble", stage: "editor" },
@@ -51,7 +51,14 @@ export default function App() {
         {stage.name === "preview" && (
           <FormPreviewScreen
             formId={stage.formId}
-            onWalk={() => setStage({ name: "navigate", formId: stage.formId })}
+            blueprintId={stage.blueprintId}
+            onWalk={() =>
+              setStage({
+                name: "navigate",
+                formId: stage.formId,
+                blueprintId: stage.blueprintId,
+              })
+            }
             onBack={() => setStage({ name: "editor" })}
           />
         )}
@@ -59,7 +66,11 @@ export default function App() {
           <SessionNavigatorScreen
             formId={stage.formId}
             onBack={() =>
-              setStage({ name: "preview", formId: stage.formId, blueprintId: "" })
+              setStage({
+                name: "preview",
+                formId: stage.formId,
+                blueprintId: stage.blueprintId,
+              })
             }
           />
         )}

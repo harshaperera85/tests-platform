@@ -15,4 +15,10 @@ export default defineConfig({
       "/api": { target: proxyTarget, changeOrigin: true },
     },
   },
+  build: {
+    // Recharts is an inherently large dep (~540 kB minified) and pulls in react,
+    // so manual chunking can't get any single chunk under the default 500 kB and
+    // only introduces circular-chunk churn. Raise the advisory limit instead.
+    chunkSizeWarningLimit: 800,
+  },
 });

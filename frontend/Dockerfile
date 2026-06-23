@@ -4,9 +4,9 @@ FROM node:20-slim
 
 WORKDIR /app
 
-COPY package.json ./
-# No lockfile committed yet (Phase 0); install resolves from package.json.
-RUN npm install
+COPY package.json package-lock.json ./
+# Reproducible install from the committed lockfile.
+RUN npm ci
 
 COPY . .
 

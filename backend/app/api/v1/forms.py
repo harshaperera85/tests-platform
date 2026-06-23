@@ -6,14 +6,24 @@ the data behind the form-preview plot (plan §10).
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
+from app.psychometrics.bank import load_default_pool
+from app.psychometrics.information import test_information
 from app.schemas.blueprint import Blueprint
-from app.schemas.responses import FormRead, TIFPoint
+from app.schemas.responses import (
+    FormRead,
+    SimulationRead,
+    SimulationStepRead,
+    TIFCurve,
+    TIFCurvePoint,
+    TIFPoint,
+)
+from app.simulation import simulate_linear
 
 router = APIRouter(prefix="/forms", tags=["forms"])
 
@@ -49,4 +59,77 @@ def get_form(form_id: str, db: Session = Depends(get_db)) -> FormRead:
         item_ids=row.item_ids,
         created_at=row.created_at,
         tif=tif,
+    )
+
+
+@router.get("/{form_id}/tif-curve", response_model=TIFCurve)
+def get_form_tif_curve(
+    form_id: str,
+    theta_min: float = Query(default=-3.0),
+    theta_max: float = Query(default=3.0),
+    n: int = Query(default=61, ge=2, le=400),
+    db: Session = Depends(get_db),
+) -> TIFCurve:
+    """Dense actual TIF over a theta grid (computed via the canonical metric).
+
+    Lets the UI draw a smooth actual curve against the discrete blueprint target.
+    """
+    row = db.get(FormRow, form_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="form not found")
+    bp_row = db.get(BlueprintRow, row.blueprint_id)
+    if bp_row is None:  # pragma: no cover - FK guarantees presence
+        raise HTTPException(status_code=404, detail="blueprint not found")
+    target = Blueprint.model_validate(bp_row.spec).statistical_target
+
+    pool = load_default_pool()
+    items = pool.subset(row.item_ids)
+    step = (theta_max - theta_min) / (n - 1)
+    curve = [
+        TIFCurvePoint(
+            theta=theta_min + i * step,
+            actual=test_information(items, theta_min + i * step),
+        )
+        for i in range(n)
+    ]
+    return TIFCurve(
+        theta_points=list(target.theta_points),
+        target_info=list(target.target_info),
+        tolerance=target.tolerance,
+        method=target.method,
+        curve=curve,
+    )
+
+
+@router.get("/{form_id}/simulate", response_model=SimulationRead)
+def simulate_form(
+    form_id: str,
+    theta: float = Query(default=0.0, description="examinee's true theta"),
+    seed: int = Query(default=0),
+    db: Session = Depends(get_db),
+) -> SimulationRead:
+    """Simulate an examinee at ``theta`` walking this form (real engine + 2PL)."""
+    row = db.get(FormRow, form_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="form not found")
+
+    result = simulate_linear(load_default_pool(), row.item_ids, theta, seed=seed)
+    return SimulationRead(
+        form_id=form_id,
+        true_theta=result.true_theta,
+        seed=result.seed,
+        n_items=result.n_items,
+        final_theta=result.final_theta,
+        final_standard_error=result.final_standard_error,
+        trace=[
+            SimulationStepRead(
+                position=s.position,
+                item_id=s.item_id,
+                prob_correct=s.prob_correct,
+                response=s.response,
+                theta=s.theta,
+                standard_error=s.standard_error,
+            )
+            for s in result.trace
+        ],
     )

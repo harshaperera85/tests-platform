@@ -38,7 +38,12 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "primary" | "secondary" | "ghost";
 };
 
-export function Button({ variant = "primary", className = "", ...props }: ButtonProps) {
+export function Button({
+  variant = "primary",
+  className = "",
+  type = "button",
+  ...props
+}: ButtonProps) {
   const styles: Record<string, string> = {
     primary:
       "bg-brand-600 text-white hover:bg-brand-700 disabled:bg-ink-200 disabled:text-ink-400",
@@ -48,7 +53,8 @@ export function Button({ variant = "primary", className = "", ...props }: Button
   };
   return (
     <button
-      className={`inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed ${styles[variant]} ${className}`}
+      type={type}
+      className={`inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition focus:outline-none focus:ring-2 focus:ring-brand-500 disabled:cursor-not-allowed ${styles[variant]} ${className}`}
       {...props}
     />
   );
@@ -101,6 +107,40 @@ export function Pill({
       className={`inline-block rounded px-2 py-0.5 text-xs font-medium ${tones[tone]}`}
     >
       {children}
+    </span>
+  );
+}
+
+export function Alert({
+  tone,
+  title,
+  children,
+}: {
+  tone: "error" | "warn" | "info";
+  title: string;
+  children?: ReactNode;
+}) {
+  const tones: Record<string, string> = {
+    error: "border-rose-200 bg-rose-50 text-rose-800",
+    warn: "border-amber-200 bg-amber-50 text-amber-800",
+    info: "border-brand-200 bg-brand-50 text-brand-700",
+  };
+  return (
+    <div className={`rounded-lg border px-4 py-3 text-sm ${tones[tone]}`} role="alert">
+      <p className="font-medium">{title}</p>
+      {children && <div className="mt-1 text-[13px] opacity-90">{children}</div>}
+    </div>
+  );
+}
+
+export function Spinner({ label }: { label?: string }) {
+  return (
+    <span className="inline-flex items-center gap-2 text-sm text-ink-600">
+      <span
+        className="h-4 w-4 animate-spin rounded-full border-2 border-ink-200 border-t-brand-600"
+        aria-hidden="true"
+      />
+      {label}
     </span>
   );
 }

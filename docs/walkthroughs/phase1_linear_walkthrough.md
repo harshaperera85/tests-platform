@@ -106,50 +106,59 @@ Click **Assemble form**.
 You should now see the **Form preview** screen.
 
 **Checkpoint 2 — PASS** if:
-- The header shows ~`Form <id> · 20 items · status draft`.
-- A green badge reads **`worst |actual − target| = 0.00x`** (tone is green when < 0.5).
-- The **TIF chart** shows two lines over θ = −1, 0, 1: a dashed grey **target** and a
-  solid indigo **actual** that **tracks the target** (both near 8 / 11 / 8). The actual
-  line should sit essentially on top of the target.
-- The **Assembled items** list shows 20 distinct item ids (e.g. `I004`, `I006`, …), and
-  it must **not** contain both items of an enemy pair (no `I001`+`I002` together, no
-  `I011`+`I012` together).
+- The header shows ~`Form <id> · 20 items · status draft`, plus a green
+  **`worst |actual − target|`** badge (green when < 0.5) and a **`method: minimax`** pill.
+- The **TIF chart** shows a smooth indigo **actual** curve (dense, computed server-side
+  over θ ∈ [−3, 3] via `/forms/{id}/tif-curve`) with dark **target** points at θ = −1, 0, 1;
+  the actual curve **sits on the target points** (≈ 8 / 11 / 8) and may rise higher between
+  them. If a **tolerance** was set, a faint grey band is drawn around each target point.
+- The **per-θ table** lists target / actual / gap; gaps are green when |gap| < 0.5.
+- The **Content constraints** card shows a ✓/✗ per constraint with the actual count vs the
+  required bounds (e.g. `KC=algebra 5 in form (need 4..8) ✓`).
+- The **Assembled items** list shows 20 distinct ids **with simulated stems and params**
+  (e.g. `I004  [SIMULATED · …]  (a=…, b=…, geometry/apply)`) — and must **not** contain
+  both items of an enemy pair (no `I001`+`I002`, no `I011`+`I012`).
 
 **Pass criterion:** *actual TIF tracks target within tolerance* (worst gap < 0.5; here
-≈ 0). **FAIL** if the actual line is far off the target while the badge/objective claims
-a good fit, or the item list has wrong length / duplicate or enemy-conflicting items.
+≈ 0), constraint badges all ✓. **FAIL** if the actual curve is far off the target points
+while the badge claims a good fit, a constraint shows ✗, or the item list has the wrong
+length / duplicates / an enemy pair.
 
 ---
 
 ## 3. Step-through navigator — real engine via `/preview`
 
-Click **Walk the form →**. This drives the actual `LinearStrategy` through the thin
-`/api/v1/preview` endpoint (`start` → `respond` → `score`); the server is stateless and
-θ/SE are the engine's real **EAP** estimate.
+Click **Walk the form →**. The navigator drives the actual `LinearStrategy` through the
+thin `/api/v1/preview` endpoint; the server is stateless and θ/SE are the engine's real
+**EAP** estimate. It has two modes (toggle buttons top-right): **Manual** and
+**Simulated examinee**.
 
-Run it **twice** to see the score respond to input:
+### 3a. Manual mode — answer with a live θ̂ trace
+Each presented item shows its **simulated stem**. After every answer the app re-scores
+(`/preview/score`) and updates a **live θ̂ trace** chart and the θ̂ / SE pills.
 
-### Run A — answer every item **correct**
-- Click **Answer correct** for all 20 items. The progress bar fills; the "item N / 20"
-  pill advances.
-- At the end you see **"End of form — end_of_form"**; click **Score session**.
+- **Run A — all correct:** click **Answer correct** for all 20. **PASS** if θ̂ climbs to
+  **clearly positive** (~+1 to +2.5), the trace rises, and **SE drops well below 1.0**
+  (~0.3–0.4) by the end.
+- **Run B — all incorrect:** **← Back to preview**, walk again, **Answer incorrect** ×20.
+  **PASS** if θ̂ is **clearly negative** (mirror of Run A).
 
-**Checkpoint 3A — PASS** if θ (EAP, canonical) is **clearly positive** (roughly +1 to
-+2.5) and **SE is well below 1.0** (the prior SD), e.g. ~0.3–0.5 — i.e. information was
-gained from a full 20-item form.
-
-### Run B — answer every item **incorrect**
-- Go **← Back to preview**, then **Walk the form →** again. Click **Answer incorrect**
-  for all 20.
-
-**Checkpoint 3B — PASS** if θ is **clearly negative** (mirror of Run A).
-
-**Pass criterion:** *θ rises on correct answers and falls on incorrect ones, and SE
-shrinks below the prior (1.0) as items accumulate.* **FAIL** if θ stays ~0 regardless of
+**Pass criterion:** *θ̂ rises on correct answers and falls on incorrect ones, and SE
+shrinks below the prior (1.0) as items accumulate.* **FAIL** if θ̂ stays ~0 regardless of
 answers, SE stays ~1.0, the item count desyncs, or scoring errors out.
 
-> Note: this is a dry run — items show only their ids (no real stem/options); you are
-> simulating an examinee's correctness.
+### 3b. Simulated examinee — genuine simulated e2e (no manual input)
+Switch to **Simulated examinee**. Enter a **True θ** (try `2.0`, then `-1.5`) and a seed,
+click **Run simulated examinee**. The server simulates the whole session (real engine +
+2PL response model on the canonical metric) and returns the θ̂ trace + final estimate.
+
+**Checkpoint 3b — PASS** if the θ̂ trace **converges toward the dashed true-θ line** and
+the final θ̂ lands near the true θ with SE ~0.3–0.4 (e.g. true 2.0 → θ̂ ≈ 1.7; true −2.0 →
+θ̂ ≈ −1.4). Re-running with the **same seed** is identical; a different seed varies
+slightly. **FAIL** if the trace ignores the true θ or the estimate is on the wrong side.
+
+> This is a dry run — stems are synthetic simulated content; correctness in the simulator
+> is drawn from the 2PL model at the true θ, not from any literal answer key.
 
 ---
 
@@ -219,6 +228,20 @@ S=$(curl -s -X POST $BASE/preview/start -H 'content-type: application/json' -d "
 (The UI does this loop for you; the integration test
 `backend/app/tests/integration/test_preview_api.py` is the canonical reference.)
 
+### 5b′. Simulated-data endpoints (genuine demo data, no real export wired)
+```bash
+# the simulated item bank: params + tags + synthetic content + provenance
+curl -s $BASE/pool/items | python3 -c 'import sys,json;d=json.load(sys.stdin);print("simulated",d["simulated"],"n",d["n_items"],"KC",d["tag_summary"]["KC"])'
+
+# dense actual TIF over a theta grid (server-computed on the canonical metric)
+curl -s "$BASE/forms/$FID/tif-curve?theta_min=-3&theta_max=3&n=61" | python3 -c 'import sys,json;d=json.load(sys.stdin);print("curve points",len(d["curve"]),"method",d["method"],"tol",d["tolerance"])'
+
+# simulated examinee at a known true theta (real engine + 2PL); estimate tracks truth
+curl -s "$BASE/forms/$FID/simulate?theta=2.0&seed=1" | python3 -c 'import sys,json;d=json.load(sys.stdin);print("true",d["true_theta"],"-> final theta_hat",round(d["final_theta"],3),"SE",round(d["final_standard_error"],3))'
+```
+**Expect:** `pool/items` → `simulated: true`, 48 items; `tif-curve` → 61 points;
+`simulate` (θ=2.0) → `final_theta` clearly positive (~1.7).
+
 ### 5c. Infeasible vs invalid (two distinct failure modes)
 ```bash
 # infeasible (solver): HTTP 201, status "infeasible", form_ids []
@@ -245,16 +268,20 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST $BASE/blueprints \
   good fit that the plot contradicts).
 - Item list has the wrong length, duplicates, or **both items of an enemy pair**.
 - Navigator **desyncs** (item count ≠ length, can't reach end, wrong item presented).
-- θ **doesn't respond** to answers (stays ~0 for all-correct and all-incorrect), or SE
-  stays at 1.0, or `/preview/score` errors.
+- θ̂ **doesn't respond** to answers (stays ~0 for all-correct and all-incorrect), or SE
+  stays at 1.0, or `/preview/score` errors; the live trace doesn't move.
+- **Simulated examinee** estimate lands on the wrong side of the true θ, or the trace
+  doesn't converge toward the dashed true-θ line; same-seed runs differ.
+- A **content-constraint badge shows ✗** on a form the engine called feasible (mismatch
+  between solver and the displayed satisfaction check).
 - Infeasible blueprint **crashes or hangs** instead of a clear message.
 
 **Cosmetic polish (note, but not blocking):**
 - Spacing/alignment, plot colors/legend/axis labels, button copy.
-- No loading spinner besides the pill; no inline field validation hints.
-- No per-step URLs/deep links (single staged flow, no router).
-- Vite "chunk larger than 500 kB" build warning (Recharts) — advisory only.
-- Item list shows ids only (no stem/metadata) — expected; content isn't wired yet.
+- No per-step URLs/deep links (single staged flow, no router — deferred IA expansion).
+- The single JS bundle is ~660 kB (Recharts); acceptable for an internal tool.
+- Simulated stems are templated placeholder text (real stems arrive with the
+  item-factory export) — expected.
 
 ### Findings log
 

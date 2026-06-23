@@ -18,7 +18,27 @@
       },
       "enemy_of": [
         "I002"
-      ]
+      ],
+      "stem": "[SIMULATED \u00b7 algebra/remember] I001: solve for x in the expression in part A (b=0.651).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I002",
@@ -33,7 +53,27 @@
       },
       "enemy_of": [
         "I001"
-      ]
+      ],
+      "stem": "[SIMULATED \u00b7 geometry/apply] I002: find the area of the expression in part B (b=2.076).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I003",
@@ -46,7 +86,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/analyze] I003: evaluate the expression in part C (b=-0.362).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I004",
@@ -59,7 +119,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/remember] I004: read the chart for the expression in part D (b=1.851).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I005",
@@ -72,7 +152,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/apply] I005: solve for x in the expression in part A (b=2.173).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I006",
@@ -85,7 +185,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I006: find the area of the expression in part B (b=-0.175).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I007",
@@ -98,7 +218,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/remember] I007: evaluate the expression in part C (b=1.716).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I008",
@@ -111,7 +251,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/apply] I008: read the chart for the expression in part D (b=-0.586).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I009",
@@ -124,7 +284,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I009: solve for x in the expression in part A (b=-1.385).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I010",
@@ -137,7 +317,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/remember] I010: find the area of the expression in part B (b=1.864).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I011",
@@ -152,7 +352,27 @@
       },
       "enemy_of": [
         "I012"
-      ]
+      ],
+      "stem": "[SIMULATED \u00b7 number/apply] I011: evaluate the expression in part C (b=-0.974).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I012",
@@ -165,7 +385,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/analyze] I012: read the chart for the expression in part D (b=1.819).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I013",
@@ -178,7 +418,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/remember] I013: solve for x in the expression in part A (b=0.02).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I014",
@@ -191,7 +451,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/apply] I014: find the area of the expression in part B (b=0.012).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I015",
@@ -204,7 +484,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/analyze] I015: evaluate the expression in part C (b=0.33).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I016",
@@ -217,7 +517,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/remember] I016: read the chart for the expression in part D (b=-0.897).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I017",
@@ -230,7 +550,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/apply] I017: solve for x in the expression in part A (b=1.659).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I018",
@@ -243,7 +583,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I018: find the area of the expression in part B (b=-0.814).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I019",
@@ -256,7 +616,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/remember] I019: evaluate the expression in part C (b=0.214).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I020",
@@ -269,7 +649,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/apply] I020: read the chart for the expression in part D (b=-0.428).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I021",
@@ -282,7 +682,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I021: solve for x in the expression in part A (b=1.351).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I022",
@@ -295,7 +715,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/remember] I022: find the area of the expression in part B (b=-0.612).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I023",
@@ -308,7 +748,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/apply] I023: evaluate the expression in part C (b=0.39).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I024",
@@ -321,7 +781,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/analyze] I024: read the chart for the expression in part D (b=-0.803).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I025",
@@ -334,7 +814,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/remember] I025: solve for x in the expression in part A (b=1.516).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I026",
@@ -347,7 +847,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/apply] I026: find the area of the expression in part B (b=0.315).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I027",
@@ -360,7 +880,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/analyze] I027: evaluate the expression in part C (b=0.008).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I028",
@@ -373,7 +913,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/remember] I028: read the chart for the expression in part D (b=-0.49).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I029",
@@ -386,7 +946,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/apply] I029: solve for x in the expression in part A (b=-1.397).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I030",
@@ -399,7 +979,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I030: find the area of the expression in part B (b=-2.168).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I031",
@@ -412,7 +1012,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/remember] I031: evaluate the expression in part C (b=0.941).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I032",
@@ -425,7 +1045,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/apply] I032: read the chart for the expression in part D (b=1.629).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I033",
@@ -438,7 +1078,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I033: solve for x in the expression in part A (b=-0.804).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I034",
@@ -451,7 +1111,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/remember] I034: find the area of the expression in part B (b=-0.941).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I035",
@@ -464,7 +1144,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/apply] I035: evaluate the expression in part C (b=0.763).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I036",
@@ -477,7 +1177,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/analyze] I036: read the chart for the expression in part D (b=1.821).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I037",
@@ -490,7 +1210,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/remember] I037: solve for x in the expression in part A (b=0.876).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I038",
@@ -503,7 +1243,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/apply] I038: find the area of the expression in part B (b=-0.316).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I039",
@@ -516,7 +1276,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/analyze] I039: evaluate the expression in part C (b=-0.362).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I040",
@@ -529,7 +1309,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/remember] I040: read the chart for the expression in part D (b=0.836).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I041",
@@ -542,7 +1342,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/apply] I041: solve for x in the expression in part A (b=1.457).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I042",
@@ -555,7 +1375,27 @@
         "TIMSS": "number",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I042: find the area of the expression in part B (b=0.785).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I043",
@@ -568,7 +1408,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/remember] I043: evaluate the expression in part C (b=-1.141).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I044",
@@ -581,7 +1441,27 @@
         "TIMSS": "algebra",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/apply] I044: read the chart for the expression in part D (b=-1.802).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     },
     {
       "item_id": "I045",
@@ -594,7 +1474,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I045: solve for x in the expression in part A (b=-1.77).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "A"
     },
     {
       "item_id": "I046",
@@ -607,7 +1507,27 @@
         "TIMSS": "geometry",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 geometry/remember] I046: find the area of the expression in part B (b=0.148).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "B"
     },
     {
       "item_id": "I047",
@@ -620,7 +1540,27 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 number/apply] I047: evaluate the expression in part C (b=1.586).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "C"
     },
     {
       "item_id": "I048",
@@ -633,7 +1573,29 @@
         "TIMSS": "data",
         "domain": "math"
       },
-      "enemy_of": []
+      "enemy_of": [],
+      "stem": "[SIMULATED \u00b7 data/analyze] I048: read the chart for the expression in part D (b=-0.594).",
+      "options": [
+        {
+          "key": "A",
+          "text": "Simulated option A"
+        },
+        {
+          "key": "B",
+          "text": "Simulated option B"
+        },
+        {
+          "key": "C",
+          "text": "Simulated option C"
+        },
+        {
+          "key": "D",
+          "text": "Simulated option D"
+        }
+      ],
+      "answer_key": "D"
     }
-  ]
+  ],
+  "simulated": true,
+  "provenance": "Auto-generated simulated 2PL bank for end-to-end demonstration. Item content (stem/options) is synthetic; IRT params are the calibrated fixture values. Not real items \u2014 replaced by the item-factory export once wired."
 }

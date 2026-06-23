@@ -8,11 +8,12 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from app.api.v1 import assembly_jobs, blueprints, forms, health, preview
+from app.api.v1 import assembly_jobs, blueprints, forms, health, pool, preview
 
 api_router = APIRouter()
 api_router.include_router(health.router)
 api_router.include_router(blueprints.router)
 api_router.include_router(assembly_jobs.router)
 api_router.include_router(forms.router)
+api_router.include_router(pool.router)
 api_router.include_router(preview.router)
