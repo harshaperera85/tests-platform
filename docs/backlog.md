@@ -44,18 +44,33 @@ Depends on the Tier 3 CAT seam.
 
 ## Hardening targets (Phase 3)
 
-### Self-contained (doable now, no external deps)
-- **Audit log** — append-only `audit_event` for config/assemble/lock actions (plan §8).
-- **Observability** — structured logging + request IDs; readiness probe that actually
-  checks Postgres + Redis; basic metrics.
-- **Job robustness** — surface assembly failures in the UI; RQ timeouts / retry / failed-job
-  registry visibility; status for long-running solves.
-- **Regression/contract tests** — golden-fixture assembly determinism; run integration
-  tests against Postgres in CI (today they use SQLite); keep the oracle-parity gate.
-- **Frontend tests** — a few Vitest/RTL component tests; error boundaries; a11y pass.
-- **Security (pre-prod)** — authN/authZ (none yet); production CORS/origin handling (today a
-  Vite dev proxy); secrets management; rate limiting.
-- **DB** — review indexes; test migration up/down in CI; connection-pool sizing.
+### Self-contained — DONE (H1–H7)
+- **H1 Observability** — structured logging + request-id middleware; `/health/ready`
+  checks Postgres + Redis. ✅
+- **H2 Audit log** — append-only `audit_event` for test create/assemble/lock/unlock/
+  duplicate/delete; `GET /audit`. ✅
+- **H3 Job robustness** — RQ `job_timeout`; `error` surfaced on the job read; editor
+  distinguishes error vs infeasible vs still-running. ✅
+- **H4 DB** — index review + `test.updated_at` index for the list sort. ✅
+- **H5 Test depth** — golden-fixture determinism guards; CI `migrations` job runs
+  alembic up/down/up on real Postgres. ✅
+- **H6 Frontend tests** — Vitest + Testing Library; ErrorBoundary; `npm test` in CI. ✅
+- **H7 Security posture** — CORS default-closed (opt-in `CORS_ORIGINS`); `.env` excluded
+  from images; `docs/security.md` + pre-prod checklist. ✅
+
+### Still open (mostly self-contained, lower priority)
+- Full integration suite against **Postgres** in CI (today SQLite; migrations already
+  run on Postgres). Basic metrics. RQ retry / failed-job registry visibility. Rate
+  limiting. Dependency scanning (`pip-audit` / `npm audit`).
+- **AuthN/AuthZ** — product decision required (see `docs/security.md`); gates any
+  exposure beyond a trusted network.
+
+### Depends on seams (Tier 3 / Phase 2 / Sessions)
+- **Item-bank seam contract test** — after the item-factory export is pinned.
+- **Sessions handoff** — the module's exit: contract + handoff of a locked form/config.
+- **CAT path load test** — mirtCAT/R concurrency ceiling — after Phase 2.
+- **SME / Admin review screens** (A-038..041) and a deeper lock/version/**publish**
+  workflow (basic lock landed in Tier 1).
 
 ### Depends on seams (Tier 3 / Phase 2 / Sessions)
 - **Item-bank seam contract test** — after the item-factory export is pinned.
