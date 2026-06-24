@@ -189,6 +189,13 @@ supports cut-score targets anywhere on θ.
 - **min / max** — lower/upper bound on matching items. Either may be left blank.
 - **count / proportion** — how min/max are read: absolute item counts, or a fraction
   (0–1) of the form length resolved to a count at assembly.
+- **"N match in pool"** — a **live availability counter** showing how many items in the
+  selected pool satisfy this constraint's predicate(s). It updates as you type and turns
+  **red with an inline error** when the (count- or proportion-resolved) **minimum exceeds
+  N** — e.g. asking ≥5 for a `KC=algebra AND Bloom=apply` cell that has only 4 items.
+  This is a *necessary* pre-flight check (it catches over-asks per constraint); deeper
+  joint feasibility — cell minimums vs. length, TIF target, enemies — is still decided by
+  the solver at assembly.
 - **Remove** — delete the constraint. **+ Add constraint** (card header) adds a new one.
 
 ### Statistical target (TIF) card

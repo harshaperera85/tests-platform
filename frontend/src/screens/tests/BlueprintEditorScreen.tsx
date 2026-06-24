@@ -139,20 +139,47 @@ export function BlueprintEditorScreen({
   if (theta.length === 0) errors.theta = "Enter at least one θ point.";
   if (info.length !== theta.length) errors.info = "Target info count must match θ points.";
   if (info.some((v) => Number.isNaN(v) || v < 0)) errors.info = "Target info must be ≥ 0.";
+  // Live availability: how many pool items match a constraint's predicate(s).
+  const poolItems = pool.data?.items ?? [];
+  const availFor = (preds: Predicate[]): number | null => {
+    const valid = preds.filter((p) => p.tag_type && p.tag_value);
+    if (!valid.length || !pool.data) return null;
+    return poolItems.filter((it) =>
+      valid.every((p) => (it.tags ?? {})[p.tag_type] === p.tag_value),
+    ).length;
+  };
+  const lenOk = Number.isInteger(len) && len > 0;
+  const resolveCount = (v: number | undefined, mode: "count" | "proportion") =>
+    v == null ? null : mode === "proportion" ? Math.round(v * len) : v;
+
+  // per-row matching-item count, for the live hint
+  const constraintAvail: (number | null)[] = [];
   constraints.forEach((c, i) => {
     const mn = numOrUndef(c.minimum);
     const mx = numOrUndef(c.maximum);
     const hasPred = c.predicates.some((p) => p.tag_type && p.tag_value);
+    const avail = availFor(c.predicates);
+    constraintAvail[i] = avail;
     if (!hasPred) errors[`c${i}`] = "set a tag type and value";
     else if (mn == null && mx == null) errors[`c${i}`] = "set a min and/or max";
     else if (mn != null && mx != null && mn > mx) errors[`c${i}`] = "min > max";
     else if (c.mode === "proportion") {
       if ([mn, mx].some((v) => v != null && (v < 0 || v > 1)))
         errors[`c${i}`] = "proportions must be 0–1";
-    } else {
-      if ([mn, mx].some((v) => v != null && !Number.isInteger(v)))
-        errors[`c${i}`] = "counts must be whole numbers";
-      else if (mn != null && mn > len) errors[`c${i}`] = `min ${mn} > length ${len}`;
+    } else if ([mn, mx].some((v) => v != null && !Number.isInteger(v))) {
+      errors[`c${i}`] = "counts must be whole numbers";
+    } else if (mn != null && mn > len) {
+      errors[`c${i}`] = `min ${mn} > length ${len}`;
+    }
+    // Dynamic feasibility: a resolved minimum can't exceed the matching items
+    // in the pool (catches over-asks early — esp. thin cross-classified cells).
+    if (!errors[`c${i}`] && lenOk && avail != null) {
+      const rmin = resolveCount(mn, c.mode);
+      if (rmin != null && rmin > avail) {
+        errors[`c${i}`] =
+          `needs ${rmin} but only ${avail} item${avail === 1 ? "" : "s"} in ` +
+          `'${poolId}' match — loosen this or pick a broader tag`;
+      }
     }
   });
   const valid = Object.keys(errors).length === 0;
@@ -450,6 +477,14 @@ export function BlueprintEditorScreen({
                   <option value="count">count</option>
                   <option value="proportion">proportion</option>
                 </Select>
+                {constraintAvail[i] != null && (
+                  <span
+                    className={`text-xs ${errors[`c${i}`] ? "text-rose-600" : "text-ink-400"}`}
+                    title="items in the selected pool matching this constraint"
+                  >
+                    {constraintAvail[i]} match in pool
+                  </span>
+                )}
                 <Button
                   variant="ghost"
                   aria-label={`remove constraint ${i + 1}`}
