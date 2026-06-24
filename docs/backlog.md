@@ -47,6 +47,36 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   (start-session → next-item → respond → score → stop), the CAT `TestConfig` schema, the
   θ scaling it returns, and auth.
 
+### Pinned metric fact — CAT platform = mirt 1.46.1 = **D = 1 (logistic)**
+*Verified empirically* (throwaway container, R 4.4.2 + mirt 1.46.1, params passed straight
+to mirt with no scaling — exactly how mirtcat-service runs):
+- `iteminfo(a=1, b=0, θ=0) = 0.25` (= a²·P·Q, D=1); the D=1.702 value would be 0.724.
+- `P(correct | a=1, b=0, θ=1) = 0.7310586` = `1/(1+exp(-1))` exactly; the D=1.702 value
+  would be 0.8457958.
+- `coef(IRTpars=TRUE)` is a slope/intercept (a1,d) → discrimination/difficulty
+  (a = a1, b = -d/a1) **reparameterization only** — `a` is unchanged, so it is **not** a
+  scaling constant.
+So the CAT platform's θ/information are on the **D = 1** logistic scale.
+
+### DECISION — revisit `CANONICAL_D` (currently 1.702)
+`psychometrics/params.py` sets `CANONICAL_D = 1.702` and previously (wrongly) called this
+"the mirt metric." Corrected in code + CLAUDE.md. The metric is *internally consistent*
+today (every item is normalized by its source D, so the response surface and θ are
+preserved), so nothing is broken on simulated data.
+- **Decision:** adopt **D = 1** (= mirt) as the canonical value when the CAT/mirt scoring
+  service or a real item bank is wired in — so our metric *equals* the canonical source
+  and mirt/CAT items need no rescale.
+- **Why deferred, not done now:** flipping the constant only rescales *simulated* demo
+  numbers; it would change every documented TIF/info figure, break the hard-pinned
+  oracle-determinism value, and likely make the tuned demo TIF targets infeasible →
+  pure churn with no functional gain pre-integration.
+- **Interim contract (works today):** any externally-calibrated item MUST carry its true
+  `scaling_d`; mirt/CAT items ⇒ `scaling_d = 1.0` so `normalize_to_canonical` rescales
+  `a → a·(1.0/1.702)`, preserving the logit/θ.
+- **Migration when adopted:** set `CANONICAL_D = 1.0`; retag/regenerate fixtures; retune
+  demo `target_info`; refresh hard-pinned numbers (oracle determinism, walkthrough TIF
+  figures); re-verify oracle parity.
+
 ### Phase 2 — CAT adapter (later)
 `CatStrategy` as a thin adapter to the existing CAT platform (preserve selection,
 estimation, stopping incl. SPRT, exposure, content balancing, pre-CAT, neural fusion).

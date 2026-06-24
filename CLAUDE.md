@@ -32,8 +32,13 @@ locally**. See `SETUP.md`.
    orchestration logic into this repo (avoid divergence). Behind the contract, adapter vs absorbed
    is invisible — we are on **adapter now**.
 4. **One canonical θ metric.** All IRT parameters and θ are normalized through `psychometrics/`
-   (single source of truth = the mirt scoring service). Mind the D-scaling mismatch (catR D=1 vs
-   mirt D=1.702).
+   (single source of truth). **D-scaling fact (verified empirically, mirt 1.46.1 = the CAT
+   platform's pin): mirt computes information in the logistic metric with `D = 1`, NOT 1.702**
+   (a=1,b=0 → info(0)=0.25; P(1)=0.731). `coef(IRTpars=TRUE)` is only an (a1,d)→(a,b)
+   reparameterization (a unchanged), not a scaling. So the CAT platform's metric is `D = 1`.
+   Our `CANONICAL_D` is currently `1.702` (our convention); cross-D items are reconciled by
+   `normalize_to_canonical` (tag mirt/CAT items `scaling_d=1.0`). Open decision (see
+   `docs/backlog.md`): adopt `D = 1` as canonical when CAT/real data is wired in.
 5. **Contract-first.** Backend defines OpenAPI; the frontend API client is **generated** via Orval +
    Zod. Never hand-write the frontend API client.
 6. **Blueprint vs selection.** The blueprint carries content constraints **and** a statistical (TIF)
