@@ -110,13 +110,134 @@ The app uses real routes, **server-backed by the `tests` resource** (`/api/v1/te
 > A "test" owns an editable blueprint draft + its assembled forms (history), all
 > persisted server-side — drafts survive refresh and are visible across browsers.
 
-### Content constraints — marginal, cross-classified, count or proportion
-In the Assembly tab, each content constraint can be:
-- a **marginal** (one tag): `where KC = algebra`;
-- a **cross-classified cell** (click **+ AND tag**): `where KC = algebra AND Bloom = apply`
-  — an item must match *all* predicates (a content × cognitive table cell);
-and its min/max can be a **count** or a **proportion** (0–1 of the form length, resolved
-to a count at assembly). Mix freely across constraints in one blueprint.
+### Content constraints — marginal vs. joint, count vs. proportion
+
+A content constraint bounds how many items in the form match a **tag predicate**:
+- **Marginal** (one tag): `where KC = algebra` — controls a single dimension's total,
+  independent of the others.
+- **Joint / cross-classified cell** (click **+ AND tag**): `where KC = algebra AND
+  Bloom = apply` — an item must match **all** predicates; this controls a cell of the
+  content × cognitive table.
+
+Each constraint's **min/max** is read as a **count** (absolute items) or a
+**proportion** (0–1 of the form length, resolved to a count at assembly, nearest
+integer). You can mix marginals, joint cells, counts, and proportions freely in one
+blueprint.
+
+**Why the distinction matters (feasibility), grounded in `demo_mixed`:** margins are
+large but cells are thin, so joint constraints are much tighter than marginals.
+
+| Bucket | Available items (demo_mixed) | Practical min you can ask for |
+|---|---|---|
+| `domain = math` (marginal) | 84 | large (e.g. 10, or 50% of the form) |
+| `KC = algebra` (marginal) | 21 | comfortable (e.g. 6) |
+| `Bloom = apply` (marginal) | ~51 | comfortable |
+| `KC = algebra AND Bloom = apply` (**cell**) | **4** | **≤ 4** (≥5 is infeasible) |
+| `domain = math AND Bloom = apply` (coarser cell) | 17 | up to ~17 |
+
+So: use **marginals** for independent per-dimension targets; use **joint cells** when the
+blueprint is a two-way table — but size each cell min to the items that exist (KC×Bloom
+cells hold only ~4), keep the **sum of cell minimums ≤ form length**, and prefer a
+**coarser** pairing (e.g. domain×Bloom) or a **proportion** when you need a larger joint
+requirement.
+
+#### Worked examples (all verified against `demo_mixed`, length 24, target 7/9/7)
+1. **Marginal (feasible):** `KC=algebra ≥ 6` **and** `Bloom=apply ≥ 6` → `optimal`. Two
+   independent margins; the same item can count toward both.
+2. **Joint cell (feasible):** `KC=algebra AND Bloom=apply ≥ 3` **and** marginal
+   `Bloom=analyze ≥ 4` → `optimal`. The cell has 4 items, so a min of 3 fits.
+3. **Joint cell (infeasible — the ceiling):** `KC=algebra AND Bloom=apply ≥ 5` →
+   **`infeasible`** (only 4 such items exist). This is the realistic failure to expect
+   when a cell min exceeds the bank's cell size.
+4. **Proportion (feasible):** `domain=math ≥ 0.5` (proportion) on a length-20 form →
+   `optimal` (resolves to ≥ 10 math items).
+5. **Coarser joint (feasible, roomier):** `domain=math AND Bloom=apply ≥ 6` → `optimal`
+   (that cell holds ~17 items).
+
+The TIF target is rarely the binding constraint here: whole-pool information is ≈
+71 / 90 / 90 / 114 / 69 at θ = −2…2, so a 20–30 item form meets targets of ~7–12 (even
+~30) easily; difficulty spread is wide (≈51 easy / 43 central / 54 hard items), which
+supports cut-score targets anywhere on θ.
+
+> Rule of thumb: if assembly comes back **infeasible** with joint cells, first check that
+> each cell min ≤ the items in that cell (browse it in **Item pools**), then that the cell
+> minimums sum to ≤ the form length.
+
+## Field reference — what every control means
+
+### Pool & scenario (top of the Assembly tab)
+- **Item pool** — the calibrated bank assembly draws from. `demo_mixed` (252 items, 3
+  domains, 2PL+3PL) or `small_2pl` (48, single-domain smoke bank). Stored on the test;
+  the form's items are resolved against this pool everywhere downstream.
+- **Demo scenario** — a one-click preset that **overwrites** the whole blueprint (pool,
+  length, constraints, TIF target). A convenience starting point; edit freely after.
+
+### Blueprint card
+- **Name** — the test's display name (shows in the Test List / About).
+- **Length** — items **per form**. With parallel forms, each form has this many.
+- **Parallel forms** — how many psychometrically-parallel forms to assemble in one job
+  (each matches the same TIF target). `1` = a single form.
+- **Max use / item** — exposure cap: the most forms any one item may appear in across the
+  job. Blank = unlimited. Only meaningful with parallel forms (e.g. `1` = no overlap).
+
+### Content constraints (each row)
+- **where `tag_type` = `tag_value`** — the predicate. `tag_type` is the tag **dimension**
+  (`KC`, `Bloom`, `TIMSS`, `domain`); `tag_value` is the required value (`algebra`,
+  `apply`, …). Browse valid values in **Item pools**.
+- **+ AND tag** — add another predicate to the *same* constraint → a **joint cell** (item
+  must match all). One predicate = a marginal.
+- **min / max** — lower/upper bound on matching items. Either may be left blank.
+- **count / proportion** — how min/max are read: absolute item counts, or a fraction
+  (0–1) of the form length resolved to a count at assembly.
+- **Remove** — delete the constraint. **+ Add constraint** (card header) adds a new one.
+
+### Statistical target (TIF) card
+- **Theta points** — the θ (ability) locations where you care about measurement
+  precision, comma-separated (e.g. `-1, 0, 1`). θ is on the canonical metric.
+- **Target info** — desired **test information** at each θ (same count as theta points).
+  Higher = more precise (lower SE) there. Compare to the pool's envelope (see above).
+- **Method** — **minimax**: drive actual TIF onto the target, minimizing the worst-point
+  absolute miss (use for parallel/equated forms). **maximin**: maximize information at the
+  weakest θ (use for a mastery/cut-score test; `target_info` acts as a reference/floor).
+- **Tolerance** — optional hard band: forces `|actual − target| ≤ tolerance` at each θ in
+  addition to the objective. Blank = objective only.
+
+### Actions (bottom of the editor)
+- **Assemble form** — saves the draft, then runs the engine (async): you'll see
+  **queued → running**, then the form preview. Disabled while fields are invalid.
+- **Save draft** — persist the blueprint without assembling (server-side; survives
+  refresh). Shows a "saved …" pill.
+- Inline cues: red field hints (validation), "Fix the highlighted fields", an
+  **infeasible** (amber) vs **request failed/error** (red) vs **warnings** (blue) banner.
+
+### Editor header (status workflow)
+- **Lock** — freeze the test (read-only; blocks edit + re-assemble). Requires ≥1 form.
+- **Unlock** — back to draft/editable. **Duplicate** — copy to a new draft test.
+- **Tabs** — Assembly (A-031, editor+preview), About (A-032, identity + blueprint
+  summary), Scoring (A-034, the EAP/canonical model), History (A-033, assembled forms).
+
+### Form preview
+- **worst |actual − target|** badge (green < 0.5) and **method** / **tolerance** pills.
+- **TIF chart** — dense **actual** information curve over θ ∈ [−3, 3] (server-computed)
+  with **target** points; a shaded band if a tolerance is set.
+- **per-θ table** — target / actual / gap at each blueprint θ.
+- **Content constraints** card — ✓/✗ per constraint with the count in the form vs the
+  required bound (proportion bounds shown resolved, tagged `·prop`).
+- **Assembled items** — the fixed linear order with each item's stem + `a`/`b` + KC/Bloom.
+- **Walk the form →** opens the session navigator.
+
+### Session navigator (Walk)
+- **Manual / Simulated examinee** toggle.
+- **Manual** — presents each item (with stem); **Answer correct / incorrect**; a live
+  **θ̂ trace** + θ̂/SE pills update after each response (real EAP via `/preview`).
+- **Simulated examinee** — **True θ** + **Seed**, then **Run**: the server simulates the
+  whole session (2PL model) and plots θ̂ converging toward the dashed true-θ line, with a
+  final θ̂/SE. Same seed → identical run.
+
+### Item pools viewer (`/pool`)
+- **Pool selector** (catalog), **filter** (id / stem / tag), and a table of every item's
+  `a` / `b` / `c` and KC / Bloom / domain. Use it to see the data and to check cell sizes
+  before writing joint constraints.
 
 ## 1. Blueprint editor + assemble (Test Editor → Assembly tab, A-031)
 
