@@ -37,6 +37,10 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   Personal repo, **org-free**. *Trigger:* approaching v1 / need to assemble real forms.
   To pin, need: a real sample export + field/schema, esp. the **IRT scaling convention**
   (a on D=1 vs 1.702), tags, `enemy_of`, status, content; and how it's accessed (file/API/DB).
+  - *Follow-up when pools become dynamic:* make the editor's live per-constraint
+    availability flag ("N match in pool") refresh when the bank changes — invalidate the
+    `getPoolItems` query on import (or set a `staleTime`/`refetchInterval`). With today's
+    static fixtures it's refresh-bounded (mount / refocus / pool switch), which is fine.
 - **CAT platform endpoints** → Phase 2 on-ramp. **Org repo (`outsmart-college`).**
   *Trigger:* committing to Phase 2 **and** ready for org involvement (note: repos move to
   `outsmart-college` only at v1-finalized). To pin, need: OpenAPI / endpoint shapes
