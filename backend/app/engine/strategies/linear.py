@@ -167,15 +167,17 @@ class LinearStrategy(AdministrationStrategy):
 
 # --------------------------------------------------------------------- helpers
 def _dump_params(p: ItemParameters) -> dict[str, float]:
-    return {"a": p.a, "b": p.b, "c": p.c, "scaling_d": p.scaling_d}
+    # Canonical slope-intercept (a, d); b is the derived difficulty view.
+    return {"a": p.a, "d": p.d, "c": p.c, "u": p.u, "scaling_d": p.scaling_d}
 
 
 def _load_params(d: dict[str, Any]) -> ItemParameters:
     return ItemParameters(
         item_id=d.get("item_id", "x"),
         a=d["a"],
-        b=d["b"],
+        d=d["d"],
         c=d.get("c", 0.0),
+        u=d.get("u", 1.0),
         scaling_d=d["scaling_d"],
     )
 

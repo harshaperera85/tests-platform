@@ -16,8 +16,9 @@ def test_exhaustive_golden_form_and_objective(tiny_pool, tiny_blueprint) -> None
     assert res.status == "optimal"
     assert res.form_indices is not None and res.objective_value is not None
     form = sorted(problem.item_ids[i] for i in res.form_indices)
-    assert form == ["T0", "T2", "T4", "T5"]
-    assert res.objective_value == pytest.approx(0.4879, abs=0.001)
+    # Canonical metric is logistic D=1 (matches mirt 1.46.1). Pinned for that metric.
+    assert form == ["T0", "T4", "T6", "T7"]
+    assert res.objective_value == pytest.approx(0.0496, abs=0.001)
 
 
 def test_mip_objective_reproducible(tiny_pool, tiny_blueprint) -> None:

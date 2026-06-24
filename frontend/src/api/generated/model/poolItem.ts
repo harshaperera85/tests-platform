@@ -6,6 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { PoolItemTags } from './poolItemTags';
+import type { PoolItemSeA } from './poolItemSeA';
+import type { PoolItemSeD } from './poolItemSeD';
+import type { PoolItemSeB } from './poolItemSeB';
 import type { PoolItemStem } from './poolItemStem';
 import type { PoolItemOption } from './poolItemOption';
 import type { PoolItemAnswerKey } from './poolItemAnswerKey';
@@ -13,11 +16,16 @@ import type { PoolItemAnswerKey } from './poolItemAnswerKey';
 export interface PoolItem {
   item_id: string;
   a: number;
-  b: number;
+  d: number;
   c?: number;
+  u?: number;
+  b: number;
   scaling_d: number;
   tags?: PoolItemTags;
   enemy_of?: string[];
+  se_a?: PoolItemSeA;
+  se_d?: PoolItemSeD;
+  se_b?: PoolItemSeB;
   stem?: PoolItemStem;
   options?: PoolItemOption[];
   answer_key?: PoolItemAnswerKey;

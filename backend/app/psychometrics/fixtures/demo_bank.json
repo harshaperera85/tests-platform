@@ -1,17 +1,21 @@
 {
   "metric": {
     "model": "mixed-2PL-3PL",
-    "scaling_d": 1.702,
-    "scale": "canonical"
+    "scaling_d": 1.0,
+    "form": "slope_intercept",
+    "kind": "synthetic",
+    "scale_note": "Native logistic D=1 slope-intercept (mirt 1.46.1 metric). a=discrimination, d=intercept, c=guessing (mirt g), u=1; difficulty view b=-d/a (stored for reference, validated on load). Synthetic: point estimates only, no SEs. Seeded regeneration; tags/enemies/stems preserved (only the embedded b-annotation in stems was refreshed)."
   },
   "simulated": true,
   "provenance": "Auto-generated mixed 2PL/3PL simulated bank for end-to-end demonstration (multi-domain, guessing, wide difficulty, enemy sets). Synthetic content; not real items.",
   "items": [
     {
       "item_id": "D0001",
-      "a": 0.912,
-      "b": 2.335,
+      "a": 0.654,
+      "d": 0.132762,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.203,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -19,7 +23,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0001: solve for the unknown in part A (b=2.335, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -38,13 +41,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0001: solve for the unknown in part A (b=-0.203, c=0.0)."
     },
     {
       "item_id": "D0002",
-      "a": 1.098,
-      "b": -2.527,
+      "a": 1.248,
+      "d": 0.722592,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.579,
       "tags": {
         "KC": "geometry",
         "Bloom": "understand",
@@ -52,7 +58,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0002: find the measure of part B (b=-2.527, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -71,13 +76,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0002: find the measure of part B (b=-0.579, c=0.0)."
     },
     {
       "item_id": "D0003",
-      "a": 0.652,
-      "b": 1.309,
-      "c": 0.15,
+      "a": 1.54,
+      "d": -0.49588,
+      "c": 0.175,
+      "u": 1.0,
+      "b": 0.322,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -85,7 +93,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/apply] D0003: evaluate the expression in part C (b=1.309, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -104,13 +111,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0003: evaluate the expression in part C (b=0.322, c=0.15)."
     },
     {
       "item_id": "D0004",
-      "a": 1.227,
-      "b": -1.423,
+      "a": 0.627,
+      "d": 0.730455,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.165,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -118,7 +128,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/analyze] D0004: interpret the dataset in part D (b=-1.423, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -137,13 +146,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0004: interpret the dataset in part D (b=-1.165, c=0.0)."
     },
     {
       "item_id": "D0005",
-      "a": 0.453,
-      "b": -1.779,
-      "c": 0.2,
+      "a": 1.205,
+      "d": 1.80268,
+      "c": 0.182,
+      "u": 1.0,
+      "b": -1.496,
       "tags": {
         "KC": "algebra",
         "Bloom": "evaluate",
@@ -151,7 +163,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0005: solve for the unknown in part A (b=-1.779, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -170,13 +181,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0005: solve for the unknown in part A (b=-1.496, c=0.2)."
     },
     {
       "item_id": "D0006",
-      "a": 1.912,
-      "b": -1.441,
-      "c": 0.15,
+      "a": 1.657,
+      "d": -2.561722,
+      "c": 0.165,
+      "u": 1.0,
+      "b": 1.546,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -184,7 +198,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0006: find the measure of part B (b=-1.441, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -203,13 +216,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0006: find the measure of part B (b=1.546, c=0.15)."
     },
     {
       "item_id": "D0007",
-      "a": 2.145,
-      "b": -2.501,
+      "a": 0.847,
+      "d": -1.022329,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.207,
       "tags": {
         "KC": "number",
         "Bloom": "understand",
@@ -220,7 +236,6 @@
         "D0132",
         "D0129"
       ],
-      "stem": "[SIMULATED \u00b7 math/number/understand] D0007: evaluate the expression in part C (b=-2.501, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -239,13 +254,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0007: evaluate the expression in part C (b=1.207, c=0.0)."
     },
     {
       "item_id": "D0008",
-      "a": 0.989,
-      "b": 0.046,
+      "a": 1.126,
+      "d": 1.848892,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.642,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -253,7 +271,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/apply] D0008: interpret the dataset in part D (b=0.046, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -272,13 +289,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0008: interpret the dataset in part D (b=-1.642, c=0.0)."
     },
     {
       "item_id": "D0009",
-      "a": 1.957,
-      "b": 1.7,
-      "c": 0.25,
+      "a": 0.734,
+      "d": 0.942456,
+      "c": 0.216,
+      "u": 1.0,
+      "b": -1.284,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -290,7 +310,6 @@
         "D0054",
         "D0224"
       ],
-      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0009: solve for the unknown in part A (b=1.7, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -309,13 +328,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0009: solve for the unknown in part A (b=-1.284, c=0.25)."
     },
     {
       "item_id": "D0010",
-      "a": 0.74,
-      "b": 0.273,
-      "c": 0.1,
+      "a": 1.436,
+      "d": 0.1436,
+      "c": 0.176,
+      "u": 1.0,
+      "b": -0.1,
       "tags": {
         "KC": "geometry",
         "Bloom": "evaluate",
@@ -323,7 +345,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0010: find the measure of part B (b=0.273, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -342,13 +363,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0010: find the measure of part B (b=-0.1, c=0.1)."
     },
     {
       "item_id": "D0011",
-      "a": 1.886,
-      "b": 1.151,
+      "a": 1.405,
+      "d": 0.349845,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.249,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -356,7 +380,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/remember] D0011: evaluate the expression in part C (b=1.151, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -375,13 +398,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0011: evaluate the expression in part C (b=-0.249, c=0.0)."
     },
     {
       "item_id": "D0012",
-      "a": 0.509,
-      "b": 2.063,
+      "a": 0.686,
+      "d": -0.166698,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.243,
       "tags": {
         "KC": "data",
         "Bloom": "understand",
@@ -389,7 +415,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/understand] D0012: interpret the dataset in part D (b=2.063, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -408,13 +433,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0012: interpret the dataset in part D (b=0.243, c=0.0)."
     },
     {
       "item_id": "D0013",
-      "a": 0.51,
-      "b": 1.829,
+      "a": 1.919,
+      "d": -0.94031,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.49,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -422,7 +450,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0013: solve for the unknown in part A (b=1.829, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -441,13 +468,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0013: solve for the unknown in part A (b=0.49, c=0.0)."
     },
     {
       "item_id": "D0014",
-      "a": 1.814,
-      "b": 1.601,
-      "c": 0.25,
+      "a": 1.844,
+      "d": 1.440164,
+      "c": 0.178,
+      "u": 1.0,
+      "b": -0.781,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -455,7 +485,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0014: find the measure of part B (b=1.601, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -474,13 +503,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0014: find the measure of part B (b=-0.781, c=0.25)."
     },
     {
       "item_id": "D0015",
-      "a": 1.122,
-      "b": -2.558,
+      "a": 0.744,
+      "d": -0.668112,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.898,
       "tags": {
         "KC": "number",
         "Bloom": "evaluate",
@@ -488,7 +520,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0015: evaluate the expression in part C (b=-2.558, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -507,13 +538,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0015: evaluate the expression in part C (b=0.898, c=0.0)."
     },
     {
       "item_id": "D0016",
-      "a": 1.065,
-      "b": -0.598,
+      "a": 1.906,
+      "d": 2.188088,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.148,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -521,7 +555,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/remember] D0016: interpret the dataset in part D (b=-0.598, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -540,13 +573,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0016: interpret the dataset in part D (b=-1.148, c=0.0)."
     },
     {
       "item_id": "D0017",
-      "a": 0.479,
-      "b": -0.402,
+      "a": 1.551,
+      "d": -1.977525,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.275,
       "tags": {
         "KC": "algebra",
         "Bloom": "understand",
@@ -554,7 +590,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0017: solve for the unknown in part A (b=-0.402, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -573,13 +608,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0017: solve for the unknown in part A (b=1.275, c=0.0)."
     },
     {
       "item_id": "D0018",
-      "a": 1.144,
-      "b": -0.551,
+      "a": 1.702,
+      "d": -1.456912,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.856,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -587,7 +625,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0018: find the measure of part B (b=-0.551, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -606,13 +643,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0018: find the measure of part B (b=0.856, c=0.0)."
     },
     {
       "item_id": "D0019",
-      "a": 1.846,
-      "b": -0.998,
+      "a": 1.858,
+      "d": 1.22628,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.66,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -620,7 +660,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/analyze] D0019: evaluate the expression in part C (b=-0.998, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -639,13 +678,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0019: evaluate the expression in part C (b=-0.66, c=0.0)."
     },
     {
       "item_id": "D0020",
-      "a": 1.617,
-      "b": 2.575,
-      "c": 0.1,
+      "a": 1.582,
+      "d": -1.862014,
+      "c": 0.125,
+      "u": 1.0,
+      "b": 1.177,
       "tags": {
         "KC": "data",
         "Bloom": "evaluate",
@@ -653,7 +695,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0020: interpret the dataset in part D (b=2.575, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -672,13 +713,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0020: interpret the dataset in part D (b=1.177, c=0.1)."
     },
     {
       "item_id": "D0021",
-      "a": 1.709,
-      "b": -1.944,
-      "c": 0.15,
+      "a": 1.788,
+      "d": -0.121584,
+      "c": 0.189,
+      "u": 1.0,
+      "b": 0.068,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -686,7 +730,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0021: solve for the unknown in part A (b=-1.944, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -705,13 +748,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0021: solve for the unknown in part A (b=0.068, c=0.15)."
     },
     {
       "item_id": "D0022",
-      "a": 1.515,
-      "b": 1.796,
+      "a": 1.115,
+      "d": 0.38579,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.346,
       "tags": {
         "KC": "geometry",
         "Bloom": "understand",
@@ -722,7 +768,6 @@
         "D0050",
         "D0159"
       ],
-      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0022: find the measure of part B (b=1.796, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -741,13 +786,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0022: find the measure of part B (b=-0.346, c=0.0)."
     },
     {
       "item_id": "D0023",
-      "a": 0.9,
-      "b": -1.887,
+      "a": 0.86,
+      "d": 1.97714,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.299,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -755,7 +803,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/apply] D0023: evaluate the expression in part C (b=-1.887, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -774,13 +821,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0023: evaluate the expression in part C (b=-2.299, c=0.0)."
     },
     {
       "item_id": "D0024",
-      "a": 1.892,
-      "b": -0.305,
-      "c": 0.1,
+      "a": 1.373,
+      "d": 2.431583,
+      "c": 0.117,
+      "u": 1.0,
+      "b": -1.771,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -788,7 +838,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/analyze] D0024: interpret the dataset in part D (b=-0.305, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -807,13 +856,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0024: interpret the dataset in part D (b=-1.771, c=0.1)."
     },
     {
       "item_id": "D0025",
-      "a": 0.423,
-      "b": -2.449,
+      "a": 1.293,
+      "d": -0.645207,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.499,
       "tags": {
         "KC": "algebra",
         "Bloom": "evaluate",
@@ -825,7 +877,6 @@
         "D0101",
         "D0127"
       ],
-      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0025: solve for the unknown in part A (b=-2.449, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -844,13 +895,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0025: solve for the unknown in part A (b=0.499, c=0.0)."
     },
     {
       "item_id": "D0026",
-      "a": 0.982,
-      "b": 0.139,
+      "a": 1.601,
+      "d": 4.0025,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.5,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -858,7 +912,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0026: find the measure of part B (b=0.139, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -877,13 +930,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0026: find the measure of part B (b=-2.5, c=0.0)."
     },
     {
       "item_id": "D0027",
-      "a": 1.801,
-      "b": 0.972,
+      "a": 0.658,
+      "d": -0.96068,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.46,
       "tags": {
         "KC": "number",
         "Bloom": "understand",
@@ -891,7 +947,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/understand] D0027: evaluate the expression in part C (b=0.972, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -910,13 +965,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0027: evaluate the expression in part C (b=1.46, c=0.0)."
     },
     {
       "item_id": "D0028",
-      "a": 0.826,
-      "b": 0.603,
-      "c": 0.2,
+      "a": 0.717,
+      "d": 0.222987,
+      "c": 0.119,
+      "u": 1.0,
+      "b": -0.311,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -924,7 +982,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/apply] D0028: interpret the dataset in part D (b=0.603, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -943,13 +1000,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0028: interpret the dataset in part D (b=-0.311, c=0.2)."
     },
     {
       "item_id": "D0029",
-      "a": 2.108,
-      "b": -1.132,
+      "a": 0.721,
+      "d": 0.234325,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.325,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -957,7 +1017,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0029: solve for the unknown in part A (b=-1.132, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -976,13 +1035,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0029: solve for the unknown in part A (b=-0.325, c=0.0)."
     },
     {
       "item_id": "D0030",
-      "a": 1.881,
-      "b": -2.267,
-      "c": 0.25,
+      "a": 1.73,
+      "d": 0.94631,
+      "c": 0.116,
+      "u": 1.0,
+      "b": -0.547,
       "tags": {
         "KC": "geometry",
         "Bloom": "evaluate",
@@ -992,7 +1054,6 @@
       "enemy_of": [
         "D0105"
       ],
-      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0030: find the measure of part B (b=-2.267, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -1011,13 +1072,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0030: find the measure of part B (b=-0.547, c=0.25)."
     },
     {
       "item_id": "D0031",
-      "a": 1.007,
-      "b": -1.703,
-      "c": 0.2,
+      "a": 1.349,
+      "d": 0.387163,
+      "c": 0.1,
+      "u": 1.0,
+      "b": -0.287,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -1027,7 +1091,6 @@
       "enemy_of": [
         "D0217"
       ],
-      "stem": "[SIMULATED \u00b7 math/number/remember] D0031: evaluate the expression in part C (b=-1.703, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -1046,13 +1109,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0031: evaluate the expression in part C (b=-0.287, c=0.2)."
     },
     {
       "item_id": "D0032",
-      "a": 0.785,
-      "b": 2.564,
+      "a": 1.865,
+      "d": -0.199555,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.107,
       "tags": {
         "KC": "data",
         "Bloom": "understand",
@@ -1060,7 +1126,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/understand] D0032: interpret the dataset in part D (b=2.564, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1079,13 +1144,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0032: interpret the dataset in part D (b=0.107, c=0.0)."
     },
     {
       "item_id": "D0033",
-      "a": 1.072,
-      "b": 0.878,
+      "a": 1.967,
+      "d": -2.502024,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.272,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -1093,7 +1161,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0033: solve for the unknown in part A (b=0.878, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1112,13 +1179,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0033: solve for the unknown in part A (b=1.272, c=0.0)."
     },
     {
       "item_id": "D0034",
-      "a": 1.49,
-      "b": -2.449,
+      "a": 1.985,
+      "d": -2.503085,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.261,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -1126,7 +1196,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0034: find the measure of part B (b=-2.449, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1145,13 +1214,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0034: find the measure of part B (b=1.261, c=0.0)."
     },
     {
       "item_id": "D0035",
-      "a": 1.46,
-      "b": 1.528,
-      "c": 0.25,
+      "a": 1.865,
+      "d": -1.396885,
+      "c": 0.208,
+      "u": 1.0,
+      "b": 0.749,
       "tags": {
         "KC": "number",
         "Bloom": "evaluate",
@@ -1159,7 +1231,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0035: evaluate the expression in part C (b=1.528, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -1178,13 +1249,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0035: evaluate the expression in part C (b=0.749, c=0.25)."
     },
     {
       "item_id": "D0036",
-      "a": 0.828,
-      "b": 1.408,
+      "a": 1.297,
+      "d": 0.85602,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.66,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -1192,7 +1266,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/remember] D0036: interpret the dataset in part D (b=1.408, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1211,13 +1284,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0036: interpret the dataset in part D (b=-0.66, c=0.0)."
     },
     {
       "item_id": "D0037",
-      "a": 1.357,
-      "b": 1.431,
+      "a": 1.912,
+      "d": 1.179704,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.617,
       "tags": {
         "KC": "algebra",
         "Bloom": "understand",
@@ -1228,7 +1304,6 @@
         "D0141",
         "D0214"
       ],
-      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0037: solve for the unknown in part A (b=1.431, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1247,13 +1322,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0037: solve for the unknown in part A (b=-0.617, c=0.0)."
     },
     {
       "item_id": "D0038",
-      "a": 0.616,
-      "b": 1.593,
+      "a": 1.8,
+      "d": 3.6504,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.028,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -1261,7 +1339,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0038: find the measure of part B (b=1.593, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1280,13 +1357,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0038: find the measure of part B (b=-2.028, c=0.0)."
     },
     {
       "item_id": "D0039",
-      "a": 0.663,
-      "b": -2.41,
-      "c": 0.2,
+      "a": 1.14,
+      "d": 0.12996,
+      "c": 0.131,
+      "u": 1.0,
+      "b": -0.114,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -1294,7 +1374,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/analyze] D0039: evaluate the expression in part C (b=-2.41, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -1313,13 +1392,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0039: evaluate the expression in part C (b=-0.114, c=0.2)."
     },
     {
       "item_id": "D0040",
-      "a": 1.329,
-      "b": -1.217,
-      "c": 0.2,
+      "a": 1.911,
+      "d": 0.901992,
+      "c": 0.161,
+      "u": 1.0,
+      "b": -0.472,
       "tags": {
         "KC": "data",
         "Bloom": "evaluate",
@@ -1327,7 +1409,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0040: interpret the dataset in part D (b=-1.217, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -1346,13 +1427,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0040: interpret the dataset in part D (b=-0.472, c=0.2)."
     },
     {
       "item_id": "D0041",
-      "a": 2.171,
-      "b": -1.682,
-      "c": 0.1,
+      "a": 1.559,
+      "d": 1.18484,
+      "c": 0.188,
+      "u": 1.0,
+      "b": -0.76,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -1360,7 +1444,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0041: solve for the unknown in part A (b=-1.682, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -1379,13 +1462,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0041: solve for the unknown in part A (b=-0.76, c=0.1)."
     },
     {
       "item_id": "D0042",
-      "a": 1.145,
-      "b": 2.561,
+      "a": 1.877,
+      "d": 0.733907,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.391,
       "tags": {
         "KC": "geometry",
         "Bloom": "understand",
@@ -1393,7 +1479,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0042: find the measure of part B (b=2.561, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1412,13 +1497,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0042: find the measure of part B (b=-0.391, c=0.0)."
     },
     {
       "item_id": "D0043",
-      "a": 1.609,
-      "b": -1.514,
+      "a": 1.058,
+      "d": 0.427432,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.404,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -1426,7 +1514,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/apply] D0043: evaluate the expression in part C (b=-1.514, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1445,13 +1532,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0043: evaluate the expression in part C (b=-0.404, c=0.0)."
     },
     {
       "item_id": "D0044",
-      "a": 1.77,
-      "b": -2.43,
+      "a": 0.849,
+      "d": -0.490722,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.578,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -1459,7 +1549,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/analyze] D0044: interpret the dataset in part D (b=-2.43, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1478,13 +1567,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0044: interpret the dataset in part D (b=0.578, c=0.0)."
     },
     {
       "item_id": "D0045",
-      "a": 1.352,
-      "b": -1.302,
+      "a": 1.758,
+      "d": 1.360692,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.774,
       "tags": {
         "KC": "algebra",
         "Bloom": "evaluate",
@@ -1492,7 +1584,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0045: solve for the unknown in part A (b=-1.302, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1511,13 +1602,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0045: solve for the unknown in part A (b=-0.774, c=0.0)."
     },
     {
       "item_id": "D0046",
-      "a": 2.079,
-      "b": 1.227,
+      "a": 1.538,
+      "d": 3.845,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.5,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -1525,7 +1619,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0046: find the measure of part B (b=1.227, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1544,13 +1637,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0046: find the measure of part B (b=-2.5, c=0.0)."
     },
     {
       "item_id": "D0047",
-      "a": 1.895,
-      "b": -2.458,
-      "c": 0.25,
+      "a": 1.942,
+      "d": -0.240808,
+      "c": 0.132,
+      "u": 1.0,
+      "b": 0.124,
       "tags": {
         "KC": "number",
         "Bloom": "understand",
@@ -1558,7 +1654,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/understand] D0047: evaluate the expression in part C (b=-2.458, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -1577,13 +1672,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0047: evaluate the expression in part C (b=0.124, c=0.25)."
     },
     {
       "item_id": "D0048",
-      "a": 2.048,
-      "b": -1.319,
+      "a": 1.137,
+      "d": -0.793626,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.698,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -1591,7 +1689,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/apply] D0048: interpret the dataset in part D (b=-1.319, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1610,13 +1707,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0048: interpret the dataset in part D (b=0.698, c=0.0)."
     },
     {
       "item_id": "D0049",
-      "a": 1.699,
-      "b": -0.975,
-      "c": 0.25,
+      "a": 1.985,
+      "d": -0.38112,
+      "c": 0.109,
+      "u": 1.0,
+      "b": 0.192,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -1624,7 +1724,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0049: solve for the unknown in part A (b=-0.975, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -1643,13 +1742,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0049: solve for the unknown in part A (b=0.192, c=0.25)."
     },
     {
       "item_id": "D0050",
-      "a": 2.043,
-      "b": -2.213,
+      "a": 0.638,
+      "d": -0.767514,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.203,
       "tags": {
         "KC": "geometry",
         "Bloom": "evaluate",
@@ -1660,7 +1762,6 @@
         "D0022",
         "D0159"
       ],
-      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0050: find the measure of part B (b=-2.213, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1679,13 +1780,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0050: find the measure of part B (b=1.203, c=0.0)."
     },
     {
       "item_id": "D0051",
-      "a": 1.756,
-      "b": 0.058,
+      "a": 1.364,
+      "d": 1.358544,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.996,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -1693,7 +1797,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/remember] D0051: evaluate the expression in part C (b=0.058, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1712,13 +1815,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0051: evaluate the expression in part C (b=-0.996, c=0.0)."
     },
     {
       "item_id": "D0052",
-      "a": 0.713,
-      "b": -0.177,
-      "c": 0.2,
+      "a": 1.881,
+      "d": 1.615779,
+      "c": 0.229,
+      "u": 1.0,
+      "b": -0.859,
       "tags": {
         "KC": "data",
         "Bloom": "understand",
@@ -1726,7 +1832,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/understand] D0052: interpret the dataset in part D (b=-0.177, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -1745,13 +1850,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0052: interpret the dataset in part D (b=-0.859, c=0.2)."
     },
     {
       "item_id": "D0053",
-      "a": 1.882,
-      "b": 0.38,
+      "a": 1.932,
+      "d": 1.462524,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.757,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -1759,7 +1867,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0053: solve for the unknown in part A (b=0.38, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1778,13 +1885,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0053: solve for the unknown in part A (b=-0.757, c=0.0)."
     },
     {
       "item_id": "D0054",
-      "a": 0.805,
-      "b": 0.191,
-      "c": 0.1,
+      "a": 0.782,
+      "d": 0.319838,
+      "c": 0.215,
+      "u": 1.0,
+      "b": -0.409,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -1796,7 +1906,6 @@
         "D0009",
         "D0224"
       ],
-      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0054: find the measure of part B (b=0.191, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -1815,13 +1924,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0054: find the measure of part B (b=-0.409, c=0.1)."
     },
     {
       "item_id": "D0055",
-      "a": 0.783,
-      "b": 0.012,
+      "a": 0.816,
+      "d": -1.390464,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.704,
       "tags": {
         "KC": "number",
         "Bloom": "evaluate",
@@ -1829,7 +1941,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0055: evaluate the expression in part C (b=0.012, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1848,13 +1959,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0055: evaluate the expression in part C (b=1.704, c=0.0)."
     },
     {
       "item_id": "D0056",
-      "a": 0.974,
-      "b": -0.514,
+      "a": 0.774,
+      "d": -0.051084,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.066,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -1862,7 +1976,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/remember] D0056: interpret the dataset in part D (b=-0.514, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1881,13 +1994,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0056: interpret the dataset in part D (b=0.066, c=0.0)."
     },
     {
       "item_id": "D0057",
-      "a": 1.849,
-      "b": -2.15,
+      "a": 1.471,
+      "d": -0.516321,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.351,
       "tags": {
         "KC": "algebra",
         "Bloom": "understand",
@@ -1895,7 +2011,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0057: solve for the unknown in part A (b=-2.15, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1914,13 +2029,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0057: solve for the unknown in part A (b=0.351, c=0.0)."
     },
     {
       "item_id": "D0058",
-      "a": 1.219,
-      "b": -0.16,
-      "c": 0.2,
+      "a": 0.621,
+      "d": -0.684963,
+      "c": 0.156,
+      "u": 1.0,
+      "b": 1.103,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -1928,7 +2046,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0058: find the measure of part B (b=-0.16, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -1947,13 +2064,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0058: find the measure of part B (b=1.103, c=0.2)."
     },
     {
       "item_id": "D0059",
-      "a": 0.829,
-      "b": 2.329,
+      "a": 1.06,
+      "d": 0.04346,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.041,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -1963,7 +2083,6 @@
       "enemy_of": [
         "D0188"
       ],
-      "stem": "[SIMULATED \u00b7 math/number/analyze] D0059: evaluate the expression in part C (b=2.329, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -1982,13 +2101,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0059: evaluate the expression in part C (b=-0.041, c=0.0)."
     },
     {
       "item_id": "D0060",
-      "a": 1.524,
-      "b": -1.642,
+      "a": 1.406,
+      "d": -0.826728,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.588,
       "tags": {
         "KC": "data",
         "Bloom": "evaluate",
@@ -1996,7 +2118,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0060: interpret the dataset in part D (b=-1.642, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2015,13 +2136,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0060: interpret the dataset in part D (b=0.588, c=0.0)."
     },
     {
       "item_id": "D0061",
-      "a": 0.872,
-      "b": 2.619,
+      "a": 1.57,
+      "d": -0.16014,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.102,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -2029,7 +2153,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0061: solve for the unknown in part A (b=2.619, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2048,13 +2171,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0061: solve for the unknown in part A (b=0.102, c=0.0)."
     },
     {
       "item_id": "D0062",
-      "a": 0.765,
-      "b": 0.531,
+      "a": 0.976,
+      "d": -0.305488,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.313,
       "tags": {
         "KC": "geometry",
         "Bloom": "understand",
@@ -2062,7 +2188,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0062: find the measure of part B (b=0.531, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2081,13 +2206,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0062: find the measure of part B (b=0.313, c=0.0)."
     },
     {
       "item_id": "D0063",
-      "a": 0.523,
-      "b": -2.703,
+      "a": 1.579,
+      "d": 0.366328,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.232,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -2095,7 +2223,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/apply] D0063: evaluate the expression in part C (b=-2.703, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2114,13 +2241,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0063: evaluate the expression in part C (b=-0.232, c=0.0)."
     },
     {
       "item_id": "D0064",
-      "a": 0.707,
-      "b": 0.01,
+      "a": 0.703,
+      "d": -1.105116,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.572,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -2128,7 +2258,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/analyze] D0064: interpret the dataset in part D (b=0.01, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2147,13 +2276,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0064: interpret the dataset in part D (b=1.572, c=0.0)."
     },
     {
       "item_id": "D0065",
-      "a": 1.583,
-      "b": -0.752,
+      "a": 1.585,
+      "d": -0.77665,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.49,
       "tags": {
         "KC": "algebra",
         "Bloom": "evaluate",
@@ -2164,7 +2296,6 @@
         "D0183",
         "D0163"
       ],
-      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0065: solve for the unknown in part A (b=-0.752, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2183,13 +2314,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/evaluate] D0065: solve for the unknown in part A (b=0.49, c=0.0)."
     },
     {
       "item_id": "D0066",
-      "a": 0.926,
-      "b": -2.336,
+      "a": 1.621,
+      "d": -0.987189,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.609,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -2197,7 +2331,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0066: find the measure of part B (b=-2.336, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2216,13 +2349,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/remember] D0066: find the measure of part B (b=0.609, c=0.0)."
     },
     {
       "item_id": "D0067",
-      "a": 0.608,
-      "b": 1.174,
+      "a": 1.265,
+      "d": 0.72611,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.574,
       "tags": {
         "KC": "number",
         "Bloom": "understand",
@@ -2230,7 +2366,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/understand] D0067: evaluate the expression in part C (b=1.174, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2249,13 +2384,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/understand] D0067: evaluate the expression in part C (b=-0.574, c=0.0)."
     },
     {
       "item_id": "D0068",
-      "a": 1.721,
-      "b": -0.281,
+      "a": 1.536,
+      "d": 1.070592,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.697,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -2263,7 +2401,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/apply] D0068: interpret the dataset in part D (b=-0.281, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2282,13 +2419,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/apply] D0068: interpret the dataset in part D (b=-0.697, c=0.0)."
     },
     {
       "item_id": "D0069",
-      "a": 2.058,
-      "b": 1.155,
+      "a": 1.019,
+      "d": 1.205477,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.183,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -2296,7 +2436,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0069: solve for the unknown in part A (b=1.155, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2315,13 +2454,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/analyze] D0069: solve for the unknown in part A (b=-1.183, c=0.0)."
     },
     {
       "item_id": "D0070",
-      "a": 1.549,
-      "b": 1.13,
+      "a": 1.877,
+      "d": -0.266534,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.142,
       "tags": {
         "KC": "geometry",
         "Bloom": "evaluate",
@@ -2329,7 +2471,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0070: find the measure of part B (b=1.13, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2348,13 +2489,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/evaluate] D0070: find the measure of part B (b=0.142, c=0.0)."
     },
     {
       "item_id": "D0071",
-      "a": 1.932,
-      "b": 0.3,
+      "a": 1.653,
+      "d": 3.350631,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.027,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -2362,7 +2506,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/remember] D0071: evaluate the expression in part C (b=0.3, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2381,13 +2524,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/remember] D0071: evaluate the expression in part C (b=-2.027, c=0.0)."
     },
     {
       "item_id": "D0072",
-      "a": 1.754,
-      "b": -1.361,
-      "c": 0.2,
+      "a": 1.454,
+      "d": 0.927652,
+      "c": 0.209,
+      "u": 1.0,
+      "b": -0.638,
       "tags": {
         "KC": "data",
         "Bloom": "understand",
@@ -2395,7 +2541,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/understand] D0072: interpret the dataset in part D (b=-1.361, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -2414,13 +2559,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/understand] D0072: interpret the dataset in part D (b=-0.638, c=0.2)."
     },
     {
       "item_id": "D0073",
-      "a": 1.282,
-      "b": -2.566,
+      "a": 1.325,
+      "d": 0.899675,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.679,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -2428,7 +2576,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0073: solve for the unknown in part A (b=-2.566, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2447,13 +2594,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/apply] D0073: solve for the unknown in part A (b=-0.679, c=0.0)."
     },
     {
       "item_id": "D0074",
-      "a": 1.513,
-      "b": -0.561,
-      "c": 0.15,
+      "a": 1.903,
+      "d": 0.660341,
+      "c": 0.196,
+      "u": 1.0,
+      "b": -0.347,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -2461,7 +2611,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0074: find the measure of part B (b=-0.561, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -2480,13 +2629,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/analyze] D0074: find the measure of part B (b=-0.347, c=0.15)."
     },
     {
       "item_id": "D0075",
-      "a": 1.767,
-      "b": -0.8,
-      "c": 0.25,
+      "a": 1.747,
+      "d": 0.338918,
+      "c": 0.116,
+      "u": 1.0,
+      "b": -0.194,
       "tags": {
         "KC": "number",
         "Bloom": "evaluate",
@@ -2494,7 +2646,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0075: evaluate the expression in part C (b=-0.8, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -2513,13 +2664,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/evaluate] D0075: evaluate the expression in part C (b=-0.194, c=0.25)."
     },
     {
       "item_id": "D0076",
-      "a": 1.931,
-      "b": 0.637,
+      "a": 1.835,
+      "d": 0.280755,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.153,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -2527,7 +2681,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/remember] D0076: interpret the dataset in part D (b=0.637, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2546,13 +2699,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/remember] D0076: interpret the dataset in part D (b=-0.153, c=0.0)."
     },
     {
       "item_id": "D0077",
-      "a": 1.891,
-      "b": 1.17,
-      "c": 0.1,
+      "a": 1.58,
+      "d": -3.03518,
+      "c": 0.135,
+      "u": 1.0,
+      "b": 1.921,
       "tags": {
         "KC": "algebra",
         "Bloom": "understand",
@@ -2560,7 +2716,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0077: solve for the unknown in part A (b=1.17, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -2579,13 +2734,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/understand] D0077: solve for the unknown in part A (b=1.921, c=0.1)."
     },
     {
       "item_id": "D0078",
-      "a": 1.772,
-      "b": -0.476,
+      "a": 1.979,
+      "d": 2.604364,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.316,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -2593,7 +2751,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0078: find the measure of part B (b=-0.476, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2612,13 +2769,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/apply] D0078: find the measure of part B (b=-1.316, c=0.0)."
     },
     {
       "item_id": "D0079",
-      "a": 1.798,
-      "b": 1.499,
-      "c": 0.25,
+      "a": 1.455,
+      "d": 0.24153,
+      "c": 0.138,
+      "u": 1.0,
+      "b": -0.166,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -2626,7 +2786,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/number/analyze] D0079: evaluate the expression in part C (b=1.499, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -2645,13 +2804,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/analyze] D0079: evaluate the expression in part C (b=-0.166, c=0.25)."
     },
     {
       "item_id": "D0080",
-      "a": 1.349,
-      "b": 1.455,
+      "a": 1.28,
+      "d": 1.68448,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.316,
       "tags": {
         "KC": "data",
         "Bloom": "evaluate",
@@ -2661,7 +2823,6 @@
       "enemy_of": [
         "D0238"
       ],
-      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0080: interpret the dataset in part D (b=1.455, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2680,13 +2841,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/evaluate] D0080: interpret the dataset in part D (b=-1.316, c=0.0)."
     },
     {
       "item_id": "D0081",
-      "a": 1.58,
-      "b": -1.717,
+      "a": 1.247,
+      "d": 0.366618,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.294,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -2694,7 +2858,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0081: solve for the unknown in part A (b=-1.717, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2713,13 +2876,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 math/algebra/remember] D0081: solve for the unknown in part A (b=-0.294, c=0.0)."
     },
     {
       "item_id": "D0082",
-      "a": 0.919,
-      "b": -2.096,
+      "a": 1.22,
+      "d": -1.17364,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.962,
       "tags": {
         "KC": "geometry",
         "Bloom": "understand",
@@ -2730,7 +2896,6 @@
         "D0121",
         "D0109"
       ],
-      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0082: find the measure of part B (b=-2.096, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2749,13 +2914,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 math/geometry/understand] D0082: find the measure of part B (b=0.962, c=0.0)."
     },
     {
       "item_id": "D0083",
-      "a": 0.628,
-      "b": 2.505,
+      "a": 0.973,
+      "d": -1.238629,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.273,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -2767,7 +2935,6 @@
         "D0102",
         "D0140"
       ],
-      "stem": "[SIMULATED \u00b7 math/number/apply] D0083: evaluate the expression in part C (b=2.505, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2786,13 +2953,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 math/number/apply] D0083: evaluate the expression in part C (b=1.273, c=0.0)."
     },
     {
       "item_id": "D0084",
-      "a": 1.892,
-      "b": 2.39,
-      "c": 0.15,
+      "a": 1.101,
+      "d": -1.680126,
+      "c": 0.155,
+      "u": 1.0,
+      "b": 1.526,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -2800,7 +2970,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 math/data/analyze] D0084: interpret the dataset in part D (b=2.39, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -2819,13 +2988,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 math/data/analyze] D0084: interpret the dataset in part D (b=1.526, c=0.15)."
     },
     {
       "item_id": "D0085",
-      "a": 1.55,
-      "b": 1.702,
+      "a": 1.697,
+      "d": 0.649951,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.383,
       "tags": {
         "KC": "biology",
         "Bloom": "remember",
@@ -2836,7 +3008,6 @@
         "D0149",
         "D0181"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/remember] D0085: identify the structure in part A (b=1.702, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2855,13 +3026,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0085: identify the structure in part A (b=-0.383, c=0.0)."
     },
     {
       "item_id": "D0086",
-      "a": 1.966,
-      "b": 0.905,
+      "a": 1.033,
+      "d": 1.172455,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.135,
       "tags": {
         "KC": "chemistry",
         "Bloom": "understand",
@@ -2869,7 +3043,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0086: balance the reaction in part B (b=0.905, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2888,13 +3061,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0086: balance the reaction in part B (b=-1.135, c=0.0)."
     },
     {
       "item_id": "D0087",
-      "a": 0.78,
-      "b": 1.335,
-      "c": 0.1,
+      "a": 1.714,
+      "d": -0.176542,
+      "c": 0.156,
+      "u": 1.0,
+      "b": 0.103,
       "tags": {
         "KC": "physics",
         "Bloom": "apply",
@@ -2902,7 +3078,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/apply] D0087: compute the quantity in part C (b=1.335, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -2921,13 +3096,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0087: compute the quantity in part C (b=0.103, c=0.1)."
     },
     {
       "item_id": "D0088",
-      "a": 2.196,
-      "b": 0.702,
+      "a": 1.993,
+      "d": -2.435446,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.222,
       "tags": {
         "KC": "earth",
         "Bloom": "analyze",
@@ -2935,7 +3113,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0088: explain the process in part D (b=0.702, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2954,13 +3131,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0088: explain the process in part D (b=1.222, c=0.0)."
     },
     {
       "item_id": "D0089",
-      "a": 0.65,
-      "b": 1.28,
+      "a": 0.936,
+      "d": 1.049256,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.121,
       "tags": {
         "KC": "biology",
         "Bloom": "evaluate",
@@ -2970,7 +3150,6 @@
       "enemy_of": [
         "D0172"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0089: identify the structure in part A (b=1.28, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -2989,13 +3168,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0089: identify the structure in part A (b=-1.121, c=0.0)."
     },
     {
       "item_id": "D0090",
-      "a": 2.189,
-      "b": 0.596,
-      "c": 0.25,
+      "a": 0.668,
+      "d": 0.498328,
+      "c": 0.127,
+      "u": 1.0,
+      "b": -0.746,
       "tags": {
         "KC": "chemistry",
         "Bloom": "remember",
@@ -3003,7 +3185,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0090: balance the reaction in part B (b=0.596, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -3022,13 +3203,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0090: balance the reaction in part B (b=-0.746, c=0.25)."
     },
     {
       "item_id": "D0091",
-      "a": 1.107,
-      "b": -0.011,
+      "a": 1.84,
+      "d": -0.33856,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.184,
       "tags": {
         "KC": "physics",
         "Bloom": "understand",
@@ -3036,7 +3220,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/understand] D0091: compute the quantity in part C (b=-0.011, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3055,13 +3238,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0091: compute the quantity in part C (b=0.184, c=0.0)."
     },
     {
       "item_id": "D0092",
-      "a": 1.68,
-      "b": 0.696,
+      "a": 0.85,
+      "d": 0.629,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.74,
       "tags": {
         "KC": "earth",
         "Bloom": "apply",
@@ -3069,7 +3255,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/apply] D0092: explain the process in part D (b=0.696, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3088,13 +3273,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0092: explain the process in part D (b=-0.74, c=0.0)."
     },
     {
       "item_id": "D0093",
-      "a": 1.258,
-      "b": -0.394,
+      "a": 1.914,
+      "d": 2.836548,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.482,
       "tags": {
         "KC": "biology",
         "Bloom": "analyze",
@@ -3102,7 +3290,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0093: identify the structure in part A (b=-0.394, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3121,13 +3308,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0093: identify the structure in part A (b=-1.482, c=0.0)."
     },
     {
       "item_id": "D0094",
-      "a": 1.919,
-      "b": 0.703,
-      "c": 0.1,
+      "a": 1.87,
+      "d": 1.72601,
+      "c": 0.139,
+      "u": 1.0,
+      "b": -0.923,
       "tags": {
         "KC": "chemistry",
         "Bloom": "evaluate",
@@ -3135,7 +3325,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0094: balance the reaction in part B (b=0.703, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -3154,13 +3343,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0094: balance the reaction in part B (b=-0.923, c=0.1)."
     },
     {
       "item_id": "D0095",
-      "a": 0.838,
-      "b": 0.595,
+      "a": 1.3,
+      "d": -0.7865,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.605,
       "tags": {
         "KC": "physics",
         "Bloom": "remember",
@@ -3168,7 +3360,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/remember] D0095: compute the quantity in part C (b=0.595, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3187,13 +3378,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0095: compute the quantity in part C (b=0.605, c=0.0)."
     },
     {
       "item_id": "D0096",
-      "a": 1.062,
-      "b": -0.87,
+      "a": 0.957,
+      "d": 0.348348,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.364,
       "tags": {
         "KC": "earth",
         "Bloom": "understand",
@@ -3201,7 +3395,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/understand] D0096: explain the process in part D (b=-0.87, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3220,13 +3413,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0096: explain the process in part D (b=-0.364, c=0.0)."
     },
     {
       "item_id": "D0097",
-      "a": 1.537,
-      "b": 1.436,
+      "a": 1.834,
+      "d": -1.322314,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.721,
       "tags": {
         "KC": "biology",
         "Bloom": "apply",
@@ -3234,7 +3430,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/apply] D0097: identify the structure in part A (b=1.436, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3253,13 +3448,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0097: identify the structure in part A (b=0.721, c=0.0)."
     },
     {
       "item_id": "D0098",
-      "a": 0.935,
-      "b": -2.457,
+      "a": 0.787,
+      "d": 0.874357,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.111,
       "tags": {
         "KC": "chemistry",
         "Bloom": "analyze",
@@ -3267,7 +3465,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0098: balance the reaction in part B (b=-2.457, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3286,13 +3483,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0098: balance the reaction in part B (b=-1.111, c=0.0)."
     },
     {
       "item_id": "D0099",
-      "a": 1.666,
-      "b": -0.918,
+      "a": 1.767,
+      "d": 1.173288,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.664,
       "tags": {
         "KC": "physics",
         "Bloom": "evaluate",
@@ -3300,7 +3500,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0099: compute the quantity in part C (b=-0.918, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3319,13 +3518,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0099: compute the quantity in part C (b=-0.664, c=0.0)."
     },
     {
       "item_id": "D0100",
-      "a": 0.755,
-      "b": -0.959,
+      "a": 0.957,
+      "d": -1.653696,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.728,
       "tags": {
         "KC": "earth",
         "Bloom": "remember",
@@ -3333,7 +3535,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/remember] D0100: explain the process in part D (b=-0.959, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3352,13 +3553,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0100: explain the process in part D (b=1.728, c=0.0)."
     },
     {
       "item_id": "D0101",
-      "a": 1.726,
-      "b": -0.155,
+      "a": 0.816,
+      "d": 0.313344,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.384,
       "tags": {
         "KC": "biology",
         "Bloom": "understand",
@@ -3370,7 +3574,6 @@
         "D0025",
         "D0127"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/understand] D0101: identify the structure in part A (b=-0.155, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3389,13 +3592,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0101: identify the structure in part A (b=-0.384, c=0.0)."
     },
     {
       "item_id": "D0102",
-      "a": 0.496,
-      "b": -0.456,
+      "a": 1.126,
+      "d": 1.15978,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.03,
       "tags": {
         "KC": "chemistry",
         "Bloom": "apply",
@@ -3407,7 +3613,6 @@
         "D0140",
         "D0083"
       ],
-      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0102: balance the reaction in part B (b=-0.456, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3426,13 +3631,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0102: balance the reaction in part B (b=-1.03, c=0.0)."
     },
     {
       "item_id": "D0103",
-      "a": 0.917,
-      "b": 1.995,
-      "c": 0.25,
+      "a": 1.215,
+      "d": 1.458,
+      "c": 0.197,
+      "u": 1.0,
+      "b": -1.2,
       "tags": {
         "KC": "physics",
         "Bloom": "analyze",
@@ -3440,7 +3648,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0103: compute the quantity in part C (b=1.995, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -3459,13 +3666,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0103: compute the quantity in part C (b=-1.2, c=0.25)."
     },
     {
       "item_id": "D0104",
-      "a": 1.161,
-      "b": 1.583,
+      "a": 0.749,
+      "d": -0.235935,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.315,
       "tags": {
         "KC": "earth",
         "Bloom": "evaluate",
@@ -3473,7 +3683,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0104: explain the process in part D (b=1.583, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3492,13 +3701,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0104: explain the process in part D (b=0.315, c=0.0)."
     },
     {
       "item_id": "D0105",
-      "a": 1.747,
-      "b": 0.854,
+      "a": 1.545,
+      "d": 3.12708,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.024,
       "tags": {
         "KC": "biology",
         "Bloom": "remember",
@@ -3508,7 +3720,6 @@
       "enemy_of": [
         "D0030"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/remember] D0105: identify the structure in part A (b=0.854, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3527,13 +3738,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0105: identify the structure in part A (b=-2.024, c=0.0)."
     },
     {
       "item_id": "D0106",
-      "a": 0.564,
-      "b": 2.569,
-      "c": 0.1,
+      "a": 1.002,
+      "d": -0.17034,
+      "c": 0.2,
+      "u": 1.0,
+      "b": 0.17,
       "tags": {
         "KC": "chemistry",
         "Bloom": "understand",
@@ -3541,7 +3755,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0106: balance the reaction in part B (b=2.569, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -3560,13 +3773,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0106: balance the reaction in part B (b=0.17, c=0.1)."
     },
     {
       "item_id": "D0107",
-      "a": 0.524,
-      "b": -1.987,
+      "a": 0.888,
+      "d": 0.464424,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.523,
       "tags": {
         "KC": "physics",
         "Bloom": "apply",
@@ -3574,7 +3790,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/apply] D0107: compute the quantity in part C (b=-1.987, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3593,13 +3808,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0107: compute the quantity in part C (b=-0.523, c=0.0)."
     },
     {
       "item_id": "D0108",
-      "a": 1.015,
-      "b": 0.003,
+      "a": 1.361,
+      "d": 2.147658,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.578,
       "tags": {
         "KC": "earth",
         "Bloom": "analyze",
@@ -3607,7 +3825,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0108: explain the process in part D (b=0.003, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3626,13 +3843,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0108: explain the process in part D (b=-1.578, c=0.0)."
     },
     {
       "item_id": "D0109",
-      "a": 1.046,
-      "b": 0.918,
-      "c": 0.25,
+      "a": 1.271,
+      "d": -1.254477,
+      "c": 0.112,
+      "u": 1.0,
+      "b": 0.987,
       "tags": {
         "KC": "biology",
         "Bloom": "evaluate",
@@ -3643,7 +3863,6 @@
         "D0082",
         "D0121"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0109: identify the structure in part A (b=0.918, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -3662,13 +3881,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0109: identify the structure in part A (b=0.987, c=0.25)."
     },
     {
       "item_id": "D0110",
-      "a": 1.242,
-      "b": -0.132,
-      "c": 0.25,
+      "a": 1.063,
+      "d": 0.338034,
+      "c": 0.106,
+      "u": 1.0,
+      "b": -0.318,
       "tags": {
         "KC": "chemistry",
         "Bloom": "remember",
@@ -3676,7 +3898,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0110: balance the reaction in part B (b=-0.132, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -3695,13 +3916,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0110: balance the reaction in part B (b=-0.318, c=0.25)."
     },
     {
       "item_id": "D0111",
-      "a": 1.295,
-      "b": -0.036,
+      "a": 1.848,
+      "d": -0.663432,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.359,
       "tags": {
         "KC": "physics",
         "Bloom": "understand",
@@ -3709,7 +3933,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/understand] D0111: compute the quantity in part C (b=-0.036, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3728,13 +3951,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0111: compute the quantity in part C (b=0.359, c=0.0)."
     },
     {
       "item_id": "D0112",
-      "a": 1.717,
-      "b": 1.681,
+      "a": 1.48,
+      "d": 0.89688,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.606,
       "tags": {
         "KC": "earth",
         "Bloom": "apply",
@@ -3746,7 +3972,6 @@
         "D0140",
         "D0083"
       ],
-      "stem": "[SIMULATED \u00b7 science/earth/apply] D0112: explain the process in part D (b=1.681, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3765,13 +3990,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0112: explain the process in part D (b=-0.606, c=0.0)."
     },
     {
       "item_id": "D0113",
-      "a": 1.943,
-      "b": -1.498,
+      "a": 0.887,
+      "d": -0.619126,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.698,
       "tags": {
         "KC": "biology",
         "Bloom": "analyze",
@@ -3779,7 +4007,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0113: identify the structure in part A (b=-1.498, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3798,13 +4025,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0113: identify the structure in part A (b=0.698, c=0.0)."
     },
     {
       "item_id": "D0114",
-      "a": 1.877,
-      "b": 1.252,
-      "c": 0.1,
+      "a": 0.683,
+      "d": 0.614017,
+      "c": 0.195,
+      "u": 1.0,
+      "b": -0.899,
       "tags": {
         "KC": "chemistry",
         "Bloom": "evaluate",
@@ -3812,7 +4042,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0114: balance the reaction in part B (b=1.252, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -3831,13 +4060,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0114: balance the reaction in part B (b=-0.899, c=0.1)."
     },
     {
       "item_id": "D0115",
-      "a": 1.436,
-      "b": 0.588,
+      "a": 0.717,
+      "d": -1.426113,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.989,
       "tags": {
         "KC": "physics",
         "Bloom": "remember",
@@ -3845,7 +4077,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/remember] D0115: compute the quantity in part C (b=0.588, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3864,13 +4095,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0115: compute the quantity in part C (b=1.989, c=0.0)."
     },
     {
       "item_id": "D0116",
-      "a": 1.651,
-      "b": -1.472,
-      "c": 0.2,
+      "a": 1.46,
+      "d": 2.27322,
+      "c": 0.137,
+      "u": 1.0,
+      "b": -1.557,
       "tags": {
         "KC": "earth",
         "Bloom": "understand",
@@ -3878,7 +4112,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/understand] D0116: explain the process in part D (b=-1.472, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -3897,13 +4130,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0116: explain the process in part D (b=-1.557, c=0.2)."
     },
     {
       "item_id": "D0117",
-      "a": 1.71,
-      "b": 1.511,
+      "a": 1.684,
+      "d": -0.870628,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.517,
       "tags": {
         "KC": "biology",
         "Bloom": "apply",
@@ -3911,7 +4147,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/apply] D0117: identify the structure in part A (b=1.511, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3930,13 +4165,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0117: identify the structure in part A (b=0.517, c=0.0)."
     },
     {
       "item_id": "D0118",
-      "a": 0.597,
-      "b": 2.406,
+      "a": 1.026,
+      "d": -0.134406,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.131,
       "tags": {
         "KC": "chemistry",
         "Bloom": "analyze",
@@ -3944,7 +4182,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0118: balance the reaction in part B (b=2.406, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3963,13 +4200,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0118: balance the reaction in part B (b=0.131, c=0.0)."
     },
     {
       "item_id": "D0119",
-      "a": 0.61,
-      "b": 2.192,
+      "a": 0.701,
+      "d": -0.803346,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.146,
       "tags": {
         "KC": "physics",
         "Bloom": "evaluate",
@@ -3977,7 +4217,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0119: compute the quantity in part C (b=2.192, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -3996,13 +4235,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0119: compute the quantity in part C (b=1.146, c=0.0)."
     },
     {
       "item_id": "D0120",
-      "a": 1.084,
-      "b": 1.224,
+      "a": 1.731,
+      "d": 2.016615,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.165,
       "tags": {
         "KC": "earth",
         "Bloom": "remember",
@@ -4010,7 +4252,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/remember] D0120: explain the process in part D (b=1.224, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4029,13 +4270,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0120: explain the process in part D (b=-1.165, c=0.0)."
     },
     {
       "item_id": "D0121",
-      "a": 1.768,
-      "b": 0.491,
+      "a": 1.52,
+      "d": -0.21584,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.142,
       "tags": {
         "KC": "biology",
         "Bloom": "understand",
@@ -4046,7 +4290,6 @@
         "D0082",
         "D0109"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/understand] D0121: identify the structure in part A (b=0.491, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4065,13 +4308,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0121: identify the structure in part A (b=0.142, c=0.0)."
     },
     {
       "item_id": "D0122",
-      "a": 1.517,
-      "b": -0.891,
+      "a": 1.451,
+      "d": -1.272527,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.877,
       "tags": {
         "KC": "chemistry",
         "Bloom": "apply",
@@ -4079,7 +4325,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0122: balance the reaction in part B (b=-0.891, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4098,13 +4343,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0122: balance the reaction in part B (b=0.877, c=0.0)."
     },
     {
       "item_id": "D0123",
-      "a": 1.436,
-      "b": -2.552,
+      "a": 1.708,
+      "d": 1.168272,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.684,
       "tags": {
         "KC": "physics",
         "Bloom": "analyze",
@@ -4112,7 +4360,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0123: compute the quantity in part C (b=-2.552, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4131,13 +4378,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0123: compute the quantity in part C (b=-0.684, c=0.0)."
     },
     {
       "item_id": "D0124",
-      "a": 0.528,
-      "b": 0.858,
+      "a": 1.72,
+      "d": 1.1782,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.685,
       "tags": {
         "KC": "earth",
         "Bloom": "evaluate",
@@ -4145,7 +4395,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0124: explain the process in part D (b=0.858, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4164,13 +4413,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0124: explain the process in part D (b=-0.685, c=0.0)."
     },
     {
       "item_id": "D0125",
-      "a": 0.607,
-      "b": 0.924,
+      "a": 1.175,
+      "d": 1.747225,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.487,
       "tags": {
         "KC": "biology",
         "Bloom": "remember",
@@ -4178,7 +4430,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/remember] D0125: identify the structure in part A (b=0.924, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4197,13 +4448,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0125: identify the structure in part A (b=-1.487, c=0.0)."
     },
     {
       "item_id": "D0126",
-      "a": 0.692,
-      "b": 2.494,
+      "a": 1.529,
+      "d": 2.357718,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.542,
       "tags": {
         "KC": "chemistry",
         "Bloom": "understand",
@@ -4211,7 +4465,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0126: balance the reaction in part B (b=2.494, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4230,13 +4483,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0126: balance the reaction in part B (b=-1.542, c=0.0)."
     },
     {
       "item_id": "D0127",
-      "a": 0.847,
-      "b": -0.321,
+      "a": 1.243,
+      "d": 0.778118,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.626,
       "tags": {
         "KC": "physics",
         "Bloom": "apply",
@@ -4248,7 +4504,6 @@
         "D0025",
         "D0101"
       ],
-      "stem": "[SIMULATED \u00b7 science/physics/apply] D0127: compute the quantity in part C (b=-0.321, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4267,13 +4522,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0127: compute the quantity in part C (b=-0.626, c=0.0)."
     },
     {
       "item_id": "D0128",
-      "a": 2.103,
-      "b": 1.537,
+      "a": 1.212,
+      "d": 0.486012,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.401,
       "tags": {
         "KC": "earth",
         "Bloom": "analyze",
@@ -4281,7 +4539,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0128: explain the process in part D (b=1.537, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4300,13 +4557,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0128: explain the process in part D (b=-0.401, c=0.0)."
     },
     {
       "item_id": "D0129",
-      "a": 2.105,
-      "b": 0.725,
-      "c": 0.25,
+      "a": 1.766,
+      "d": 0.356732,
+      "c": 0.222,
+      "u": 1.0,
+      "b": -0.202,
       "tags": {
         "KC": "biology",
         "Bloom": "evaluate",
@@ -4317,7 +4577,6 @@
         "D0132",
         "D0007"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0129: identify the structure in part A (b=0.725, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -4336,13 +4595,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0129: identify the structure in part A (b=-0.202, c=0.25)."
     },
     {
       "item_id": "D0130",
-      "a": 0.666,
-      "b": -2.241,
+      "a": 0.816,
+      "d": -0.015504,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.019,
       "tags": {
         "KC": "chemistry",
         "Bloom": "remember",
@@ -4350,7 +4612,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0130: balance the reaction in part B (b=-2.241, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4369,13 +4630,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0130: balance the reaction in part B (b=0.019, c=0.0)."
     },
     {
       "item_id": "D0131",
-      "a": 2.175,
-      "b": -0.89,
-      "c": 0.2,
+      "a": 0.646,
+      "d": 1.069776,
+      "c": 0.117,
+      "u": 1.0,
+      "b": -1.656,
       "tags": {
         "KC": "physics",
         "Bloom": "understand",
@@ -4383,7 +4647,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/understand] D0131: compute the quantity in part C (b=-0.89, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -4402,13 +4665,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0131: compute the quantity in part C (b=-1.656, c=0.2)."
     },
     {
       "item_id": "D0132",
-      "a": 1.982,
-      "b": 0.28,
+      "a": 1.221,
+      "d": 1.087911,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.891,
       "tags": {
         "KC": "earth",
         "Bloom": "apply",
@@ -4419,7 +4685,6 @@
         "D0007",
         "D0129"
       ],
-      "stem": "[SIMULATED \u00b7 science/earth/apply] D0132: explain the process in part D (b=0.28, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4438,13 +4703,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0132: explain the process in part D (b=-0.891, c=0.0)."
     },
     {
       "item_id": "D0133",
-      "a": 1.868,
-      "b": 1.765,
+      "a": 1.246,
+      "d": -1.38306,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.11,
       "tags": {
         "KC": "biology",
         "Bloom": "analyze",
@@ -4452,7 +4720,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0133: identify the structure in part A (b=1.765, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4471,13 +4738,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0133: identify the structure in part A (b=1.11, c=0.0)."
     },
     {
       "item_id": "D0134",
-      "a": 1.914,
-      "b": 0.33,
+      "a": 0.952,
+      "d": -1.029112,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.081,
       "tags": {
         "KC": "chemistry",
         "Bloom": "evaluate",
@@ -4485,7 +4755,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0134: balance the reaction in part B (b=0.33, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4504,13 +4773,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0134: balance the reaction in part B (b=1.081, c=0.0)."
     },
     {
       "item_id": "D0135",
-      "a": 1.454,
-      "b": -0.105,
+      "a": 1.568,
+      "d": 2.102688,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.341,
       "tags": {
         "KC": "physics",
         "Bloom": "remember",
@@ -4518,7 +4790,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/remember] D0135: compute the quantity in part C (b=-0.105, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4537,13 +4808,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0135: compute the quantity in part C (b=-1.341, c=0.0)."
     },
     {
       "item_id": "D0136",
-      "a": 0.575,
-      "b": 1.491,
+      "a": 0.924,
+      "d": 0.021252,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.023,
       "tags": {
         "KC": "earth",
         "Bloom": "understand",
@@ -4551,7 +4825,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/understand] D0136: explain the process in part D (b=1.491, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4570,13 +4843,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0136: explain the process in part D (b=-0.023, c=0.0)."
     },
     {
       "item_id": "D0137",
-      "a": 2.018,
-      "b": 0.083,
-      "c": 0.2,
+      "a": 1.669,
+      "d": -1.587219,
+      "c": 0.115,
+      "u": 1.0,
+      "b": 0.951,
       "tags": {
         "KC": "biology",
         "Bloom": "apply",
@@ -4584,7 +4860,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/apply] D0137: identify the structure in part A (b=0.083, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -4603,13 +4878,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0137: identify the structure in part A (b=0.951, c=0.2)."
     },
     {
       "item_id": "D0138",
-      "a": 1.7,
-      "b": -0.151,
+      "a": 0.72,
+      "d": -0.04752,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.066,
       "tags": {
         "KC": "chemistry",
         "Bloom": "analyze",
@@ -4617,7 +4895,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0138: balance the reaction in part B (b=-0.151, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4636,13 +4913,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0138: balance the reaction in part B (b=0.066, c=0.0)."
     },
     {
       "item_id": "D0139",
-      "a": 1.886,
-      "b": 1.156,
+      "a": 0.615,
+      "d": 0.258915,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.421,
       "tags": {
         "KC": "physics",
         "Bloom": "evaluate",
@@ -4650,7 +4930,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0139: compute the quantity in part C (b=1.156, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4669,13 +4948,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0139: compute the quantity in part C (b=-0.421, c=0.0)."
     },
     {
       "item_id": "D0140",
-      "a": 0.58,
-      "b": -2.402,
-      "c": 0.25,
+      "a": 0.76,
+      "d": 0.04636,
+      "c": 0.165,
+      "u": 1.0,
+      "b": -0.061,
       "tags": {
         "KC": "earth",
         "Bloom": "remember",
@@ -4687,7 +4969,6 @@
         "D0102",
         "D0083"
       ],
-      "stem": "[SIMULATED \u00b7 science/earth/remember] D0140: explain the process in part D (b=-2.402, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -4706,13 +4987,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0140: explain the process in part D (b=-0.061, c=0.25)."
     },
     {
       "item_id": "D0141",
-      "a": 1.924,
-      "b": 2.637,
-      "c": 0.1,
+      "a": 1.552,
+      "d": -0.735648,
+      "c": 0.184,
+      "u": 1.0,
+      "b": 0.474,
       "tags": {
         "KC": "biology",
         "Bloom": "understand",
@@ -4723,7 +5007,6 @@
         "D0214",
         "D0037"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/understand] D0141: identify the structure in part A (b=2.637, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -4742,13 +5025,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0141: identify the structure in part A (b=0.474, c=0.1)."
     },
     {
       "item_id": "D0142",
-      "a": 1.497,
-      "b": 1.31,
+      "a": 1.894,
+      "d": -2.912972,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.538,
       "tags": {
         "KC": "chemistry",
         "Bloom": "apply",
@@ -4756,7 +5042,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0142: balance the reaction in part B (b=1.31, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4775,13 +5060,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0142: balance the reaction in part B (b=1.538, c=0.0)."
     },
     {
       "item_id": "D0143",
-      "a": 1.06,
-      "b": 2.683,
+      "a": 1.734,
+      "d": -1.791222,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.033,
       "tags": {
         "KC": "physics",
         "Bloom": "analyze",
@@ -4789,7 +5077,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0143: compute the quantity in part C (b=2.683, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4808,13 +5095,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0143: compute the quantity in part C (b=1.033, c=0.0)."
     },
     {
       "item_id": "D0144",
-      "a": 0.886,
-      "b": 0.877,
+      "a": 1.839,
+      "d": 0.101145,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.055,
       "tags": {
         "KC": "earth",
         "Bloom": "evaluate",
@@ -4822,7 +5112,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0144: explain the process in part D (b=0.877, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4841,13 +5130,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0144: explain the process in part D (b=-0.055, c=0.0)."
     },
     {
       "item_id": "D0145",
-      "a": 0.794,
-      "b": -2.461,
-      "c": 0.1,
+      "a": 1.049,
+      "d": 0.249662,
+      "c": 0.103,
+      "u": 1.0,
+      "b": -0.238,
       "tags": {
         "KC": "biology",
         "Bloom": "remember",
@@ -4855,7 +5147,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/remember] D0145: identify the structure in part A (b=-2.461, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -4874,13 +5165,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0145: identify the structure in part A (b=-0.238, c=0.1)."
     },
     {
       "item_id": "D0146",
-      "a": 0.473,
-      "b": 0.883,
+      "a": 1.613,
+      "d": -1.827529,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.133,
       "tags": {
         "KC": "chemistry",
         "Bloom": "understand",
@@ -4888,7 +5182,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0146: balance the reaction in part B (b=0.883, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4907,13 +5200,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0146: balance the reaction in part B (b=1.133, c=0.0)."
     },
     {
       "item_id": "D0147",
-      "a": 2.113,
-      "b": 1.056,
+      "a": 0.724,
+      "d": 0.210684,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.291,
       "tags": {
         "KC": "physics",
         "Bloom": "apply",
@@ -4921,7 +5217,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/apply] D0147: compute the quantity in part C (b=1.056, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -4940,13 +5235,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0147: compute the quantity in part C (b=-0.291, c=0.0)."
     },
     {
       "item_id": "D0148",
-      "a": 0.404,
-      "b": -2.489,
-      "c": 0.1,
+      "a": 1.198,
+      "d": 0.298302,
+      "c": 0.138,
+      "u": 1.0,
+      "b": -0.249,
       "tags": {
         "KC": "earth",
         "Bloom": "analyze",
@@ -4954,7 +5252,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0148: explain the process in part D (b=-2.489, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -4973,13 +5270,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0148: explain the process in part D (b=-0.249, c=0.1)."
     },
     {
       "item_id": "D0149",
-      "a": 1.444,
-      "b": -0.769,
+      "a": 1.923,
+      "d": 0.59613,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.31,
       "tags": {
         "KC": "biology",
         "Bloom": "evaluate",
@@ -4990,7 +5290,6 @@
         "D0181",
         "D0085"
       ],
-      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0149: identify the structure in part A (b=-0.769, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5009,13 +5308,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/evaluate] D0149: identify the structure in part A (b=-0.31, c=0.0)."
     },
     {
       "item_id": "D0150",
-      "a": 1.446,
-      "b": 2.614,
-      "c": 0.15,
+      "a": 1.03,
+      "d": -1.01455,
+      "c": 0.119,
+      "u": 1.0,
+      "b": 0.985,
       "tags": {
         "KC": "chemistry",
         "Bloom": "remember",
@@ -5023,7 +5325,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0150: balance the reaction in part B (b=2.614, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -5042,13 +5343,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/remember] D0150: balance the reaction in part B (b=0.985, c=0.15)."
     },
     {
       "item_id": "D0151",
-      "a": 1.036,
-      "b": -1.719,
+      "a": 1.502,
+      "d": 0.426568,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.284,
       "tags": {
         "KC": "physics",
         "Bloom": "understand",
@@ -5056,7 +5360,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/understand] D0151: compute the quantity in part C (b=-1.719, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5075,13 +5378,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/understand] D0151: compute the quantity in part C (b=-0.284, c=0.0)."
     },
     {
       "item_id": "D0152",
-      "a": 0.554,
-      "b": -2.482,
+      "a": 1.038,
+      "d": -0.858426,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.827,
       "tags": {
         "KC": "earth",
         "Bloom": "apply",
@@ -5089,7 +5395,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/apply] D0152: explain the process in part D (b=-2.482, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5108,13 +5413,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/apply] D0152: explain the process in part D (b=0.827, c=0.0)."
     },
     {
       "item_id": "D0153",
-      "a": 1.075,
-      "b": 2.251,
+      "a": 1.094,
+      "d": -0.226458,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.207,
       "tags": {
         "KC": "biology",
         "Bloom": "analyze",
@@ -5122,7 +5430,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0153: identify the structure in part A (b=2.251, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5141,13 +5448,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/analyze] D0153: identify the structure in part A (b=0.207, c=0.0)."
     },
     {
       "item_id": "D0154",
-      "a": 1.453,
-      "b": -2.162,
+      "a": 0.773,
+      "d": 0.57202,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.74,
       "tags": {
         "KC": "chemistry",
         "Bloom": "evaluate",
@@ -5155,7 +5465,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0154: balance the reaction in part B (b=-2.162, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5174,13 +5483,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/evaluate] D0154: balance the reaction in part B (b=-0.74, c=0.0)."
     },
     {
       "item_id": "D0155",
-      "a": 1.708,
-      "b": 0.128,
+      "a": 1.063,
+      "d": 0.862093,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.811,
       "tags": {
         "KC": "physics",
         "Bloom": "remember",
@@ -5188,7 +5500,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/remember] D0155: compute the quantity in part C (b=0.128, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5207,13 +5518,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/remember] D0155: compute the quantity in part C (b=-0.811, c=0.0)."
     },
     {
       "item_id": "D0156",
-      "a": 1.106,
-      "b": 0.83,
+      "a": 0.753,
+      "d": 0.286893,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.381,
       "tags": {
         "KC": "earth",
         "Bloom": "understand",
@@ -5221,7 +5535,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/understand] D0156: explain the process in part D (b=0.83, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5240,13 +5553,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/understand] D0156: explain the process in part D (b=-0.381, c=0.0)."
     },
     {
       "item_id": "D0157",
-      "a": 1.663,
-      "b": 1.294,
+      "a": 1.1,
+      "d": -2.4959,
       "c": 0.0,
+      "u": 1.0,
+      "b": 2.269,
       "tags": {
         "KC": "biology",
         "Bloom": "apply",
@@ -5254,7 +5570,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/apply] D0157: identify the structure in part A (b=1.294, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5273,13 +5588,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/apply] D0157: identify the structure in part A (b=2.269, c=0.0)."
     },
     {
       "item_id": "D0158",
-      "a": 1.23,
-      "b": 0.072,
+      "a": 1.222,
+      "d": 0.698984,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.572,
       "tags": {
         "KC": "chemistry",
         "Bloom": "analyze",
@@ -5287,7 +5605,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0158: balance the reaction in part B (b=0.072, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5306,13 +5623,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/analyze] D0158: balance the reaction in part B (b=-0.572, c=0.0)."
     },
     {
       "item_id": "D0159",
-      "a": 1.716,
-      "b": 2.642,
-      "c": 0.15,
+      "a": 1.206,
+      "d": -0.914148,
+      "c": 0.208,
+      "u": 1.0,
+      "b": 0.758,
       "tags": {
         "KC": "physics",
         "Bloom": "evaluate",
@@ -5323,7 +5643,6 @@
         "D0022",
         "D0050"
       ],
-      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0159: compute the quantity in part C (b=2.642, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -5342,13 +5661,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/evaluate] D0159: compute the quantity in part C (b=0.758, c=0.15)."
     },
     {
       "item_id": "D0160",
-      "a": 0.473,
-      "b": 1.304,
+      "a": 0.962,
+      "d": -1.39971,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.455,
       "tags": {
         "KC": "earth",
         "Bloom": "remember",
@@ -5356,7 +5678,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/remember] D0160: explain the process in part D (b=1.304, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5375,13 +5696,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/remember] D0160: explain the process in part D (b=1.455, c=0.0)."
     },
     {
       "item_id": "D0161",
-      "a": 1.786,
-      "b": 1.715,
+      "a": 1.476,
+      "d": -1.132092,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.767,
       "tags": {
         "KC": "biology",
         "Bloom": "understand",
@@ -5389,7 +5713,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/understand] D0161: identify the structure in part A (b=1.715, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5408,13 +5731,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/understand] D0161: identify the structure in part A (b=0.767, c=0.0)."
     },
     {
       "item_id": "D0162",
-      "a": 0.768,
-      "b": 1.656,
-      "c": 0.25,
+      "a": 1.004,
+      "d": -0.574288,
+      "c": 0.22,
+      "u": 1.0,
+      "b": 0.572,
       "tags": {
         "KC": "chemistry",
         "Bloom": "apply",
@@ -5422,7 +5748,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0162: balance the reaction in part B (b=1.656, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -5441,13 +5766,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/apply] D0162: balance the reaction in part B (b=0.572, c=0.25)."
     },
     {
       "item_id": "D0163",
-      "a": 1.028,
-      "b": -0.58,
-      "c": 0.2,
+      "a": 1.466,
+      "d": 1.725482,
+      "c": 0.183,
+      "u": 1.0,
+      "b": -1.177,
       "tags": {
         "KC": "physics",
         "Bloom": "analyze",
@@ -5458,7 +5786,6 @@
         "D0183",
         "D0065"
       ],
-      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0163: compute the quantity in part C (b=-0.58, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -5477,13 +5804,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/analyze] D0163: compute the quantity in part C (b=-1.177, c=0.2)."
     },
     {
       "item_id": "D0164",
-      "a": 1.953,
-      "b": -2.684,
+      "a": 1.274,
+      "d": 0.105742,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.083,
       "tags": {
         "KC": "earth",
         "Bloom": "evaluate",
@@ -5491,7 +5821,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0164: explain the process in part D (b=-2.684, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5510,13 +5839,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/evaluate] D0164: explain the process in part D (b=-0.083, c=0.0)."
     },
     {
       "item_id": "D0165",
-      "a": 0.681,
-      "b": -1.166,
-      "c": 0.1,
+      "a": 0.961,
+      "d": -0.917755,
+      "c": 0.158,
+      "u": 1.0,
+      "b": 0.955,
       "tags": {
         "KC": "biology",
         "Bloom": "remember",
@@ -5524,7 +5856,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/biology/remember] D0165: identify the structure in part A (b=-1.166, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -5543,13 +5874,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 science/biology/remember] D0165: identify the structure in part A (b=0.955, c=0.1)."
     },
     {
       "item_id": "D0166",
-      "a": 1.986,
-      "b": 0.632,
+      "a": 1.164,
+      "d": 1.997424,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.716,
       "tags": {
         "KC": "chemistry",
         "Bloom": "understand",
@@ -5557,7 +5891,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0166: balance the reaction in part B (b=0.632, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5576,13 +5909,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 science/chemistry/understand] D0166: balance the reaction in part B (b=-1.716, c=0.0)."
     },
     {
       "item_id": "D0167",
-      "a": 0.777,
-      "b": -0.374,
+      "a": 1.897,
+      "d": -3.526523,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.859,
       "tags": {
         "KC": "physics",
         "Bloom": "apply",
@@ -5590,7 +5926,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/physics/apply] D0167: compute the quantity in part C (b=-0.374, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5609,13 +5944,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 science/physics/apply] D0167: compute the quantity in part C (b=1.859, c=0.0)."
     },
     {
       "item_id": "D0168",
-      "a": 1.791,
-      "b": -2.416,
+      "a": 0.837,
+      "d": -0.202554,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.242,
       "tags": {
         "KC": "earth",
         "Bloom": "analyze",
@@ -5623,7 +5961,6 @@
         "domain": "science"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0168: explain the process in part D (b=-2.416, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5642,13 +5979,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 science/earth/analyze] D0168: explain the process in part D (b=0.242, c=0.0)."
     },
     {
       "item_id": "D0169",
-      "a": 2.074,
-      "b": -1.215,
-      "c": 0.1,
+      "a": 0.866,
+      "d": 0.781998,
+      "c": 0.148,
+      "u": 1.0,
+      "b": -0.903,
       "tags": {
         "KC": "reading",
         "Bloom": "remember",
@@ -5656,7 +5996,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0169: infer the meaning in part A (b=-1.215, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -5675,13 +6014,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0169: infer the meaning in part A (b=-0.903, c=0.1)."
     },
     {
       "item_id": "D0170",
-      "a": 1.242,
-      "b": -0.732,
-      "c": 0.15,
+      "a": 1.325,
+      "d": -1.65095,
+      "c": 0.177,
+      "u": 1.0,
+      "b": 1.246,
       "tags": {
         "KC": "writing",
         "Bloom": "understand",
@@ -5689,7 +6031,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0170: revise the passage in part B (b=-0.732, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -5708,13 +6049,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0170: revise the passage in part B (b=1.246, c=0.15)."
     },
     {
       "item_id": "D0171",
-      "a": 0.557,
-      "b": -1.156,
-      "c": 0.25,
+      "a": 1.888,
+      "d": 1.448096,
+      "c": 0.195,
+      "u": 1.0,
+      "b": -0.767,
       "tags": {
         "KC": "grammar",
         "Bloom": "apply",
@@ -5722,7 +6066,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0171: correct the sentence in part C (b=-1.156, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -5741,13 +6084,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0171: correct the sentence in part C (b=-0.767, c=0.25)."
     },
     {
       "item_id": "D0172",
-      "a": 2.004,
-      "b": 0.798,
+      "a": 1.379,
+      "d": 0.576422,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.418,
       "tags": {
         "KC": "vocab",
         "Bloom": "analyze",
@@ -5757,7 +6103,6 @@
       "enemy_of": [
         "D0089"
       ],
-      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0172: choose the best word for part D (b=0.798, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5776,13 +6121,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0172: choose the best word for part D (b=-0.418, c=0.0)."
     },
     {
       "item_id": "D0173",
-      "a": 1.493,
-      "b": 1.943,
+      "a": 1.025,
+      "d": 0.0246,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.024,
       "tags": {
         "KC": "reading",
         "Bloom": "evaluate",
@@ -5790,7 +6138,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0173: infer the meaning in part A (b=1.943, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5809,13 +6156,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0173: infer the meaning in part A (b=-0.024, c=0.0)."
     },
     {
       "item_id": "D0174",
-      "a": 0.737,
-      "b": 2.552,
+      "a": 1.981,
+      "d": 0.289226,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.146,
       "tags": {
         "KC": "writing",
         "Bloom": "remember",
@@ -5823,7 +6173,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0174: revise the passage in part B (b=2.552, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5842,13 +6191,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0174: revise the passage in part B (b=-0.146, c=0.0)."
     },
     {
       "item_id": "D0175",
-      "a": 0.927,
-      "b": -0.362,
+      "a": 1.823,
+      "d": -2.93503,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.61,
       "tags": {
         "KC": "grammar",
         "Bloom": "understand",
@@ -5856,7 +6208,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0175: correct the sentence in part C (b=-0.362, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5875,13 +6226,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0175: correct the sentence in part C (b=1.61, c=0.0)."
     },
     {
       "item_id": "D0176",
-      "a": 1.629,
-      "b": -1.485,
+      "a": 0.783,
+      "d": -0.505035,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.645,
       "tags": {
         "KC": "vocab",
         "Bloom": "apply",
@@ -5889,7 +6243,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0176: choose the best word for part D (b=-1.485, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5908,13 +6261,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0176: choose the best word for part D (b=0.645, c=0.0)."
     },
     {
       "item_id": "D0177",
-      "a": 0.94,
-      "b": -0.766,
-      "c": 0.1,
+      "a": 1.987,
+      "d": 3.45738,
+      "c": 0.138,
+      "u": 1.0,
+      "b": -1.74,
       "tags": {
         "KC": "reading",
         "Bloom": "analyze",
@@ -5922,7 +6278,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0177: infer the meaning in part A (b=-0.766, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -5941,13 +6296,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0177: infer the meaning in part A (b=-1.74, c=0.1)."
     },
     {
       "item_id": "D0178",
-      "a": 1.92,
-      "b": 2.496,
+      "a": 1.516,
+      "d": -0.812576,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.536,
       "tags": {
         "KC": "writing",
         "Bloom": "evaluate",
@@ -5955,7 +6313,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0178: revise the passage in part B (b=2.496, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -5974,13 +6331,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0178: revise the passage in part B (b=0.536, c=0.0)."
     },
     {
       "item_id": "D0179",
-      "a": 1.928,
-      "b": -2.366,
+      "a": 0.64,
+      "d": -0.16832,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.263,
       "tags": {
         "KC": "grammar",
         "Bloom": "remember",
@@ -5988,7 +6348,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0179: correct the sentence in part C (b=-2.366, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6007,13 +6366,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0179: correct the sentence in part C (b=0.263, c=0.0)."
     },
     {
       "item_id": "D0180",
-      "a": 1.077,
-      "b": -0.863,
-      "c": 0.2,
+      "a": 0.841,
+      "d": 0.693825,
+      "c": 0.166,
+      "u": 1.0,
+      "b": -0.825,
       "tags": {
         "KC": "vocab",
         "Bloom": "understand",
@@ -6021,7 +6383,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0180: choose the best word for part D (b=-0.863, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -6040,13 +6401,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0180: choose the best word for part D (b=-0.825, c=0.2)."
     },
     {
       "item_id": "D0181",
-      "a": 2.112,
-      "b": -1.584,
+      "a": 1.302,
+      "d": -0.829374,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.637,
       "tags": {
         "KC": "reading",
         "Bloom": "apply",
@@ -6057,7 +6421,6 @@
         "D0149",
         "D0085"
       ],
-      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0181: infer the meaning in part A (b=-1.584, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6076,13 +6439,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0181: infer the meaning in part A (b=0.637, c=0.0)."
     },
     {
       "item_id": "D0182",
-      "a": 1.301,
-      "b": -1.411,
+      "a": 1.134,
+      "d": -0.21546,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.19,
       "tags": {
         "KC": "writing",
         "Bloom": "analyze",
@@ -6090,7 +6456,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0182: revise the passage in part B (b=-1.411, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6109,13 +6474,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0182: revise the passage in part B (b=0.19, c=0.0)."
     },
     {
       "item_id": "D0183",
-      "a": 0.403,
-      "b": 2.241,
+      "a": 1.362,
+      "d": 0.250608,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.184,
       "tags": {
         "KC": "grammar",
         "Bloom": "evaluate",
@@ -6126,7 +6494,6 @@
         "D0065",
         "D0163"
       ],
-      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0183: correct the sentence in part C (b=2.241, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6145,13 +6512,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0183: correct the sentence in part C (b=-0.184, c=0.0)."
     },
     {
       "item_id": "D0184",
-      "a": 0.854,
-      "b": 1.254,
+      "a": 1.751,
+      "d": 0.987564,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.564,
       "tags": {
         "KC": "vocab",
         "Bloom": "remember",
@@ -6162,7 +6532,6 @@
         "D0239",
         "D0240"
       ],
-      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0184: choose the best word for part D (b=1.254, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6181,13 +6550,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0184: choose the best word for part D (b=-0.564, c=0.0)."
     },
     {
       "item_id": "D0185",
-      "a": 2.097,
-      "b": 0.034,
+      "a": 1.103,
+      "d": -1.166974,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.058,
       "tags": {
         "KC": "reading",
         "Bloom": "understand",
@@ -6195,7 +6567,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0185: infer the meaning in part A (b=0.034, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6214,13 +6585,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0185: infer the meaning in part A (b=1.058, c=0.0)."
     },
     {
       "item_id": "D0186",
-      "a": 1.1,
-      "b": -2.626,
+      "a": 1.227,
+      "d": 0.07362,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.06,
       "tags": {
         "KC": "writing",
         "Bloom": "apply",
@@ -6228,7 +6602,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0186: revise the passage in part B (b=-2.626, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6247,13 +6620,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0186: revise the passage in part B (b=-0.06, c=0.0)."
     },
     {
       "item_id": "D0187",
-      "a": 0.791,
-      "b": 1.661,
+      "a": 1.103,
+      "d": -2.427703,
       "c": 0.0,
+      "u": 1.0,
+      "b": 2.201,
       "tags": {
         "KC": "grammar",
         "Bloom": "analyze",
@@ -6261,7 +6637,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0187: correct the sentence in part C (b=1.661, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6280,13 +6655,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0187: correct the sentence in part C (b=2.201, c=0.0)."
     },
     {
       "item_id": "D0188",
-      "a": 0.694,
-      "b": -2.286,
+      "a": 1.428,
+      "d": -1.745016,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.222,
       "tags": {
         "KC": "vocab",
         "Bloom": "evaluate",
@@ -6296,7 +6674,6 @@
       "enemy_of": [
         "D0059"
       ],
-      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0188: choose the best word for part D (b=-2.286, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6315,13 +6692,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0188: choose the best word for part D (b=1.222, c=0.0)."
     },
     {
       "item_id": "D0189",
-      "a": 1.557,
-      "b": 2.308,
-      "c": 0.2,
+      "a": 1.66,
+      "d": -1.1952,
+      "c": 0.143,
+      "u": 1.0,
+      "b": 0.72,
       "tags": {
         "KC": "reading",
         "Bloom": "remember",
@@ -6329,7 +6709,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0189: infer the meaning in part A (b=2.308, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -6348,13 +6727,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0189: infer the meaning in part A (b=0.72, c=0.2)."
     },
     {
       "item_id": "D0190",
-      "a": 1.04,
-      "b": 1.872,
-      "c": 0.15,
+      "a": 0.98,
+      "d": -1.0241,
+      "c": 0.159,
+      "u": 1.0,
+      "b": 1.045,
       "tags": {
         "KC": "writing",
         "Bloom": "understand",
@@ -6364,7 +6746,6 @@
       "enemy_of": [
         "D0209"
       ],
-      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0190: revise the passage in part B (b=1.872, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -6383,13 +6764,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0190: revise the passage in part B (b=1.045, c=0.15)."
     },
     {
       "item_id": "D0191",
-      "a": 1.98,
-      "b": 0.209,
+      "a": 1.476,
+      "d": 2.423592,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.642,
       "tags": {
         "KC": "grammar",
         "Bloom": "apply",
@@ -6397,7 +6781,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0191: correct the sentence in part C (b=0.209, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6416,13 +6799,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0191: correct the sentence in part C (b=-1.642, c=0.0)."
     },
     {
       "item_id": "D0192",
-      "a": 1.103,
-      "b": -0.216,
-      "c": 0.15,
+      "a": 1.984,
+      "d": -0.8928,
+      "c": 0.188,
+      "u": 1.0,
+      "b": 0.45,
       "tags": {
         "KC": "vocab",
         "Bloom": "analyze",
@@ -6430,7 +6816,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0192: choose the best word for part D (b=-0.216, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -6449,13 +6834,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0192: choose the best word for part D (b=0.45, c=0.15)."
     },
     {
       "item_id": "D0193",
-      "a": 0.505,
-      "b": -2.6,
+      "a": 1.719,
+      "d": -4.2975,
       "c": 0.0,
+      "u": 1.0,
+      "b": 2.5,
       "tags": {
         "KC": "reading",
         "Bloom": "evaluate",
@@ -6463,7 +6851,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0193: infer the meaning in part A (b=-2.6, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6482,13 +6869,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0193: infer the meaning in part A (b=2.5, c=0.0)."
     },
     {
       "item_id": "D0194",
-      "a": 1.045,
-      "b": 2.697,
-      "c": 0.25,
+      "a": 1.087,
+      "d": 0.950038,
+      "c": 0.226,
+      "u": 1.0,
+      "b": -0.874,
       "tags": {
         "KC": "writing",
         "Bloom": "remember",
@@ -6496,7 +6886,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0194: revise the passage in part B (b=2.697, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -6515,13 +6904,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0194: revise the passage in part B (b=-0.874, c=0.25)."
     },
     {
       "item_id": "D0195",
-      "a": 1.461,
-      "b": 0.884,
-      "c": 0.25,
+      "a": 1.576,
+      "d": -3.185096,
+      "c": 0.235,
+      "u": 1.0,
+      "b": 2.021,
       "tags": {
         "KC": "grammar",
         "Bloom": "understand",
@@ -6529,7 +6921,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0195: correct the sentence in part C (b=0.884, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -6548,13 +6939,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0195: correct the sentence in part C (b=2.021, c=0.25)."
     },
     {
       "item_id": "D0196",
-      "a": 0.898,
-      "b": 0.411,
-      "c": 0.1,
+      "a": 1.855,
+      "d": -0.458185,
+      "c": 0.151,
+      "u": 1.0,
+      "b": 0.247,
       "tags": {
         "KC": "vocab",
         "Bloom": "apply",
@@ -6562,7 +6956,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0196: choose the best word for part D (b=0.411, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -6581,13 +6974,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0196: choose the best word for part D (b=0.247, c=0.1)."
     },
     {
       "item_id": "D0197",
-      "a": 1.055,
-      "b": 0.915,
+      "a": 1.617,
+      "d": -0.903903,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.559,
       "tags": {
         "KC": "reading",
         "Bloom": "analyze",
@@ -6595,7 +6991,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0197: infer the meaning in part A (b=0.915, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6614,13 +7009,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0197: infer the meaning in part A (b=0.559, c=0.0)."
     },
     {
       "item_id": "D0198",
-      "a": 0.448,
-      "b": 1.484,
-      "c": 0.25,
+      "a": 1.493,
+      "d": 1.573622,
+      "c": 0.157,
+      "u": 1.0,
+      "b": -1.054,
       "tags": {
         "KC": "writing",
         "Bloom": "evaluate",
@@ -6630,7 +7028,6 @@
       "enemy_of": [
         "D0245"
       ],
-      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0198: revise the passage in part B (b=1.484, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -6649,13 +7046,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0198: revise the passage in part B (b=-1.054, c=0.25)."
     },
     {
       "item_id": "D0199",
-      "a": 2.08,
-      "b": -1.85,
+      "a": 1.889,
+      "d": 1.528201,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.809,
       "tags": {
         "KC": "grammar",
         "Bloom": "remember",
@@ -6663,7 +7063,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0199: correct the sentence in part C (b=-1.85, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6682,13 +7081,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0199: correct the sentence in part C (b=-0.809, c=0.0)."
     },
     {
       "item_id": "D0200",
-      "a": 2.036,
-      "b": 0.48,
+      "a": 1.199,
+      "d": 0.148676,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.124,
       "tags": {
         "KC": "vocab",
         "Bloom": "understand",
@@ -6696,7 +7098,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0200: choose the best word for part D (b=0.48, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6715,13 +7116,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0200: choose the best word for part D (b=-0.124, c=0.0)."
     },
     {
       "item_id": "D0201",
-      "a": 1.502,
-      "b": 0.625,
+      "a": 1.422,
+      "d": 0.9954,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.7,
       "tags": {
         "KC": "reading",
         "Bloom": "apply",
@@ -6729,7 +7133,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0201: infer the meaning in part A (b=0.625, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6748,13 +7151,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0201: infer the meaning in part A (b=-0.7, c=0.0)."
     },
     {
       "item_id": "D0202",
-      "a": 1.882,
-      "b": -0.998,
+      "a": 1.481,
+      "d": -1.018928,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.688,
       "tags": {
         "KC": "writing",
         "Bloom": "analyze",
@@ -6762,7 +7168,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0202: revise the passage in part B (b=-0.998, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6781,13 +7186,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0202: revise the passage in part B (b=0.688, c=0.0)."
     },
     {
       "item_id": "D0203",
-      "a": 1.91,
-      "b": 1.137,
+      "a": 1.047,
+      "d": 0.480573,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.459,
       "tags": {
         "KC": "grammar",
         "Bloom": "evaluate",
@@ -6797,7 +7205,6 @@
       "enemy_of": [
         "D0251"
       ],
-      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0203: correct the sentence in part C (b=1.137, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6816,13 +7223,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0203: correct the sentence in part C (b=-0.459, c=0.0)."
     },
     {
       "item_id": "D0204",
-      "a": 1.697,
-      "b": 2.041,
+      "a": 1.046,
+      "d": -0.03661,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.035,
       "tags": {
         "KC": "vocab",
         "Bloom": "remember",
@@ -6830,7 +7240,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0204: choose the best word for part D (b=2.041, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6849,13 +7258,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0204: choose the best word for part D (b=0.035, c=0.0)."
     },
     {
       "item_id": "D0205",
-      "a": 1.689,
-      "b": 1.254,
+      "a": 0.759,
+      "d": 0.739266,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.974,
       "tags": {
         "KC": "reading",
         "Bloom": "understand",
@@ -6863,7 +7275,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0205: infer the meaning in part A (b=1.254, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6882,13 +7293,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0205: infer the meaning in part A (b=-0.974, c=0.0)."
     },
     {
       "item_id": "D0206",
-      "a": 1.434,
-      "b": 1.263,
+      "a": 1.128,
+      "d": -0.125208,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.111,
       "tags": {
         "KC": "writing",
         "Bloom": "apply",
@@ -6896,7 +7310,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0206: revise the passage in part B (b=1.263, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6915,13 +7328,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0206: revise the passage in part B (b=0.111, c=0.0)."
     },
     {
       "item_id": "D0207",
-      "a": 1.462,
-      "b": 0.516,
+      "a": 0.643,
+      "d": -0.486108,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.756,
       "tags": {
         "KC": "grammar",
         "Bloom": "analyze",
@@ -6929,7 +7345,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0207: correct the sentence in part C (b=0.516, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -6948,13 +7363,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0207: correct the sentence in part C (b=0.756, c=0.0)."
     },
     {
       "item_id": "D0208",
-      "a": 1.581,
-      "b": 1.584,
-      "c": 0.25,
+      "a": 0.614,
+      "d": 0.030086,
+      "c": 0.188,
+      "u": 1.0,
+      "b": -0.049,
       "tags": {
         "KC": "vocab",
         "Bloom": "evaluate",
@@ -6962,7 +7380,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0208: choose the best word for part D (b=1.584, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -6981,13 +7398,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0208: choose the best word for part D (b=-0.049, c=0.25)."
     },
     {
       "item_id": "D0209",
-      "a": 0.591,
-      "b": -0.951,
+      "a": 0.654,
+      "d": 1.434222,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.193,
       "tags": {
         "KC": "reading",
         "Bloom": "remember",
@@ -6997,7 +7417,6 @@
       "enemy_of": [
         "D0190"
       ],
-      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0209: infer the meaning in part A (b=-0.951, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7016,13 +7435,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0209: infer the meaning in part A (b=-2.193, c=0.0)."
     },
     {
       "item_id": "D0210",
-      "a": 0.981,
-      "b": 0.044,
-      "c": 0.15,
+      "a": 0.681,
+      "d": 0.718455,
+      "c": 0.171,
+      "u": 1.0,
+      "b": -1.055,
       "tags": {
         "KC": "writing",
         "Bloom": "understand",
@@ -7030,7 +7452,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0210: revise the passage in part B (b=0.044, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -7049,13 +7470,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0210: revise the passage in part B (b=-1.055, c=0.15)."
     },
     {
       "item_id": "D0211",
-      "a": 1.744,
-      "b": -1.73,
-      "c": 0.25,
+      "a": 1.769,
+      "d": -0.077836,
+      "c": 0.109,
+      "u": 1.0,
+      "b": 0.044,
       "tags": {
         "KC": "grammar",
         "Bloom": "apply",
@@ -7063,7 +7487,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0211: correct the sentence in part C (b=-1.73, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -7082,13 +7505,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0211: correct the sentence in part C (b=0.044, c=0.25)."
     },
     {
       "item_id": "D0212",
-      "a": 1.391,
-      "b": -0.685,
-      "c": 0.2,
+      "a": 1.574,
+      "d": -0.917642,
+      "c": 0.214,
+      "u": 1.0,
+      "b": 0.583,
       "tags": {
         "KC": "vocab",
         "Bloom": "analyze",
@@ -7096,7 +7522,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0212: choose the best word for part D (b=-0.685, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -7115,13 +7540,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0212: choose the best word for part D (b=0.583, c=0.2)."
     },
     {
       "item_id": "D0213",
-      "a": 1.283,
-      "b": 2.715,
-      "c": 0.15,
+      "a": 1.198,
+      "d": 2.19234,
+      "c": 0.137,
+      "u": 1.0,
+      "b": -1.83,
       "tags": {
         "KC": "reading",
         "Bloom": "evaluate",
@@ -7129,7 +7557,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0213: infer the meaning in part A (b=2.715, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -7148,13 +7575,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0213: infer the meaning in part A (b=-1.83, c=0.15)."
     },
     {
       "item_id": "D0214",
-      "a": 1.8,
-      "b": 0.411,
-      "c": 0.2,
+      "a": 1.72,
+      "d": -4.3,
+      "c": 0.221,
+      "u": 1.0,
+      "b": 2.5,
       "tags": {
         "KC": "writing",
         "Bloom": "remember",
@@ -7165,7 +7595,6 @@
         "D0141",
         "D0037"
       ],
-      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0214: revise the passage in part B (b=0.411, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -7184,13 +7613,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0214: revise the passage in part B (b=2.5, c=0.2)."
     },
     {
       "item_id": "D0215",
-      "a": 1.69,
-      "b": -1.17,
+      "a": 1.234,
+      "d": -0.260374,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.211,
       "tags": {
         "KC": "grammar",
         "Bloom": "understand",
@@ -7198,7 +7630,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0215: correct the sentence in part C (b=-1.17, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7217,13 +7648,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0215: correct the sentence in part C (b=0.211, c=0.0)."
     },
     {
       "item_id": "D0216",
-      "a": 1.656,
-      "b": 1.314,
+      "a": 1.863,
+      "d": 1.781028,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.956,
       "tags": {
         "KC": "vocab",
         "Bloom": "apply",
@@ -7231,7 +7665,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0216: choose the best word for part D (b=1.314, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7250,13 +7683,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0216: choose the best word for part D (b=-0.956, c=0.0)."
     },
     {
       "item_id": "D0217",
-      "a": 0.832,
-      "b": 2.321,
-      "c": 0.1,
+      "a": 1.644,
+      "d": 2.469288,
+      "c": 0.201,
+      "u": 1.0,
+      "b": -1.502,
       "tags": {
         "KC": "reading",
         "Bloom": "analyze",
@@ -7266,7 +7702,6 @@
       "enemy_of": [
         "D0031"
       ],
-      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0217: infer the meaning in part A (b=2.321, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -7285,13 +7720,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0217: infer the meaning in part A (b=-1.502, c=0.1)."
     },
     {
       "item_id": "D0218",
-      "a": 2.05,
-      "b": -0.722,
+      "a": 1.812,
+      "d": 2.670888,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.474,
       "tags": {
         "KC": "writing",
         "Bloom": "evaluate",
@@ -7299,7 +7737,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0218: revise the passage in part B (b=-0.722, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7318,13 +7755,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0218: revise the passage in part B (b=-1.474, c=0.0)."
     },
     {
       "item_id": "D0219",
-      "a": 0.664,
-      "b": -0.691,
-      "c": 0.1,
+      "a": 1.094,
+      "d": 2.047968,
+      "c": 0.165,
+      "u": 1.0,
+      "b": -1.872,
       "tags": {
         "KC": "grammar",
         "Bloom": "remember",
@@ -7332,7 +7772,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0219: correct the sentence in part C (b=-0.691, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -7351,13 +7790,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0219: correct the sentence in part C (b=-1.872, c=0.1)."
     },
     {
       "item_id": "D0220",
-      "a": 1.95,
-      "b": 1.591,
+      "a": 1.037,
+      "d": -1.943338,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.874,
       "tags": {
         "KC": "vocab",
         "Bloom": "understand",
@@ -7365,7 +7807,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0220: choose the best word for part D (b=1.591, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7384,13 +7825,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0220: choose the best word for part D (b=1.874, c=0.0)."
     },
     {
       "item_id": "D0221",
-      "a": 1.732,
-      "b": -1.698,
+      "a": 1.731,
+      "d": 1.185735,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.685,
       "tags": {
         "KC": "reading",
         "Bloom": "apply",
@@ -7398,7 +7842,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0221: infer the meaning in part A (b=-1.698, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7417,13 +7860,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0221: infer the meaning in part A (b=-0.685, c=0.0)."
     },
     {
       "item_id": "D0222",
-      "a": 1.978,
-      "b": -1.02,
-      "c": 0.25,
+      "a": 1.396,
+      "d": -1.280132,
+      "c": 0.113,
+      "u": 1.0,
+      "b": 0.917,
       "tags": {
         "KC": "writing",
         "Bloom": "analyze",
@@ -7431,7 +7877,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0222: revise the passage in part B (b=-1.02, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -7450,13 +7895,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0222: revise the passage in part B (b=0.917, c=0.25)."
     },
     {
       "item_id": "D0223",
-      "a": 2.076,
-      "b": -1.573,
+      "a": 1.778,
+      "d": 0.464058,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.261,
       "tags": {
         "KC": "grammar",
         "Bloom": "evaluate",
@@ -7468,7 +7916,6 @@
         "D0009",
         "D0224"
       ],
-      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0223: correct the sentence in part C (b=-1.573, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7487,13 +7934,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0223: correct the sentence in part C (b=-0.261, c=0.0)."
     },
     {
       "item_id": "D0224",
-      "a": 1.634,
-      "b": -1.65,
-      "c": 0.2,
+      "a": 0.732,
+      "d": 0.160308,
+      "c": 0.144,
+      "u": 1.0,
+      "b": -0.219,
       "tags": {
         "KC": "vocab",
         "Bloom": "remember",
@@ -7505,7 +7955,6 @@
         "D0054",
         "D0009"
       ],
-      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0224: choose the best word for part D (b=-1.65, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -7524,13 +7973,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0224: choose the best word for part D (b=-0.219, c=0.2)."
     },
     {
       "item_id": "D0225",
-      "a": 0.849,
-      "b": -0.32,
+      "a": 1.202,
+      "d": -0.754856,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.628,
       "tags": {
         "KC": "reading",
         "Bloom": "understand",
@@ -7538,7 +7990,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0225: infer the meaning in part A (b=-0.32, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7557,13 +8008,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0225: infer the meaning in part A (b=0.628, c=0.0)."
     },
     {
       "item_id": "D0226",
-      "a": 0.886,
-      "b": 1.998,
+      "a": 1.636,
+      "d": 3.064228,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.873,
       "tags": {
         "KC": "writing",
         "Bloom": "apply",
@@ -7575,7 +8029,6 @@
         "D0101",
         "D0127"
       ],
-      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0226: revise the passage in part B (b=1.998, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7594,13 +8047,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0226: revise the passage in part B (b=-1.873, c=0.0)."
     },
     {
       "item_id": "D0227",
-      "a": 0.455,
-      "b": 2.038,
-      "c": 0.25,
+      "a": 1.623,
+      "d": 0.761187,
+      "c": 0.153,
+      "u": 1.0,
+      "b": -0.469,
       "tags": {
         "KC": "grammar",
         "Bloom": "analyze",
@@ -7608,7 +8064,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0227: correct the sentence in part C (b=2.038, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -7627,13 +8082,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0227: correct the sentence in part C (b=-0.469, c=0.25)."
     },
     {
       "item_id": "D0228",
-      "a": 1.508,
-      "b": -1.121,
+      "a": 1.643,
+      "d": 0.059148,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.036,
       "tags": {
         "KC": "vocab",
         "Bloom": "evaluate",
@@ -7641,7 +8099,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0228: choose the best word for part D (b=-1.121, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7660,13 +8117,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0228: choose the best word for part D (b=-0.036, c=0.0)."
     },
     {
       "item_id": "D0229",
-      "a": 1.179,
-      "b": 1.09,
-      "c": 0.2,
+      "a": 0.636,
+      "d": -0.006996,
+      "c": 0.149,
+      "u": 1.0,
+      "b": 0.011,
       "tags": {
         "KC": "reading",
         "Bloom": "remember",
@@ -7674,7 +8134,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0229: infer the meaning in part A (b=1.09, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -7693,13 +8152,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0229: infer the meaning in part A (b=0.011, c=0.2)."
     },
     {
       "item_id": "D0230",
-      "a": 1.529,
-      "b": 0.741,
-      "c": 0.2,
+      "a": 1.055,
+      "d": -0.212055,
+      "c": 0.172,
+      "u": 1.0,
+      "b": 0.201,
       "tags": {
         "KC": "writing",
         "Bloom": "understand",
@@ -7707,7 +8169,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0230: revise the passage in part B (b=0.741, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -7726,13 +8187,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0230: revise the passage in part B (b=0.201, c=0.2)."
     },
     {
       "item_id": "D0231",
-      "a": 1.884,
-      "b": -2.147,
+      "a": 0.847,
+      "d": 0.446369,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.527,
       "tags": {
         "KC": "grammar",
         "Bloom": "apply",
@@ -7740,7 +8204,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0231: correct the sentence in part C (b=-2.147, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7759,13 +8222,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0231: correct the sentence in part C (b=-0.527, c=0.0)."
     },
     {
       "item_id": "D0232",
-      "a": 0.903,
-      "b": 0.597,
+      "a": 1.705,
+      "d": 0.267685,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.157,
       "tags": {
         "KC": "vocab",
         "Bloom": "analyze",
@@ -7773,7 +8239,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0232: choose the best word for part D (b=0.597, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7792,13 +8257,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0232: choose the best word for part D (b=-0.157, c=0.0)."
     },
     {
       "item_id": "D0233",
-      "a": 0.457,
-      "b": 1.259,
+      "a": 1.769,
+      "d": 3.46724,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.96,
       "tags": {
         "KC": "reading",
         "Bloom": "evaluate",
@@ -7806,7 +8274,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0233: infer the meaning in part A (b=1.259, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7825,13 +8292,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/evaluate] D0233: infer the meaning in part A (b=-1.96, c=0.0)."
     },
     {
       "item_id": "D0234",
-      "a": 0.998,
-      "b": -0.173,
-      "c": 0.1,
+      "a": 1.53,
+      "d": -1.81611,
+      "c": 0.184,
+      "u": 1.0,
+      "b": 1.187,
       "tags": {
         "KC": "writing",
         "Bloom": "remember",
@@ -7839,7 +8309,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0234: revise the passage in part B (b=-0.173, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -7858,13 +8327,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/remember] D0234: revise the passage in part B (b=1.187, c=0.1)."
     },
     {
       "item_id": "D0235",
-      "a": 0.858,
-      "b": 1.512,
+      "a": 1.492,
+      "d": 0.84298,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.565,
       "tags": {
         "KC": "grammar",
         "Bloom": "understand",
@@ -7872,7 +8344,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0235: correct the sentence in part C (b=1.512, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7891,13 +8362,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/understand] D0235: correct the sentence in part C (b=-0.565, c=0.0)."
     },
     {
       "item_id": "D0236",
-      "a": 1.947,
-      "b": 2.285,
+      "a": 1.858,
+      "d": -0.38089,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.205,
       "tags": {
         "KC": "vocab",
         "Bloom": "apply",
@@ -7905,7 +8379,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0236: choose the best word for part D (b=2.285, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7924,13 +8397,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/apply] D0236: choose the best word for part D (b=0.205, c=0.0)."
     },
     {
       "item_id": "D0237",
-      "a": 2.091,
-      "b": -1.528,
-      "c": 0.1,
+      "a": 0.918,
+      "d": -0.696762,
+      "c": 0.183,
+      "u": 1.0,
+      "b": 0.759,
       "tags": {
         "KC": "reading",
         "Bloom": "analyze",
@@ -7938,7 +8414,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0237: infer the meaning in part A (b=-1.528, c=0.1).",
       "options": [
         {
           "key": "A",
@@ -7957,13 +8432,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/analyze] D0237: infer the meaning in part A (b=0.759, c=0.1)."
     },
     {
       "item_id": "D0238",
-      "a": 0.638,
-      "b": 1.359,
+      "a": 1.464,
+      "d": 1.12728,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.77,
       "tags": {
         "KC": "writing",
         "Bloom": "evaluate",
@@ -7973,7 +8451,6 @@
       "enemy_of": [
         "D0080"
       ],
-      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0238: revise the passage in part B (b=1.359, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -7992,13 +8469,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/evaluate] D0238: revise the passage in part B (b=-0.77, c=0.0)."
     },
     {
       "item_id": "D0239",
-      "a": 0.909,
-      "b": 0.082,
+      "a": 1.105,
+      "d": -2.354755,
       "c": 0.0,
+      "u": 1.0,
+      "b": 2.131,
       "tags": {
         "KC": "grammar",
         "Bloom": "remember",
@@ -8009,7 +8489,6 @@
         "D0184",
         "D0240"
       ],
-      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0239: correct the sentence in part C (b=0.082, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8028,13 +8507,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/remember] D0239: correct the sentence in part C (b=2.131, c=0.0)."
     },
     {
       "item_id": "D0240",
-      "a": 0.88,
-      "b": -2.164,
+      "a": 1.138,
+      "d": 0.134284,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.118,
       "tags": {
         "KC": "vocab",
         "Bloom": "understand",
@@ -8045,7 +8527,6 @@
         "D0184",
         "D0239"
       ],
-      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0240: choose the best word for part D (b=-2.164, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8064,13 +8545,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/understand] D0240: choose the best word for part D (b=-0.118, c=0.0)."
     },
     {
       "item_id": "D0241",
-      "a": 2.133,
-      "b": -0.982,
+      "a": 1.073,
+      "d": -2.12454,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.98,
       "tags": {
         "KC": "reading",
         "Bloom": "apply",
@@ -8078,7 +8562,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0241: infer the meaning in part A (b=-0.982, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8097,13 +8580,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/apply] D0241: infer the meaning in part A (b=1.98, c=0.0)."
     },
     {
       "item_id": "D0242",
-      "a": 1.891,
-      "b": -2.198,
+      "a": 1.103,
+      "d": 1.872894,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.698,
       "tags": {
         "KC": "writing",
         "Bloom": "analyze",
@@ -8111,7 +8597,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0242: revise the passage in part B (b=-2.198, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8130,13 +8615,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/analyze] D0242: revise the passage in part B (b=-1.698, c=0.0)."
     },
     {
       "item_id": "D0243",
-      "a": 0.928,
-      "b": 1.863,
+      "a": 0.783,
+      "d": 0.936468,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.196,
       "tags": {
         "KC": "grammar",
         "Bloom": "evaluate",
@@ -8144,7 +8632,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0243: correct the sentence in part C (b=1.863, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8163,13 +8650,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/evaluate] D0243: correct the sentence in part C (b=-1.196, c=0.0)."
     },
     {
       "item_id": "D0244",
-      "a": 1.936,
-      "b": 0.764,
+      "a": 1.219,
+      "d": 0.32913,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.27,
       "tags": {
         "KC": "vocab",
         "Bloom": "remember",
@@ -8177,7 +8667,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0244: choose the best word for part D (b=0.764, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8196,13 +8685,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/remember] D0244: choose the best word for part D (b=-0.27, c=0.0)."
     },
     {
       "item_id": "D0245",
-      "a": 0.682,
-      "b": -2.702,
-      "c": 0.15,
+      "a": 1.443,
+      "d": -2.041845,
+      "c": 0.202,
+      "u": 1.0,
+      "b": 1.415,
       "tags": {
         "KC": "reading",
         "Bloom": "understand",
@@ -8212,7 +8704,6 @@
       "enemy_of": [
         "D0198"
       ],
-      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0245: infer the meaning in part A (b=-2.702, c=0.15).",
       "options": [
         {
           "key": "A",
@@ -8231,13 +8722,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/understand] D0245: infer the meaning in part A (b=1.415, c=0.15)."
     },
     {
       "item_id": "D0246",
-      "a": 1.158,
-      "b": -0.779,
+      "a": 1.372,
+      "d": -0.1715,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.125,
       "tags": {
         "KC": "writing",
         "Bloom": "apply",
@@ -8245,7 +8739,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0246: revise the passage in part B (b=-0.779, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8264,13 +8757,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/apply] D0246: revise the passage in part B (b=0.125, c=0.0)."
     },
     {
       "item_id": "D0247",
-      "a": 1.249,
-      "b": 2.465,
+      "a": 0.602,
+      "d": 1.344868,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.234,
       "tags": {
         "KC": "grammar",
         "Bloom": "analyze",
@@ -8278,7 +8774,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0247: correct the sentence in part C (b=2.465, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8297,13 +8792,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/analyze] D0247: correct the sentence in part C (b=-2.234, c=0.0)."
     },
     {
       "item_id": "D0248",
-      "a": 1.206,
-      "b": 0.6,
-      "c": 0.2,
+      "a": 1.558,
+      "d": 1.592276,
+      "c": 0.177,
+      "u": 1.0,
+      "b": -1.022,
       "tags": {
         "KC": "vocab",
         "Bloom": "evaluate",
@@ -8311,7 +8809,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0248: choose the best word for part D (b=0.6, c=0.2).",
       "options": [
         {
           "key": "A",
@@ -8330,13 +8827,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/evaluate] D0248: choose the best word for part D (b=-1.022, c=0.2)."
     },
     {
       "item_id": "D0249",
-      "a": 1.557,
-      "b": -1.88,
-      "c": 0.25,
+      "a": 1.127,
+      "d": -0.290766,
+      "c": 0.244,
+      "u": 1.0,
+      "b": 0.258,
       "tags": {
         "KC": "reading",
         "Bloom": "remember",
@@ -8344,7 +8844,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0249: infer the meaning in part A (b=-1.88, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -8363,13 +8862,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 ela/reading/remember] D0249: infer the meaning in part A (b=0.258, c=0.25)."
     },
     {
       "item_id": "D0250",
-      "a": 1.442,
-      "b": 2.032,
+      "a": 0.811,
+      "d": -0.961846,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.186,
       "tags": {
         "KC": "writing",
         "Bloom": "understand",
@@ -8377,7 +8879,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0250: revise the passage in part B (b=2.032, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8396,13 +8897,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 ela/writing/understand] D0250: revise the passage in part B (b=1.186, c=0.0)."
     },
     {
       "item_id": "D0251",
-      "a": 2.189,
-      "b": 2.759,
-      "c": 0.25,
+      "a": 1.468,
+      "d": 0.6973,
+      "c": 0.137,
+      "u": 1.0,
+      "b": -0.475,
       "tags": {
         "KC": "grammar",
         "Bloom": "apply",
@@ -8412,7 +8916,6 @@
       "enemy_of": [
         "D0203"
       ],
-      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0251: correct the sentence in part C (b=2.759, c=0.25).",
       "options": [
         {
           "key": "A",
@@ -8431,13 +8934,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 ela/grammar/apply] D0251: correct the sentence in part C (b=-0.475, c=0.25)."
     },
     {
       "item_id": "D0252",
-      "a": 1.185,
-      "b": -1.254,
+      "a": 0.962,
+      "d": 0.069264,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.072,
       "tags": {
         "KC": "vocab",
         "Bloom": "analyze",
@@ -8445,7 +8951,6 @@
         "domain": "ela"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0252: choose the best word for part D (b=-1.254, c=0.0).",
       "options": [
         {
           "key": "A",
@@ -8464,7 +8969,8 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 ela/vocab/analyze] D0252: choose the best word for part D (b=-0.072, c=0.0)."
     }
   ]
 }

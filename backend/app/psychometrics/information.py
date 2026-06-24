@@ -1,15 +1,18 @@
 """Closed-form Fisher information and the Test Information Function (TIF).
 
-All computation is on the canonical theta metric (:data:`CANONICAL_D`). Items are
-normalized via :func:`normalize_to_canonical` before their information is used, so
-callers never have to think about scaling here.
+All computation is on the canonical metric: **logistic D=1, slope-intercept** (see
+:mod:`app.psychometrics.params`). Items are normalized via
+:func:`normalize_to_canonical` first, so callers never deal with scaling here.
 
-For the 3PL (the 2PL is the ``c = 0`` special case) item Fisher information is
+Response function (slope-intercept, D=1):
 
-    I(theta) = D^2 a^2 * (Q / P) * ((P - c) / (1 - c))^2
+    P(theta) = c + (1 - c) * sigma(a * theta + d),   sigma(x) = 1 / (1 + e^-x)
 
-with ``P = c + (1 - c) * logistic(D a (theta - b))`` and ``Q = 1 - P``. For the
-2PL this collapses to the familiar ``I = D^2 a^2 P (1 - P)``.
+Fisher information (3PL; the 2PL is the ``c = 0`` special case):
+
+    I(theta) = a^2 * (Q / P) * ((P - c) / (1 - c))^2,   Q = 1 - P
+
+which reduces to ``I = a^2 * P * Q`` at ``c = 0``. No 1.702 factor anywhere.
 """
 
 from __future__ import annotations
@@ -29,9 +32,9 @@ def _logistic(z: float) -> float:
 
 
 def prob_correct(item: ItemParameters, theta: float) -> float:
-    """P(correct | theta) on the canonical metric."""
+    """P(correct | theta) on the canonical metric (slope-intercept, D=1)."""
     it = normalize_to_canonical(item)
-    p_star = _logistic(it.scaling_d * it.a * (theta - it.b))
+    p_star = _logistic(it.a * theta + it.d)
     return it.c + (1.0 - it.c) * p_star
 
 
@@ -42,11 +45,10 @@ def item_information(item: ItemParameters, theta: float) -> float:
     q = 1.0 - p
     if p <= 0.0 or q <= 0.0:
         return 0.0
-    da = it.scaling_d * it.a
     if it.c == 0.0:
-        return da * da * p * q
+        return it.a * it.a * p * q
     ratio = (p - it.c) / (1.0 - it.c)
-    return da * da * (q / p) * ratio * ratio
+    return it.a * it.a * (q / p) * ratio * ratio
 
 
 def test_information(items: Iterable[ItemParameters], theta: float) -> float:

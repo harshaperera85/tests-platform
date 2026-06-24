@@ -61,6 +61,12 @@ def _serialize(problem: CompiledProblem) -> dict[str, object]:
     return {
         "item_ids": list(problem.item_ids),
         "info": [list(row) for row in problem.info],
+        # native canonical slope-intercept params (a, d, g, u) — D=1 logistic, the
+        # mirt-native metric; the harness can recompute info or hand these to mirt.
+        "params": [
+            {"a": a, "d": d, "g": g, "u": u} for (a, d, g, u) in problem.params
+        ],
+        "metric": {"scaling_d": 1.0, "form": "slope_intercept"},
         "theta_points": list(problem.theta_points),
         "target_info": list(problem.target_info),
         "method": problem.method,

@@ -67,7 +67,8 @@ export function PoolBrowserScreen() {
                 <tr>
                   <th className="px-3 py-1.5 text-left">item</th>
                   <th className="px-3 py-1.5 text-right">a</th>
-                  <th className="px-3 py-1.5 text-right">b</th>
+                  <th className="px-3 py-1.5 text-right">d</th>
+                  <th className="px-3 py-1.5 text-right" title="difficulty b = -d/a">b</th>
                   <th className="px-3 py-1.5 text-right">c</th>
                   <th className="px-3 py-1.5 text-left">KC</th>
                   <th className="px-3 py-1.5 text-left">Bloom</th>
@@ -79,7 +80,8 @@ export function PoolBrowserScreen() {
                   <tr key={it.item_id} className="border-t border-ink-100 tabular-nums">
                     <td className="px-3 py-1.5 font-medium">{it.item_id}</td>
                     <td className="px-3 py-1.5 text-right">{it.a}</td>
-                    <td className="px-3 py-1.5 text-right">{it.b}</td>
+                    <td className="px-3 py-1.5 text-right">{it.d}</td>
+                    <td className="px-3 py-1.5 text-right">{it.b.toFixed(3)}</td>
                     <td className="px-3 py-1.5 text-right">{it.c}</td>
                     <td className="px-3 py-1.5">{it.tags?.KC ?? "—"}</td>
                     <td className="px-3 py-1.5">{it.tags?.Bloom ?? "—"}</td>

@@ -45,6 +45,13 @@ class Settings(BaseSettings):
     # Hard ceiling (seconds) for a queued solve; RQ kills the job past this.
     assembly_job_timeout_s: int = 300
 
+    # --- psychometrics reporting ---
+    # Display/interop scaling convention for IRT params & theta. Internal computation
+    # is ALWAYS canonical logistic D=1 (psychometrics.CANONICAL_D); this only affects
+    # how values are *presented*. 1.0 = native (no transform); 1.702 = normal-ogive.
+    # See app/psychometrics/reporting.py. Default native.
+    display_metric_d: float = 1.0
+
     # --- capability services ---
     scoring_r_url: str = "http://scoring-r:8000"
     # CAT platform endpoints are pinned before Phase 2 (see plan §16). Adapter

@@ -12,6 +12,7 @@ from collections import Counter
 from fastapi import APIRouter, HTTPException, Query
 
 from app.psychometrics import pools
+from app.psychometrics.params import require_metric
 from app.schemas.pool import PoolCatalog, PoolDocument, PoolItem, PoolSummary
 
 router = APIRouter(prefix="/pool", tags=["pool"])
@@ -53,18 +54,33 @@ def get_pool_items(
         raise HTTPException(status_code=404, detail=f"unknown pool_id {pool_id!r}")
     doc = pools.load_document_by_id(pool_id)
     raw_items = doc["items"]
-    metric = doc.get("metric", {})
-    scaling_d = float(metric.get("scaling_d", 1.702))
+    # Enforce the metric contract (no silent default; raises on undeclared metric).
+    metric = require_metric(doc.get("metric"), where=f"pool {pool_id!r}")
+
+    def _b(it: dict) -> float:
+        if metric.form == "slope_intercept":
+            return -float(it["d"]) / float(it["a"])
+        return float(it["b"])
+
+    def _d(it: dict) -> float:
+        if metric.form == "slope_intercept":
+            return float(it["d"])
+        return -float(it["a"]) * float(it["b"])
 
     items = [
         PoolItem(
             item_id=it["item_id"],
             a=it["a"],
-            b=it["b"],
+            d=_d(it),
             c=it.get("c", 0.0),
-            scaling_d=it.get("scaling_d", scaling_d),
+            u=it.get("u", 1.0),
+            b=_b(it),
+            scaling_d=metric.scaling_d,
             tags=it.get("tags", {}),
             enemy_of=it.get("enemy_of", []),
+            se_a=it.get("se_a"),
+            se_d=it.get("se_d"),
+            se_b=it.get("se_b"),
             stem=it.get("stem"),
             options=it.get("options", []),
             answer_key=it.get("answer_key"),
@@ -84,8 +100,10 @@ def get_pool_items(
         pool_id=pool_id,
         simulated=bool(doc.get("simulated", False)),
         provenance=doc.get("provenance"),
-        model=metric.get("model", "2PL"),
-        scaling_d=scaling_d,
+        model=doc.get("metric", {}).get("model", "2PL"),
+        scaling_d=metric.scaling_d,
+        form=metric.form,
+        kind=metric.kind,
         n_items=len(items),
         tag_summary=tag_summary,
         items=items,

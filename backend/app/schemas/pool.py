@@ -19,12 +19,20 @@ class PoolItemOption(BaseModel):
 
 class PoolItem(BaseModel):
     item_id: str
+    # canonical slope-intercept (logistic D=1)
     a: float
-    b: float
+    d: float
     c: float = 0.0
+    u: float = 1.0
+    # difficulty view (b = -d/a) — surfaced for display
+    b: float
     scaling_d: float
     tags: dict[str, str] = {}
     enemy_of: list[str] = []
+    # calibration uncertainty (calibrated pools only; None for synthetic)
+    se_a: float | None = None
+    se_d: float | None = None
+    se_b: float | None = None
     # Synthetic, display-only demonstration content.
     stem: str | None = None
     options: list[PoolItemOption] = []
@@ -36,7 +44,10 @@ class PoolDocument(BaseModel):
     simulated: bool
     provenance: str | None = None
     model: str
+    # metric contract (axis 1 scaling, axis 2 form, synthetic vs calibrated)
     scaling_d: float
+    form: str
+    kind: str
     n_items: int
     # counts per tag dimension -> value -> count (drives feasibility hints in the UI)
     tag_summary: dict[str, dict[str, int]]

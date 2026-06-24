@@ -15,6 +15,8 @@ export interface PoolDocument {
   provenance?: PoolDocumentProvenance;
   model: string;
   scaling_d: number;
+  form: string;
+  kind: string;
   n_items: number;
   tag_summary: PoolDocumentTagSummary;
   items: PoolItem[];

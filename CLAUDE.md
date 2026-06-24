@@ -31,14 +31,28 @@ locally**. See `SETUP.md`.
    (mirtCAT + neural services). Preserve all CAT functionality. Do not copy/duplicate CAT
    orchestration logic into this repo (avoid divergence). Behind the contract, adapter vs absorbed
    is invisible — we are on **adapter now**.
-4. **One canonical θ metric.** All IRT parameters and θ are normalized through `psychometrics/`
-   (single source of truth). **D-scaling fact (verified empirically, mirt 1.46.1 = the CAT
-   platform's pin): mirt computes information in the logistic metric with `D = 1`, NOT 1.702**
-   (a=1,b=0 → info(0)=0.25; P(1)=0.731). `coef(IRTpars=TRUE)` is only an (a1,d)→(a,b)
-   reparameterization (a unchanged), not a scaling. So the CAT platform's metric is `D = 1`.
-   Our `CANONICAL_D` is currently `1.702` (our convention); cross-D items are reconciled by
-   `normalize_to_canonical` (tag mirt/CAT items `scaling_d=1.0`). Open decision (see
-   `docs/backlog.md`): adopt `D = 1` as canonical when CAT/real data is wired in.
+4. **One canonical θ metric = logistic `D = 1`, slope-intercept.** All IRT parameters and θ go
+   through `psychometrics/` (single source of truth). The canonical metric matches mirt 1.46.1 /
+   the CAT platform natively on **two orthogonal axes**:
+   - **Axis 1 — scaling: logistic `D = 1`.** `P(θ) = c + (1−c)·σ(a·θ + d)`; info
+     `I(θ) = a²·(Q/P)·((P−c)/(1−c))²`, reducing to `a²·P·Q` at c=0. **No 1.702 in computation**
+     (verified: a=1,d=0 → info(0)=0.25, P(1)=0.731). Normal-ogive `D = 1.702` is an **optional
+     reporting transform only** (`psychometrics/reporting.py`, config `display_metric_d`, default
+     1.0); never relabel logistic `a` by ×1.702.
+   - **Axis 2 — form: slope-intercept `(a, d)` is canonical/stored.** Traditional `(a, b)` with
+     `b = −d/a` is the **difficulty view**. The form conversion is **mirt's job via
+     `IRTpars=TRUE`** — empirically only `d↔b` changes, `a` and `D` are untouched. **SE(b) needs
+     delta-method propagation of the (a,d) covariance** (`Var(b)=JΣJᵀ`), which mirt does and a
+     `b=−d/a` shortcut does not. Routing: **synthetic** point-estimate pools may take `b=−d/a` in
+     Python (and must **not** fabricate `SE(b)`); **calibrated** pools (with covariance) get
+     `b`+`SE(b)` from the R/mirt service (`engines/scoring-r` `/convert-difficulty`), which uses
+     **`mirt::DeltaMethod`** as the production computation — mirt is the single source of truth.
+     The analytic Jacobian is kept only as a build-time parity tripwire that asserts agreement
+     with `mirt::DeltaMethod` and `coef(IRTpars=TRUE)` (`convert_difficulty_selftest.R`).
+   Every pool **must declare** its metric `{scaling_d, form, kind}` (`require_metric`) — undeclared
+   raises, no silent default. Cross-source params are reconciled by `normalize_to_canonical` via
+   `scaling_d`/`form` at ingest. **Phase-2 CAT params are native logistic D=1 slope-intercept — no
+   conversion.**
 5. **Contract-first.** Backend defines OpenAPI; the frontend API client is **generated** via Orval +
    Zod. Never hand-write the frontend API client.
 6. **Blueprint vs selection.** The blueprint carries content constraints **and** a statistical (TIF)

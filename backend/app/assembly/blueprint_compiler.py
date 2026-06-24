@@ -53,6 +53,10 @@ class CompiledProblem:
     enemy_pairs: tuple[tuple[int, int], ...] = ()
     max_use_per_item: int | None = None
     warnings: tuple[str, ...] = field(default_factory=tuple)
+    # native canonical slope-intercept params per item: (a, d, g=c, u). Lets the R
+    # oracle receive mirt-native parameters (D=1 slope-intercept), not just the
+    # precomputed info matrix.
+    params: tuple[tuple[float, float, float, float], ...] = ()
 
     @property
     def n_items(self) -> int:
@@ -131,4 +135,5 @@ def compile_blueprint(blueprint: Blueprint, pool: ItemPool) -> CompiledProblem:
         enemy_pairs=tuple(sorted(enemy_pairs)),
         max_use_per_item=max_use,
         warnings=tuple(warnings),
+        params=tuple((it.a, it.d, it.c, it.u) for it in items),
     )

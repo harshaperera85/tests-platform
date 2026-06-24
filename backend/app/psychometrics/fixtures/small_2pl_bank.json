@@ -1,15 +1,21 @@
 {
   "metric": {
     "model": "2PL",
-    "scaling_d": 1.702,
-    "scale": "canonical"
+    "scaling_d": 1.0,
+    "form": "slope_intercept",
+    "kind": "synthetic",
+    "scale_note": "Native logistic D=1 slope-intercept (mirt 1.46.1 metric). a=discrimination, d=intercept, c=guessing (mirt g), u=1; difficulty view b=-d/a (stored for reference, validated on load). Synthetic: point estimates only, no SEs. Seeded regeneration; tags/enemies/stems preserved (only the embedded b-annotation in stems was refreshed)."
   },
+  "simulated": true,
+  "provenance": "Auto-generated simulated 2PL bank for end-to-end demonstration. Item content (stem/options) is synthetic; IRT params are the calibrated fixture values. Not real items \u2014 replaced by the item-factory export once wired.",
   "items": [
     {
       "item_id": "I001",
-      "a": 0.758,
-      "b": 0.651,
+      "a": 1.495,
+      "d": -1.302145,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.871,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -19,7 +25,6 @@
       "enemy_of": [
         "I002"
       ],
-      "stem": "[SIMULATED \u00b7 algebra/remember] I001: solve for x in the expression in part A (b=0.651).",
       "options": [
         {
           "key": "A",
@@ -38,13 +43,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/remember] I001: solve for x in the expression in part A (b=0.871)."
     },
     {
       "item_id": "I002",
-      "a": 0.862,
-      "b": 2.076,
+      "a": 0.912,
+      "d": -0.125856,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.138,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -54,7 +62,6 @@
       "enemy_of": [
         "I001"
       ],
-      "stem": "[SIMULATED \u00b7 geometry/apply] I002: find the area of the expression in part B (b=2.076).",
       "options": [
         {
           "key": "A",
@@ -73,13 +80,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/apply] I002: find the area of the expression in part B (b=0.138)."
     },
     {
       "item_id": "I003",
-      "a": 1.613,
-      "b": -0.362,
+      "a": 1.631,
+      "d": 1.683192,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.032,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -87,7 +97,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/analyze] I003: evaluate the expression in part C (b=-0.362).",
       "options": [
         {
           "key": "A",
@@ -106,13 +115,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/analyze] I003: evaluate the expression in part C (b=-1.032)."
     },
     {
       "item_id": "I004",
-      "a": 1.17,
-      "b": 1.851,
+      "a": 0.722,
+      "d": 1.50176,
       "c": 0.0,
+      "u": 1.0,
+      "b": -2.08,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -120,7 +132,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/remember] I004: read the chart for the expression in part D (b=1.851).",
       "options": [
         {
           "key": "A",
@@ -139,13 +150,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/remember] I004: read the chart for the expression in part D (b=-2.08)."
     },
     {
       "item_id": "I005",
-      "a": 1.255,
-      "b": 2.173,
+      "a": 1.191,
+      "d": -0.903969,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.759,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -153,7 +167,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/apply] I005: solve for x in the expression in part A (b=2.173).",
       "options": [
         {
           "key": "A",
@@ -172,13 +185,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/apply] I005: solve for x in the expression in part A (b=0.759)."
     },
     {
       "item_id": "I006",
-      "a": 1.384,
-      "b": -0.175,
+      "a": 1.307,
+      "d": -0.188208,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.144,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -186,7 +202,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/analyze] I006: find the area of the expression in part B (b=-0.175).",
       "options": [
         {
           "key": "A",
@@ -205,13 +220,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I006: find the area of the expression in part B (b=0.144)."
     },
     {
       "item_id": "I007",
-      "a": 1.605,
-      "b": 1.716,
+      "a": 0.637,
+      "d": -0.321048,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.504,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -219,7 +237,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/remember] I007: evaluate the expression in part C (b=1.716).",
       "options": [
         {
           "key": "A",
@@ -238,13 +255,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/remember] I007: evaluate the expression in part C (b=0.504)."
     },
     {
       "item_id": "I008",
-      "a": 1.209,
-      "b": -0.586,
+      "a": 1.363,
+      "d": -2.060856,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.512,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -252,7 +272,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/apply] I008: read the chart for the expression in part D (b=-0.586).",
       "options": [
         {
           "key": "A",
@@ -271,13 +290,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/apply] I008: read the chart for the expression in part D (b=1.512)."
     },
     {
       "item_id": "I009",
-      "a": 1.776,
-      "b": -1.385,
+      "a": 0.909,
+      "d": 1.541664,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.696,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -285,7 +307,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/analyze] I009: solve for x in the expression in part A (b=-1.385).",
       "options": [
         {
           "key": "A",
@@ -304,13 +325,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I009: solve for x in the expression in part A (b=-1.696)."
     },
     {
       "item_id": "I010",
-      "a": 1.029,
-      "b": 1.864,
+      "a": 0.609,
+      "d": 0.648585,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.065,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -318,7 +342,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/remember] I010: find the area of the expression in part B (b=1.864).",
       "options": [
         {
           "key": "A",
@@ -337,13 +360,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/remember] I010: find the area of the expression in part B (b=-1.065)."
     },
     {
       "item_id": "I011",
-      "a": 1.545,
-      "b": -0.974,
+      "a": 1.728,
+      "d": 0.554688,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.321,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -353,7 +379,6 @@
       "enemy_of": [
         "I012"
       ],
-      "stem": "[SIMULATED \u00b7 number/apply] I011: evaluate the expression in part C (b=-0.974).",
       "options": [
         {
           "key": "A",
@@ -372,13 +397,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/apply] I011: evaluate the expression in part C (b=-0.321)."
     },
     {
       "item_id": "I012",
-      "a": 1.681,
-      "b": 1.819,
+      "a": 0.818,
+      "d": 0.7771,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.95,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -386,7 +414,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/analyze] I012: read the chart for the expression in part D (b=1.819).",
       "options": [
         {
           "key": "A",
@@ -405,13 +432,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/analyze] I012: read the chart for the expression in part D (b=-0.95)."
     },
     {
       "item_id": "I013",
-      "a": 1.862,
-      "b": 0.02,
+      "a": 1.94,
+      "d": 0.48694,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.251,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -419,7 +449,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/remember] I013: solve for x in the expression in part A (b=0.02).",
       "options": [
         {
           "key": "A",
@@ -438,13 +467,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/remember] I013: solve for x in the expression in part A (b=-0.251)."
     },
     {
       "item_id": "I014",
-      "a": 1.978,
-      "b": 0.012,
+      "a": 0.735,
+      "d": -0.305025,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.415,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -452,7 +484,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/apply] I014: find the area of the expression in part B (b=0.012).",
       "options": [
         {
           "key": "A",
@@ -471,13 +502,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/apply] I014: find the area of the expression in part B (b=0.415)."
     },
     {
       "item_id": "I015",
-      "a": 0.795,
-      "b": 0.33,
+      "a": 1.786,
+      "d": 2.834382,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.587,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -485,7 +519,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/analyze] I015: evaluate the expression in part C (b=0.33).",
       "options": [
         {
           "key": "A",
@@ -504,13 +537,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/analyze] I015: evaluate the expression in part C (b=-1.587)."
     },
     {
       "item_id": "I016",
-      "a": 1.996,
-      "b": -0.897,
+      "a": 1.622,
+      "d": 1.96262,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.21,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -518,7 +554,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/remember] I016: read the chart for the expression in part D (b=-0.897).",
       "options": [
         {
           "key": "A",
@@ -537,13 +572,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/remember] I016: read the chart for the expression in part D (b=-1.21)."
     },
     {
       "item_id": "I017",
-      "a": 0.669,
-      "b": 1.659,
+      "a": 1.351,
+      "d": -1.429358,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.058,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -551,7 +589,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/apply] I017: solve for x in the expression in part A (b=1.659).",
       "options": [
         {
           "key": "A",
@@ -570,13 +607,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/apply] I017: solve for x in the expression in part A (b=1.058)."
     },
     {
       "item_id": "I018",
-      "a": 1.016,
-      "b": -0.814,
+      "a": 1.373,
+      "d": 0.24714,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.18,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -584,7 +624,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/analyze] I018: find the area of the expression in part B (b=-0.814).",
       "options": [
         {
           "key": "A",
@@ -603,13 +642,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I018: find the area of the expression in part B (b=-0.18)."
     },
     {
       "item_id": "I019",
-      "a": 1.955,
-      "b": 0.214,
+      "a": 1.761,
+      "d": 2.833449,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.609,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -617,7 +659,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/remember] I019: evaluate the expression in part C (b=0.214).",
       "options": [
         {
           "key": "A",
@@ -636,13 +677,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/remember] I019: evaluate the expression in part C (b=-1.609)."
     },
     {
       "item_id": "I020",
-      "a": 1.771,
-      "b": -0.428,
+      "a": 1.408,
+      "d": 2.088064,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.483,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -650,7 +694,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/apply] I020: read the chart for the expression in part D (b=-0.428).",
       "options": [
         {
           "key": "A",
@@ -669,13 +712,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/apply] I020: read the chart for the expression in part D (b=-1.483)."
     },
     {
       "item_id": "I021",
-      "a": 1.525,
-      "b": 1.351,
+      "a": 1.586,
+      "d": -1.203774,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.759,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -683,7 +729,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/analyze] I021: solve for x in the expression in part A (b=1.351).",
       "options": [
         {
           "key": "A",
@@ -702,13 +747,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I021: solve for x in the expression in part A (b=0.759)."
     },
     {
       "item_id": "I022",
-      "a": 1.142,
-      "b": -0.612,
+      "a": 1.005,
+      "d": -0.226125,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.225,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -716,7 +764,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/remember] I022: find the area of the expression in part B (b=-0.612).",
       "options": [
         {
           "key": "A",
@@ -735,13 +782,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/remember] I022: find the area of the expression in part B (b=0.225)."
     },
     {
       "item_id": "I023",
-      "a": 1.007,
-      "b": 0.39,
+      "a": 0.712,
+      "d": -0.03916,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.055,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -749,7 +799,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/apply] I023: evaluate the expression in part C (b=0.39).",
       "options": [
         {
           "key": "A",
@@ -768,13 +817,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/apply] I023: evaluate the expression in part C (b=0.055)."
     },
     {
       "item_id": "I024",
-      "a": 0.713,
-      "b": -0.803,
+      "a": 0.989,
+      "d": -0.499445,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.505,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -782,7 +834,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/analyze] I024: read the chart for the expression in part D (b=-0.803).",
       "options": [
         {
           "key": "A",
@@ -801,13 +852,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/analyze] I024: read the chart for the expression in part D (b=0.505)."
     },
     {
       "item_id": "I025",
-      "a": 1.631,
-      "b": 1.516,
+      "a": 1.49,
+      "d": 1.04151,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.699,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -815,7 +869,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/remember] I025: solve for x in the expression in part A (b=1.516).",
       "options": [
         {
           "key": "A",
@@ -834,13 +887,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/remember] I025: solve for x in the expression in part A (b=-0.699)."
     },
     {
       "item_id": "I026",
-      "a": 1.697,
-      "b": 0.315,
+      "a": 0.893,
+      "d": -0.709042,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.794,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -848,7 +904,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/apply] I026: find the area of the expression in part B (b=0.315).",
       "options": [
         {
           "key": "A",
@@ -867,13 +922,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/apply] I026: find the area of the expression in part B (b=0.794)."
     },
     {
       "item_id": "I027",
-      "a": 0.621,
-      "b": 0.008,
+      "a": 0.974,
+      "d": -1.42691,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.465,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -881,7 +939,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/analyze] I027: evaluate the expression in part C (b=0.008).",
       "options": [
         {
           "key": "A",
@@ -900,13 +957,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/analyze] I027: evaluate the expression in part C (b=1.465)."
     },
     {
       "item_id": "I028",
-      "a": 1.251,
-      "b": -0.49,
+      "a": 1.453,
+      "d": 0.895048,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.616,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -914,7 +974,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/remember] I028: read the chart for the expression in part D (b=-0.49).",
       "options": [
         {
           "key": "A",
@@ -933,13 +992,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/remember] I028: read the chart for the expression in part D (b=-0.616)."
     },
     {
       "item_id": "I029",
-      "a": 1.091,
-      "b": -1.397,
+      "a": 0.84,
+      "d": 0.07224,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.086,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -947,7 +1009,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/apply] I029: solve for x in the expression in part A (b=-1.397).",
       "options": [
         {
           "key": "A",
@@ -966,13 +1027,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/apply] I029: solve for x in the expression in part A (b=-0.086)."
     },
     {
       "item_id": "I030",
-      "a": 1.95,
-      "b": -2.168,
+      "a": 1.131,
+      "d": 0.736281,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.651,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -980,7 +1044,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/analyze] I030: find the area of the expression in part B (b=-2.168).",
       "options": [
         {
           "key": "A",
@@ -999,13 +1062,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I030: find the area of the expression in part B (b=-0.651)."
     },
     {
       "item_id": "I031",
-      "a": 1.236,
-      "b": 0.941,
+      "a": 1.985,
+      "d": 1.776575,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.895,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -1013,7 +1079,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/remember] I031: evaluate the expression in part C (b=0.941).",
       "options": [
         {
           "key": "A",
@@ -1032,13 +1097,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/remember] I031: evaluate the expression in part C (b=-0.895)."
     },
     {
       "item_id": "I032",
-      "a": 1.188,
-      "b": 1.629,
+      "a": 1.558,
+      "d": 1.684198,
       "c": 0.0,
+      "u": 1.0,
+      "b": -1.081,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -1046,7 +1114,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/apply] I032: read the chart for the expression in part D (b=1.629).",
       "options": [
         {
           "key": "A",
@@ -1065,13 +1132,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/apply] I032: read the chart for the expression in part D (b=-1.081)."
     },
     {
       "item_id": "I033",
-      "a": 1.284,
-      "b": -0.804,
+      "a": 1.78,
+      "d": -0.22962,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.129,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -1079,7 +1149,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/analyze] I033: solve for x in the expression in part A (b=-0.804).",
       "options": [
         {
           "key": "A",
@@ -1098,13 +1167,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I033: solve for x in the expression in part A (b=0.129)."
     },
     {
       "item_id": "I034",
-      "a": 0.693,
-      "b": -0.941,
+      "a": 0.645,
+      "d": 0.505035,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.783,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -1112,7 +1184,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/remember] I034: find the area of the expression in part B (b=-0.941).",
       "options": [
         {
           "key": "A",
@@ -1131,13 +1202,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/remember] I034: find the area of the expression in part B (b=-0.783)."
     },
     {
       "item_id": "I035",
-      "a": 0.974,
-      "b": 0.763,
+      "a": 1.042,
+      "d": 0.087528,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.084,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -1145,7 +1219,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/apply] I035: evaluate the expression in part C (b=0.763).",
       "options": [
         {
           "key": "A",
@@ -1164,13 +1237,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/apply] I035: evaluate the expression in part C (b=-0.084)."
     },
     {
       "item_id": "I036",
-      "a": 1.758,
-      "b": 1.821,
+      "a": 1.92,
+      "d": -1.44576,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.753,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -1178,7 +1254,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/analyze] I036: read the chart for the expression in part D (b=1.821).",
       "options": [
         {
           "key": "A",
@@ -1197,13 +1272,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/analyze] I036: read the chart for the expression in part D (b=0.753)."
     },
     {
       "item_id": "I037",
-      "a": 1.19,
-      "b": 0.876,
+      "a": 1.827,
+      "d": 1.160145,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.635,
       "tags": {
         "KC": "algebra",
         "Bloom": "remember",
@@ -1211,7 +1289,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/remember] I037: solve for x in the expression in part A (b=0.876).",
       "options": [
         {
           "key": "A",
@@ -1230,13 +1307,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/remember] I037: solve for x in the expression in part A (b=-0.635)."
     },
     {
       "item_id": "I038",
-      "a": 0.872,
-      "b": -0.316,
+      "a": 1.154,
+      "d": -1.70215,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.475,
       "tags": {
         "KC": "geometry",
         "Bloom": "apply",
@@ -1244,7 +1324,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/apply] I038: find the area of the expression in part B (b=-0.316).",
       "options": [
         {
           "key": "A",
@@ -1263,13 +1342,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/apply] I038: find the area of the expression in part B (b=1.475)."
     },
     {
       "item_id": "I039",
-      "a": 1.842,
-      "b": -0.362,
+      "a": 1.88,
+      "d": 1.56792,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.834,
       "tags": {
         "KC": "number",
         "Bloom": "analyze",
@@ -1277,7 +1359,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/analyze] I039: evaluate the expression in part C (b=-0.362).",
       "options": [
         {
           "key": "A",
@@ -1296,13 +1377,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/analyze] I039: evaluate the expression in part C (b=-0.834)."
     },
     {
       "item_id": "I040",
-      "a": 1.499,
-      "b": 0.836,
+      "a": 0.945,
+      "d": -0.208845,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.221,
       "tags": {
         "KC": "data",
         "Bloom": "remember",
@@ -1310,7 +1394,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/remember] I040: read the chart for the expression in part D (b=0.836).",
       "options": [
         {
           "key": "A",
@@ -1329,13 +1412,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/remember] I040: read the chart for the expression in part D (b=0.221)."
     },
     {
       "item_id": "I041",
-      "a": 1.533,
-      "b": 1.457,
+      "a": 1.386,
+      "d": 0.162162,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.117,
       "tags": {
         "KC": "algebra",
         "Bloom": "apply",
@@ -1343,7 +1429,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/apply] I041: solve for x in the expression in part A (b=1.457).",
       "options": [
         {
           "key": "A",
@@ -1362,13 +1447,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/apply] I041: solve for x in the expression in part A (b=-0.117)."
     },
     {
       "item_id": "I042",
-      "a": 1.815,
-      "b": 0.785,
+      "a": 1.857,
+      "d": -2.698221,
       "c": 0.0,
+      "u": 1.0,
+      "b": 1.453,
       "tags": {
         "KC": "geometry",
         "Bloom": "analyze",
@@ -1376,7 +1464,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/analyze] I042: find the area of the expression in part B (b=0.785).",
       "options": [
         {
           "key": "A",
@@ -1395,13 +1482,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/analyze] I042: find the area of the expression in part B (b=1.453)."
     },
     {
       "item_id": "I043",
-      "a": 0.82,
-      "b": -1.141,
+      "a": 1.159,
+      "d": -0.84607,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.73,
       "tags": {
         "KC": "number",
         "Bloom": "remember",
@@ -1409,7 +1499,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/remember] I043: evaluate the expression in part C (b=-1.141).",
       "options": [
         {
           "key": "A",
@@ -1428,13 +1517,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/remember] I043: evaluate the expression in part C (b=0.73)."
     },
     {
       "item_id": "I044",
-      "a": 1.601,
-      "b": -1.802,
+      "a": 1.313,
+      "d": -3.2825,
       "c": 0.0,
+      "u": 1.0,
+      "b": 2.5,
       "tags": {
         "KC": "data",
         "Bloom": "apply",
@@ -1442,7 +1534,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/apply] I044: read the chart for the expression in part D (b=-1.802).",
       "options": [
         {
           "key": "A",
@@ -1461,13 +1552,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/apply] I044: read the chart for the expression in part D (b=2.5)."
     },
     {
       "item_id": "I045",
-      "a": 0.683,
-      "b": -1.77,
+      "a": 0.727,
+      "d": -0.368589,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.507,
       "tags": {
         "KC": "algebra",
         "Bloom": "analyze",
@@ -1475,7 +1569,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 algebra/analyze] I045: solve for x in the expression in part A (b=-1.77).",
       "options": [
         {
           "key": "A",
@@ -1494,13 +1587,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "A"
+      "answer_key": "A",
+      "stem": "[SIMULATED \u00b7 algebra/analyze] I045: solve for x in the expression in part A (b=0.507)."
     },
     {
       "item_id": "I046",
-      "a": 1.531,
-      "b": 0.148,
+      "a": 1.478,
+      "d": -0.22909,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.155,
       "tags": {
         "KC": "geometry",
         "Bloom": "remember",
@@ -1508,7 +1604,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 geometry/remember] I046: find the area of the expression in part B (b=0.148).",
       "options": [
         {
           "key": "A",
@@ -1527,13 +1622,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "B"
+      "answer_key": "B",
+      "stem": "[SIMULATED \u00b7 geometry/remember] I046: find the area of the expression in part B (b=0.155)."
     },
     {
       "item_id": "I047",
-      "a": 0.675,
-      "b": 1.586,
+      "a": 1.709,
+      "d": 0.601568,
       "c": 0.0,
+      "u": 1.0,
+      "b": -0.352,
       "tags": {
         "KC": "number",
         "Bloom": "apply",
@@ -1541,7 +1639,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 number/apply] I047: evaluate the expression in part C (b=1.586).",
       "options": [
         {
           "key": "A",
@@ -1560,13 +1657,16 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "C"
+      "answer_key": "C",
+      "stem": "[SIMULATED \u00b7 number/apply] I047: evaluate the expression in part C (b=-0.352)."
     },
     {
       "item_id": "I048",
-      "a": 1.424,
-      "b": -0.594,
+      "a": 1.134,
+      "d": -0.212058,
       "c": 0.0,
+      "u": 1.0,
+      "b": 0.187,
       "tags": {
         "KC": "data",
         "Bloom": "analyze",
@@ -1574,7 +1674,6 @@
         "domain": "math"
       },
       "enemy_of": [],
-      "stem": "[SIMULATED \u00b7 data/analyze] I048: read the chart for the expression in part D (b=-0.594).",
       "options": [
         {
           "key": "A",
@@ -1593,9 +1692,8 @@
           "text": "Simulated option D"
         }
       ],
-      "answer_key": "D"
+      "answer_key": "D",
+      "stem": "[SIMULATED \u00b7 data/analyze] I048: read the chart for the expression in part D (b=0.187)."
     }
-  ],
-  "simulated": true,
-  "provenance": "Auto-generated simulated 2PL bank for end-to-end demonstration. Item content (stem/options) is synthetic; IRT params are the calibrated fixture values. Not real items \u2014 replaced by the item-factory export once wired."
+  ]
 }

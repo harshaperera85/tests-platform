@@ -87,8 +87,9 @@ demo bank's tag values differ per domain (e.g. KC `algebra/geometry/number/data`
 | `domain` | math (48) |
 
 Enemy pairs in the bank: **I001↔I002** and **I011→I012** (the engine symmetrizes the
-second). Whole-pool TIF ≈ **21.9 / 30.3 / 22.1** at θ = −1 / 0 / 1 — so a 20-item form
-can comfortably hit a target around 8–12 information.
+second). Whole-pool TIF ≈ **14.1 / 15.0 / 11.1** at θ = −1 / 0 / 1 (canonical logistic
+**D=1 slope-intercept** metric) — so a 20-item form can comfortably hit a target around
+**7–9** information.
 
 ---
 
@@ -142,22 +143,23 @@ cells hold only ~4), keep the **sum of cell minimums ≤ form length**, and pref
 requirement.
 
 #### Worked examples (all verified against `demo_mixed`, length 24, target 7/9/7)
-1. **Marginal (feasible):** `KC=algebra ≥ 6` **and** `Bloom=apply ≥ 6` → `optimal`. Two
+1. **Marginal (feasible):** `KC=algebra ≥ 6` **and** `Bloom=apply ≥ 6` → **assembles**. Two
    independent margins; the same item can count toward both.
 2. **Joint cell (feasible):** `KC=algebra AND Bloom=apply ≥ 3` **and** marginal
-   `Bloom=analyze ≥ 4` → `optimal`. The cell has 4 items, so a min of 3 fits.
+   `Bloom=analyze ≥ 4` → **assembles**. The cell has 4 items, so a min of 3 fits.
 3. **Joint cell (infeasible — the ceiling):** `KC=algebra AND Bloom=apply ≥ 5` →
    **`infeasible`** (only 4 such items exist). This is the realistic failure to expect
    when a cell min exceeds the bank's cell size.
 4. **Proportion (feasible):** `domain=math ≥ 0.5` (proportion) on a length-20 form →
-   `optimal` (resolves to ≥ 10 math items).
-5. **Coarser joint (feasible, roomier):** `domain=math AND Bloom=apply ≥ 6` → `optimal`
+   **assembles** (resolves to ≥ 10 math items).
+5. **Coarser joint (feasible, roomier):** `domain=math AND Bloom=apply ≥ 6` → **assembles**
    (that cell holds ~17 items).
 
-The TIF target is rarely the binding constraint here: whole-pool information is ≈
-71 / 90 / 90 / 114 / 69 at θ = −2…2, so a 20–30 item form meets targets of ~7–12 (even
-~30) easily; difficulty spread is wide (≈51 easy / 43 central / 54 hard items), which
-supports cut-score targets anywhere on θ.
+The TIF target is rarely the binding constraint here. On the **canonical logistic D=1
+metric** (matching mirt / the CAT platform), whole-pool information is ≈
+32.6 / 61.3 / 74.0 / 56.6 / 30.5 at θ = −2…2, so a 20–30 item form meets targets of ~7–13
+easily; difficulty spread is wide (≈51 easy / 43 central / 54 hard items), which supports
+cut-score targets anywhere on θ.
 
 > Rule of thumb: if assembly comes back **infeasible** with joint cells, first check that
 > each cell min ≤ the items in that cell (browse it in **Item pools**), then that the cell
@@ -397,7 +399,7 @@ BASE=http://localhost:8000/api/v1
 
 BP=$(curl -s -X POST $BASE/blueprints -H 'content-type: application/json' -d '{
   "name":"linear-demo","length":20,
-  "statistical_target":{"theta_points":[-1,0,1],"target_info":[8,11,8],"method":"minimax"},
+  "statistical_target":{"theta_points":[-1,0,1],"target_info":[7,9,7],"method":"minimax"},
   "content_constraints":[
     {"tag_type":"KC","tag_value":"algebra","minimum":4,"maximum":8},
     {"tag_type":"KC","tag_value":"geometry","minimum":4},

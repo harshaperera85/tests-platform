@@ -29,7 +29,7 @@ _SCENARIOS: list[ScenarioRead] = [
             name="linear-demo",
             length=20,
             statistical_target=TIFTarget(
-                theta_points=[-1, 0, 1], target_info=[8, 11, 8], method="minimax"
+                theta_points=[-1, 0, 1], target_info=[7, 9, 7], method="minimax"
             ),
             content_constraints=[
                 ContentConstraint(
@@ -39,7 +39,7 @@ _SCENARIOS: list[ScenarioRead] = [
                 ContentConstraint(tag_type="Bloom", tag_value="analyze", minimum=3),
             ],
         ),
-        note="Baseline: actual TIF should sit on 8/11/8; assembles instantly.",
+        note="Baseline: actual TIF should sit on 7/9/7 (D=1); assembles instantly.",
     ),
     ScenarioRead(
         scenario_id="multi_domain",
@@ -50,7 +50,7 @@ _SCENARIOS: list[ScenarioRead] = [
             name="multi-domain-balance",
             length=30,
             statistical_target=TIFTarget(
-                theta_points=[-1, 0, 1], target_info=[10, 12, 10], method="minimax"
+                theta_points=[-1, 0, 1], target_info=[12, 13, 12], method="minimax"
             ),
             content_constraints=[
                 ContentConstraint(
@@ -75,7 +75,7 @@ _SCENARIOS: list[ScenarioRead] = [
             name="mastery-cut",
             length=25,
             statistical_target=TIFTarget(
-                theta_points=[1.5], target_info=[12], method="maximin"
+                theta_points=[1.5], target_info=[14], method="maximin"
             ),
         ),
         note="Information should peak near θ=1.5; the bank has plenty of hard items.",
@@ -90,7 +90,7 @@ _SCENARIOS: list[ScenarioRead] = [
             length=30,
             num_forms=3,
             statistical_target=TIFTarget(
-                theta_points=[-1, 0, 1], target_info=[8, 10, 8], method="minimax"
+                theta_points=[-1, 0, 1], target_info=[8, 9, 8], method="minimax"
             ),
             exposure_target=ExposureTarget(max_use_per_item=1),
         ),
@@ -105,7 +105,7 @@ _SCENARIOS: list[ScenarioRead] = [
             name="guessing-3pl",
             length=25,
             statistical_target=TIFTarget(
-                theta_points=[-0.5, 0.5, 1.5], target_info=[7, 8, 7], method="minimax"
+                theta_points=[-0.5, 0.5, 1.5], target_info=[9, 10, 9], method="minimax"
             ),
             content_constraints=[
                 ContentConstraint(tag_type="TIMSS", tag_value="reasoning", minimum=8),

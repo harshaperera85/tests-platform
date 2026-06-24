@@ -1777,6 +1777,14 @@
             "type": "number",
             "title": "Scaling D"
           },
+          "form": {
+            "type": "string",
+            "title": "Form"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
           "n_items": {
             "type": "integer",
             "title": "N Items"
@@ -1805,6 +1813,8 @@
           "simulated",
           "model",
           "scaling_d",
+          "form",
+          "kind",
           "n_items",
           "tag_summary",
           "items"
@@ -1821,14 +1831,23 @@
             "type": "number",
             "title": "A"
           },
-          "b": {
+          "d": {
             "type": "number",
-            "title": "B"
+            "title": "D"
           },
           "c": {
             "type": "number",
             "title": "C",
             "default": 0.0
+          },
+          "u": {
+            "type": "number",
+            "title": "U",
+            "default": 1.0
+          },
+          "b": {
+            "type": "number",
+            "title": "B"
           },
           "scaling_d": {
             "type": "number",
@@ -1849,6 +1868,39 @@
             "type": "array",
             "title": "Enemy Of",
             "default": []
+          },
+          "se_a": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se A"
+          },
+          "se_d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se D"
+          },
+          "se_b": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se B"
           },
           "stem": {
             "anyOf": [
@@ -1885,6 +1937,7 @@
         "required": [
           "item_id",
           "a",
+          "d",
           "b",
           "scaling_d"
         ],

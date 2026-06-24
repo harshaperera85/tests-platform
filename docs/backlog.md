@@ -58,24 +58,34 @@ to mirt with no scaling — exactly how mirtcat-service runs):
   scaling constant.
 So the CAT platform's θ/information are on the **D = 1** logistic scale.
 
-### DECISION — revisit `CANONICAL_D` (currently 1.702)
-`psychometrics/params.py` sets `CANONICAL_D = 1.702` and previously (wrongly) called this
-"the mirt metric." Corrected in code + CLAUDE.md. The metric is *internally consistent*
-today (every item is normalized by its source D, so the response surface and θ are
-preserved), so nothing is broken on simulated data.
-- **Decision:** adopt **D = 1** (= mirt) as the canonical value when the CAT/mirt scoring
-  service or a real item bank is wired in — so our metric *equals* the canonical source
-  and mirt/CAT items need no rescale.
-- **Why deferred, not done now:** flipping the constant only rescales *simulated* demo
-  numbers; it would change every documented TIF/info figure, break the hard-pinned
-  oracle-determinism value, and likely make the tuned demo TIF targets infeasible →
-  pure churn with no functional gain pre-integration.
-- **Interim contract (works today):** any externally-calibrated item MUST carry its true
-  `scaling_d`; mirt/CAT items ⇒ `scaling_d = 1.0` so `normalize_to_canonical` rescales
-  `a → a·(1.0/1.702)`, preserving the logit/θ.
-- **Migration when adopted:** set `CANONICAL_D = 1.0`; retag/regenerate fixtures; retune
-  demo `target_info`; refresh hard-pinned numbers (oracle determinism, walkthrough TIF
-  figures); re-verify oracle parity.
+### DONE — canonical metric = logistic `D = 1`, slope-intercept (mirt-native)
+Two orthogonal axes, both pinned to mirt 1.46.1's native metric. **Axis 1:** logistic
+`D = 1` — `P = c+(1−c)σ(aθ+d)`, `I = a²(Q/P)((P−c)/(1−c))²` (→ `a²PQ` at c=0); no 1.702
+in computation; normal-ogive D=1.702 = reporting transform only. **Axis 2:**
+slope-intercept `(a,d)` canonical/stored; traditional `(a,b=−d/a)` is the difficulty
+view, with `SE(b)` via mirt `IRTpars=TRUE` delta-method. What shipped:
+- `params.py`: native `(a,d,c,u)` `ItemParameters` (b = −d/a property; optional
+  `se_a/se_d/cov_ad/se_b`); `PoolMetric{scaling_d,form,kind}` + `require_metric` (raises on
+  undeclared, no silent default); `normalize_to_canonical` rescales `(a,d)` jointly.
+- `information.py`: native `(a,d)` info. `reporting.py` + `display_metric_d` (presentation).
+- **Fixtures regenerated natively** (seeded a,b,c; `d=−a·b`; store a,d,c,u,b; metric
+  `{1.0, slope_intercept, synthetic}`); tags/enemies/stems preserved (only the embedded
+  `(b=…)` annotation refreshed); `b≈−d/a` validated on load.
+- **`engines/scoring-r`**: mirt 1.46.1 image + `/convert-difficulty` whose **production**
+  SE(b) is computed by **`mirt::DeltaMethod`** (mirt = single source of truth). The analytic
+  Jacobian is a build-time tripwire only: `convert_difficulty_selftest.R` fails the build
+  unless `DeltaMethod` == `coef(IRTpars=TRUE)` == analytic (verified live: all 5 items match,
+  ≠ SE(d); endpoint returns b=0.3926, se_b=0.0355 for the known case).
+  `psychometrics/difficulty.py` routes synthetic (Python `b=−d/a`, no SE) vs calibrated (R svc).
+- Propagated: `schemas/pool.py` (a,d,c,u,b + SE + form/kind), `/pool/items`, compiler +
+  `CompiledProblem.params`, `r_oracle` payload (native a/d/g/u), frontend pool viewer (b,d).
+- Tests: `test_difficulty` (delta==mirt, ≠SE(d), routing), `test_metric_contract`
+  (undeclared raises, b consistency), rewritten `test_psychometrics`; determinism golden
+  unchanged (tiny pool response identical under `d=−a·b`). Demo scenarios re-verified to
+  assemble on the new fixtures. CLAUDE.md rule 4 + walkthrough numbers updated.
+- **Oracle agreement:** Python-exhaustive ↔ MIP parity holds on the native fixtures (both
+  consume the same native D=1 info matrix); eatATA parity runs in the `oracle-parity` CI job.
+- **Phase-2 CAT** params are native logistic D=1 slope-intercept — no conversion needed.
 
 ### Phase 2 — CAT adapter (later)
 `CatStrategy` as a thin adapter to the existing CAT platform (preserve selection,

@@ -41,8 +41,12 @@ def tiny_pool() -> ItemPool:
         ("T6", 1.3, 0.2, "x"),
         ("T7", 1.0, -0.2, "y"),
     ]
+    # canonical slope-intercept: d = -a*b
     return ItemPool(
-        [ItemParameters(item_id=i, a=a, b=b, tags={"KC": kc}) for i, a, b, kc in rows]
+        [
+            ItemParameters(item_id=i, a=a, d=-a * b, tags={"KC": kc})
+            for i, a, b, kc in rows
+        ]
     )
 
 
@@ -67,8 +71,9 @@ def linear_blueprint() -> Blueprint:
         name="linear-demo",
         length=20,
         statistical_target=TIFTarget(
+            # D=1 logistic magnitudes (small_2pl 20-item maximin ceiling ≈ 7.3/10/7.3)
             theta_points=[-1.0, 0.0, 1.0],
-            target_info=[8.0, 11.0, 8.0],
+            target_info=[7.0, 9.0, 7.0],
             method="minimax",
         ),
         content_constraints=[
