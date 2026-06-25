@@ -6,21 +6,26 @@
  * OpenAPI spec version: 0.1.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
+  CrossValidationResult,
   FormRead,
   GetFormTifCurveParams,
   HTTPValidationError,
@@ -38,6 +43,74 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
+ * Validate an assembled form against the eatATA R oracle (read-only).
+
+Recompiles the form's blueprint+pool to the same canonical D=1 problem, solves
+it with eatATA via the oracle-r service, and compares to the stored OR-Tools
+result. Never builds a deliverable form. Scope: single-form unweighted minimax
+(the eatATA bridge's objective).
+ * @summary Cross Validate Form
+ */
+export const crossValidateForm = (
+    formId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<CrossValidationResult>(
+      {url: `/api/v1/forms/${formId}/cross-validate`, method: 'POST', signal
+    },
+      options);
+    }
+  
+
+
+export const getCrossValidateFormMutationOptions = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof crossValidateForm>>, TError,{formId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof crossValidateForm>>, TError,{formId: string}, TContext> => {
+
+const mutationKey = ['crossValidateForm'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof crossValidateForm>>, {formId: string}> = (props) => {
+          const {formId} = props ?? {};
+
+          return  crossValidateForm(formId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CrossValidateFormMutationResult = NonNullable<Awaited<ReturnType<typeof crossValidateForm>>>
+    
+    export type CrossValidateFormMutationError = ErrorType<HTTPValidationError>
+
+    /**
+ * @summary Cross Validate Form
+ */
+export const useCrossValidateForm = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof crossValidateForm>>, TError,{formId: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof crossValidateForm>>,
+        TError,
+        {formId: string},
+        TContext
+      > => {
+
+      const mutationOptions = getCrossValidateFormMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Get Form
  */
 export const getForm = (

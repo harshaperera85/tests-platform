@@ -17,6 +17,7 @@ import json
 import shutil
 import subprocess
 import tempfile
+import urllib.request
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -33,6 +34,8 @@ class ROracleResult:
     objective_value: float | None
     item_ids: list[str] | None
     package: str
+    solver: str | None = None
+    solve_time_s: float | None = None
 
 
 @lru_cache(maxsize=4)
@@ -107,4 +110,47 @@ def run_oracle(problem: CompiledProblem, *, package: str = "eatATA") -> ROracleR
         objective_value=payload.get("objective"),
         item_ids=payload.get("item_ids"),
         package=package,
+        solver=payload.get("solver"),
+    )
+
+
+def run_oracle_http(
+    problem: CompiledProblem,
+    *,
+    base_url: str,
+    package: str = "eatATA",
+    timeout: float = 60.0,
+) -> ROracleResult:
+    """Solve ``problem`` via the runtime oracle-r HTTP service (read-only).
+
+    Used by the cross-validation endpoint. The service consumes the same serialized
+    CompiledProblem (canonical D=1 info matrix + constraints) as the CLI bridge.
+    """
+    if problem.num_forms != 1:
+        raise ValueError("oracle cross-validation supports single-form problems only")
+    body = dict(_serialize(problem))
+    body["package"] = package
+    req = urllib.request.Request(
+        base_url.rstrip("/") + "/assemble",
+        data=json.dumps(body).encode(),
+        headers={"content-type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=timeout) as resp:  # noqa: S310 (trusted)
+        payload = json.loads(resp.read())
+    if payload.get("status") == "error":
+        return ROracleResult(
+            status="error",
+            objective_value=None,
+            item_ids=None,
+            package=package,
+            solve_time_s=payload.get("solve_time_s"),
+        )
+    return ROracleResult(
+        status=payload["status"],
+        objective_value=payload.get("objective"),
+        item_ids=payload.get("item_ids"),
+        package=package,
+        solver=payload.get("solver"),
+        solve_time_s=payload.get("solve_time_s"),
     )

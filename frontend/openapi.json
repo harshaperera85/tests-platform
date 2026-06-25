@@ -693,6 +693,49 @@
         }
       }
     },
+    "/api/v1/forms/{form_id}/cross-validate": {
+      "post": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Cross Validate Form",
+        "description": "Validate an assembled form against the eatATA R oracle (read-only).\n\nRecompiles the form's blueprint+pool to the same canonical D=1 problem, solves\nit with eatATA via the oracle-r service, and compares to the stored OR-Tools\nresult. Never builds a deliverable form. Scope: single-form unweighted minimax\n(the eatATA bridge's objective).",
+        "operationId": "cross_validate_form",
+        "parameters": [
+          {
+            "name": "form_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Form Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CrossValidationResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/forms/{form_id}": {
       "get": {
         "tags": [
@@ -1488,6 +1531,218 @@
         "type": "object",
         "title": "ContentConstraint",
         "description": "A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` \u2014 e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content \u00d7 cognitive table cell): set ``tags`` to a\n  mapping of dimension \u2192 value \u2014 e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set."
+      },
+      "CrossValComparison": {
+        "properties": {
+          "selection_match": {
+            "type": "boolean",
+            "title": "Selection Match"
+          },
+          "only_in_ortools": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Only In Ortools"
+          },
+          "only_in_oracle": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Only In Oracle"
+          },
+          "jaccard": {
+            "type": "number",
+            "title": "Jaccard"
+          },
+          "objective_abs_diff": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective Abs Diff"
+          },
+          "objective_within_tolerance": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective Within Tolerance"
+          },
+          "tolerance": {
+            "type": "number",
+            "title": "Tolerance"
+          },
+          "tolerance_basis": {
+            "type": "string",
+            "title": "Tolerance Basis"
+          },
+          "constraints_satisfied": {
+            "type": "boolean",
+            "title": "Constraints Satisfied"
+          }
+        },
+        "type": "object",
+        "required": [
+          "selection_match",
+          "only_in_ortools",
+          "only_in_oracle",
+          "jaccard",
+          "objective_abs_diff",
+          "objective_within_tolerance",
+          "tolerance",
+          "tolerance_basis",
+          "constraints_satisfied"
+        ],
+        "title": "CrossValComparison",
+        "description": "Structured agreement between the two solutions."
+      },
+      "CrossValOracle": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "item_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Ids"
+          },
+          "objective_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective Value"
+          },
+          "solver": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solver"
+          },
+          "solve_time_s": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Solve Time S"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "CrossValOracle",
+        "description": "The R oracle's solution + solve metadata."
+      },
+      "CrossValSide": {
+        "properties": {
+          "item_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Item Ids"
+          },
+          "objective_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Objective Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_ids",
+          "objective_value"
+        ],
+        "title": "CrossValSide",
+        "description": "One assembler's solution."
+      },
+      "CrossValidationResult": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "package": {
+            "type": "string",
+            "title": "Package"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "ortools": {
+            "$ref": "#/components/schemas/CrossValSide"
+          },
+          "oracle": {
+            "$ref": "#/components/schemas/CrossValOracle"
+          },
+          "comparison": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CrossValComparison"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "package",
+          "ortools",
+          "oracle"
+        ],
+        "title": "CrossValidationResult",
+        "description": "Full cross-validation payload for the UI.\n\n``status``: ``ok`` (ran and compared), ``unsupported`` (blueprint outside the\noracle's scope \u2014 single-form unweighted minimax only), ``oracle_unavailable``\n(service unreachable), or ``error``."
       },
       "EnemyPolicy": {
         "properties": {

@@ -1,16 +1,21 @@
 # =============================================================================
-# DEV / CI ONLY — assembly parity oracle image.  NEVER a runtime dependency.
+# ATA validation oracle image — GPL R packages (eatATA + lpSolve), kept ISOLATED.
 #
-# This image carries the GPL R oracle packages (eatATA, and Rglpk/GLPK) used to
-# validate the owned OR-Tools assembly engine on fixtures (plan §6, §14). Per
-# CLAUDE.md golden rule 2 these packages must stay out of every shipped/runtime
-# image — they live here only, and only CI / local test runs use this image.
-# The runtime scoring service is the separate, package-free engines/scoring-r/.
+# Two roles, one image:
+#   1. CI parity gate (default-overridden command runs pytest; see below).
+#   2. Runtime READ-ONLY cross-validation service (default CMD = plumber on :8000),
+#      called by the backend so users can validate an OR-Tools form against eatATA.
 #
-# Build (from repo root, so backend/requirements.txt is in context):
-#   docker build -f engines/oracle-r/Dockerfile -t oracle-r:ci .
-# Run the parity test (mount the backend source read-only style):
-#   docker run --rm -v "$PWD/backend:/app" -w /app oracle-r:ci
+# The GPL oracle packages live ONLY in this image and are NEVER used to build a
+# deliverable form — OR-Tools is the sole production assembler (CLAUDE.md golden
+# rule 2). This service is deliberately SEPARATE from the package-free mirt
+# scoring-r so the GPL oracle stays isolated / re-firewallable.
+#
+# Build (from repo root, so backend/* is in context):
+#   docker build -f engines/oracle-r/Dockerfile -t oracle-r .
+# CI parity test (overrides the default CMD, mounts backend source):
+#   docker run --rm -v "$PWD/backend:/app" -w /app oracle-r \
+#       pytest app/tests/regression/test_oracle_parity.py::test_mip_matches_r_oracle -q
 # =============================================================================
 
 # Same R base as the runtime scoring service (engines/scoring-r/) so the R
@@ -46,15 +51,22 @@ ENV PATH="/opt/venv/bin:$PATH" \
 COPY backend/requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache-dir -r /tmp/requirements.txt pytest
 
-# Backend source is mounted at /app at run time (kept out of the image so code
-# changes don't bust the cached R/Python layers).
+# Runtime validation service: the plumber app + the shared solver core (copied
+# from the backend tree so the runtime image is self-contained; the CI path uses
+# the mounted backend copy instead).
+COPY engines/oracle-r/plumber.R /srv/oracle/plumber.R
+COPY backend/app/assembly/oracles/ata_oracle_core.R /srv/oracle/ata_oracle_core.R
+
+# Backend source is mounted at /app for the CI parity run (kept out of the image so
+# code changes don't bust the cached R/Python layers).
 WORKDIR /app
 
-# The plumber base sets an ENTRYPOINT that launches the R server; reset it so this
-# image runs ordinary commands (pytest / Rscript) instead.
+# The plumber base sets an ENTRYPOINT that launches a server; reset it so the CI
+# command override (pytest / Rscript) runs as an ordinary command.
 ENTRYPOINT []
 
-# Default: run only the R-oracle parity test. cacheprovider disabled so pytest
-# never writes into the mounted source tree.
-CMD ["pytest", "app/tests/regression/test_oracle_parity.py::test_mip_matches_r_oracle", \
-     "-q", "-p", "no:cacheprovider"]
+EXPOSE 8000
+
+# Default: run the runtime read-only validation service. CI overrides this with an
+# explicit `pytest ...` command (which runs instead of this CMD).
+CMD ["Rscript", "-e", "plumber::pr_run(plumber::pr('/srv/oracle/plumber.R'), host='0.0.0.0', port=8000)"]

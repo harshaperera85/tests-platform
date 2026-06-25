@@ -9,6 +9,47 @@ import * as zod from 'zod';
 
 
 /**
+ * Validate an assembled form against the eatATA R oracle (read-only).
+
+Recompiles the form's blueprint+pool to the same canonical D=1 problem, solves
+it with eatATA via the oracle-r service, and compares to the stored OR-Tools
+result. Never builds a deliverable form. Scope: single-form unweighted minimax
+(the eatATA bridge's objective).
+ * @summary Cross Validate Form
+ */
+export const crossValidateFormParams = zod.object({
+  "form_id": zod.string()
+})
+
+export const crossValidateFormResponse = zod.object({
+  "status": zod.string(),
+  "package": zod.string(),
+  "detail": zod.union([zod.string(),zod.null()]).optional(),
+  "ortools": zod.object({
+  "item_ids": zod.array(zod.string()),
+  "objective_value": zod.union([zod.number(),zod.null()])
+}).describe('One assembler\'s solution.'),
+  "oracle": zod.object({
+  "status": zod.string(),
+  "item_ids": zod.union([zod.array(zod.string()),zod.null()]).optional(),
+  "objective_value": zod.union([zod.number(),zod.null()]).optional(),
+  "solver": zod.union([zod.string(),zod.null()]).optional(),
+  "solve_time_s": zod.union([zod.number(),zod.null()]).optional()
+}).describe('The R oracle\'s solution + solve metadata.'),
+  "comparison": zod.union([zod.object({
+  "selection_match": zod.boolean(),
+  "only_in_ortools": zod.array(zod.string()),
+  "only_in_oracle": zod.array(zod.string()),
+  "jaccard": zod.number(),
+  "objective_abs_diff": zod.union([zod.number(),zod.null()]),
+  "objective_within_tolerance": zod.union([zod.boolean(),zod.null()]),
+  "tolerance": zod.number(),
+  "tolerance_basis": zod.string(),
+  "constraints_satisfied": zod.boolean()
+}).describe('Structured agreement between the two solutions.'),zod.null()]).optional()
+}).describe('Full cross-validation payload for the UI.\n\n``status``: ``ok`` (ran and compared), ``unsupported`` (blueprint outside the\noracle\'s scope — single-form unweighted minimax only), ``oracle_unavailable``\n(service unreachable), or ``error``.')
+
+/**
  * @summary Get Form
  */
 export const getFormParams = zod.object({

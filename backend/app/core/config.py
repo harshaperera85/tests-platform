@@ -54,6 +54,8 @@ class Settings(BaseSettings):
 
     # --- capability services ---
     scoring_r_url: str = "http://scoring-r:8000"
+    # Read-only ATA cross-validation oracle (GPL eatATA), separate from scoring-r.
+    oracle_r_url: str = "http://oracle-r:8000"
     # CAT platform endpoints are pinned before Phase 2 (see plan §16). Adapter
     # default is unset locally.
     cat_platform_url: str | None = None

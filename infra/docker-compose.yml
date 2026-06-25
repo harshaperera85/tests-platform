@@ -38,6 +38,7 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://tests:tests@postgres:5432/tests}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
       SCORING_R_URL: ${SCORING_R_URL:-http://scoring-r:8000}
+      ORACLE_R_URL: ${ORACLE_R_URL:-http://oracle-r:8000}
       ENVIRONMENT: ${ENVIRONMENT:-development}
       ASSEMBLY_ASYNC: ${ASSEMBLY_ASYNC:-true}
     ports:
@@ -78,6 +79,17 @@ services:
       context: ../engines/scoring-r
     ports:
       - "8001:8000"
+
+  # Read-only ATA cross-validation oracle (GPL: eatATA + lpSolve), kept SEPARATE
+  # from scoring-r so the GPL oracle stays isolated. Never builds a deliverable
+  # form — OR-Tools is the sole production assembler.
+  oracle-r:
+    build:
+      # repo-root context: the Dockerfile copies backend/ + engines/oracle-r/.
+      context: ..
+      dockerfile: engines/oracle-r/Dockerfile
+    ports:
+      - "8002:8000"
 
   frontend:
     build:

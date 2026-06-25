@@ -6,10 +6,17 @@ the data behind the form-preview plot (plan §10).
 
 from __future__ import annotations
 
+import urllib.error
+
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
+from app.assembly.ata_model import INFO_SCALE
+from app.assembly.blueprint_compiler import compile_blueprint
+from app.assembly.oracles import r_oracle
+from app.core.config import settings
 from app.core.db import get_db
+from app.models.assembly_job import AssemblyJobRow
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
 from app.psychometrics import pools
@@ -23,9 +30,126 @@ from app.schemas.responses import (
     TIFCurvePoint,
     TIFPoint,
 )
+from app.schemas.validation import (
+    CrossValComparison,
+    CrossValidationResult,
+    CrossValOracle,
+    CrossValSide,
+)
 from app.simulation import simulate_linear
 
 router = APIRouter(prefix="/forms", tags=["forms"])
+
+
+def _unsupported(
+    ortools: CrossValSide, package: str, detail: str
+) -> CrossValidationResult:
+    return CrossValidationResult(
+        status="unsupported",
+        package=package,
+        detail=detail,
+        ortools=ortools,
+        oracle=CrossValOracle(status="skipped"),
+    )
+
+
+@router.post("/{form_id}/cross-validate", response_model=CrossValidationResult)
+def cross_validate_form(
+    form_id: str, db: Session = Depends(get_db)
+) -> CrossValidationResult:
+    """Validate an assembled form against the eatATA R oracle (read-only).
+
+    Recompiles the form's blueprint+pool to the same canonical D=1 problem, solves
+    it with eatATA via the oracle-r service, and compares to the stored OR-Tools
+    result. Never builds a deliverable form. Scope: single-form unweighted minimax
+    (the eatATA bridge's objective).
+    """
+    row = db.get(FormRow, form_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="form not found")
+    bp_row = db.get(BlueprintRow, row.blueprint_id)
+    if bp_row is None:  # pragma: no cover - FK guarantees presence
+        raise HTTPException(status_code=404, detail="blueprint not found")
+
+    blueprint = Blueprint.model_validate(bp_row.spec)
+    job = db.get(AssemblyJobRow, row.assembly_job_id)
+    ortools_obj = (job.result or {}).get("objective_value") if job else None
+    ortools = CrossValSide(item_ids=list(row.item_ids), objective_value=ortools_obj)
+    package = "eatATA"
+
+    # Scope guards: the eatATA bridge solves single-form, unweighted minimax.
+    tgt = blueprint.statistical_target
+    if blueprint.num_forms != 1:
+        return _unsupported(ortools, package, "cross-validation is single-form only")
+    if tgt.method != "minimax":
+        return _unsupported(ortools, package, "oracle bridge validates minimax only")
+    if any(w != 1.0 for w in tgt.resolved_weights):
+        return _unsupported(
+            ortools, package, "oracle bridge validates unweighted minimax only"
+        )
+
+    problem = compile_blueprint(blueprint, pools.load_pool_by_id(row.pool_id))
+    try:
+        rr = r_oracle.run_oracle_http(
+            problem, base_url=settings.oracle_r_url, package=package
+        )
+    except (urllib.error.URLError, OSError, TimeoutError) as exc:
+        return CrossValidationResult(
+            status="oracle_unavailable",
+            package=package,
+            detail=f"oracle-r service unreachable: {exc}",
+            ortools=ortools,
+            oracle=CrossValOracle(status="unavailable"),
+        )
+
+    oracle = CrossValOracle(
+        status=rr.status,
+        item_ids=rr.item_ids,
+        objective_value=rr.objective_value,
+        solver=rr.solver,
+        solve_time_s=rr.solve_time_s,
+    )
+    if rr.status not in ("optimal", "feasible") or rr.item_ids is None:
+        return CrossValidationResult(
+            status="error",
+            package=package,
+            detail="oracle did not return a feasible solution",
+            ortools=ortools,
+            oracle=oracle,
+        )
+
+    ot_set, or_set = set(row.item_ids), set(rr.item_ids)
+    union = ot_set | or_set
+    # Objective tolerance from integer info-scaling: the engine rounds each item's
+    # info to 1/INFO_SCALE before solving, so the accumulated miss on a TIF
+    # *deviation* over L items is bounded by ~(L+1)/INFO_SCALE (eatATA solves the
+    # unrounded LP). Matches the CI parity gate's tolerance.
+    tolerance = (problem.length + 1) / INFO_SCALE
+    obj_diff = (
+        abs(ortools_obj - rr.objective_value)
+        if ortools_obj is not None and rr.objective_value is not None
+        else None
+    )
+    comparison = CrossValComparison(
+        selection_match=ot_set == or_set,
+        only_in_ortools=sorted(ot_set - or_set),
+        only_in_oracle=sorted(or_set - ot_set),
+        jaccard=(len(ot_set & or_set) / len(union)) if union else 1.0,
+        objective_abs_diff=obj_diff,
+        objective_within_tolerance=(obj_diff <= tolerance)
+        if obj_diff is not None
+        else None,
+        tolerance=tolerance,
+        tolerance_basis="(length + 1) / INFO_SCALE",
+        constraints_satisfied=rr.status in ("optimal", "feasible"),
+    )
+    return CrossValidationResult(
+        status="ok",
+        package=package,
+        ortools=ortools,
+        oracle=oracle,
+        comparison=comparison,
+    )
 
 
 @router.get("/{form_id}", response_model=FormRead)

@@ -233,7 +233,24 @@ cut-score targets anywhere on θ.
 - **Content constraints** card — ✓/✗ per constraint with the count in the form vs the
   required bound (proportion bounds shown resolved, tagged `·prop`).
 - **Assembled items** — the fixed linear order with each item's stem + `a`/`b` + KC/Bloom.
+- **Validate against eatATA** — see below.
 - **Walk the form →** opens the session navigator.
+
+### Cross-validation against eatATA (read-only)
+**Validate against eatATA** re-solves the *same compiled problem* (same canonical D=1 info
+matrix, constraints, and minimax objective) with the established **eatATA** R package via the
+isolated `oracle-r` service, and shows a transparent side-by-side comparison:
+- **OR-Tools (CP-SAT) · production** vs **eatATA (R) · validation** — each with its objective
+  and item count, plus the solver used (`lpSolve`) and solve time.
+- an **agreement / divergence** indicator, **item-selection** agreement (identical set, or the
+  symmetric difference + Jaccard), and **objective** |Δ| vs. an `(length+1)/INFO_SCALE` tolerance
+  (the integer-scaling resolution of the engine), and constraint feasibility.
+
+This is **read-only validation** — OR-Tools is the sole production assembler; the eatATA result is
+never used to build a deliverable form. It applies to **single-form unweighted minimax** blueprints
+(the eatATA bridge's objective); other blueprints report *“not applicable”*. On the regenerated D=1
+fixtures the two agree (identical selection; objective within tolerance). It complements — does not
+replace — the CI `oracle-parity` gate.
 
 ### Session navigator (Walk)
 - **Manual / Simulated examinee** toggle.

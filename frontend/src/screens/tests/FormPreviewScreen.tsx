@@ -18,11 +18,16 @@ import {
 
 import { useGetBlueprint } from "../../api/generated/endpoints/blueprints/blueprints";
 import {
+  useCrossValidateForm,
   useGetForm,
   useGetFormTifCurve,
 } from "../../api/generated/endpoints/forms/forms";
 import { useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
-import type { Blueprint, PoolItem } from "../../api/generated/model";
+import type {
+  Blueprint,
+  CrossValidationResult,
+  PoolItem,
+} from "../../api/generated/model";
 import { Alert, Button, Card, Pill, Spinner } from "../../components/ui";
 
 export function FormPreviewScreen({
@@ -39,6 +44,8 @@ export function FormPreviewScreen({
   onBack?: () => void;
 }) {
   const form = useGetForm(formId);
+  const crossVal = useCrossValidateForm();
+  const xval: CrossValidationResult | undefined = crossVal.data;
   const curve = useGetFormTifCurve(formId, { theta_min: -3, theta_max: 3, n: 61 });
   const blueprint = useGetBlueprint(blueprintId, {
     query: { enabled: Boolean(blueprintId) },
@@ -82,6 +89,13 @@ export function FormPreviewScreen({
             {onBack && (
               <Button variant="secondary" onClick={onBack}>← Back</Button>
             )}
+            <Button
+              variant="secondary"
+              onClick={() => crossVal.mutate({ formId })}
+              disabled={crossVal.isPending}
+            >
+              {crossVal.isPending ? "Validating…" : "Validate against eatATA"}
+            </Button>
             <Button onClick={onWalk}>Walk the form →</Button>
           </div>
         }
@@ -190,6 +204,14 @@ export function FormPreviewScreen({
 
       <ConstraintCheck blueprint={blueprint.data?.blueprint} form={f} byId={byId} />
 
+      {(crossVal.isPending || xval || crossVal.isError) && (
+        <CrossValidationPanel
+          result={xval}
+          loading={crossVal.isPending}
+          error={crossVal.isError}
+        />
+      )}
+
       <Card
         title="Assembled items"
         subtitle="Fixed linear order · simulated bank content"
@@ -265,6 +287,108 @@ function ConstraintCheck({
             </li>
           );
         })}
+      </ul>
+    </Card>
+  );
+}
+
+function CrossValidationPanel({
+  result,
+  loading,
+  error,
+}: {
+  result?: CrossValidationResult;
+  loading: boolean;
+  error: boolean;
+}) {
+  const subtitle =
+    "Read-only: solve the same compiled problem with the eatATA R package and compare. " +
+    "OR-Tools remains the sole production assembler — the oracle never builds a form.";
+  if (loading)
+    return (
+      <Card title="Cross-validation (eatATA)" subtitle={subtitle}>
+        <Spinner label="Solving with eatATA (lpSolve)…" />
+      </Card>
+    );
+  if (error || !result)
+    return (
+      <Card title="Cross-validation (eatATA)" subtitle={subtitle}>
+        <Alert tone="error" title="Cross-validation request failed." />
+      </Card>
+    );
+
+  if (result.status !== "ok" || !result.comparison) {
+    const tone = result.status === "unsupported" ? "info" : "warn";
+    const title =
+      result.status === "unsupported"
+        ? "Not applicable to this blueprint"
+        : result.status === "oracle_unavailable"
+          ? "Oracle service unavailable"
+          : "Oracle could not validate";
+    return (
+      <Card title="Cross-validation (eatATA)" subtitle={subtitle}>
+        <Alert tone={tone} title={title}>
+          {result.detail ?? ""}
+        </Alert>
+      </Card>
+    );
+  }
+
+  const c = result.comparison;
+  const o = result.oracle;
+  const agree = c.selection_match && c.objective_within_tolerance !== false;
+  return (
+    <Card title="Cross-validation (eatATA)" subtitle={subtitle}>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <Pill tone={agree ? "ok" : "warn"}>
+          {agree ? "✓ agreement" : "⚠ divergence"}
+        </Pill>
+        <Pill tone="info">{result.package}</Pill>
+        {o.solver && <Pill>solver: {o.solver}</Pill>}
+        {o.solve_time_s != null && <Pill>{o.solve_time_s.toFixed(2)}s</Pill>}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="rounded-lg border border-ink-100 p-3">
+          <div className="font-medium text-ink-800">OR-Tools (CP-SAT) · production</div>
+          <div className="mt-1 text-ink-600">
+            objective {result.ortools.objective_value?.toFixed(4) ?? "—"}
+          </div>
+          <div className="text-ink-600">{result.ortools.item_ids.length} items</div>
+        </div>
+        <div className="rounded-lg border border-ink-100 p-3">
+          <div className="font-medium text-ink-800">eatATA (R) · validation</div>
+          <div className="mt-1 text-ink-600">
+            objective {o.objective_value?.toFixed(4) ?? "—"}
+          </div>
+          <div className="text-ink-600">{o.item_ids?.length ?? 0} items</div>
+        </div>
+      </div>
+
+      <ul className="mt-3 space-y-1 text-sm text-ink-700">
+        <li>
+          <span className="font-medium">Item selection:</span>{" "}
+          {c.selection_match
+            ? "identical set ✓"
+            : `differ — ${c.only_in_ortools.length} only in OR-Tools, ` +
+              `${c.only_in_oracle.length} only in eatATA (Jaccard ${c.jaccard.toFixed(3)})`}
+        </li>
+        <li>
+          <span className="font-medium">Objective:</span>{" "}
+          |Δ| = {c.objective_abs_diff?.toFixed(5) ?? "—"} ·{" "}
+          {c.objective_within_tolerance ? "within" : "outside"} tolerance{" "}
+          {c.tolerance.toFixed(5)} <span className="text-ink-400">[{c.tolerance_basis}]</span>
+        </li>
+        <li>
+          <span className="font-medium">Constraints:</span>{" "}
+          {c.constraints_satisfied ? "oracle solution feasible ✓" : "not satisfied ✗"}
+        </li>
+        {!c.selection_match && (c.only_in_ortools.length > 0 || c.only_in_oracle.length > 0) && (
+          <li className="text-xs text-ink-500">
+            only-OR-Tools: {c.only_in_ortools.join(", ") || "—"} · only-eatATA:{" "}
+            {c.only_in_oracle.join(", ") || "—"}
+          </li>
+        )}
       </ul>
     </Card>
   );

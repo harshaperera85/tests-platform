@@ -24,9 +24,13 @@ locally**. See `SETUP.md`.
    `AdministrationStrategy` interface, registered via the registry. **Adding/changing a model must
    never edit the engine core, the contract, the registry, or sibling strategies.** New model =
    new file in `engine/strategies/` + `@register` + a config branch + a frontend config panel.
-2. **Assembly is owned in Python (OR-Tools / CP-SAT).** `TestDesign` and `eatATA` (R) are **dev-time
-   validation oracles only** — never a runtime or shipped dependency. Do not route production
-   assembly through R.
+2. **Assembly is owned in Python (OR-Tools / CP-SAT).** `eatATA`/`TestDesign` (R, GPL) are
+   **validation oracles only — they never build a deliverable form.** Two sanctioned roles: the
+   CI parity gate (`oracle-parity`), and an **isolated runtime read-only cross-validation service**
+   (`engines/oracle-r`, the `oracle-r` compose service) the UI can call on demand to compare an
+   OR-Tools form against eatATA. **Production assembly is never routed through R.** Keep `oracle-r`
+   a **separate** service from the package-free mirt `scoring-r` so the GPL oracle stays isolated /
+   re-firewallable.
 3. **CAT = adapter, not fork.** The CAT module is a thin client to the existing CAT platform
    (mirtCAT + neural services). Preserve all CAT functionality. Do not copy/duplicate CAT
    orchestration logic into this repo (avoid divergence). Behind the contract, adapter vs absorbed

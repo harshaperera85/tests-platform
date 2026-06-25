@@ -281,9 +281,22 @@ packages; phase them in):
 - **Bidirectional exposure/utilization** (Lim & Choi): penalize over- *and* under-used items.
 - **Honeycomb pool assembly**: assemble multiple parallel CAT pools.
 
-**Validation oracles (dev-time).** For each standard problem, assemble with our engine and with
+**Validation oracles.** For each standard problem, assemble with our engine and with
 `TestDesign::Static` / `eatATA`, and assert parity (objective value, constraint satisfaction) on
-known fixtures before trusting the engine in production. Oracles are never in the runtime path.
+known fixtures. Two sanctioned roles, both **read-only validation that never builds a deliverable
+form** (OR-Tools is the sole production assembler):
+
+1. **CI parity gate** (`oracle-parity` workflow) — fixture parity on every relevant change.
+2. **Runtime cross-validation service** (`engines/oracle-r`, the `oracle-r` compose service, a
+   plumber wrapper over the shared `ata_oracle_core.R`). The backend endpoint
+   `POST /api/v1/forms/{id}/cross-validate` recompiles the form's blueprint+pool to the *same*
+   canonical D=1 info matrix, solves it with eatATA over HTTP, and returns a structured comparison
+   (item-selection agreement, objective |Δ| vs an `(length+1)/INFO_SCALE` tolerance, feasibility,
+   solver/time). The UI's **Validate against eatATA** action surfaces it as transparent
+   psychometric output. Scope: single-form unweighted minimax (the eatATA bridge's objective).
+
+`oracle-r` is kept a **separate** service from the package-free mirt `scoring-r` so the GPL oracle
+stays isolated / re-firewallable. It is never on the production *assembly* path.
 
 ---
 
