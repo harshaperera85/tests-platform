@@ -13,6 +13,7 @@ export interface FormRead {
   assembly_job_id: string;
   form_index: number;
   status: string;
+  lifecycle_state?: string;
   item_ids: string[];
   created_at: string;
   tif: TIFPoint[];

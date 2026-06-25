@@ -9,6 +9,7 @@ from app.models.audit_event import AuditEventRow
 from app.models.base import Base
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
+from app.models.form_review_event import FormReviewEventRow
 from app.models.test import TestRow
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "Base",
     "BlueprintRow",
     "FormRow",
+    "FormReviewEventRow",
     "TestRow",
 ]

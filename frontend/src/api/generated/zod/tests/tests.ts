@@ -230,6 +230,8 @@ export const listTestFormsParams = zod.object({
   "test_id": zod.string()
 })
 
+export const listTestFormsResponseLifecycleStateDefault = "draft";
+
 export const listTestFormsResponseItem = zod.object({
   "id": zod.string(),
   "assembly_job_id": zod.string(),
@@ -237,6 +239,7 @@ export const listTestFormsResponseItem = zod.object({
   "pool_id": zod.string(),
   "form_index": zod.number(),
   "status": zod.string(),
+  "lifecycle_state": zod.string().default(listTestFormsResponseLifecycleStateDefault),
   "n_items": zod.number(),
   "created_at": zod.string().datetime({})
 })

@@ -70,6 +70,7 @@ class FormRead(BaseModel):
     assembly_job_id: str
     form_index: int
     status: str
+    lifecycle_state: str = "draft"
     item_ids: list[str]
     created_at: datetime
     #: actual-vs-target TIF, point by point — drives the preview plot.

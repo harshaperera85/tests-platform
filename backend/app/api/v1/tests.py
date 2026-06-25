@@ -26,7 +26,7 @@ from app.schemas.tests import (
     TestSummary,
     TestUpdate,
 )
-from app.services import audit
+from app.services import audit, form_lifecycle
 from app.services.assembly_run import create_job, dispatch
 
 router = APIRouter(prefix="/tests", tags=["tests"])
@@ -138,7 +138,15 @@ def update_test(
     test = _get_or_404(db, test_id)
     if test.status == "locked":
         raise HTTPException(status_code=409, detail="test is locked; unlock to edit")
+    # Governance freeze: editing the blueprint is blocked once a form has left draft.
     data = payload.model_dump(exclude_unset=True)
+    if data.get("blueprint") is not None and form_lifecycle.test_has_frozen_form(
+        db, test_id
+    ):
+        raise HTTPException(
+            status_code=409,
+            detail="a form is in review/approved/published; return it to draft to edit",
+        )
     if "name" in data and data["name"] is not None:
         test.name = data["name"]
     if "pool_id" in data and data["pool_id"] is not None:
@@ -173,6 +181,13 @@ def assemble_test(
     if test.status == "locked":
         raise HTTPException(
             status_code=409, detail="test is locked; unlock to assemble"
+        )
+    # Governance freeze: re-assembly is blocked once a form has left draft.
+    if form_lifecycle.test_has_frozen_form(db, test_id):
+        raise HTTPException(
+            status_code=409,
+            detail="a form is in review/approved/published; return it to draft "
+            "to re-assemble",
         )
     if test.blueprint_spec is None:
         raise HTTPException(status_code=422, detail="test has no blueprint to assemble")
@@ -247,6 +262,7 @@ def list_test_forms(test_id: str, db: Session = Depends(get_db)) -> list[FormSum
             pool_id=r.pool_id,
             form_index=r.form_index,
             status=r.status,
+            lifecycle_state=r.lifecycle_state,
             n_items=len(r.item_ids),
             created_at=r.created_at,
         )

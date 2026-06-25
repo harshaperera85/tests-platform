@@ -693,6 +693,144 @@
         }
       }
     },
+    "/api/v1/forms/{form_id}/lifecycle": {
+      "get": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Get Form Lifecycle",
+        "operationId": "get_form_lifecycle",
+        "parameters": [
+          {
+            "name": "form_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Form Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormLifecycle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{form_id}/transition": {
+      "post": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Transition Form",
+        "description": "Move a form through the review/approve/publish lifecycle (records sign-off).",
+        "operationId": "transition_form",
+        "parameters": [
+          {
+            "name": "form_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Form Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransitionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormLifecycle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/{form_id}/qa-report": {
+      "get": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Get Form Qa Report",
+        "description": "Server-side form-QA report (answer key, key balance, coverage, SE/TCC, TIF).",
+        "operationId": "get_form_qa_report",
+        "parameters": [
+          {
+            "name": "form_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Form Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FormQAReport"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/forms/{form_id}/cross-validate": {
       "post": {
         "tags": [
@@ -1160,6 +1298,36 @@
   },
   "components": {
     "schemas": {
+      "AnswerKeyEntry": {
+        "properties": {
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "answer_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answer Key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "position",
+          "item_id",
+          "answer_key"
+        ],
+        "title": "AnswerKeyEntry"
+      },
       "AssemblyJobCreate": {
         "properties": {
           "blueprint_id": {
@@ -1532,6 +1700,53 @@
         "title": "ContentConstraint",
         "description": "A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` \u2014 e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content \u00d7 cognitive table cell): set ``tags`` to a\n  mapping of dimension \u2192 value \u2014 e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set."
       },
+      "CoverageRow": {
+        "properties": {
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "minimum": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minimum"
+          },
+          "maximum": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maximum"
+          },
+          "satisfied": {
+            "type": "boolean",
+            "title": "Satisfied"
+          }
+        },
+        "type": "object",
+        "required": [
+          "label",
+          "count",
+          "minimum",
+          "maximum",
+          "satisfied"
+        ],
+        "title": "CoverageRow"
+      },
       "CrossValComparison": {
         "properties": {
           "selection_match": {
@@ -1800,6 +2015,116 @@
         "title": "ExposureTarget",
         "description": "Optional caps on item reuse across assembled forms (multi-form jobs).\n\nTwo reuse levers:\n- **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.\n  Specify it directly, or as a target ``max_exposure_rate`` (proportion 0\u20131) that\n  the compiler translates to a count given the planned form count:\n  ``max_use \u2248 ceil(rate \u00d7 num_forms)`` (assumes **uniform form administration**).\n  A raw ``max_use_per_item`` is the low-level override and wins if both are set.\n- **pairwise overlap cap**: any two forms may share at most\n  ``max_pairwise_overlap`` items (distinct from the total per-item cap \u2014 it bounds\n  similarity *between forms*, e.g. for security across parallel administrations)."
       },
+      "FormLifecycle": {
+        "properties": {
+          "form_id": {
+            "type": "string",
+            "title": "Form Id"
+          },
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "frozen": {
+            "type": "boolean",
+            "title": "Frozen"
+          },
+          "available_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Available Actions"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewEvent"
+            },
+            "type": "array",
+            "title": "Events"
+          }
+        },
+        "type": "object",
+        "required": [
+          "form_id",
+          "state",
+          "frozen",
+          "available_actions",
+          "events"
+        ],
+        "title": "FormLifecycle"
+      },
+      "FormQAReport": {
+        "properties": {
+          "form_id": {
+            "type": "string",
+            "title": "Form Id"
+          },
+          "lifecycle_state": {
+            "type": "string",
+            "title": "Lifecycle State"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "metric": {
+            "type": "string",
+            "title": "Metric",
+            "default": "logistic-D1-slope-intercept"
+          },
+          "answer_key": {
+            "items": {
+              "$ref": "#/components/schemas/AnswerKeyEntry"
+            },
+            "type": "array",
+            "title": "Answer Key"
+          },
+          "key_balance": {
+            "$ref": "#/components/schemas/KeyBalance"
+          },
+          "coverage": {
+            "items": {
+              "$ref": "#/components/schemas/CoverageRow"
+            },
+            "type": "array",
+            "title": "Coverage"
+          },
+          "curve": {
+            "items": {
+              "$ref": "#/components/schemas/QAPsychometricPoint"
+            },
+            "type": "array",
+            "title": "Curve"
+          },
+          "marginal_reliability": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Marginal Reliability"
+          },
+          "tif_actual_vs_target": {
+            "items": {
+              "$ref": "#/components/schemas/TIFActualTarget"
+            },
+            "type": "array",
+            "title": "Tif Actual Vs Target"
+          }
+        },
+        "type": "object",
+        "required": [
+          "form_id",
+          "lifecycle_state",
+          "n_items",
+          "answer_key",
+          "key_balance",
+          "coverage",
+          "curve",
+          "marginal_reliability",
+          "tif_actual_vs_target"
+        ],
+        "title": "FormQAReport"
+      },
       "FormRead": {
         "properties": {
           "id": {
@@ -1821,6 +2146,11 @@
           "status": {
             "type": "string",
             "title": "Status"
+          },
+          "lifecycle_state": {
+            "type": "string",
+            "title": "Lifecycle State",
+            "default": "draft"
           },
           "item_ids": {
             "items": {
@@ -1880,6 +2210,11 @@
           "status": {
             "type": "string",
             "title": "Status"
+          },
+          "lifecycle_state": {
+            "type": "string",
+            "title": "Lifecycle State",
+            "default": "draft"
           },
           "n_items": {
             "type": "integer",
@@ -1945,6 +2280,37 @@
           "environment"
         ],
         "title": "HealthResponse"
+      },
+      "KeyBalance": {
+        "properties": {
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Counts"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "imbalanced": {
+            "type": "boolean",
+            "title": "Imbalanced"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "counts",
+          "n",
+          "imbalanced",
+          "note"
+        ],
+        "title": "KeyBalance"
       },
       "Navigation": {
         "properties": {
@@ -2410,6 +2776,41 @@
         "title": "PreviewStep",
         "description": "One step of the walkthrough: the new state + what to do next.\n\n``next_action.navigation`` carries the strategy's capabilities, so no separate\ncapabilities call is needed."
       },
+      "QAPsychometricPoint": {
+        "properties": {
+          "theta": {
+            "type": "number",
+            "title": "Theta"
+          },
+          "information": {
+            "type": "number",
+            "title": "Information"
+          },
+          "se": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se"
+          },
+          "tcc": {
+            "type": "number",
+            "title": "Tcc"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta",
+          "information",
+          "se",
+          "tcc"
+        ],
+        "title": "QAPsychometricPoint"
+      },
       "ReadinessResponse": {
         "properties": {
           "status": {
@@ -2434,6 +2835,69 @@
           "checks"
         ],
         "title": "ReadinessResponse"
+      },
+      "ReviewEvent": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "from_state": {
+            "type": "string",
+            "title": "From State"
+          },
+          "to_state": {
+            "type": "string",
+            "title": "To State"
+          },
+          "actor": {
+            "type": "string",
+            "title": "Actor"
+          },
+          "actor_role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Role"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "action",
+          "from_state",
+          "to_state",
+          "actor",
+          "actor_role",
+          "comment",
+          "created_at"
+        ],
+        "title": "ReviewEvent"
       },
       "ScenarioRead": {
         "properties": {
@@ -2654,6 +3118,29 @@
           "response"
         ],
         "title": "SimulationStepRead"
+      },
+      "TIFActualTarget": {
+        "properties": {
+          "theta": {
+            "type": "number",
+            "title": "Theta"
+          },
+          "target": {
+            "type": "number",
+            "title": "Target"
+          },
+          "actual": {
+            "type": "number",
+            "title": "Actual"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta",
+          "target",
+          "actual"
+        ],
+        "title": "TIFActualTarget"
       },
       "TIFCurve": {
         "properties": {
@@ -3053,6 +3540,47 @@
         "type": "object",
         "title": "TestUpdate",
         "description": "PATCH \u2014 only provided fields are applied."
+      },
+      "TransitionRequest": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "title": "Action"
+          },
+          "actor": {
+            "type": "string",
+            "title": "Actor",
+            "default": "anonymous"
+          },
+          "actor_role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Role"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action"
+        ],
+        "title": "TransitionRequest",
+        "description": "A requested lifecycle transition. ``actor``/``actor_role`` are the *claimed*\nidentity (recorded; not yet authorization-checked \u2014 role hook is a stub)."
       },
       "ValidationError": {
         "properties": {

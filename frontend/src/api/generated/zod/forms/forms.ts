@@ -9,6 +9,112 @@ import * as zod from 'zod';
 
 
 /**
+ * @summary Get Form Lifecycle
+ */
+export const getFormLifecycleParams = zod.object({
+  "form_id": zod.string()
+})
+
+export const getFormLifecycleResponse = zod.object({
+  "form_id": zod.string(),
+  "state": zod.string(),
+  "frozen": zod.boolean(),
+  "available_actions": zod.array(zod.string()),
+  "events": zod.array(zod.object({
+  "id": zod.string(),
+  "action": zod.string(),
+  "from_state": zod.string(),
+  "to_state": zod.string(),
+  "actor": zod.string(),
+  "actor_role": zod.union([zod.string(),zod.null()]),
+  "comment": zod.union([zod.string(),zod.null()]),
+  "created_at": zod.string().datetime({})
+}))
+})
+
+/**
+ * Move a form through the review/approve/publish lifecycle (records sign-off).
+ * @summary Transition Form
+ */
+export const transitionFormParams = zod.object({
+  "form_id": zod.string()
+})
+
+export const transitionFormBodyActorDefault = "anonymous";
+
+export const transitionFormBody = zod.object({
+  "action": zod.string(),
+  "actor": zod.string().default(transitionFormBodyActorDefault),
+  "actor_role": zod.union([zod.string(),zod.null()]).optional(),
+  "comment": zod.union([zod.string(),zod.null()]).optional()
+}).describe('A requested lifecycle transition. ``actor``/``actor_role`` are the *claimed*\nidentity (recorded; not yet authorization-checked — role hook is a stub).')
+
+export const transitionFormResponse = zod.object({
+  "form_id": zod.string(),
+  "state": zod.string(),
+  "frozen": zod.boolean(),
+  "available_actions": zod.array(zod.string()),
+  "events": zod.array(zod.object({
+  "id": zod.string(),
+  "action": zod.string(),
+  "from_state": zod.string(),
+  "to_state": zod.string(),
+  "actor": zod.string(),
+  "actor_role": zod.union([zod.string(),zod.null()]),
+  "comment": zod.union([zod.string(),zod.null()]),
+  "created_at": zod.string().datetime({})
+}))
+})
+
+/**
+ * Server-side form-QA report (answer key, key balance, coverage, SE/TCC, TIF).
+ * @summary Get Form Qa Report
+ */
+export const getFormQaReportParams = zod.object({
+  "form_id": zod.string()
+})
+
+export const getFormQaReportResponseMetricDefault = "logistic-D1-slope-intercept";export const getFormQaReportResponseMarginalReliabilityMin = 0;
+export const getFormQaReportResponseMarginalReliabilityMax = 1;
+
+export const getFormQaReportResponse = zod.object({
+  "form_id": zod.string(),
+  "lifecycle_state": zod.string(),
+  "n_items": zod.number(),
+  "metric": zod.string().default(getFormQaReportResponseMetricDefault),
+  "answer_key": zod.array(zod.object({
+  "position": zod.number(),
+  "item_id": zod.string(),
+  "answer_key": zod.union([zod.string(),zod.null()])
+})),
+  "key_balance": zod.object({
+  "counts": zod.record(zod.string(), zod.number()),
+  "n": zod.number(),
+  "imbalanced": zod.boolean(),
+  "note": zod.string()
+}),
+  "coverage": zod.array(zod.object({
+  "label": zod.string(),
+  "count": zod.number(),
+  "minimum": zod.union([zod.number(),zod.null()]),
+  "maximum": zod.union([zod.number(),zod.null()]),
+  "satisfied": zod.boolean()
+})),
+  "curve": zod.array(zod.object({
+  "theta": zod.number(),
+  "information": zod.number(),
+  "se": zod.union([zod.number(),zod.null()]),
+  "tcc": zod.number()
+})),
+  "marginal_reliability": zod.number().min(getFormQaReportResponseMarginalReliabilityMin).max(getFormQaReportResponseMarginalReliabilityMax),
+  "tif_actual_vs_target": zod.array(zod.object({
+  "theta": zod.number(),
+  "target": zod.number(),
+  "actual": zod.number()
+}))
+})
+
+/**
  * Validate an assembled form against the eatATA R oracle (read-only).
 
 Recompiles the form's blueprint+pool to the same canonical D=1 problem, solves
@@ -56,12 +162,15 @@ export const getFormParams = zod.object({
   "form_id": zod.string()
 })
 
+export const getFormResponseLifecycleStateDefault = "draft";
+
 export const getFormResponse = zod.object({
   "id": zod.string(),
   "blueprint_id": zod.string(),
   "assembly_job_id": zod.string(),
   "form_index": zod.number(),
   "status": zod.string(),
+  "lifecycle_state": zod.string().default(getFormResponseLifecycleStateDefault),
   "item_ids": zod.array(zod.string()),
   "created_at": zod.string().datetime({}),
   "tif": zod.array(zod.object({

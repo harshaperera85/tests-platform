@@ -13,6 +13,7 @@ export interface FormSummary {
   pool_id: string;
   form_index: number;
   status: string;
+  lifecycle_state?: string;
   n_items: number;
   created_at: string;
 }

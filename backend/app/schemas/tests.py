@@ -68,5 +68,6 @@ class FormSummary(BaseModel):
     pool_id: str
     form_index: int
     status: str
+    lifecycle_state: str = "draft"
     n_items: int
     created_at: datetime

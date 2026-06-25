@@ -18,6 +18,7 @@ const TABS = [
   { to: "about", id: "A-032", label: "About" },
   { to: "scoring", id: "A-034", label: "Scoring" },
   { to: "history", id: "A-033", label: "History" },
+  { to: "review", id: "A-038", label: "Review" },
 ];
 
 export function TestEditorLayout() {

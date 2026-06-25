@@ -260,6 +260,23 @@ replace — the CI `oracle-parity` gate.
   whole session (2PL model) and plots θ̂ converging toward the dashed true-θ line, with a
   final θ̂/SE. Same seed → identical run.
 
+### Review → approve → publish (form governance, A-038–041)
+The **Review** tab is the cross-model governance surface (the *form* is the unit of review,
+not the test — CAT/MST forms will use the identical lifecycle). For the selected form it shows:
+- **Lifecycle state + gate actions** — `draft → content_review → psychometric_review →
+  approved → published`, with **Return to draft** (reject; comment required) and **Withdraw**
+  (unpublish). Only valid transitions are offered; you supply a claimed **actor** (+ the gate's
+  role is recorded). **Role enforcement is a deliberate stub** — any actor may act for now, until
+  AuthN/AuthZ is decided; the *provenance* is what's recorded.
+- **Form-QA report** — answer key, **key-balance** (with an imbalance flag), **content coverage**
+  vs blueprint, and the psychometric summary: **conditional SE** SE(θ)=1/√I(θ), **TCC** Σ Pᵢ(θ),
+  **marginal reliability**, and actual-vs-target TIF — all on the canonical D=1 metric.
+- **Sign-off history** — the append-only trail: who moved the form through which gate, when, with
+  what comment.
+
+Once a form leaves **draft**, the **Assembly** tab freezes (no blueprint edit / re-assembly) until
+you **Return to draft**. `published` is the release state (the eventual Sessions handoff).
+
 ### Item pools viewer (`/pool`)
 - **Pool selector** (catalog), **filter** (id / stem / tag), and a table of every item's
   `a` / `b` / `c` and KC / Bloom / domain. Use it to see the data and to check cell sizes

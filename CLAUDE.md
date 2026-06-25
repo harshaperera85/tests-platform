@@ -72,6 +72,27 @@ locally**. See `SETUP.md`.
    passed — and any path-triggered job (e.g. `oracle-parity`) — before reporting a phase complete.
    Read `GH_TOKEN` from the environment only; never print, hardcode, or commit a token value.
 
+## Form-lifecycle governance (cross-model — Phase L2a)
+The unit of review/approval/publication is the **assembled form** (the deliverable Sessions
+administers); the test is the authoring container. A **model-agnostic** state machine
+(`services/form_lifecycle.py`) governs every form regardless of how it was assembled
+(linear/CAT/MST flow through the identical lifecycle): `draft → content_review →
+psychometric_review → approved → published`, with `return_to_draft` (reject, comment required)
+and `withdraw` (unpublish). Only valid transitions are allowed. **A form past `draft` freezes
+its test from blueprint edits + re-assembly** (return to draft to unfreeze); `published` is the
+release state and the eventual Sessions handoff point (Sessions itself out of scope).
+- **Sign-off provenance** (`form_review_event`, append-only, + `audit_event`): every transition
+  records the claimed actor/role, from→to, timestamp, comment — surfaced in History/Review.
+- **Role hooks are a DELIBERATE PERMISSIVE STUB.** Each gate declares a required role
+  (`content_reviewer`/`psychometrician`/`publisher`), but `authorize_transition` records the
+  claimed role and **never denies** — real AuthN/AuthZ wires in at that single chokepoint once
+  decided (see `docs/security.md`).
+- **Form-QA report** (`services/form_qa.py`, endpoint `GET /forms/{id}/qa-report`): answer key,
+  key-balance, content coverage, and a psychometric summary (SE(θ)=1/√I(θ), TCC(θ)=Σ Pᵢ(θ),
+  marginal reliability, actual-vs-target TIF) — all on the canonical **D=1 slope-intercept**
+  metric. This is a governance layer over the form/test resource; the **engine core / contract /
+  registry are untouched**.
+
 ## Stack
 - Backend: Python 3.12, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, Redis + RQ, PostgreSQL.
 - Assembly: OR-Tools (CP-SAT), in-process; long solves run as RQ jobs.

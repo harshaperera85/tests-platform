@@ -11,6 +11,7 @@ import { TestListScreen } from "./screens/tests/TestListScreen";
 import { AboutTab } from "./screens/tests/tabs/AboutTab";
 import { AssemblyTab } from "./screens/tests/tabs/AssemblyTab";
 import { HistoryTab } from "./screens/tests/tabs/HistoryTab";
+import { ReviewTab } from "./screens/tests/tabs/ReviewTab";
 import { ScoringTab } from "./screens/tests/tabs/ScoringTab";
 import { WalkTab } from "./screens/tests/tabs/WalkTab";
 
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="about" element={<AboutTab />} />
             <Route path="scoring" element={<ScoringTab />} />
             <Route path="history" element={<HistoryTab />} />
+            <Route path="review" element={<ReviewTab />} />
             <Route path="walk/:formId" element={<WalkTab />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

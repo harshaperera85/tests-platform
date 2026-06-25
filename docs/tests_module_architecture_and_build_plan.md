@@ -326,7 +326,20 @@ Core entities (illustrative; expand during build):
 - `blueprint` — test_id (or reusable), content_constraints (JSONB), statistical_target (JSONB).
 - `admin_model_config` — test_id, model_type, config (JSONB = the discriminated-union branch).
 - `assembly_job` — id, blueprint_id, strategy, status, params, created_at (RQ-backed).
-- `form` — id, test_id, assembly_job_id, item_ids (ordered), tif_actual (JSONB), status.
+- `form` — id, test_id, assembly_job_id, item_ids (ordered), tif_actual (JSONB), status,
+  **`lifecycle_state`** (draft → content_review → psychometric_review → approved → published).
+- `form_review_event` — append-only sign-off trail: form_id, action, from/to state, actor,
+  actor_role, comment, ts (the defensibility provenance for the review → publish workflow).
+
+**Form-lifecycle governance (Phase L2a, cross-model).** The assembled **form** is the unit of
+review/approval/publication (model-agnostic — linear/CAT/MST share it). A state machine
+(`services/form_lifecycle.py`) enforces valid transitions only; a form past `draft` freezes its
+test from blueprint edits + re-assembly; `published` is the release state / Sessions handoff
+point. Gate **role hooks are a deliberate permissive stub** (`authorize_transition` records the
+claimed role, never denies) until AuthN/AuthZ is decided. The **form-QA report**
+(`GET /forms/{id}/qa-report`) is generated server-side on the canonical D=1 metric (answer key,
+key-balance, coverage, SE(θ), TCC(θ), marginal reliability, actual-vs-target TIF). The engine
+core / contract / registry are untouched — this is a layer over the form/test resource.
 - `item_pool_ref` — logical pool definition = a query/filter over the calibrated bank (`live` only).
 - `audit_event` — append-only log of config/assembly/lock actions.
 

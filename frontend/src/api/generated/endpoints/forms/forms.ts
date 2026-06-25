@@ -26,19 +26,271 @@ import type {
 
 import type {
   CrossValidationResult,
+  FormLifecycle,
+  FormQAReport,
   FormRead,
   GetFormTifCurveParams,
   HTTPValidationError,
   SimulateFormParams,
   SimulationRead,
-  TIFCurve
+  TIFCurve,
+  TransitionRequest
 } from '../../model';
 
 import { customInstance } from '../../../mutator';
-import type { ErrorType } from '../../../mutator';
+import type { ErrorType , BodyType } from '../../../mutator';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+/**
+ * @summary Get Form Lifecycle
+ */
+export const getFormLifecycle = (
+    formId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<FormLifecycle>(
+      {url: `/api/v1/forms/${formId}/lifecycle`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetFormLifecycleQueryKey = (formId?: string,) => {
+    return [
+    `/api/v1/forms/${formId}/lifecycle`
+    ] as const;
+    }
+
+    
+export const getGetFormLifecycleQueryOptions = <TData = Awaited<ReturnType<typeof getFormLifecycle>>, TError = ErrorType<HTTPValidationError>>(formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormLifecycle>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFormLifecycleQueryKey(formId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFormLifecycle>>> = ({ signal }) => getFormLifecycle(formId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(formId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFormLifecycle>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetFormLifecycleQueryResult = NonNullable<Awaited<ReturnType<typeof getFormLifecycle>>>
+export type GetFormLifecycleQueryError = ErrorType<HTTPValidationError>
+
+
+export function useGetFormLifecycle<TData = Awaited<ReturnType<typeof getFormLifecycle>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormLifecycle>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFormLifecycle>>,
+          TError,
+          Awaited<ReturnType<typeof getFormLifecycle>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFormLifecycle<TData = Awaited<ReturnType<typeof getFormLifecycle>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormLifecycle>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFormLifecycle>>,
+          TError,
+          Awaited<ReturnType<typeof getFormLifecycle>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFormLifecycle<TData = Awaited<ReturnType<typeof getFormLifecycle>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormLifecycle>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Form Lifecycle
+ */
+
+export function useGetFormLifecycle<TData = Awaited<ReturnType<typeof getFormLifecycle>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormLifecycle>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetFormLifecycleQueryOptions(formId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+/**
+ * Move a form through the review/approve/publish lifecycle (records sign-off).
+ * @summary Transition Form
+ */
+export const transitionForm = (
+    formId: string,
+    transitionRequest: BodyType<TransitionRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<FormLifecycle>(
+      {url: `/api/v1/forms/${formId}/transition`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: transitionRequest, signal
+    },
+      options);
+    }
+  
+
+
+export const getTransitionFormMutationOptions = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof transitionForm>>, TError,{formId: string;data: BodyType<TransitionRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof transitionForm>>, TError,{formId: string;data: BodyType<TransitionRequest>}, TContext> => {
+
+const mutationKey = ['transitionForm'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof transitionForm>>, {formId: string;data: BodyType<TransitionRequest>}> = (props) => {
+          const {formId,data} = props ?? {};
+
+          return  transitionForm(formId,data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type TransitionFormMutationResult = NonNullable<Awaited<ReturnType<typeof transitionForm>>>
+    export type TransitionFormMutationBody = BodyType<TransitionRequest>
+    export type TransitionFormMutationError = ErrorType<HTTPValidationError>
+
+    /**
+ * @summary Transition Form
+ */
+export const useTransitionForm = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof transitionForm>>, TError,{formId: string;data: BodyType<TransitionRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof transitionForm>>,
+        TError,
+        {formId: string;data: BodyType<TransitionRequest>},
+        TContext
+      > => {
+
+      const mutationOptions = getTransitionFormMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * Server-side form-QA report (answer key, key balance, coverage, SE/TCC, TIF).
+ * @summary Get Form Qa Report
+ */
+export const getFormQaReport = (
+    formId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<FormQAReport>(
+      {url: `/api/v1/forms/${formId}/qa-report`, method: 'GET', signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetFormQaReportQueryKey = (formId?: string,) => {
+    return [
+    `/api/v1/forms/${formId}/qa-report`
+    ] as const;
+    }
+
+    
+export const getGetFormQaReportQueryOptions = <TData = Awaited<ReturnType<typeof getFormQaReport>>, TError = ErrorType<HTTPValidationError>>(formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormQaReport>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFormQaReportQueryKey(formId);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFormQaReport>>> = ({ signal }) => getFormQaReport(formId, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(formId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFormQaReport>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetFormQaReportQueryResult = NonNullable<Awaited<ReturnType<typeof getFormQaReport>>>
+export type GetFormQaReportQueryError = ErrorType<HTTPValidationError>
+
+
+export function useGetFormQaReport<TData = Awaited<ReturnType<typeof getFormQaReport>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormQaReport>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFormQaReport>>,
+          TError,
+          Awaited<ReturnType<typeof getFormQaReport>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFormQaReport<TData = Awaited<ReturnType<typeof getFormQaReport>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormQaReport>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFormQaReport>>,
+          TError,
+          Awaited<ReturnType<typeof getFormQaReport>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetFormQaReport<TData = Awaited<ReturnType<typeof getFormQaReport>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormQaReport>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Form Qa Report
+ */
+
+export function useGetFormQaReport<TData = Awaited<ReturnType<typeof getFormQaReport>>, TError = ErrorType<HTTPValidationError>>(
+ formId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFormQaReport>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetFormQaReportQueryOptions(formId,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
 
 
 

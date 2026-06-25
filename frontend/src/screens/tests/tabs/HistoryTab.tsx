@@ -30,12 +30,22 @@ export function HistoryTab() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <Pill tone="ok">{f.status}</Pill>
+                <Pill
+                  tone={
+                    f.lifecycle_state === "published"
+                      ? "ok"
+                      : f.lifecycle_state === "draft"
+                        ? "neutral"
+                        : "info"
+                  }
+                >
+                  {f.lifecycle_state}
+                </Pill>
                 <Link to={`/tests/${testId}/assembly?form=${f.id}`}>
                   <Button variant="secondary">Preview</Button>
                 </Link>
-                <Link to={`/tests/${testId}/walk/${f.id}`}>
-                  <Button variant="ghost">Walk</Button>
+                <Link to={`/tests/${testId}/review`}>
+                  <Button variant="ghost">Review</Button>
                 </Link>
               </div>
             </li>

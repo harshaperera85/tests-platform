@@ -35,3 +35,8 @@ class FormRow(PkUuidMixin, TimestampMixin, Base):
     )
     item_ids: Mapped[list[str]] = mapped_column(JSONColumn)
     tif_actual: Mapped[list[float]] = mapped_column(JSONColumn)
+    #: governance lifecycle (model-agnostic): draft → content_review →
+    #: psychometric_review → approved → published (see services/form_lifecycle).
+    lifecycle_state: Mapped[str] = mapped_column(
+        default="draft", server_default="draft", index=True
+    )

@@ -22,6 +22,12 @@ from app.models.form import FormRow
 from app.psychometrics import pools
 from app.psychometrics.information import test_information
 from app.schemas.blueprint import Blueprint
+from app.schemas.governance import (
+    FormLifecycle,
+    FormQAReport,
+    ReviewEvent,
+    TransitionRequest,
+)
 from app.schemas.responses import (
     FormRead,
     SimulationRead,
@@ -36,9 +42,71 @@ from app.schemas.validation import (
     CrossValOracle,
     CrossValSide,
 )
+from app.services import form_lifecycle, form_qa
 from app.simulation import simulate_linear
 
 router = APIRouter(prefix="/forms", tags=["forms"])
+
+
+def _lifecycle_read(db: Session, form: FormRow) -> FormLifecycle:
+    return FormLifecycle(
+        form_id=form.id,
+        state=form.lifecycle_state,
+        frozen=form.lifecycle_state in form_lifecycle.FROZEN_STATES,
+        available_actions=form_lifecycle.available_actions(form.lifecycle_state),
+        events=[
+            ReviewEvent(
+                id=e.id,
+                action=e.action,
+                from_state=e.from_state,
+                to_state=e.to_state,
+                actor=e.actor,
+                actor_role=e.actor_role,
+                comment=e.comment,
+                created_at=e.created_at,
+            )
+            for e in form_lifecycle.review_events(db, form.id)
+        ],
+    )
+
+
+@router.get("/{form_id}/lifecycle", response_model=FormLifecycle)
+def get_form_lifecycle(form_id: str, db: Session = Depends(get_db)) -> FormLifecycle:
+    row = db.get(FormRow, form_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="form not found")
+    return _lifecycle_read(db, row)
+
+
+@router.post("/{form_id}/transition", response_model=FormLifecycle)
+def transition_form(
+    form_id: str, payload: TransitionRequest, db: Session = Depends(get_db)
+) -> FormLifecycle:
+    """Move a form through the review/approve/publish lifecycle (records sign-off)."""
+    row = db.get(FormRow, form_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="form not found")
+    try:
+        form_lifecycle.apply_transition(
+            db,
+            row,
+            payload.action,
+            actor=payload.actor,
+            actor_role=payload.actor_role,
+            comment=payload.comment,
+        )
+    except form_lifecycle.LifecycleError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    return _lifecycle_read(db, row)
+
+
+@router.get("/{form_id}/qa-report", response_model=FormQAReport)
+def get_form_qa_report(form_id: str, db: Session = Depends(get_db)) -> FormQAReport:
+    """Server-side form-QA report (answer key, key balance, coverage, SE/TCC, TIF)."""
+    row = db.get(FormRow, form_id)
+    if row is None:
+        raise HTTPException(status_code=404, detail="form not found")
+    return form_qa.build_qa_report(db, row)
 
 
 def _unsupported(
@@ -180,6 +248,7 @@ def get_form(form_id: str, db: Session = Depends(get_db)) -> FormRead:
         assembly_job_id=row.assembly_job_id,
         form_index=row.form_index,
         status=row.status,
+        lifecycle_state=row.lifecycle_state,
         item_ids=row.item_ids,
         created_at=row.created_at,
         tif=tif,

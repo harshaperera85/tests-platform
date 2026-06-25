@@ -27,13 +27,24 @@ export function AssemblyTab() {
   const selectedId = params.get("form") ?? list[0]?.id;
   const selected = list.find((f) => f.id === selectedId);
   const locked = test.data.status === "locked";
+  // Governance freeze: a form past draft freezes blueprint edits + re-assembly.
+  const governanceFrozen = list.some((f) => f.lifecycle_state !== "draft");
+  const frozen = locked || governanceFrozen;
 
   return (
     <div className="space-y-6">
-      {locked ? (
-        <Card title="Blueprint (locked)" subtitle="Unlock the test to edit or re-assemble.">
+      {frozen ? (
+        <Card
+          title="Blueprint (frozen)"
+          subtitle={
+            locked
+              ? "Unlock the test to edit or re-assemble."
+              : "A form is in review / approved / published. Return it to draft in the Review tab to edit or re-assemble."
+          }
+        >
           <p className="text-sm text-ink-600">
-            This test is locked; its blueprint and forms are frozen.
+            Editing and re-assembly are disabled while this test has a form under
+            governance review or released.
           </p>
         </Card>
       ) : (
