@@ -1,17 +1,22 @@
-// A-031..034 Test Editor shell — tab bar + routed tab content, plus the test-level
-// status workflow (lock / unlock / duplicate). Server-backed via the generated client.
+// A-031..034 Test Editor shell — tab bar + routed tab content + Duplicate. The
+// test's status + editability are DERIVED from its forms' lifecycle (no manual
+// lock — see the Review tab). Server-backed via the generated client.
 import { useQueryClient } from "@tanstack/react-query";
 import { NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 
 import {
-  getGetTestQueryKey,
   getListTestsQueryKey,
   useDuplicateTest,
   useGetTest,
-  useLockTest,
-  useUnlockTest,
 } from "../../api/generated/endpoints/tests/tests";
 import { Alert, Button, Card, Pill, Spinner } from "../../components/ui";
+
+const STATUS_TONE: Record<string, "neutral" | "ok" | "warn" | "info"> = {
+  draft: "neutral",
+  in_review: "info",
+  approved: "warn",
+  published: "ok",
+};
 
 const TABS = [
   { to: "assembly", id: "A-031", label: "Assembly" },
@@ -27,14 +32,7 @@ export function TestEditorLayout() {
   const qc = useQueryClient();
   const test = useGetTest(testId ?? "", { query: { enabled: Boolean(testId) } });
 
-  const lock = useLockTest();
-  const unlock = useUnlockTest();
   const duplicate = useDuplicateTest();
-
-  function invalidate() {
-    if (testId) qc.invalidateQueries({ queryKey: getGetTestQueryKey(testId) });
-    qc.invalidateQueries({ queryKey: getListTestsQueryKey() });
-  }
 
   if (test.isLoading) return <Card title="Test editor"><Spinner label="Loading…" /></Card>;
   if (test.isError || !test.data || !testId) {
@@ -49,7 +47,6 @@ export function TestEditorLayout() {
   }
 
   const t = test.data;
-  const locked = t.status === "locked";
 
   return (
     <div className="space-y-5">
@@ -60,32 +57,10 @@ export function TestEditorLayout() {
           <p className="flex items-center gap-2 text-sm text-ink-600">
             {t.administration_model} · pool {t.pool_id} · v{t.version} · {t.form_count} form
             {t.form_count === 1 ? "" : "s"}{" "}
-            <Pill tone={locked ? "warn" : t.form_count ? "ok" : "neutral"}>{t.status}</Pill>
+            <Pill tone={STATUS_TONE[t.status] ?? "neutral"}>{t.status}</Pill>
           </p>
         </div>
         <div className="flex items-center gap-2">
-          {locked ? (
-            <Button
-              variant="secondary"
-              onClick={async () => {
-                await unlock.mutateAsync({ testId });
-                invalidate();
-              }}
-            >
-              Unlock
-            </Button>
-          ) : (
-            <Button
-              variant="secondary"
-              disabled={t.form_count === 0}
-              onClick={async () => {
-                await lock.mutateAsync({ testId });
-                invalidate();
-              }}
-            >
-              Lock
-            </Button>
-          )}
           <Button
             variant="secondary"
             onClick={async () => {
@@ -117,12 +92,6 @@ export function TestEditorLayout() {
           </NavLink>
         ))}
       </nav>
-
-      {locked && (
-        <Alert tone="info" title="This test is locked.">
-          Editing and re-assembly are disabled. Unlock to make changes.
-        </Alert>
-      )}
 
       <Outlet />
     </div>

@@ -102,7 +102,9 @@ The app uses real routes, **server-backed by the `tests` resource** (`/api/v1/te
   **About (A-032)**, **Scoring (A-034)**, **History (A-033)**. Deep links work on
   refresh. The editor's **Save draft** persists the blueprint (`PATCH /tests/{id}`);
   **Assemble** snapshots the draft and runs the engine (`POST /tests/{id}/assemble`).
-- The editor header has **Lock / Unlock / Duplicate** (status workflow).
+- The editor header has **Duplicate**, and a **status pill derived from the forms' lifecycle**
+  (draft / in_review / approved / published) — there is no manual lock; freezing is a
+  consequence of moving a form past draft (see the Review tab).
 - **`/tests/:id/walk/:formId`** — the step-through walkthrough, reachable from the
   Assembly preview, the Scoring tab, or History.
 - **`/pool`** — **Item pools** viewer (header nav): browse the simulated bank(s) —

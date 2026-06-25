@@ -321,7 +321,8 @@ Build it once; every engine goes through it.
 ## 8. Data model (PostgreSQL + Alembic)
 
 Core entities (illustrative; expand during build):
-- `test` — id, name, administration_model, status (draft/review/locked/published), version.
+- `test` — id, name, administration_model, version. (No stored status/lock — the test's
+  status + editability are **derived** from its forms' lifecycle; manual lock retired in 0008.)
 - `section` — test_id, order, type (linear/testlet), navigation.
 - `blueprint` — test_id (or reusable), content_constraints (JSONB), statistical_target (JSONB).
 - `admin_model_config` — test_id, model_type, config (JSONB = the discriminated-union branch).
@@ -353,7 +354,8 @@ tags, `enemy_of`, asset_path, status) and the calibration source for IRT params 
 ## 9. API surface (REST → OpenAPI → Orval)
 
 ```
-/api/v1/tests                      CRUD, status transitions, lock/unlock, duplicate
+/api/v1/tests                      CRUD, draft, assemble, history, duplicate (status derived)
+/api/v1/forms/{id}/transition      form lifecycle: review → approve → publish (governance)
 /api/v1/tests/{id}/config          get/put the discriminated-union TestConfig
 /api/v1/blueprints                 CRUD blueprints (content + TIF targets)
 /api/v1/section-templates          ATA section templates (tag elements + targets)

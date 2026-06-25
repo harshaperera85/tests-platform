@@ -79,21 +79,36 @@ def test_assemble_from_test_then_history(client: TestClient) -> None:
     assert client.get(f"/api/v1/tests/{tid}").json()["form_count"] == 1
 
 
-def test_lock_blocks_edit_then_unlock(client: TestClient) -> None:
+def test_status_and_freeze_derived_from_lifecycle(client: TestClient) -> None:
+    """No manual lock: test status + editability are derived from form lifecycle."""
+    # the retired endpoints are gone
     tid = client.post("/api/v1/tests", json={"name": "lk"}).json()["id"]
-    # can't lock before assembling
-    assert client.post(f"/api/v1/tests/{tid}/lock").status_code == 409
-    client.patch(f"/api/v1/tests/{tid}", json={"blueprint": _bp()})
-    client.post(f"/api/v1/tests/{tid}/assemble", json={"time_limit_s": 6})
+    assert client.post(f"/api/v1/tests/{tid}/lock").status_code == 404
+    assert client.post(f"/api/v1/tests/{tid}/unlock").status_code == 404
 
-    locked = client.post(f"/api/v1/tests/{tid}/lock")
-    assert locked.status_code == 200 and locked.json()["status"] == "locked"
-    # locked tests reject edits + re-assemble
-    assert client.patch(f"/api/v1/tests/{tid}", json={"name": "x"}).status_code == 409
+    assert client.get(f"/api/v1/tests/{tid}").json()["status"] == "draft"
+    client.patch(f"/api/v1/tests/{tid}", json={"blueprint": _bp()})
+    job = client.post(f"/api/v1/tests/{tid}/assemble", json={"time_limit_s": 6}).json()
+    fid = job["form_ids"][0]
+    # all forms draft → test status draft, still editable
+    assert client.get(f"/api/v1/tests/{tid}").json()["status"] == "draft"
+    assert client.patch(f"/api/v1/tests/{tid}", json={"name": "ok"}).status_code == 200
+
+    # move the form into review → test status derives to in_review, and freezes
+    client.post(f"/api/v1/forms/{fid}/transition", json={"action": "submit_for_review"})
+    assert client.get(f"/api/v1/tests/{tid}").json()["status"] == "in_review"
+    assert client.patch(
+        f"/api/v1/tests/{tid}", json={"blueprint": _bp()}
+    ).status_code == 409
     assert client.post(f"/api/v1/tests/{tid}/assemble", json={}).status_code == 409
 
-    assert client.post(f"/api/v1/tests/{tid}/unlock").json()["status"] == "draft"
-    assert client.patch(f"/api/v1/tests/{tid}", json={"name": "ok"}).status_code == 200
+    # return to draft unfreezes + reverts the derived status
+    client.post(
+        f"/api/v1/forms/{fid}/transition",
+        json={"action": "return_to_draft", "actor": "sme", "comment": "rework"},
+    )
+    assert client.get(f"/api/v1/tests/{tid}").json()["status"] == "draft"
+    assert client.patch(f"/api/v1/tests/{tid}", json={"name": "x"}).status_code == 200
 
 
 def test_duplicate_and_delete(client: TestClient) -> None:

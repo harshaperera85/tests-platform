@@ -1,7 +1,8 @@
 """``tests`` resource — the authoring entity (plan §8/§9).
 
 CRUD + list + draft persistence + assemble (snapshots the draft and runs the owned
-engine) + form history + status workflow (lock/unlock/duplicate). Additive API;
+engine) + form history + duplicate. The test's status and editability are **derived
+from its forms' lifecycle** (no manual lock — single source of truth). Additive API;
 no engine logic. Replaces the frontend's client-side test registry.
 """
 
@@ -47,12 +48,12 @@ def _blueprint_of(test: TestRow) -> Blueprint | None:
     )
 
 
-def _to_read(test: TestRow, form_count: int) -> TestRead:
+def _to_read(db: Session, test: TestRow, form_count: int) -> TestRead:
     return TestRead(
         id=test.id,
         name=test.name,
         administration_model=test.administration_model,
-        status=test.status,
+        status=form_lifecycle.derive_test_status(db, test.id),
         pool_id=test.pool_id,
         version=test.version,
         blueprint=_blueprint_of(test),
@@ -93,7 +94,7 @@ def create_test(payload: TestCreate, db: Session = Depends(get_db)) -> TestRead:
         entity_id=test.id,
         detail={"name": test.name, "pool_id": test.pool_id},
     )
-    return _to_read(test, 0)
+    return _to_read(db, test, 0)
 
 
 @router.get("", response_model=list[TestSummary])
@@ -113,7 +114,7 @@ def list_tests(db: Session = Depends(get_db)) -> list[TestSummary]:
             id=t.id,
             name=t.name,
             administration_model=t.administration_model,
-            status=t.status,
+            status=form_lifecycle.derive_test_status(db, t.id),
             pool_id=t.pool_id,
             version=t.version,
             form_count=int(counts.get(t.id, 0)),
@@ -128,7 +129,7 @@ def list_tests(db: Session = Depends(get_db)) -> list[TestSummary]:
 @router.get("/{test_id}", response_model=TestRead)
 def get_test(test_id: str, db: Session = Depends(get_db)) -> TestRead:
     test = _get_or_404(db, test_id)
-    return _to_read(test, _form_count(db, test_id))
+    return _to_read(db, test, _form_count(db, test_id))
 
 
 @router.patch("/{test_id}", response_model=TestRead)
@@ -136,9 +137,8 @@ def update_test(
     test_id: str, payload: TestUpdate, db: Session = Depends(get_db)
 ) -> TestRead:
     test = _get_or_404(db, test_id)
-    if test.status == "locked":
-        raise HTTPException(status_code=409, detail="test is locked; unlock to edit")
-    # Governance freeze: editing the blueprint is blocked once a form has left draft.
+    # Editability is derived from form lifecycle (no manual lock): editing the
+    # blueprint is blocked once any form has left draft. Return it to draft to edit.
     data = payload.model_dump(exclude_unset=True)
     if data.get("blueprint") is not None and form_lifecycle.test_has_frozen_form(
         db, test_id
@@ -158,7 +158,7 @@ def update_test(
     test.version += 1
     db.commit()
     db.refresh(test)
-    return _to_read(test, _form_count(db, test_id))
+    return _to_read(db, test, _form_count(db, test_id))
 
 
 @router.delete("/{test_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -178,11 +178,7 @@ def assemble_test(
     test_id: str, payload: TestAssembleRequest, db: Session = Depends(get_db)
 ) -> AssemblyJobRead:
     test = _get_or_404(db, test_id)
-    if test.status == "locked":
-        raise HTTPException(
-            status_code=409, detail="test is locked; unlock to assemble"
-        )
-    # Governance freeze: re-assembly is blocked once a form has left draft.
+    # Re-assembly is blocked once any form has left draft (derived from lifecycle).
     if form_lifecycle.test_has_frozen_form(db, test_id):
         raise HTTPException(
             status_code=409,
@@ -270,26 +266,9 @@ def list_test_forms(test_id: str, db: Session = Depends(get_db)) -> list[FormSum
     ]
 
 
-@router.post("/{test_id}/lock", response_model=TestRead)
-def lock_test(test_id: str, db: Session = Depends(get_db)) -> TestRead:
-    test = _get_or_404(db, test_id)
-    if _form_count(db, test_id) == 0:
-        raise HTTPException(status_code=409, detail="assemble a form before locking")
-    test.status = "locked"
-    db.commit()
-    db.refresh(test)
-    audit.record(db, action="test.lock", entity_type="test", entity_id=test_id)
-    return _to_read(test, _form_count(db, test_id))
-
-
-@router.post("/{test_id}/unlock", response_model=TestRead)
-def unlock_test(test_id: str, db: Session = Depends(get_db)) -> TestRead:
-    test = _get_or_404(db, test_id)
-    test.status = "draft"
-    db.commit()
-    db.refresh(test)
-    audit.record(db, action="test.unlock", entity_type="test", entity_id=test_id)
-    return _to_read(test, _form_count(db, test_id))
+# Manual lock/unlock retired: editability + test status are derived from form
+# lifecycle (single source of truth). Freeze a test by moving a form past draft
+# (Review tab); unfreeze with return_to_draft.
 
 
 @router.post(
@@ -313,4 +292,4 @@ def duplicate_test(test_id: str, db: Session = Depends(get_db)) -> TestRead:
         entity_id=copy.id,
         detail={"from": test_id},
     )
-    return _to_read(copy, 0)
+    return _to_read(db, copy, 0)

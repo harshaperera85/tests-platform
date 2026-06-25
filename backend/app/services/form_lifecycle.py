@@ -155,9 +155,34 @@ def review_events(db: Session, form_id: str) -> list[FormReviewEventRow]:
     )
 
 
+def _test_form_states(db: Session, test_id: str) -> list[str]:
+    return list(
+        db.scalars(
+            select(FormRow.lifecycle_state).where(FormRow.test_id == test_id)
+        ).all()
+    )
+
+
 def test_has_frozen_form(db: Session, test_id: str) -> bool:
-    """True if any form of ``test_id`` has left draft (freezes re-assembly/edits)."""
-    states = db.scalars(
-        select(FormRow.lifecycle_state).where(FormRow.test_id == test_id)
-    ).all()
-    return any(s in FROZEN_STATES for s in states)
+    """True if any form of ``test_id`` has left draft (freezes re-assembly/edits).
+
+    Editability is a **consequence of lifecycle state** (single source of truth):
+    draft = editable; any form beyond draft = frozen; ``return_to_draft`` unfreezes.
+    """
+    return any(s in FROZEN_STATES for s in _test_form_states(db, test_id))
+
+
+def derive_test_status(db: Session, test_id: str) -> str:
+    """The test's status, DERIVED from its forms' lifecycle (no stored toggle).
+
+    Highest form state wins: published > approved > in_review (content/psychometric
+    review) > draft (no forms, or all forms still in draft).
+    """
+    states = _test_form_states(db, test_id)
+    if "published" in states:
+        return "published"
+    if "approved" in states:
+        return "approved"
+    if any(s in ("content_review", "psychometric_review") for s in states):
+        return "in_review"
+    return "draft"

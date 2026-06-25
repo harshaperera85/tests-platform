@@ -61,7 +61,15 @@ export function TestListScreen() {
                 </p>
               </Link>
               <div className="flex items-center gap-2">
-                <Pill tone={t.status === "locked" ? "warn" : t.form_count ? "ok" : "neutral"}>
+                <Pill
+                  tone={
+                    t.status === "published"
+                      ? "ok"
+                      : t.status === "in_review" || t.status === "approved"
+                        ? "info"
+                        : "neutral"
+                  }
+                >
                   {t.status}
                 </Pill>
                 <Link to={`/tests/${t.id}/assembly`}>

@@ -78,9 +78,12 @@ administers); the test is the authoring container. A **model-agnostic** state ma
 (`services/form_lifecycle.py`) governs every form regardless of how it was assembled
 (linear/CAT/MST flow through the identical lifecycle): `draft → content_review →
 psychometric_review → approved → published`, with `return_to_draft` (reject, comment required)
-and `withdraw` (unpublish). Only valid transitions are allowed. **A form past `draft` freezes
-its test from blueprint edits + re-assembly** (return to draft to unfreeze); `published` is the
-release state and the eventual Sessions handoff point (Sessions itself out of scope).
+and `withdraw` (unpublish → **draft**: re-publishing re-runs both gates, no stale-approval
+shortcut). Only valid transitions are allowed. **A form past `draft` freezes its test from
+blueprint edits + re-assembly** (return to draft to unfreeze); `published` is the release state
+and the eventual Sessions handoff point (Sessions out of scope). **Editability + the test's status
+are DERIVED from the forms' lifecycle — single source of truth; the manual test Lock/Unlock was
+retired (migration 0008).**
 - **Sign-off provenance** (`form_review_event`, append-only, + `audit_event`): every transition
   records the claimed actor/role, from→to, timestamp, comment — surfaced in History/Review.
 - **Role hooks are a DELIBERATE PERMISSIVE STUB.** Each gate declares a required role

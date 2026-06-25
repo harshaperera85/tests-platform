@@ -21,12 +21,14 @@ def test_lifecycle_actions_are_audited(client: TestClient) -> None:
         "/api/v1/tests", json={"name": "audited", "pool_id": "small_2pl"}
     ).json()["id"]
     client.patch(f"/api/v1/tests/{tid}", json={"blueprint": _bp()})
-    client.post(f"/api/v1/tests/{tid}/assemble", json={"time_limit_s": 5})
-    client.post(f"/api/v1/tests/{tid}/lock")
+    job = client.post(f"/api/v1/tests/{tid}/assemble", json={"time_limit_s": 5}).json()
+    # a form lifecycle transition is also audited
+    fid = job["form_ids"][0]
+    client.post(f"/api/v1/forms/{fid}/transition", json={"action": "submit_for_review"})
 
     events = client.get(f"/api/v1/audit?entity_id={tid}").json()
     actions = {e["action"] for e in events}
-    assert {"test.create", "test.assemble", "test.lock"} <= actions
+    assert {"test.create", "test.assemble"} <= actions
     # newest first, append-only shape
     assert events[0]["created_at"] >= events[-1]["created_at"]
     create = next(e for e in events if e["action"] == "test.create")

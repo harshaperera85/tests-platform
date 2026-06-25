@@ -73,6 +73,28 @@ def test_full_happy_path_and_signoff_attribution(client) -> None:
     )
 
 
+def test_withdraw_returns_to_draft_and_requires_full_re_review(client) -> None:
+    """Withdraw → draft; re-publishing must re-run BOTH gates (no stale-approval)."""
+    _, form_id = _assemble_form(client)
+    for action, kw in [
+        ("submit_for_review", {}),
+        ("approve_content", {"actor": "sme", "actor_role": "content_reviewer"}),
+        ("approve_psychometric", {"actor": "psy", "actor_role": "psychometrician"}),
+        ("publish", {"actor": "admin", "actor_role": "publisher"}),
+    ]:
+        _transition(client, form_id, action, **kw)
+    # withdraw lands in draft (a non-released state), not approved
+    assert _transition(client, form_id, "withdraw", actor="admin").json()["state"] == (
+        "draft"
+    )
+    # no shortcut back to published — the gates must be re-run from scratch
+    assert _transition(client, form_id, "publish").status_code == 409
+    assert _transition(client, form_id, "approve_psychometric").status_code == 409
+    _transition(client, form_id, "submit_for_review")
+    body = _transition(client, form_id, "approve_content", actor="sme").json()
+    assert body["state"] == "psychometric_review"
+
+
 def test_invalid_transition_rejected(client) -> None:
     _, form_id = _assemble_form(client)
     # cannot publish straight from draft

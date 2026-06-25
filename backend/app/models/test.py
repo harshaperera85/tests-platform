@@ -29,9 +29,9 @@ class TestRow(PkUuidMixin, TimestampMixin, Base):
     administration_model: Mapped[str] = mapped_column(
         default="linear", server_default="linear"
     )
-    status: Mapped[str] = mapped_column(
-        default="draft", server_default="draft"
-    )  # draft / review / locked / published
+    # NB: no stored ``status`` — the test's status + editability are DERIVED from its
+    # forms' lifecycle (services/form_lifecycle.derive_test_status). Single source of
+    # truth; the manual lock/unlock was retired (migration 0008).
     pool_id: Mapped[str] = mapped_column(
         default="demo_mixed", server_default="demo_mixed"
     )
