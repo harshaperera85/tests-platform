@@ -59,6 +59,8 @@ export function FormPreviewScreen({
   );
   const worstGap = Math.max(...f.tif.map((p) => Math.abs(p.gap)));
   const tol = curve.data?.tolerance ?? null;
+  // maximin has no target — show achieved TIF only (no target curve / gap).
+  const isMaximin = curve.data?.method === "maximin";
 
   const actualData = (curve.data?.curve ?? []).map((p) => ({
     theta: Number(p.theta.toFixed(3)),
@@ -85,13 +87,19 @@ export function FormPreviewScreen({
         }
       >
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          <Pill tone={worstGap < 0.5 ? "ok" : "warn"}>
-            worst |actual − target| = {worstGap.toFixed(3)}
-          </Pill>
+          {isMaximin ? (
+            <Pill tone="ok">worst-point info = {Math.min(...f.tif.map((p) => p.actual)).toFixed(3)}</Pill>
+          ) : (
+            <Pill tone={worstGap < 0.5 ? "ok" : "warn"}>
+              worst |actual − target| = {worstGap.toFixed(3)}
+            </Pill>
+          )}
           {curve.data && <Pill tone="info">method: {curve.data.method}</Pill>}
-          {tol != null && <Pill>tolerance ±{tol}</Pill>}
+          {!isMaximin && tol != null && <Pill>tolerance ±{tol}</Pill>}
           <span className="text-sm text-ink-600">
-            Test Information Function vs. blueprint target
+            {isMaximin
+              ? "Test Information Function (achieved; maximin — no target)"
+              : "Test Information Function vs. blueprint target"}
           </span>
         </div>
         <div className="h-72 w-full">
@@ -115,7 +123,8 @@ export function FormPreviewScreen({
                 />
                 <Tooltip />
                 <Legend />
-                {tol != null &&
+                {!isMaximin &&
+                  tol != null &&
                   targetData.map((t) => (
                     <ReferenceArea
                       key={t.theta}
@@ -137,9 +146,11 @@ export function FormPreviewScreen({
                   dot={false}
                   isAnimationActive={false}
                 />
-                <Scatter data={targetData} dataKey="target" name="target" fill="#0f172a">
-                  {tol != null && <ErrorBar dataKey="tol" stroke="#64748b" width={4} />}
-                </Scatter>
+                {!isMaximin && (
+                  <Scatter data={targetData} dataKey="target" name="target" fill="#0f172a">
+                    {tol != null && <ErrorBar dataKey="tol" stroke="#64748b" width={4} />}
+                  </Scatter>
+                )}
               </ComposedChart>
             </ResponsiveContainer>
           )}
@@ -149,23 +160,27 @@ export function FormPreviewScreen({
             <thead className="bg-ink-50 text-ink-600">
               <tr>
                 <th className="px-3 py-1.5 text-left">θ</th>
-                <th className="px-3 py-1.5 text-right">target</th>
+                {!isMaximin && <th className="px-3 py-1.5 text-right">target</th>}
                 <th className="px-3 py-1.5 text-right">actual</th>
-                <th className="px-3 py-1.5 text-right">gap</th>
+                {!isMaximin && <th className="px-3 py-1.5 text-right">gap</th>}
               </tr>
             </thead>
             <tbody>
               {f.tif.map((p) => (
                 <tr key={p.theta} className="border-t border-ink-100 tabular-nums">
                   <td className="px-3 py-1.5">{p.theta}</td>
-                  <td className="px-3 py-1.5 text-right">{p.target.toFixed(2)}</td>
+                  {!isMaximin && (
+                    <td className="px-3 py-1.5 text-right">{p.target.toFixed(2)}</td>
+                  )}
                   <td className="px-3 py-1.5 text-right">{p.actual.toFixed(3)}</td>
+                  {!isMaximin && (
                   <td
                     className={`px-3 py-1.5 text-right ${Math.abs(p.gap) < 0.5 ? "text-emerald-700" : "text-amber-700"}`}
                   >
                     {p.gap >= 0 ? "+" : ""}
                     {p.gap.toFixed(3)}
                   </td>
+                  )}
                 </tr>
               ))}
             </tbody>

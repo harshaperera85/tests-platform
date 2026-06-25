@@ -11,7 +11,7 @@ import * as zod from 'zod';
 /**
  * @summary Create Blueprint
  */
-export const createBlueprintBodyNameDefault = "untitled-blueprint";export const createBlueprintBodyNumFormsDefault = 1;export const createBlueprintBodyContentConstraintsItemMinimumMinOne = 0;export const createBlueprintBodyContentConstraintsItemMaximumMinOne = 0;export const createBlueprintBodyContentConstraintsItemModeDefault = "count";export const createBlueprintBodyStatisticalTargetMethodDefault = "minimax";export const createBlueprintBodyEnemyPolicyEnforceDefault = true;
+export const createBlueprintBodyNameDefault = "untitled-blueprint";export const createBlueprintBodyNumFormsDefault = 1;export const createBlueprintBodyContentConstraintsItemMinimumMinOne = 0;export const createBlueprintBodyContentConstraintsItemMaximumMinOne = 0;export const createBlueprintBodyContentConstraintsItemModeDefault = "count";export const createBlueprintBodyStatisticalTargetMethodDefault = "minimax";export const createBlueprintBodyEnemyPolicyEnforceDefault = true;export const createBlueprintBodyExposureTargetMaxExposureRateMaxOne = 1;export const createBlueprintBodyExposureTargetMaxPairwiseOverlapMinOne = 0;
 
 export const createBlueprintBody = zod.object({
   "name": zod.string().default(createBlueprintBodyNameDefault),
@@ -30,14 +30,17 @@ export const createBlueprintBody = zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),
   "method": zod.enum(['minimax', 'maximin']).default(createBlueprintBodyStatisticalTargetMethodDefault),
-  "tolerance": zod.union([zod.number(),zod.null()]).optional()
-}).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point, using\n``target_info`` as a floor). ``tolerance`` is an optional absolute band; when\nset, the compiler adds hard ``|actual - target| <= tolerance`` constraints in\naddition to the objective.'),
+  "tolerance": zod.union([zod.number(),zod.null()]).optional(),
+  "weights": zod.union([zod.array(zod.number()),zod.null()]).optional()
+}).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point — there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point\'s weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs — orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*.'),
   "enemy_policy": zod.object({
   "enforce": zod.boolean().default(createBlueprintBodyEnemyPolicyEnforceDefault)
 }).optional().describe('How to honor ``enemy_of`` relations from the bank.\n\nWhen ``enforce`` is true, two items that are enemies of each other may not both\nappear in the same form (declared one-directionally in the bank; the compiler\nsymmetrizes).'),
   "exposure_target": zod.union([zod.object({
-  "max_use_per_item": zod.number().min(1)
-}).describe('Optional cap on how often an item may be used across assembled forms.\n\nOnly meaningful when assembling multiple parallel forms in one job.'),zod.null()]).optional()
+  "max_use_per_item": zod.union([zod.number().min(1),zod.null()]).optional(),
+  "max_exposure_rate": zod.union([zod.number().max(createBlueprintBodyExposureTargetMaxExposureRateMaxOne),zod.null()]).optional(),
+  "max_pairwise_overlap": zod.union([zod.number().min(createBlueprintBodyExposureTargetMaxPairwiseOverlapMinOne),zod.null()]).optional()
+}).describe('Optional caps on item reuse across assembled forms (multi-form jobs).\n\nTwo reuse levers:\n- **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.\n  Specify it directly, or as a target ``max_exposure_rate`` (proportion 0–1) that\n  the compiler translates to a count given the planned form count:\n  ``max_use ≈ ceil(rate × num_forms)`` (assumes **uniform form administration**).\n  A raw ``max_use_per_item`` is the low-level override and wins if both are set.\n- **pairwise overlap cap**: any two forms may share at most\n  ``max_pairwise_overlap`` items (distinct from the total per-item cap — it bounds\n  similarity *between forms*, e.g. for security across parallel administrations).'),zod.null()]).optional()
 }).describe('Full assembly specification for one (or several parallel) forms.')
 
 /**
@@ -47,7 +50,7 @@ export const getBlueprintParams = zod.object({
   "blueprint_id": zod.string()
 })
 
-export const getBlueprintResponseBlueprintNameDefault = "untitled-blueprint";export const getBlueprintResponseBlueprintNumFormsDefault = 1;export const getBlueprintResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const getBlueprintResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const getBlueprintResponseBlueprintContentConstraintsItemModeDefault = "count";export const getBlueprintResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const getBlueprintResponseBlueprintEnemyPolicyEnforceDefault = true;
+export const getBlueprintResponseBlueprintNameDefault = "untitled-blueprint";export const getBlueprintResponseBlueprintNumFormsDefault = 1;export const getBlueprintResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const getBlueprintResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const getBlueprintResponseBlueprintContentConstraintsItemModeDefault = "count";export const getBlueprintResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const getBlueprintResponseBlueprintEnemyPolicyEnforceDefault = true;export const getBlueprintResponseBlueprintExposureTargetMaxExposureRateMaxOne = 1;export const getBlueprintResponseBlueprintExposureTargetMaxPairwiseOverlapMinOne = 0;
 
 export const getBlueprintResponse = zod.object({
   "id": zod.string(),
@@ -72,14 +75,17 @@ export const getBlueprintResponse = zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),
   "method": zod.enum(['minimax', 'maximin']).default(getBlueprintResponseBlueprintStatisticalTargetMethodDefault),
-  "tolerance": zod.union([zod.number(),zod.null()]).optional()
-}).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point, using\n``target_info`` as a floor). ``tolerance`` is an optional absolute band; when\nset, the compiler adds hard ``|actual - target| <= tolerance`` constraints in\naddition to the objective.'),
+  "tolerance": zod.union([zod.number(),zod.null()]).optional(),
+  "weights": zod.union([zod.array(zod.number()),zod.null()]).optional()
+}).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point — there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point\'s weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs — orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*.'),
   "enemy_policy": zod.object({
   "enforce": zod.boolean().default(getBlueprintResponseBlueprintEnemyPolicyEnforceDefault)
 }).optional().describe('How to honor ``enemy_of`` relations from the bank.\n\nWhen ``enforce`` is true, two items that are enemies of each other may not both\nappear in the same form (declared one-directionally in the bank; the compiler\nsymmetrizes).'),
   "exposure_target": zod.union([zod.object({
-  "max_use_per_item": zod.number().min(1)
-}).describe('Optional cap on how often an item may be used across assembled forms.\n\nOnly meaningful when assembling multiple parallel forms in one job.'),zod.null()]).optional()
+  "max_use_per_item": zod.union([zod.number().min(1),zod.null()]).optional(),
+  "max_exposure_rate": zod.union([zod.number().max(getBlueprintResponseBlueprintExposureTargetMaxExposureRateMaxOne),zod.null()]).optional(),
+  "max_pairwise_overlap": zod.union([zod.number().min(getBlueprintResponseBlueprintExposureTargetMaxPairwiseOverlapMinOne),zod.null()]).optional()
+}).describe('Optional caps on item reuse across assembled forms (multi-form jobs).\n\nTwo reuse levers:\n- **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.\n  Specify it directly, or as a target ``max_exposure_rate`` (proportion 0–1) that\n  the compiler translates to a count given the planned form count:\n  ``max_use ≈ ceil(rate × num_forms)`` (assumes **uniform form administration**).\n  A raw ``max_use_per_item`` is the low-level override and wins if both are set.\n- **pairwise overlap cap**: any two forms may share at most\n  ``max_pairwise_overlap`` items (distinct from the total per-item cap — it bounds\n  similarity *between forms*, e.g. for security across parallel administrations).'),zod.null()]).optional()
 }).describe('Full assembly specification for one (or several parallel) forms.')
 })
 

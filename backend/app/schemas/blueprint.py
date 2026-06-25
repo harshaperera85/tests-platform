@@ -12,6 +12,7 @@ free of any administration-model coupling.
 
 from __future__ import annotations
 
+import math
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
@@ -96,16 +97,23 @@ class TIFTarget(BaseModel):
 
     ``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the
     target, minimizing the worst-point absolute miss — the default for parallel
-    forms) or ``maximin`` (maximize information at the worst theta point, using
-    ``target_info`` as a floor). ``tolerance`` is an optional absolute band; when
-    set, the compiler adds hard ``|actual - target| <= tolerance`` constraints in
-    addition to the objective.
+    forms) or ``maximin`` (maximize information at the worst theta point — there is
+    **no target** under maximin, so ``target_info``/``tolerance``/``weights`` are
+    ignored). ``tolerance`` is an optional absolute band; when set, the compiler adds
+    hard ``|actual - target| <= tolerance`` constraints in addition to the objective.
+
+    ``weights`` (minimax only) give a per-theta multiplier on the deviation term, so
+    the objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly
+    the unweighted minimax). Raise a point's weight to **protect fit there** (e.g. a
+    cut score) when the pool forces tradeoffs — orthogonal to target height: height
+    sets the desired curve *shape*; weight sets *where not to compromise*.
     """
 
     theta_points: list[float] = Field(min_length=1)
     target_info: list[float] = Field(min_length=1)
     method: Literal["minimax", "maximin"] = "minimax"
     tolerance: float | None = Field(default=None, gt=0.0)
+    weights: list[float] | None = Field(default=None)
 
     @model_validator(mode="after")
     def _check_lengths(self) -> TIFTarget:
@@ -113,7 +121,19 @@ class TIFTarget(BaseModel):
             raise ValueError("theta_points and target_info must be the same length")
         if any(v < 0 for v in self.target_info):
             raise ValueError("target_info values must be non-negative")
+        if self.weights is not None:
+            if len(self.weights) != len(self.theta_points):
+                raise ValueError("weights must match the number of theta_points")
+            if any(w <= 0 for w in self.weights):
+                raise ValueError("weights must be positive")
         return self
+
+    @property
+    def resolved_weights(self) -> tuple[float, ...]:
+        """Per-theta weights, defaulting to all 1.0 (unweighted minimax)."""
+        if self.weights is None:
+            return tuple(1.0 for _ in self.theta_points)
+        return tuple(self.weights)
 
 
 class EnemyPolicy(BaseModel):
@@ -128,12 +148,43 @@ class EnemyPolicy(BaseModel):
 
 
 class ExposureTarget(BaseModel):
-    """Optional cap on how often an item may be used across assembled forms.
+    """Optional caps on item reuse across assembled forms (multi-form jobs).
 
-    Only meaningful when assembling multiple parallel forms in one job.
+    Two reuse levers:
+    - **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.
+      Specify it directly, or as a target ``max_exposure_rate`` (proportion 0–1) that
+      the compiler translates to a count given the planned form count:
+      ``max_use ≈ ceil(rate × num_forms)`` (assumes **uniform form administration**).
+      A raw ``max_use_per_item`` is the low-level override and wins if both are set.
+    - **pairwise overlap cap**: any two forms may share at most
+      ``max_pairwise_overlap`` items (distinct from the total per-item cap — it bounds
+      similarity *between forms*, e.g. for security across parallel administrations).
     """
 
-    max_use_per_item: int = Field(ge=1)
+    max_use_per_item: int | None = Field(default=None, ge=1)
+    max_exposure_rate: float | None = Field(default=None, gt=0.0, le=1.0)
+    max_pairwise_overlap: int | None = Field(default=None, ge=0)
+
+    @model_validator(mode="after")
+    def _check_any(self) -> ExposureTarget:
+        if (
+            self.max_use_per_item is None
+            and self.max_exposure_rate is None
+            and self.max_pairwise_overlap is None
+        ):
+            raise ValueError(
+                "exposure_target needs at least one of max_use_per_item, "
+                "max_exposure_rate, max_pairwise_overlap"
+            )
+        return self
+
+    def resolved_max_use(self, num_forms: int) -> int | None:
+        """Per-item use cap as a count: raw override, else rate × num_forms."""
+        if self.max_use_per_item is not None:
+            return self.max_use_per_item
+        if self.max_exposure_rate is not None:
+            return math.ceil(self.max_exposure_rate * num_forms)
+        return None
 
 
 class Blueprint(BaseModel):

@@ -7,16 +7,23 @@
  */
 import type { TIFTargetMethod } from './tIFTargetMethod';
 import type { TIFTargetTolerance } from './tIFTargetTolerance';
+import type { TIFTargetWeights } from './tIFTargetWeights';
 
 /**
  * Target test information at a set of theta points.
 
 ``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the
 target, minimizing the worst-point absolute miss — the default for parallel
-forms) or ``maximin`` (maximize information at the worst theta point, using
-``target_info`` as a floor). ``tolerance`` is an optional absolute band; when
-set, the compiler adds hard ``|actual - target| <= tolerance`` constraints in
-addition to the objective.
+forms) or ``maximin`` (maximize information at the worst theta point — there is
+**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are
+ignored). ``tolerance`` is an optional absolute band; when set, the compiler adds
+hard ``|actual - target| <= tolerance`` constraints in addition to the objective.
+
+``weights`` (minimax only) give a per-theta multiplier on the deviation term, so
+the objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly
+the unweighted minimax). Raise a point's weight to **protect fit there** (e.g. a
+cut score) when the pool forces tradeoffs — orthogonal to target height: height
+sets the desired curve *shape*; weight sets *where not to compromise*.
  */
 export interface TIFTarget {
   /** @minItems 1 */
@@ -25,4 +32,5 @@ export interface TIFTarget {
   target_info: number[];
   method?: TIFTargetMethod;
   tolerance?: TIFTargetTolerance;
+  weights?: TIFTargetWeights;
 }

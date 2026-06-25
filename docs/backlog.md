@@ -87,6 +87,29 @@ view, with `SE(b)` via mirt `IRTpars=TRUE` delta-method. What shipped:
   consume the same native D=1 info matrix); eatATA parity runs in the `oracle-parity` CI job.
 - **Phase-2 CAT** params are native logistic D=1 slope-intercept — no conversion needed.
 
+### DONE — Linear ATA enhancements (shared engine, all assembly-based models)
+- **Weighted minimax**: optional per-θ weights `w_k` → minimize `max_k w_k·|TIF_k−target_k|`
+  (`objectives.py`); default all 1.0 reproduces the unweighted model byte-for-byte (verified:
+  determinism golden unchanged). Protects fit at critical θ (height = shape; weight = where
+  not to compromise). Schema `TIFTarget.weights` + per-θ UI input.
+- **Inter-form pairwise overlap**: `ExposureTarget.max_pairwise_overlap` caps items shared by
+  any two forms (MIP in `ata_model.py`), distinct from the per-item `max_use`. UI input.
+- **Rate-based exposure**: `ExposureTarget.max_exposure_rate` (0–1) → compiler
+  `max_use = ceil(rate × num_forms)` (assumes uniform form administration); raw `max_use`
+  remains the override. UI input.
+- **Maximin UI consistency**: target-info/tolerance/weights hidden under maximin (no target);
+  preview shows achieved TIF only (no target curve/gap). (Previously these were always shown.)
+- Tests: `test_ata_enhancements.py` (weights=1 ≡ unweighted, weight protects critical θ,
+  overlap cap incl. disjoint, rate→max_use, validators); oracles still agree.
+
+### Deferred — robust + chance-constrained ATA objectives
+Robust ATA + chance-constrained ATA objectives — shared-engine assembly objectives (available
+to all assembly-based models, not linear-specific). Deferred **not for architectural reasons**
+but because they require item-parameter uncertainty (calibration covariance/SEs), which depends
+on the item-factory calibration seam being wired. Build when calibrated parameters with
+covariance are flowing. (NB: do NOT add CAT exposure methods — Sympson-Hetter, randomesque — to
+the linear path; those are administration-time/CAT-only and don't apply to fixed-form assembly.)
+
 ### Phase 2 — CAT adapter (later)
 `CatStrategy` as a thin adapter to the existing CAT platform (preserve selection,
 estimation, stopping incl. SPRT, exposure, content balancing, pre-CAT, neural fusion).

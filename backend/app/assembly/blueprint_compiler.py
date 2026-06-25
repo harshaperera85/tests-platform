@@ -52,6 +52,9 @@ class CompiledProblem:
     content_sets: tuple[ContentSet, ...] = ()
     enemy_pairs: tuple[tuple[int, int], ...] = ()
     max_use_per_item: int | None = None
+    max_pairwise_overlap: int | None = None
+    # per-theta minimax weights (all 1.0 = unweighted minimax)
+    weights: tuple[float, ...] = ()
     warnings: tuple[str, ...] = field(default_factory=tuple)
     # native canonical slope-intercept params per item: (a, d, g=c, u). Lets the R
     # oracle receive mirt-native parameters (D=1 slope-intercept), not just the
@@ -116,11 +119,14 @@ def compile_blueprint(blueprint: Blueprint, pool: ItemPool) -> CompiledProblem:
                     continue
                 enemy_pairs.add((min(i, j), max(i, j)))
 
-    max_use = (
-        blueprint.exposure_target.max_use_per_item
-        if blueprint.exposure_target is not None
-        else None
-    )
+    # Exposure: resolve the per-item use cap (raw override, else rate × num_forms)
+    # and the pairwise-overlap cap from the exposure target.
+    max_use: int | None = None
+    max_pairwise_overlap: int | None = None
+    exp = blueprint.exposure_target
+    if exp is not None:
+        max_use = exp.resolved_max_use(blueprint.num_forms)
+        max_pairwise_overlap = exp.max_pairwise_overlap
 
     return CompiledProblem(
         item_ids=item_ids,
@@ -134,6 +140,8 @@ def compile_blueprint(blueprint: Blueprint, pool: ItemPool) -> CompiledProblem:
         content_sets=tuple(content_sets),
         enemy_pairs=tuple(sorted(enemy_pairs)),
         max_use_per_item=max_use,
+        max_pairwise_overlap=max_pairwise_overlap,
+        weights=blueprint.statistical_target.resolved_weights,
         warnings=tuple(warnings),
         params=tuple((it.a, it.d, it.c, it.u) for it in items),
     )

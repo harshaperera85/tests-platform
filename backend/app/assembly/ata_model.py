@@ -74,6 +74,17 @@ class AtaModel:
             for i in range(n):
                 m.add(sum(self.x[(i, f)] for f in range(F)) <= p.max_use_per_item)
 
+        # Inter-form overlap: any two forms share at most max_pairwise_overlap items.
+        # z_i(f,g) >= x_if + x_ig - 1 forces z=1 when item i is in both forms; the
+        # cap on sum(z) then bounds the shared count (z is free to be 0 otherwise).
+        if p.max_pairwise_overlap is not None and F > 1:
+            for f in range(F):
+                for g in range(f + 1, F):
+                    z = [m.new_bool_var(f"ov_{i}_{f}_{g}") for i in range(n)]
+                    for i in range(n):
+                        m.add(z[i] >= self.x[(i, f)] + self.x[(i, g)] - 1)
+                    m.add(sum(z) <= p.max_pairwise_overlap)
+
         # Realized TIF expressions (scaled) for objective use.
         for f in range(F):
             row = [

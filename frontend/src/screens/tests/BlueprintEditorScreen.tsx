@@ -32,8 +32,11 @@ type Fields = {
   length: string;
   numForms: string;
   maxUse: string;
+  maxRate: string;
+  maxOverlap: string;
   thetaText: string;
   infoText: string;
+  weightsText: string;
   tolerance: string;
   method: Method;
   constraints: ConstraintRow[];
@@ -43,8 +46,11 @@ const DEFAULT_FIELDS: Fields = {
   length: "20",
   numForms: "1",
   maxUse: "",
+  maxRate: "",
+  maxOverlap: "",
   thetaText: "-1, 0, 1",
   infoText: "8, 11, 8",
+  weightsText: "",
   tolerance: "",
   method: "minimax",
   constraints: [
@@ -72,8 +78,17 @@ function fieldsFromBlueprint(bp: Blueprint): Fields {
       bp.exposure_target?.max_use_per_item != null
         ? String(bp.exposure_target.max_use_per_item)
         : "",
+    maxRate:
+      bp.exposure_target?.max_exposure_rate != null
+        ? String(bp.exposure_target.max_exposure_rate)
+        : "",
+    maxOverlap:
+      bp.exposure_target?.max_pairwise_overlap != null
+        ? String(bp.exposure_target.max_pairwise_overlap)
+        : "",
     thetaText: (t.theta_points ?? []).join(", "),
     infoText: (t.target_info ?? []).join(", "),
+    weightsText: (t.weights ?? []).join(", "),
     tolerance: t.tolerance != null ? String(t.tolerance) : "",
     method: (t.method as Method) ?? "minimax",
     constraints: (bp.content_constraints ?? []).map((c) => {
@@ -109,9 +124,12 @@ export function BlueprintEditorScreen({
   const [length, setLength] = useState(base.length);
   const [numForms, setNumForms] = useState(base.numForms);
   const [maxUse, setMaxUse] = useState(base.maxUse);
+  const [maxRate, setMaxRate] = useState(base.maxRate);
+  const [maxOverlap, setMaxOverlap] = useState(base.maxOverlap);
   const [constraints, setConstraints] = useState<ConstraintRow[]>(base.constraints);
   const [thetaText, setThetaText] = useState(base.thetaText);
   const [infoText, setInfoText] = useState(base.infoText);
+  const [weightsText, setWeightsText] = useState(base.weightsText);
   const [tolerance, setTolerance] = useState(base.tolerance);
   const [method, setMethod] = useState<Method>(base.method);
   const [savedAt, setSavedAt] = useState<string | null>(null);
@@ -131,14 +149,25 @@ export function BlueprintEditorScreen({
 
   const theta = parseNums(thetaText);
   const info = parseNums(infoText);
+  const weights = parseNums(weightsText);
   const len = Number(length);
   const nForms = Number(numForms);
+  const isMinimax = method === "minimax";
   const errors: Record<string, string> = {};
   if (!Number.isInteger(len) || len <= 0) errors.length = "Length must be a positive integer.";
   if (!Number.isInteger(nForms) || nForms <= 0) errors.numForms = "Forms must be ≥ 1.";
   if (theta.length === 0) errors.theta = "Enter at least one θ point.";
-  if (info.length !== theta.length) errors.info = "Target info count must match θ points.";
-  if (info.some((v) => Number.isNaN(v) || v < 0)) errors.info = "Target info must be ≥ 0.";
+  // maximin has no target: target_info/tolerance/weights are not validated/required.
+  if (isMinimax) {
+    if (info.length !== theta.length) errors.info = "Target info count must match θ points.";
+    if (info.some((v) => Number.isNaN(v) || v < 0)) errors.info = "Target info must be ≥ 0.";
+    if (weights.length > 0) {
+      if (weights.length !== theta.length) errors.weights = "Weights count must match θ points.";
+      else if (weights.some((w) => Number.isNaN(w) || w <= 0)) errors.weights = "Weights must be > 0.";
+    }
+  }
+  const rateNum = numOrUndef(maxRate);
+  if (rateNum != null && (rateNum <= 0 || rateNum > 1)) errors.maxRate = "Rate must be in (0, 1].";
   // Live availability: how many pool items match a constraint's predicate(s).
   const poolItems = pool.data?.items ?? [];
   const availFor = (preds: Predicate[]): number | null => {
@@ -191,8 +220,11 @@ export function BlueprintEditorScreen({
     setLength(f.length);
     setNumForms(f.numForms);
     setMaxUse(f.maxUse);
+    setMaxRate(f.maxRate);
+    setMaxOverlap(f.maxOverlap);
     setThetaText(f.thetaText);
     setInfoText(f.infoText);
+    setWeightsText(f.weightsText);
     setMethod(f.method);
     setTolerance(f.tolerance);
     setConstraints(f.constraints);
@@ -233,6 +265,21 @@ export function BlueprintEditorScreen({
 
   function buildBlueprint(): Blueprint {
     const maxUseNum = numOrUndef(maxUse);
+    const rate = numOrUndef(maxRate);
+    const overlap = numOrUndef(maxOverlap);
+    const exposure =
+      maxUseNum != null || rate != null || overlap != null
+        ? {
+            max_use_per_item: maxUseNum,
+            max_exposure_rate: rate,
+            max_pairwise_overlap: overlap,
+          }
+        : undefined;
+    // weights apply to minimax only; omit when empty or all 1 (== unweighted)
+    const weightsClean =
+      isMinimax && weights.length === theta.length && weights.some((w) => w !== 1)
+        ? weights
+        : undefined;
     return {
       name,
       length: len,
@@ -241,9 +288,10 @@ export function BlueprintEditorScreen({
         theta_points: theta,
         target_info: info,
         method,
-        tolerance: numOrUndef(tolerance),
+        tolerance: isMinimax ? numOrUndef(tolerance) : undefined,
+        weights: weightsClean,
       },
-      exposure_target: maxUseNum != null ? { max_use_per_item: maxUseNum } : undefined,
+      exposure_target: exposure,
       content_constraints: constraints
         .map((c) => {
           const preds = c.predicates.filter((p) => p.tag_type && p.tag_value);
@@ -395,11 +443,24 @@ export function BlueprintEditorScreen({
             <TextInput type="number" min={1} value={numForms} aria-invalid={Boolean(errors.numForms)}
               onChange={(e) => setNumForms(e.target.value)} />
           </Field>
-          <Field label="Max use / item" hint="exposure (optional)">
+          <Field label="Max use / item" hint="exposure count (optional)">
             <TextInput type="number" min={1} value={maxUse} placeholder="(none)"
               onChange={(e) => setMaxUse(e.target.value)} />
           </Field>
+          <Field label="Max exposure rate" hint={errors.maxRate ?? "0–1; → ceil(rate × forms)"}>
+            <TextInput type="number" min={0} max={1} step="0.05" value={maxRate}
+              placeholder="(none)" aria-invalid={Boolean(errors.maxRate)}
+              onChange={(e) => setMaxRate(e.target.value)} />
+          </Field>
+          <Field label="Max pairwise overlap" hint="items shared by any 2 forms">
+            <TextInput type="number" min={0} value={maxOverlap} placeholder="(none)"
+              onChange={(e) => setMaxOverlap(e.target.value)} />
+          </Field>
         </div>
+        <p className="mt-2 text-xs text-ink-400">
+          Exposure/overlap apply across parallel forms (Parallel forms ≥ 2). Rate assumes
+          uniform form administration; a raw “Max use / item” overrides the rate.
+        </p>
       </Card>
 
       <Card
@@ -507,24 +568,39 @@ export function BlueprintEditorScreen({
         subtitle="Target test information at θ points — what makes forms psychometrically parallel."
       >
         <div className="grid grid-cols-2 gap-4">
-          <Field label="Theta points" hint={errors.theta ?? "comma-separated"}>
-            <TextInput value={thetaText} aria-invalid={Boolean(errors.theta)}
-              onChange={(e) => setThetaText(e.target.value)} />
-          </Field>
-          <Field label="Target info" hint={errors.info ?? "comma-separated, same length"}>
-            <TextInput value={infoText} aria-invalid={Boolean(errors.info)}
-              onChange={(e) => setInfoText(e.target.value)} />
-          </Field>
           <Field label="Method">
             <Select value={method} onChange={(e) => setMethod(e.target.value as Method)}>
               <option value="minimax">minimax (match target)</option>
               <option value="maximin">maximin (maximize worst point)</option>
             </Select>
           </Field>
-          <Field label="Tolerance" hint="optional absolute band">
-            <TextInput type="number" value={tolerance} placeholder="(none)"
-              onChange={(e) => setTolerance(e.target.value)} />
+          <Field label="Theta points" hint={errors.theta ?? "comma-separated"}>
+            <TextInput value={thetaText} aria-invalid={Boolean(errors.theta)}
+              onChange={(e) => setThetaText(e.target.value)} />
           </Field>
+          {isMinimax ? (
+            <>
+              <Field label="Target info" hint={errors.info ?? "comma-separated, same length"}>
+                <TextInput value={infoText} aria-invalid={Boolean(errors.info)}
+                  onChange={(e) => setInfoText(e.target.value)} />
+              </Field>
+              <Field label="Weights" hint={errors.weights ?? "per-θ, default 1; raise to protect a θ"}>
+                <TextInput value={weightsText} placeholder="1, 1, 1"
+                  aria-invalid={Boolean(errors.weights)}
+                  onChange={(e) => setWeightsText(e.target.value)} />
+              </Field>
+              <Field label="Tolerance" hint="optional absolute band">
+                <TextInput type="number" value={tolerance} placeholder="(none)"
+                  onChange={(e) => setTolerance(e.target.value)} />
+              </Field>
+            </>
+          ) : (
+            <div className="col-span-2 rounded-lg bg-ink-50 px-3 py-2 text-xs text-ink-500">
+              <span className="font-medium text-ink-700">maximin</span> maximizes information at
+              the worst θ point — there is no target, so target-info, weights, and tolerance
+              don’t apply. The preview shows the achieved TIF only.
+            </div>
+          )}
         </div>
       </Card>
 

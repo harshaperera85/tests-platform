@@ -5,13 +5,25 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
+import type { ExposureTargetMaxUsePerItem } from './exposureTargetMaxUsePerItem';
+import type { ExposureTargetMaxExposureRate } from './exposureTargetMaxExposureRate';
+import type { ExposureTargetMaxPairwiseOverlap } from './exposureTargetMaxPairwiseOverlap';
 
 /**
- * Optional cap on how often an item may be used across assembled forms.
+ * Optional caps on item reuse across assembled forms (multi-form jobs).
 
-Only meaningful when assembling multiple parallel forms in one job.
+Two reuse levers:
+- **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.
+  Specify it directly, or as a target ``max_exposure_rate`` (proportion 0–1) that
+  the compiler translates to a count given the planned form count:
+  ``max_use ≈ ceil(rate × num_forms)`` (assumes **uniform form administration**).
+  A raw ``max_use_per_item`` is the low-level override and wins if both are set.
+- **pairwise overlap cap**: any two forms may share at most
+  ``max_pairwise_overlap`` items (distinct from the total per-item cap — it bounds
+  similarity *between forms*, e.g. for security across parallel administrations).
  */
 export interface ExposureTarget {
-  /** @minimum 1 */
-  max_use_per_item: number;
+  max_use_per_item?: ExposureTargetMaxUsePerItem;
+  max_exposure_rate?: ExposureTargetMaxExposureRate;
+  max_pairwise_overlap?: ExposureTargetMaxPairwiseOverlap;
 }

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from ortools.sat.python import cp_model
 
-from app.assembly.ata_model import INFO_SCALE, AtaModel
+from app.assembly.ata_model import AtaModel
 from app.assembly.blueprint_compiler import CompiledProblem
 from app.assembly.objectives import add_maximin_objective, add_minimax_objective
 from app.assembly.result import AssemblyResult, FormSolution
@@ -38,7 +38,7 @@ class MipStrategy(AssemblyStrategy):
         seed: int = 0,
     ) -> AssemblyResult:
         am = AtaModel(problem)
-        objective_var = (
+        objective_var, value_scale = (
             add_minimax_objective(am)
             if problem.method == "minimax"
             else add_maximin_objective(am)
@@ -73,5 +73,5 @@ class MipStrategy(AssemblyStrategy):
                     tif_actual=problem.tif_at(chosen),
                 )
             )
-        result.objective_value = solver.value(objective_var) / INFO_SCALE
+        result.objective_value = solver.value(objective_var) / value_scale
         return result

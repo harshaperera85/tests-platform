@@ -1504,17 +1504,46 @@
       "ExposureTarget": {
         "properties": {
           "max_use_per_item": {
-            "type": "integer",
-            "minimum": 1.0,
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Max Use Per Item"
+          },
+          "max_exposure_rate": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Exposure Rate"
+          },
+          "max_pairwise_overlap": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Pairwise Overlap"
           }
         },
         "type": "object",
-        "required": [
-          "max_use_per_item"
-        ],
         "title": "ExposureTarget",
-        "description": "Optional cap on how often an item may be used across assembled forms.\n\nOnly meaningful when assembling multiple parallel forms in one job."
+        "description": "Optional caps on item reuse across assembled forms (multi-form jobs).\n\nTwo reuse levers:\n- **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.\n  Specify it directly, or as a target ``max_exposure_rate`` (proportion 0\u20131) that\n  the compiler translates to a count given the planned form count:\n  ``max_use \u2248 ceil(rate \u00d7 num_forms)`` (assumes **uniform form administration**).\n  A raw ``max_use_per_item`` is the low-level override and wins if both are set.\n- **pairwise overlap cap**: any two forms may share at most\n  ``max_pairwise_overlap`` items (distinct from the total per-item cap \u2014 it bounds\n  similarity *between forms*, e.g. for security across parallel administrations)."
       },
       "FormRead": {
         "properties": {
@@ -2504,6 +2533,20 @@
               }
             ],
             "title": "Tolerance"
+          },
+          "weights": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weights"
           }
         },
         "type": "object",
@@ -2512,7 +2555,7 @@
           "target_info"
         ],
         "title": "TIFTarget",
-        "description": "Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss \u2014 the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point, using\n``target_info`` as a floor). ``tolerance`` is an optional absolute band; when\nset, the compiler adds hard ``|actual - target| <= tolerance`` constraints in\naddition to the objective."
+        "description": "Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss \u2014 the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point \u2014 there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k\u00b7|TIF_k \u2212 target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point's weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs \u2014 orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*."
       },
       "TerminationDecision": {
         "properties": {
