@@ -275,6 +275,14 @@ not the test — CAT/MST forms will use the identical lifecycle). For the select
   **marginal reliability**, and actual-vs-target TIF — all on the canonical D=1 metric.
 - **Sign-off history** — the append-only trail: who moved the form through which gate, when, with
   what comment.
+- **Cross-form comparability (equating evidence)** — when the test has ≥2 forms, **Run
+  comparability report** overlays every form's **TIF** (vs the common target), **conditional SE**,
+  and **expected score (TCC)** on the canonical D=1 scale, flags θ points where forms **diverge**
+  beyond tolerance (red), and gives a **pass/flag** summary (max TIF deviation, max expected-score
+  difference) plus per-form reliability/info. This is the across-forms evidence a psychometric
+  reviewer signs off on (parallel forms should overlay tightly; mismatched forms light up red).
+  **Comparability ≠ equating:** it shows the forms match *by design* on the IRT scale — it does
+  **not** derive score-conversion tables from examinee responses (that's downstream equating).
 
 Once a form leaves **draft**, the **Assembly** tab freezes (no blueprint edit / re-assembly) until
 you **Return to draft**. `published` is the release state (the eventual Sessions handoff).

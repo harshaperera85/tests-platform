@@ -22,6 +22,7 @@ from app.models.form import FormRow
 from app.psychometrics import pools
 from app.psychometrics.information import test_information
 from app.schemas.blueprint import Blueprint
+from app.schemas.comparability import ComparabilityReport, ComparabilityRequest
 from app.schemas.governance import (
     FormLifecycle,
     FormQAReport,
@@ -42,10 +43,38 @@ from app.schemas.validation import (
     CrossValOracle,
     CrossValSide,
 )
-from app.services import form_lifecycle, form_qa
+from app.services import form_comparability, form_lifecycle, form_qa
 from app.simulation import simulate_linear
 
 router = APIRouter(prefix="/forms", tags=["forms"])
+
+
+@router.post("/compare", response_model=ComparabilityReport)
+def compare_forms(
+    payload: ComparabilityRequest, db: Session = Depends(get_db)
+) -> ComparabilityReport:
+    """Cross-form comparability / equating-evidence report over a set of forms.
+
+    Shows whether the forms match by design on the canonical D=1 IRT scale (TIF / SE
+    / TCC overlay + per-θ dispersion + pass/flag). Comparability evidence only — not
+    response-data equating (see the report's scope_note).
+    """
+    if len(payload.form_ids) < 2:
+        raise HTTPException(
+            status_code=422, detail="comparability needs at least two forms"
+        )
+    forms = []
+    for fid in payload.form_ids:
+        row = db.get(FormRow, fid)
+        if row is None:
+            raise HTTPException(status_code=404, detail=f"form not found: {fid}")
+        forms.append(row)
+    return form_comparability.build_comparability_report(
+        db,
+        forms,
+        tolerance=payload.tolerance,
+        score_tolerance=payload.score_tolerance,
+    )
 
 
 def _lifecycle_read(db: Session, form: FormRow) -> FormLifecycle:

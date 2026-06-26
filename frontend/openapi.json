@@ -316,7 +316,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/FormSummary"
+                    "$ref": "#/components/schemas/app__schemas__tests__FormSummary"
                   },
                   "title": "Response List Test Forms"
                 }
@@ -592,6 +592,48 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AssemblyJobRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/forms/compare": {
+      "post": {
+        "tags": [
+          "forms"
+        ],
+        "summary": "Compare Forms",
+        "description": "Cross-form comparability / equating-evidence report over a set of forms.\n\nShows whether the forms match by design on the canonical D=1 IRT scale (TIF / SE\n/ TCC overlay + per-\u03b8 dispersion + pass/flag). Comparability evidence only \u2014 not\nresponse-data equating (see the report's scope_note).",
+        "operationId": "compare_forms",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComparabilityRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComparabilityReport"
                 }
               }
             }
@@ -1529,6 +1571,138 @@
         ],
         "title": "BlueprintRead"
       },
+      "ComparabilityReport": {
+        "properties": {
+          "form_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Form Ids"
+          },
+          "n_forms": {
+            "type": "integer",
+            "title": "N Forms"
+          },
+          "metric": {
+            "type": "string",
+            "title": "Metric",
+            "default": "logistic-D1-slope-intercept"
+          },
+          "theta_grid": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Theta Grid"
+          },
+          "tolerance": {
+            "type": "number",
+            "title": "Tolerance"
+          },
+          "score_tolerance": {
+            "type": "number",
+            "title": "Score Tolerance"
+          },
+          "target": {
+            "items": {
+              "$ref": "#/components/schemas/TargetPoint"
+            },
+            "type": "array",
+            "title": "Target"
+          },
+          "forms": {
+            "items": {
+              "$ref": "#/components/schemas/app__schemas__comparability__FormSummary"
+            },
+            "type": "array",
+            "title": "Forms"
+          },
+          "dispersion": {
+            "items": {
+              "$ref": "#/components/schemas/DispersionPoint"
+            },
+            "type": "array",
+            "title": "Dispersion"
+          },
+          "max_tif_deviation": {
+            "type": "number",
+            "title": "Max Tif Deviation"
+          },
+          "max_tif_deviation_theta": {
+            "type": "number",
+            "title": "Max Tif Deviation Theta"
+          },
+          "max_expected_score_diff": {
+            "type": "number",
+            "title": "Max Expected Score Diff"
+          },
+          "max_expected_score_diff_theta": {
+            "type": "number",
+            "title": "Max Expected Score Diff Theta"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          },
+          "flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Flags"
+          },
+          "scope_note": {
+            "type": "string",
+            "title": "Scope Note",
+            "default": "Comparability evidence: forms matched by design on the IRT scale (canonical D=1). NOT statistical equating \u2014 no score-conversion tables are derived from examinee response data (that is downstream post-administration equating)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "form_ids",
+          "n_forms",
+          "theta_grid",
+          "tolerance",
+          "score_tolerance",
+          "target",
+          "forms",
+          "dispersion",
+          "max_tif_deviation",
+          "max_tif_deviation_theta",
+          "max_expected_score_diff",
+          "max_expected_score_diff_theta",
+          "passed",
+          "flags"
+        ],
+        "title": "ComparabilityReport"
+      },
+      "ComparabilityRequest": {
+        "properties": {
+          "form_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Form Ids"
+          },
+          "tolerance": {
+            "type": "number",
+            "title": "Tolerance",
+            "default": 1.0
+          },
+          "score_tolerance": {
+            "type": "number",
+            "title": "Score Tolerance",
+            "default": 1.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "form_ids"
+        ],
+        "title": "ComparabilityRequest"
+      },
       "ContentConstraint": {
         "properties": {
           "tag_type": {
@@ -1875,6 +2049,84 @@
         "title": "CrossValidationResult",
         "description": "Full cross-validation payload for the UI.\n\n``status``: ``ok`` (ran and compared), ``unsupported`` (blueprint outside the\noracle's scope \u2014 single-form unweighted minimax only), ``oracle_unavailable``\n(service unreachable), or ``error``."
       },
+      "CurvePoint": {
+        "properties": {
+          "theta": {
+            "type": "number",
+            "title": "Theta"
+          },
+          "tif": {
+            "type": "number",
+            "title": "Tif"
+          },
+          "se": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se"
+          },
+          "tcc": {
+            "type": "number",
+            "title": "Tcc"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta",
+          "tif",
+          "se",
+          "tcc"
+        ],
+        "title": "CurvePoint"
+      },
+      "DispersionPoint": {
+        "properties": {
+          "theta": {
+            "type": "number",
+            "title": "Theta"
+          },
+          "tif_min": {
+            "type": "number",
+            "title": "Tif Min"
+          },
+          "tif_max": {
+            "type": "number",
+            "title": "Tif Max"
+          },
+          "tif_spread": {
+            "type": "number",
+            "title": "Tif Spread"
+          },
+          "tif_sd": {
+            "type": "number",
+            "title": "Tif Sd"
+          },
+          "tcc_spread": {
+            "type": "number",
+            "title": "Tcc Spread"
+          },
+          "diverged": {
+            "type": "boolean",
+            "title": "Diverged"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta",
+          "tif_min",
+          "tif_max",
+          "tif_spread",
+          "tif_sd",
+          "tcc_spread",
+          "diverged"
+        ],
+        "title": "DispersionPoint"
+      },
       "EnemyPolicy": {
         "properties": {
           "enforce": {
@@ -2100,60 +2352,6 @@
           "tif"
         ],
         "title": "FormRead"
-      },
-      "FormSummary": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "assembly_job_id": {
-            "type": "string",
-            "title": "Assembly Job Id"
-          },
-          "blueprint_id": {
-            "type": "string",
-            "title": "Blueprint Id"
-          },
-          "pool_id": {
-            "type": "string",
-            "title": "Pool Id"
-          },
-          "form_index": {
-            "type": "integer",
-            "title": "Form Index"
-          },
-          "status": {
-            "type": "string",
-            "title": "Status"
-          },
-          "lifecycle_state": {
-            "type": "string",
-            "title": "Lifecycle State",
-            "default": "draft"
-          },
-          "n_items": {
-            "type": "integer",
-            "title": "N Items"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time",
-            "title": "Created At"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "assembly_job_id",
-          "blueprint_id",
-          "pool_id",
-          "form_index",
-          "status",
-          "n_items",
-          "created_at"
-        ],
-        "title": "FormSummary"
       },
       "HTTPValidationError": {
         "properties": {
@@ -3215,6 +3413,24 @@
         "title": "TIFTarget",
         "description": "Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss \u2014 the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point \u2014 there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k\u00b7|TIF_k \u2212 target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point's weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs \u2014 orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*."
       },
+      "TargetPoint": {
+        "properties": {
+          "theta": {
+            "type": "number",
+            "title": "Theta"
+          },
+          "target": {
+            "type": "number",
+            "title": "Target"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta",
+          "target"
+        ],
+        "title": "TargetPoint"
+      },
       "TerminationDecision": {
         "properties": {
           "complete": {
@@ -3537,6 +3753,106 @@
           "type"
         ],
         "title": "ValidationError"
+      },
+      "app__schemas__comparability__FormSummary": {
+        "properties": {
+          "form_id": {
+            "type": "string",
+            "title": "Form Id"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "marginal_reliability": {
+            "type": "number",
+            "title": "Marginal Reliability"
+          },
+          "mean_information": {
+            "type": "number",
+            "title": "Mean Information"
+          },
+          "peak_information": {
+            "type": "number",
+            "title": "Peak Information"
+          },
+          "peak_theta": {
+            "type": "number",
+            "title": "Peak Theta"
+          },
+          "curve": {
+            "items": {
+              "$ref": "#/components/schemas/CurvePoint"
+            },
+            "type": "array",
+            "title": "Curve"
+          }
+        },
+        "type": "object",
+        "required": [
+          "form_id",
+          "n_items",
+          "marginal_reliability",
+          "mean_information",
+          "peak_information",
+          "peak_theta",
+          "curve"
+        ],
+        "title": "FormSummary"
+      },
+      "app__schemas__tests__FormSummary": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "assembly_job_id": {
+            "type": "string",
+            "title": "Assembly Job Id"
+          },
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "form_index": {
+            "type": "integer",
+            "title": "Form Index"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "lifecycle_state": {
+            "type": "string",
+            "title": "Lifecycle State",
+            "default": "draft"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "assembly_job_id",
+          "blueprint_id",
+          "pool_id",
+          "form_index",
+          "status",
+          "n_items",
+          "created_at"
+        ],
+        "title": "FormSummary"
       }
     }
   }

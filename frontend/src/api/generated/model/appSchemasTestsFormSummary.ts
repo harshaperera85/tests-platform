@@ -6,7 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface FormSummary {
+export interface AppSchemasTestsFormSummary {
   id: string;
   assembly_job_id: string;
   blueprint_id: string;

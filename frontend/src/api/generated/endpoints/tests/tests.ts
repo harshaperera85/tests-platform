@@ -25,8 +25,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AppSchemasTestsFormSummary,
   AssemblyJobRead,
-  FormSummary,
   HTTPValidationError,
   TestAssembleRequest,
   TestCreate,
@@ -488,7 +488,7 @@ export const listTestForms = (
 ) => {
       
       
-      return customInstance<FormSummary[]>(
+      return customInstance<AppSchemasTestsFormSummary[]>(
       {url: `/api/v1/tests/${testId}/forms`, method: 'GET', signal
     },
       options);

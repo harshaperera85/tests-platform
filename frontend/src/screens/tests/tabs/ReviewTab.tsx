@@ -25,6 +25,7 @@ import {
 } from "../../../api/generated/endpoints/forms/forms";
 import { useListTestForms } from "../../../api/generated/endpoints/tests/tests";
 import { Alert, Button, Card, Field, Pill, Select, Spinner, TextInput } from "../../../components/ui";
+import { ComparabilityPanel } from "./ComparabilityPanel";
 
 // gate action → label + the role it records (role hook is a permissive stub today)
 const ACTIONS: Record<string, { label: string; role: string; comment: boolean }> = {
@@ -76,6 +77,7 @@ export function ReviewTab() {
         {selected && <LifecyclePanel formId={selected} />}
       </Card>
       {selected && <QAReport formId={selected} />}
+      <ComparabilityPanel formIds={forms.data.map((f) => f.id)} />
       {selected && <SignoffHistory formId={selected} />}
     </div>
   );

@@ -25,6 +25,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ComparabilityReport,
+  ComparabilityRequest,
   CrossValidationResult,
   FormLifecycle,
   FormQAReport,
@@ -46,6 +48,75 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
+ * Cross-form comparability / equating-evidence report over a set of forms.
+
+Shows whether the forms match by design on the canonical D=1 IRT scale (TIF / SE
+/ TCC overlay + per-θ dispersion + pass/flag). Comparability evidence only — not
+response-data equating (see the report's scope_note).
+ * @summary Compare Forms
+ */
+export const compareForms = (
+    comparabilityRequest: BodyType<ComparabilityRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<ComparabilityReport>(
+      {url: `/api/v1/forms/compare`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: comparabilityRequest, signal
+    },
+      options);
+    }
+  
+
+
+export const getCompareFormsMutationOptions = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof compareForms>>, TError,{data: BodyType<ComparabilityRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof compareForms>>, TError,{data: BodyType<ComparabilityRequest>}, TContext> => {
+
+const mutationKey = ['compareForms'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof compareForms>>, {data: BodyType<ComparabilityRequest>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  compareForms(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CompareFormsMutationResult = NonNullable<Awaited<ReturnType<typeof compareForms>>>
+    export type CompareFormsMutationBody = BodyType<ComparabilityRequest>
+    export type CompareFormsMutationError = ErrorType<HTTPValidationError>
+
+    /**
+ * @summary Compare Forms
+ */
+export const useCompareForms = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof compareForms>>, TError,{data: BodyType<ComparabilityRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof compareForms>>,
+        TError,
+        {data: BodyType<ComparabilityRequest>},
+        TContext
+      > => {
+
+      const mutationOptions = getCompareFormsMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
  * @summary Get Form Lifecycle
  */
 export const getFormLifecycle = (

@@ -9,6 +9,67 @@ import * as zod from 'zod';
 
 
 /**
+ * Cross-form comparability / equating-evidence report over a set of forms.
+
+Shows whether the forms match by design on the canonical D=1 IRT scale (TIF / SE
+/ TCC overlay + per-θ dispersion + pass/flag). Comparability evidence only — not
+response-data equating (see the report's scope_note).
+ * @summary Compare Forms
+ */
+export const compareFormsBodyToleranceDefault = 1;export const compareFormsBodyScoreToleranceDefault = 1;
+
+export const compareFormsBody = zod.object({
+  "form_ids": zod.array(zod.string()),
+  "tolerance": zod.number().default(compareFormsBodyToleranceDefault),
+  "score_tolerance": zod.number().default(compareFormsBodyScoreToleranceDefault)
+})
+
+export const compareFormsResponseMetricDefault = "logistic-D1-slope-intercept";export const compareFormsResponseScopeNoteDefault = "Comparability evidence: forms matched by design on the IRT scale (canonical D=1). NOT statistical equating — no score-conversion tables are derived from examinee response data (that is downstream post-administration equating).";
+
+export const compareFormsResponse = zod.object({
+  "form_ids": zod.array(zod.string()),
+  "n_forms": zod.number(),
+  "metric": zod.string().default(compareFormsResponseMetricDefault),
+  "theta_grid": zod.array(zod.number()),
+  "tolerance": zod.number(),
+  "score_tolerance": zod.number(),
+  "target": zod.array(zod.object({
+  "theta": zod.number(),
+  "target": zod.number()
+})),
+  "forms": zod.array(zod.object({
+  "form_id": zod.string(),
+  "n_items": zod.number(),
+  "marginal_reliability": zod.number(),
+  "mean_information": zod.number(),
+  "peak_information": zod.number(),
+  "peak_theta": zod.number(),
+  "curve": zod.array(zod.object({
+  "theta": zod.number(),
+  "tif": zod.number(),
+  "se": zod.union([zod.number(),zod.null()]),
+  "tcc": zod.number()
+}))
+})),
+  "dispersion": zod.array(zod.object({
+  "theta": zod.number(),
+  "tif_min": zod.number(),
+  "tif_max": zod.number(),
+  "tif_spread": zod.number(),
+  "tif_sd": zod.number(),
+  "tcc_spread": zod.number(),
+  "diverged": zod.boolean()
+})),
+  "max_tif_deviation": zod.number(),
+  "max_tif_deviation_theta": zod.number(),
+  "max_expected_score_diff": zod.number(),
+  "max_expected_score_diff_theta": zod.number(),
+  "passed": zod.boolean(),
+  "flags": zod.array(zod.string()),
+  "scope_note": zod.string().default(compareFormsResponseScopeNoteDefault)
+})
+
+/**
  * @summary Get Form Lifecycle
  */
 export const getFormLifecycleParams = zod.object({

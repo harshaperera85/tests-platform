@@ -341,6 +341,16 @@ claimed role, never denies) until AuthN/AuthZ is decided. The **form-QA report**
 (`GET /forms/{id}/qa-report`) is generated server-side on the canonical D=1 metric (answer key,
 key-balance, coverage, SE(θ), TCC(θ), marginal reliability, actual-vs-target TIF). The engine
 core / contract / registry are untouched — this is a layer over the form/test resource.
+
+**Cross-form comparability / equating evidence (Phase L2b, cross-model).**
+`POST /forms/compare` (`services/form_comparability.py`) takes a set of form IDs and returns the
+across-forms evidence on the canonical D=1 metric: overlaid TIF (+ common target), conditional SE,
+and TCC/expected-score, with per-θ dispersion (spread/SD + divergence flags) and a pass/flag
+summary (max TIF deviation, max expected-score difference). Surfaced at the psychometric-review
+gate alongside the per-form QA report. **Comparability evidence ≠ statistical equating:** it shows
+forms match *by design* on the IRT scale; it does NOT derive score-conversion tables from examinee
+response data (post-administration equating — a downstream, program-level function needing real
+responses; out of scope).
 - `item_pool_ref` — logical pool definition = a query/filter over the calibrated bank (`live` only).
 - `audit_event` — append-only log of config/assembly/lock actions.
 

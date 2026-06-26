@@ -95,6 +95,13 @@ retired (migration 0008).**
   marginal reliability, actual-vs-target TIF) — all on the canonical **D=1 slope-intercept**
   metric. This is a governance layer over the form/test resource; the **engine core / contract /
   registry are untouched**.
+- **Cross-form comparability / equating-evidence report (L2b)** (`services/form_comparability.py`,
+  endpoint `POST /forms/compare`): over a *set* of forms, overlaid TIF (+ common target),
+  conditional SE, and TCC/expected-score, with per-θ dispersion (spread/SD + divergence flag) and a
+  pass/flag summary (max TIF deviation, max expected-score diff) — the across-forms evidence a
+  psychometric reviewer consults *alongside* the per-form QA report. **Comparability ≠ equating:**
+  this is design-time interchangeability on the IRT scale; it does **not** derive score-conversion
+  tables from examinee response data (post-administration equating — downstream, out of scope).
 
 ## Stack
 - Backend: Python 3.12, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, Redis + RQ, PostgreSQL.
