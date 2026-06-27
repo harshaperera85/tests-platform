@@ -65,12 +65,24 @@ def execute_job(db: Session, job: AssemblyJobRow) -> AssemblyJobRow:
     try:
         blueprint = Blueprint.model_validate(bp_row.spec)
         pool = pools.load_pool_by_id(job.pool_id)
+        # Longitudinal-exposure feedback (opt-in): load cumulative usage only when
+        # the blueprint declares it, so default assembly is unchanged.
+        exposure_counts = None
+        if blueprint.exposure_feedback is not None:
+            from app.services import item_exposure
+
+            exposure_counts = item_exposure.exposure_counts(
+                db,
+                contexts=blueprint.exposure_feedback.count_contexts,
+                pool_id=job.pool_id,
+            )
         result = assemble(
             blueprint,
             pool,
             strategy=job.strategy,
             time_limit_s=float(params.get("time_limit_s", 10.0)),
             seed=int(params.get("seed", 0)),
+            exposure_counts=exposure_counts,
         )
     except Exception as exc:  # noqa: BLE001 - record any solver/setup failure
         job.status = "error"
@@ -86,21 +98,33 @@ def execute_job(db: Session, job: AssemblyJobRow) -> AssemblyJobRow:
         "target_info": result.target_info,
         "warnings": result.warnings,
     }
-    for idx, form in enumerate(result.forms):
-        db.add(
-            FormRow(
-                blueprint_id=bp_row.id,
-                assembly_job_id=job.id,
-                test_id=job.test_id,
-                form_index=idx,
-                status="draft",
-                pool_id=job.pool_id,
-                item_ids=form.item_ids,
-                tif_actual=form.tif_actual,
-            )
+    form_rows = [
+        FormRow(
+            blueprint_id=bp_row.id,
+            assembly_job_id=job.id,
+            test_id=job.test_id,
+            form_index=idx,
+            status="draft",
+            pool_id=job.pool_id,
+            item_ids=form.item_ids,
+            tif_actual=form.tif_actual,
         )
+        for idx, form in enumerate(result.forms)
+    ]
+    for row in form_rows:
+        db.add(row)
     db.commit()
     db.refresh(job)
+
+    # Longitudinal exposure (post-solve; does NOT affect selection): track draft
+    # assembly usage separately when enabled. Published forms record exposure on
+    # the publish transition (services/form_lifecycle).
+    if settings.track_assembly_exposure:
+        from app.services import item_exposure
+
+        for row in form_rows:
+            db.refresh(row)
+            item_exposure.record_form_usage(db, row, "assembled")
     return job
 
 

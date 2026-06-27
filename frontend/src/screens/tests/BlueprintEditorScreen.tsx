@@ -34,6 +34,9 @@ type Fields = {
   maxUse: string;
   maxRate: string;
   maxOverlap: string;
+  expMax: string;
+  expPrefer: boolean;
+  expWeight: string;
   thetaText: string;
   infoText: string;
   weightsText: string;
@@ -48,6 +51,9 @@ const DEFAULT_FIELDS: Fields = {
   maxUse: "",
   maxRate: "",
   maxOverlap: "",
+  expMax: "",
+  expPrefer: false,
+  expWeight: "",
   thetaText: "-1, 0, 1",
   infoText: "8, 11, 8",
   weightsText: "",
@@ -77,6 +83,15 @@ function fieldsFromBlueprint(bp: Blueprint): Fields {
     maxUse:
       bp.exposure_target?.max_use_per_item != null
         ? String(bp.exposure_target.max_use_per_item)
+        : "",
+    expMax:
+      bp.exposure_feedback?.max_cumulative != null
+        ? String(bp.exposure_feedback.max_cumulative)
+        : "",
+    expPrefer: Boolean(bp.exposure_feedback?.prefer_underused),
+    expWeight:
+      bp.exposure_feedback?.underuse_weight
+        ? String(bp.exposure_feedback.underuse_weight)
         : "",
     maxRate:
       bp.exposure_target?.max_exposure_rate != null
@@ -126,6 +141,9 @@ export function BlueprintEditorScreen({
   const [maxUse, setMaxUse] = useState(base.maxUse);
   const [maxRate, setMaxRate] = useState(base.maxRate);
   const [maxOverlap, setMaxOverlap] = useState(base.maxOverlap);
+  const [expMax, setExpMax] = useState(base.expMax);
+  const [expPrefer, setExpPrefer] = useState(base.expPrefer);
+  const [expWeight, setExpWeight] = useState(base.expWeight);
   const [constraints, setConstraints] = useState<ConstraintRow[]>(base.constraints);
   const [thetaText, setThetaText] = useState(base.thetaText);
   const [infoText, setInfoText] = useState(base.infoText);
@@ -222,6 +240,9 @@ export function BlueprintEditorScreen({
     setMaxUse(f.maxUse);
     setMaxRate(f.maxRate);
     setMaxOverlap(f.maxOverlap);
+    setExpMax(f.expMax);
+    setExpPrefer(f.expPrefer);
+    setExpWeight(f.expWeight);
     setThetaText(f.thetaText);
     setInfoText(f.infoText);
     setWeightsText(f.weightsText);
@@ -275,6 +296,18 @@ export function BlueprintEditorScreen({
             max_pairwise_overlap: overlap,
           }
         : undefined;
+    // opt-in longitudinal exposure feedback (default-off): only sent when configured
+    const expMaxNum = numOrUndef(expMax);
+    const expWeightNum = numOrUndef(expWeight);
+    const exposureFeedback =
+      expMaxNum != null || (expPrefer && (expWeightNum ?? 0) > 0)
+        ? {
+            count_contexts: ["published"],
+            max_cumulative: expMaxNum,
+            prefer_underused: expPrefer,
+            underuse_weight: expPrefer ? (expWeightNum ?? 0) : 0,
+          }
+        : undefined;
     // weights apply to minimax only; omit when empty or all 1 (== unweighted)
     const weightsClean =
       isMinimax && weights.length === theta.length && weights.some((w) => w !== 1)
@@ -292,6 +325,7 @@ export function BlueprintEditorScreen({
         weights: weightsClean,
       },
       exposure_target: exposure,
+      exposure_feedback: exposureFeedback,
       content_constraints: constraints
         .map((c) => {
           const preds = c.predicates.filter((p) => p.tag_type && p.tag_value);
@@ -460,6 +494,34 @@ export function BlueprintEditorScreen({
         <p className="mt-2 text-xs text-ink-400">
           Exposure/overlap apply across parallel forms (Parallel forms ≥ 2). Rate assumes
           uniform form administration; a raw “Max use / item” overrides the rate.
+        </p>
+      </Card>
+
+      <Card
+        title="Longitudinal exposure feedback (opt-in)"
+        subtitle="Use cumulative item usage across past assemblies/publications to constrain selection. Default off — leave blank to keep assembly unchanged."
+      >
+        <div className="grid grid-cols-3 items-end gap-4">
+          <Field label="Max cumulative use" hint="exclude items used ≥ this (published)">
+            <TextInput type="number" min={1} value={expMax} placeholder="(none)"
+              onChange={(e) => setExpMax(e.target.value)} />
+          </Field>
+          <Field label="Prefer under-used">
+            <label className="mt-1 flex items-center gap-2 text-sm text-ink-700">
+              <input type="checkbox" checked={expPrefer}
+                onChange={(e) => setExpPrefer(e.target.checked)} />
+              bias toward under-utilized items
+            </label>
+          </Field>
+          <Field label="Under-use weight" hint="info-units per use; 0 = off">
+            <TextInput type="number" min={0} step="0.1" value={expWeight} placeholder="0"
+              disabled={!expPrefer}
+              onChange={(e) => setExpWeight(e.target.value)} />
+          </Field>
+        </div>
+        <p className="mt-2 text-xs text-ink-400">
+          Longitudinal (across administrations), distinct from the within-batch overlap/rate
+          above and from CAT administration-time exposure. Counts <em>published</em> usage.
         </p>
       </Card>
 

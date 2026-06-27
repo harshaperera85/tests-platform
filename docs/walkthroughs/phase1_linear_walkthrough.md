@@ -184,6 +184,16 @@ cut-score targets anywhere on θ.
 - **Max use / item** — exposure cap: the most forms any one item may appear in across the
   job. Blank = unlimited. Only meaningful with parallel forms (e.g. `1` = no overlap).
 
+### Longitudinal exposure feedback (opt-in, default-off)
+Separate card. Uses **cumulative item usage across past assemblies/publications** (the longitudinal
+history) to constrain *this* assembly's eligibility — **distinct** from the within-batch caps above
+(one job) and from CAT administration-time exposure (live session, CAT-only).
+- **Max cumulative use** — hard-exclude items already used at least this many times (over-exposure).
+- **Prefer under-used** + **Under-use weight** — bias selection toward under-utilized items
+  (bidirectional). Weight is objective info-units per unit of cumulative use (small = tie-breaker).
+- Counts **published** usage. Leave blank ⇒ assembly is **unchanged** (default-off). See the
+  per-item usage in **Item pools** (the `exposure` column: `Np / Md` = published / draft-assembled).
+
 ### Content constraints (each row)
 - **where `tag_type` = `tag_value`** — the predicate. `tag_type` is the tag **dimension**
   (`KC`, `Bloom`, `TIMSS`, `domain`); `tag_value` is the required value (`algebra`,
@@ -288,6 +298,10 @@ Once a form leaves **draft**, the **Assembly** tab freezes (no blueprint edit / 
 you **Return to draft**. `published` is the release state (the eventual Sessions handoff).
 
 ### Item pools viewer (`/pool`)
+- An **exposure** column shows each item's cumulative longitudinal usage as `Np / Md`
+  (**N** published = real exposure, **M** draft-assembled), hover for last-used — the longitudinal
+  complement to the within-batch rate control, so you can spot over-/under-exposed items across
+  administrations.
 - **Pool selector** (catalog), **filter** (id / stem / tag), and a table of every item's
   `a` / `b` / `c` and KC / Bloom / domain. Use it to see the data and to check cell sizes
   before writing joint constraints.

@@ -9,6 +9,31 @@ import * as zod from 'zod';
 
 
 /**
+ * Cumulative longitudinal item exposure for a pool (published vs draft usage).
+ * @summary Get Pool Exposure
+ */
+export const getPoolExposureQueryPoolIdDefault = "small_2pl";
+
+export const getPoolExposureQueryParams = zod.object({
+  "pool_id": zod.string().default(getPoolExposureQueryPoolIdDefault)
+})
+
+export const getPoolExposureResponseItemsItemPublishedDefault = 0;export const getPoolExposureResponseItemsItemAssembledDefault = 0;export const getPoolExposureResponseItemsItemTotalDefault = 0;export const getPoolExposureResponseItemsItemNFormsDefault = 0;
+
+export const getPoolExposureResponse = zod.object({
+  "pool_id": zod.string(),
+  "exposure_contexts": zod.array(zod.string()),
+  "items": zod.array(zod.object({
+  "item_id": zod.string(),
+  "published": zod.number().optional(),
+  "assembled": zod.number().optional(),
+  "total": zod.number().optional(),
+  "n_forms": zod.number().optional(),
+  "last_used": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Cumulative longitudinal usage of one item across assemblies over time.'))
+})
+
+/**
  * List the selectable simulated banks (for the pool selector).
  * @summary Get Pool Catalog
  */

@@ -9,6 +9,7 @@ import type { ContentConstraint } from './contentConstraint';
 import type { TIFTarget } from './tIFTarget';
 import type { EnemyPolicy } from './enemyPolicy';
 import type { BlueprintExposureTarget } from './blueprintExposureTarget';
+import type { BlueprintExposureFeedback } from './blueprintExposureFeedback';
 
 /**
  * Full assembly specification for one (or several parallel) forms.
@@ -25,4 +26,5 @@ export interface Blueprint {
   statistical_target: TIFTarget;
   enemy_policy?: EnemyPolicy;
   exposure_target?: BlueprintExposureTarget;
+  exposure_feedback?: BlueprintExposureFeedback;
 }

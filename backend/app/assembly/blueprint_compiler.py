@@ -60,6 +60,12 @@ class CompiledProblem:
     # oracle receive mirt-native parameters (D=1 slope-intercept), not just the
     # precomputed info matrix.
     params: tuple[tuple[float, float, float, float], ...] = ()
+    # longitudinal-exposure eligibility (opt-in; empty/0 ⇒ no effect, identical model):
+    # item indices hard-excluded (over-exposed) + per-item cumulative exposure +
+    # under-use objective weight (info-units per unit of exposure).
+    excluded_indices: tuple[int, ...] = ()
+    exposure: tuple[int, ...] = ()
+    underuse_weight: float = 0.0
 
     @property
     def n_items(self) -> int:
@@ -73,8 +79,18 @@ class CompiledProblem:
         ]
 
 
-def compile_blueprint(blueprint: Blueprint, pool: ItemPool) -> CompiledProblem:
-    """Translate a blueprint + pool into a :class:`CompiledProblem`."""
+def compile_blueprint(
+    blueprint: Blueprint,
+    pool: ItemPool,
+    *,
+    exposure_counts: dict[str, int] | None = None,
+) -> CompiledProblem:
+    """Translate a blueprint + pool into a :class:`CompiledProblem`.
+
+    ``exposure_counts`` (cumulative usage per item_id) is only consulted when the
+    blueprint declares ``exposure_feedback``; otherwise the compiled problem is
+    identical to a no-exposure compile (assembly behavior unchanged).
+    """
     items = list(pool.items)
     item_ids = tuple(it.item_id for it in items)
     index_of = {iid: i for i, iid in enumerate(item_ids)}
@@ -128,6 +144,30 @@ def compile_blueprint(blueprint: Blueprint, pool: ItemPool) -> CompiledProblem:
         max_use = exp.resolved_max_use(blueprint.num_forms)
         max_pairwise_overlap = exp.max_pairwise_overlap
 
+    # Longitudinal-exposure feedback (opt-in). Absent ⇒ excluded/exposure/weight stay
+    # empty/0 and the compiled problem is identical to a no-exposure compile.
+    excluded_indices: tuple[int, ...] = ()
+    exposure_vec: tuple[int, ...] = ()
+    underuse_weight = 0.0
+    fb = blueprint.exposure_feedback
+    if fb is not None:
+        counts = exposure_counts or {}
+        if fb.max_cumulative is not None:
+            excluded_indices = tuple(
+                i
+                for i, iid in enumerate(item_ids)
+                if counts.get(iid, 0) >= fb.max_cumulative
+            )
+            n_elig = len(items) - len(excluded_indices)
+            if n_elig < blueprint.length:
+                warnings.append(
+                    f"exposure feedback excluded {len(excluded_indices)} over-exposed "
+                    f"items; only {n_elig} eligible for length {blueprint.length}"
+                )
+        if fb.prefer_underused and fb.underuse_weight > 0:
+            exposure_vec = tuple(counts.get(iid, 0) for iid in item_ids)
+            underuse_weight = fb.underuse_weight
+
     return CompiledProblem(
         item_ids=item_ids,
         info=info,
@@ -144,4 +184,7 @@ def compile_blueprint(blueprint: Blueprint, pool: ItemPool) -> CompiledProblem:
         weights=blueprint.statistical_target.resolved_weights,
         warnings=tuple(warnings),
         params=tuple((it.a, it.d, it.c, it.u) for it in items),
+        excluded_indices=excluded_indices,
+        exposure=exposure_vec,
+        underuse_weight=underuse_weight,
     )

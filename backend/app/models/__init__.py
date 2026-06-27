@@ -10,6 +10,7 @@ from app.models.base import Base
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
 from app.models.form_review_event import FormReviewEventRow
+from app.models.item_usage_event import ItemUsageEventRow
 from app.models.test import TestRow
 
 __all__ = [
@@ -19,5 +20,6 @@ __all__ = [
     "BlueprintRow",
     "FormRow",
     "FormReviewEventRow",
+    "ItemUsageEventRow",
     "TestRow",
 ]

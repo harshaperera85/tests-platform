@@ -33,6 +33,30 @@ def _weights_are_unit(weights: tuple[float, ...] | None, n: int) -> bool:
     return len(weights) == n and all(w == 1.0 for w in weights)
 
 
+def _underuse_penalty(am: AtaModel, value_scale: int) -> cp_model.LinearExpr | None:
+    """Under-use bias term (in objective ``value_scale`` units), or ``None`` when off.
+
+    Sums each selected item's cumulative exposure times the user weight, so the
+    solver prefers under-utilized items. Returns ``None`` when disabled so callers
+    minimize/maximize the bare objective var — keeping default assembly byte-for-byte
+    identical.
+    """
+    p = am.problem
+    if p.underuse_weight <= 0.0 or not p.exposure:
+        return None
+    coeffs: list[int] = []
+    vars_: list[cp_model.IntVar] = []
+    for f in range(p.num_forms):
+        for i in range(p.n_items):
+            c = round(p.underuse_weight * value_scale * p.exposure[i])
+            if c:
+                coeffs.append(c)
+                vars_.append(am.x[(i, f)])
+    if not vars_:
+        return None
+    return cp_model.LinearExpr.weighted_sum(vars_, coeffs)
+
+
 def add_minimax_objective(am: AtaModel) -> tuple[cp_model.IntVar, int]:
     """Add the (optionally weighted) minimax deviation objective.
 
@@ -59,7 +83,8 @@ def add_minimax_objective(am: AtaModel) -> tuple[cp_model.IntVar, int]:
                 if tol_scaled is not None:
                     m.add(dev <= tol_scaled)
                     m.add(-dev <= tol_scaled)
-        m.minimize(y)
+        pen = _underuse_penalty(am, INFO_SCALE)
+        m.minimize(y if pen is None else y + pen)
         return y, INFO_SCALE
 
     # Weighted path: y >= w_int_k · dev (integer-scaled weights). The objective is in
@@ -76,8 +101,10 @@ def add_minimax_objective(am: AtaModel) -> tuple[cp_model.IntVar, int]:
             if tol_scaled is not None:
                 m.add(dev <= tol_scaled)
                 m.add(-dev <= tol_scaled)
-    m.minimize(y)
-    return y, INFO_SCALE * WEIGHT_SCALE
+    scale = INFO_SCALE * WEIGHT_SCALE
+    pen = _underuse_penalty(am, scale)
+    m.minimize(y if pen is None else y + pen)
+    return y, scale
 
 
 def add_maximin_objective(am: AtaModel) -> tuple[cp_model.IntVar, int]:
@@ -89,5 +116,7 @@ def add_maximin_objective(am: AtaModel) -> tuple[cp_model.IntVar, int]:
     for f in range(p.num_forms):
         for k in range(len(p.theta_points)):
             m.add(t <= am.form_info[f][k])
-    m.maximize(t)
+    # maximize the floor, biased toward under-utilized items (penalty subtracted).
+    pen = _underuse_penalty(am, INFO_SCALE)
+    m.maximize(t if pen is None else t - pen)
     return t, INFO_SCALE

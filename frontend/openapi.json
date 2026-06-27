@@ -1014,6 +1014,50 @@
         }
       }
     },
+    "/api/v1/pool/exposure": {
+      "get": {
+        "tags": [
+          "pool"
+        ],
+        "summary": "Get Pool Exposure",
+        "description": "Cumulative longitudinal item exposure for a pool (published vs draft usage).",
+        "operationId": "get_pool_exposure",
+        "parameters": [
+          {
+            "name": "pool_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "small_2pl",
+              "title": "Pool Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoolExposure"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/pool/catalog": {
       "get": {
         "tags": [
@@ -1518,6 +1562,16 @@
             "anyOf": [
               {
                 "$ref": "#/components/schemas/ExposureTarget"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "exposure_feedback": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExposureFeedback"
               },
               {
                 "type": "null"
@@ -2139,6 +2193,43 @@
         "title": "EnemyPolicy",
         "description": "How to honor ``enemy_of`` relations from the bank.\n\nWhen ``enforce`` is true, two items that are enemies of each other may not both\nappear in the same form (declared one-directionally in the bank; the compiler\nsymmetrizes)."
       },
+      "ExposureFeedback": {
+        "properties": {
+          "count_contexts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Count Contexts"
+          },
+          "max_cumulative": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Cumulative"
+          },
+          "prefer_underused": {
+            "type": "boolean",
+            "title": "Prefer Underused",
+            "default": false
+          },
+          "underuse_weight": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Underuse Weight",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "title": "ExposureFeedback",
+        "description": "**Opt-in, default-off** feedback from *longitudinal* item-exposure history into\nassembly eligibility.\n\nDistinct from :class:`ExposureTarget` (within-batch overlap/use/rate, governing a\nsingle multi-form assembly) and from CAT administration-time exposure control\n(Sympson-Hetter etc.). Uses cumulative usage *across* past assemblies/publications:\n- ``max_cumulative`` \u2014 hard-exclude items already used at least this many times\n  (over-exposure control).\n- ``prefer_underused`` + ``underuse_weight`` \u2014 bias selection toward under-utilized\n  items (bidirectional utilization). ``underuse_weight`` is in objective info-units\n  per unit of cumulative exposure: small = tie-breaker, large = strong preference.\n\nWhen this is absent the assembly is **byte-for-byte unchanged** (no eligibility\nconstraints/terms are added)."
+      },
       "ExposureTarget": {
         "properties": {
           "max_use_per_item": {
@@ -2395,6 +2486,51 @@
         ],
         "title": "HealthResponse"
       },
+      "ItemExposure": {
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "published": {
+            "type": "integer",
+            "title": "Published",
+            "default": 0
+          },
+          "assembled": {
+            "type": "integer",
+            "title": "Assembled",
+            "default": 0
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "default": 0
+          },
+          "n_forms": {
+            "type": "integer",
+            "title": "N Forms",
+            "default": 0
+          },
+          "last_used": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Used"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_id"
+        ],
+        "title": "ItemExposure",
+        "description": "Cumulative longitudinal usage of one item across assemblies over time."
+      },
       "KeyBalance": {
         "properties": {
           "counts": {
@@ -2584,6 +2720,35 @@
           "items"
         ],
         "title": "PoolDocument"
+      },
+      "PoolExposure": {
+        "properties": {
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "exposure_contexts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Exposure Contexts"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ItemExposure"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pool_id",
+          "exposure_contexts",
+          "items"
+        ],
+        "title": "PoolExposure"
       },
       "PoolItem": {
         "properties": {

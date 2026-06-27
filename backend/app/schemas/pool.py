@@ -70,3 +70,21 @@ class PoolSummary(BaseModel):
 class PoolCatalog(BaseModel):
     default_pool_id: str
     pools: list[PoolSummary]
+
+
+class ItemExposure(BaseModel):
+    """Cumulative longitudinal usage of one item across assemblies over time."""
+
+    item_id: str
+    published: int = 0  # real exposure (forms that reached published)
+    assembled: int = 0  # draft assembly usage (tracked separately)
+    total: int = 0
+    n_forms: int = 0
+    last_used: str | None = None
+
+
+class PoolExposure(BaseModel):
+    pool_id: str
+    #: which contexts count as "real" exposure (default: published)
+    exposure_contexts: list[str]
+    items: list[ItemExposure]

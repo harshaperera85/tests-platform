@@ -141,6 +141,11 @@ def apply_transition(
             "comment": comment,
         },
     )
+    # Longitudinal exposure: reaching `published` is real exposure of the items.
+    if t.to_state == "published":
+        from app.services import item_exposure
+
+        item_exposure.record_form_usage(db, form, "published")
     return form
 
 

@@ -85,6 +85,14 @@ class AtaModel:
                         m.add(z[i] >= self.x[(i, f)] + self.x[(i, g)] - 1)
                     m.add(sum(z) <= p.max_pairwise_overlap)
 
+        # Longitudinal-exposure eligibility: hard-exclude over-exposed items from
+        # every form (opt-in; empty ⇒ no constraints added, model unchanged).
+        if p.excluded_indices:
+            excluded = set(p.excluded_indices)
+            for f in range(F):
+                for i in excluded:
+                    m.add(self.x[(i, f)] == 0)
+
         # Realized TIF expressions (scaled) for objective use.
         for f in range(F):
             row = [

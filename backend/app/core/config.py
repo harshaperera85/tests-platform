@@ -37,6 +37,12 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://tests:tests@postgres:5432/tests"
     redis_url: str = "redis://redis:6379/0"
 
+    # --- item exposure (longitudinal usage history) ---
+    # Record an 'assembled' (draft) usage event for each item on every assembly.
+    # Published forms always record a 'published' event (real exposure). Draft
+    # tracking is separate and never counts toward eligibility unless configured.
+    track_assembly_exposure: bool = True
+
     # --- jobs ---
     # When true, assembly solves are enqueued to RQ (a worker executes them);
     # when false they run inline in-request. Default false so the API works

@@ -187,6 +187,40 @@ class ExposureTarget(BaseModel):
         return None
 
 
+class ExposureFeedback(BaseModel):
+    """**Opt-in, default-off** feedback from *longitudinal* item-exposure history into
+    assembly eligibility.
+
+    Distinct from :class:`ExposureTarget` (within-batch overlap/use/rate, governing a
+    single multi-form assembly) and from CAT administration-time exposure control
+    (Sympson-Hetter etc.). Uses cumulative usage *across* past assemblies/publications:
+    - ``max_cumulative`` — hard-exclude items already used at least this many times
+      (over-exposure control).
+    - ``prefer_underused`` + ``underuse_weight`` — bias selection toward under-utilized
+      items (bidirectional utilization). ``underuse_weight`` is in objective info-units
+      per unit of cumulative exposure: small = tie-breaker, large = strong preference.
+
+    When this is absent the assembly is **byte-for-byte unchanged** (no eligibility
+    constraints/terms are added).
+    """
+
+    count_contexts: list[str] = Field(default_factory=lambda: ["published"])
+    max_cumulative: int | None = Field(default=None, ge=1)
+    prefer_underused: bool = False
+    underuse_weight: float = Field(default=0.0, ge=0.0)
+
+    @model_validator(mode="after")
+    def _check(self) -> ExposureFeedback:
+        if self.max_cumulative is None and not (
+            self.prefer_underused and self.underuse_weight > 0
+        ):
+            raise ValueError(
+                "exposure_feedback needs max_cumulative and/or "
+                "(prefer_underused with underuse_weight > 0)"
+            )
+        return self
+
+
 class Blueprint(BaseModel):
     """Full assembly specification for one (or several parallel) forms."""
 
@@ -197,6 +231,8 @@ class Blueprint(BaseModel):
     statistical_target: TIFTarget
     enemy_policy: EnemyPolicy = Field(default_factory=EnemyPolicy)
     exposure_target: ExposureTarget | None = None
+    #: opt-in longitudinal-exposure eligibility feedback (default-off)
+    exposure_feedback: ExposureFeedback | None = None
 
     @model_validator(mode="after")
     def _check_feasible_shape(self) -> Blueprint:

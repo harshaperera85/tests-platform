@@ -9,15 +9,52 @@ from __future__ import annotations
 
 from collections import Counter
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
 
+from app.core.db import get_db
 from app.psychometrics import pools
 from app.psychometrics.params import require_metric
-from app.schemas.pool import PoolCatalog, PoolDocument, PoolItem, PoolSummary
+from app.schemas.pool import (
+    ItemExposure,
+    PoolCatalog,
+    PoolDocument,
+    PoolExposure,
+    PoolItem,
+    PoolSummary,
+)
+from app.services import item_exposure
 
 router = APIRouter(prefix="/pool", tags=["pool"])
 
 _TAG_DIMENSIONS = ("KC", "Bloom", "TIMSS", "domain")
+
+
+@router.get("/exposure", response_model=PoolExposure)
+def get_pool_exposure(
+    pool_id: str = Query(default=pools.DEFAULT_POOL_ID),
+    db: Session = Depends(get_db),
+) -> PoolExposure:
+    """Cumulative longitudinal item exposure for a pool (published vs draft usage)."""
+    if not pools.is_known(pool_id):
+        raise HTTPException(status_code=404, detail=f"unknown pool_id {pool_id!r}")
+    summary = item_exposure.exposure_summary(db, pool_id=pool_id)
+    items = [
+        ItemExposure(
+            item_id=iid,
+            published=e["published"],
+            assembled=e["assembled"],
+            total=e["total"],
+            n_forms=e["n_forms"],
+            last_used=e["last_used"].isoformat() if e["last_used"] else None,
+        )
+        for iid, e in sorted(summary.items())
+    ]
+    return PoolExposure(
+        pool_id=pool_id,
+        exposure_contexts=list(item_exposure.DEFAULT_EXPOSURE_CONTEXTS),
+        items=items,
+    )
 
 
 @router.get("/catalog", response_model=PoolCatalog)

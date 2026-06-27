@@ -24,9 +24,14 @@ def assemble(
     strategy: str = "mip",
     time_limit_s: float = 10.0,
     seed: int = 0,
+    exposure_counts: dict[str, int] | None = None,
 ) -> AssemblyResult:
-    """Compile a blueprint against a pool and assemble form(s) with ``strategy``."""
-    problem = compile_blueprint(blueprint, pool)
+    """Compile a blueprint against a pool and assemble form(s) with ``strategy``.
+
+    ``exposure_counts`` (cumulative item usage) only matters when the blueprint sets
+    ``exposure_feedback``; otherwise it is ignored and the result is unchanged.
+    """
+    problem = compile_blueprint(blueprint, pool, exposure_counts=exposure_counts)
     return get_assembly_strategy(strategy).assemble(
         problem, time_limit_s=time_limit_s, seed=seed
     )

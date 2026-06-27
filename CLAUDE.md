@@ -103,6 +103,21 @@ retired (migration 0008).**
   this is design-time interchangeability on the IRT scale; it does **not** derive score-conversion
   tables from examinee response data (post-administration equating — downstream, out of scope).
 
+## Item exposure — three distinct layers (keep separate)
+1. **Within-batch** (`ExposureTarget`: `max_use_per_item` / `max_exposure_rate` / `max_pairwise_overlap`)
+   — governs item reuse/overlap within a **single** (multi-form) assembly job.
+2. **Longitudinal** (Phase L2c — `item_usage_event` + `services/item_exposure.py`) — persists
+   **cumulative** item usage *across* assemblies/administrations over time. "What counts" is explicit:
+   **published forms = real exposure** (recorded on the publish transition); draft `assembled` usage is
+   tracked separately (setting `track_assembly_exposure`, post-solve so it never affects selection).
+   Optionally feeds back into assembly **eligibility** via `Blueprint.exposure_feedback`
+   (`max_cumulative` hard-exclude over-exposed; `prefer_underused`+`underuse_weight` bidirectional
+   bias) — **opt-in, default-off**: absent ⇒ the OR-Tools model is **byte-for-byte unchanged**
+   (oracle parity intact). Extends the existing model (excludes + an objective tie-breaker); does not
+   rewrite it. Surfaced in the item-pool viewer (`GET /pool/exposure`).
+3. **CAT administration-time** (Sympson-Hetter, randomesque) — controls exposure during a live
+   adaptive session; **CAT-only**, NOT part of fixed-form assembly. Do not add these to the linear path.
+
 ## Stack
 - Backend: Python 3.12, FastAPI, Pydantic v2, SQLAlchemy 2, Alembic, Redis + RQ, PostgreSQL.
 - Assembly: OR-Tools (CP-SAT), in-process; long solves run as RQ jobs.

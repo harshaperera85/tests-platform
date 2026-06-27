@@ -2,7 +2,11 @@
 // synthetic content. Lets you see the demo data behind assembly.
 import { useState } from "react";
 
-import { useGetPoolCatalog, useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
+import {
+  useGetPoolCatalog,
+  useGetPoolExposure,
+  useGetPoolItems,
+} from "../../api/generated/endpoints/pool/pool";
 import { Card, Pill, Select, Spinner, TextInput } from "../../components/ui";
 
 export function PoolBrowserScreen() {
@@ -10,6 +14,9 @@ export function PoolBrowserScreen() {
   const [poolId, setPoolId] = useState("demo_mixed");
   const [q, setQ] = useState("");
   const pool = useGetPoolItems({ pool_id: poolId });
+  const exposure = useGetPoolExposure({ pool_id: poolId });
+  // cumulative longitudinal usage per item (published = real exposure)
+  const expById = new Map((exposure.data?.items ?? []).map((e) => [e.item_id, e]));
 
   const items = pool.data?.items ?? [];
   const needle = q.trim().toLowerCase();
@@ -73,6 +80,12 @@ export function PoolBrowserScreen() {
                   <th className="px-3 py-1.5 text-left">KC</th>
                   <th className="px-3 py-1.5 text-left">Bloom</th>
                   <th className="px-3 py-1.5 text-left">domain</th>
+                  <th
+                    className="px-3 py-1.5 text-right"
+                    title="cumulative exposure: published / draft-assembled"
+                  >
+                    exposure
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -86,6 +99,22 @@ export function PoolBrowserScreen() {
                     <td className="px-3 py-1.5">{it.tags?.KC ?? "—"}</td>
                     <td className="px-3 py-1.5">{it.tags?.Bloom ?? "—"}</td>
                     <td className="px-3 py-1.5">{it.tags?.domain ?? "—"}</td>
+                    <td className="px-3 py-1.5 text-right">
+                      {(() => {
+                        const e = expById.get(it.item_id);
+                        const pub = e?.published ?? 0;
+                        const asm = e?.assembled ?? 0;
+                        if ((e?.total ?? 0) === 0) return <span className="text-ink-300">—</span>;
+                        return (
+                          <span
+                            className={pub > 0 ? "font-medium text-amber-700" : "text-ink-500"}
+                            title={e?.last_used ? `last used ${new Date(e.last_used).toLocaleString()}` : ""}
+                          >
+                            {pub}p / {asm}d
+                          </span>
+                        );
+                      })()}
+                    </td>
                   </tr>
                 ))}
               </tbody>

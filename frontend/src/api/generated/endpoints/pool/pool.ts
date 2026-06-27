@@ -21,10 +21,12 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  GetPoolExposureParams,
   GetPoolItemsParams,
   HTTPValidationError,
   PoolCatalog,
-  PoolDocument
+  PoolDocument,
+  PoolExposure
 } from '../../model';
 
 import { customInstance } from '../../../mutator';
@@ -32,6 +34,99 @@ import type { ErrorType } from '../../../mutator';
 
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
+
+
+/**
+ * Cumulative longitudinal item exposure for a pool (published vs draft usage).
+ * @summary Get Pool Exposure
+ */
+export const getPoolExposure = (
+    params?: GetPoolExposureParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<PoolExposure>(
+      {url: `/api/v1/pool/exposure`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetPoolExposureQueryKey = (params?: GetPoolExposureParams,) => {
+    return [
+    `/api/v1/pool/exposure`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetPoolExposureQueryOptions = <TData = Awaited<ReturnType<typeof getPoolExposure>>, TError = ErrorType<HTTPValidationError>>(params?: GetPoolExposureParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolExposure>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPoolExposureQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPoolExposure>>> = ({ signal }) => getPoolExposure(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPoolExposure>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type GetPoolExposureQueryResult = NonNullable<Awaited<ReturnType<typeof getPoolExposure>>>
+export type GetPoolExposureQueryError = ErrorType<HTTPValidationError>
+
+
+export function useGetPoolExposure<TData = Awaited<ReturnType<typeof getPoolExposure>>, TError = ErrorType<HTTPValidationError>>(
+ params: undefined |  GetPoolExposureParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolExposure>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPoolExposure>>,
+          TError,
+          Awaited<ReturnType<typeof getPoolExposure>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetPoolExposure<TData = Awaited<ReturnType<typeof getPoolExposure>>, TError = ErrorType<HTTPValidationError>>(
+ params?: GetPoolExposureParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolExposure>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPoolExposure>>,
+          TError,
+          Awaited<ReturnType<typeof getPoolExposure>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useGetPoolExposure<TData = Awaited<ReturnType<typeof getPoolExposure>>, TError = ErrorType<HTTPValidationError>>(
+ params?: GetPoolExposureParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolExposure>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary Get Pool Exposure
+ */
+
+export function useGetPoolExposure<TData = Awaited<ReturnType<typeof getPoolExposure>>, TError = ErrorType<HTTPValidationError>>(
+ params?: GetPoolExposureParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPoolExposure>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getGetPoolExposureQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
 
 
 

@@ -351,6 +351,20 @@ gate alongside the per-form QA report. **Comparability evidence ≠ statistical 
 forms match *by design* on the IRT scale; it does NOT derive score-conversion tables from examinee
 response data (post-administration equating — a downstream, program-level function needing real
 responses; out of scope).
+
+**Longitudinal item-exposure history + eligibility feedback (Phase L2c, cross-model).**
+`item_usage_event` (append-only) + `services/item_exposure.py` persist **cumulative** item usage
+*across* assemblies/administrations over time — distinct from the within-batch `ExposureTarget`
+(overlap/max-use/rate, governing one assembly) and from CAT administration-time exposure
+(Sympson-Hetter etc., CAT-only). "What counts" is explicit: **published** forms = real exposure
+(recorded on the publish transition); draft `assembled` usage tracked separately (post-solve, never
+affects selection). Queryable via `GET /pool/exposure`; surfaced in the item-pool viewer.
+Optionally feeds back into assembly **eligibility** (`Blueprint.exposure_feedback`): `max_cumulative`
+hard-excludes over-exposed items; `prefer_underused`+`underuse_weight` biases toward under-utilized
+items (bidirectional). **Opt-in, default-off** — absent ⇒ the OR-Tools model is byte-for-byte
+unchanged (oracle parity intact); it **extends** the model (excludes + an objective tie-breaker),
+never rewrites it.
+
 - `item_pool_ref` — logical pool definition = a query/filter over the calibrated bank (`live` only).
 - `audit_event` — append-only log of config/assembly/lock actions.
 
