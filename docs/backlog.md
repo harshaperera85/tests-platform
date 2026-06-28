@@ -144,10 +144,3 @@ Depends on the Tier 3 CAT seam.
 - **CAT path load test** — mirtCAT/R concurrency ceiling — after Phase 2.
 - **SME / Admin review screens** (A-038..041) and a deeper lock/version/**publish**
   workflow (basic lock landed in Tier 1).
-
-### Depends on seams (Tier 3 / Phase 2 / Sessions)
-- **Item-bank seam contract test** — after the item-factory export is pinned.
-- **Sessions handoff** — the module's exit: contract + handoff of a locked form/config.
-- **CAT path load test** — mirtCAT/R concurrency ceiling — after Phase 2.
-- **SME / Admin review screens** (A-038..041) and a deeper lock/version/**publish** workflow
-  (basic lock landed in Tier 1).
