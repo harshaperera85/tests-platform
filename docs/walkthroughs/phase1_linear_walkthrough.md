@@ -1,13 +1,21 @@
-# Phase 1 — Linear end-to-end operational walkthrough
+# Tests Platform — operational walkthrough (end-to-end)
 
 A hands-on script to **drive the platform as built** and verify it operates correctly —
-not just trust green CI. Covers the delivered linear capabilities: blueprint editor →
-assemble → form preview (actual-vs-target TIF plot) → step-through navigator (real
-engine via `/preview`).
+not just trust green CI. Covers the full delivered feature set, in order:
+1. Blueprint editor → assemble → form preview (actual-vs-target TIF) → step-through navigator
+   (real engine via `/preview`); the deliberate infeasible case.
+2. Parallel forms + within-batch exposure (overlap / rate) + **weighted minimax** + **maximin**.
+3. **Cross-validate** a form against the **eatATA** R oracle (read-only).
+4. **Governance** — review → approve → publish + the **form-QA report** (A-038–041).
+5. **Cross-form comparability** (equating evidence).
+6. **Longitudinal item exposure** + opt-in assembly eligibility feedback.
+
+Built-in example data (no real export needed): pools **`demo_mixed`** (252 items · 3 domains ·
+2PL+3PL) and **`small_2pl`** (48 items), plus the one-click **demo scenarios**.
 
 > Generated from the actual current code: endpoints in `backend/app/api/v1/`, screens in
-> `frontend/src/screens/tests/`, and the fixture pool
-> `backend/app/psychometrics/fixtures/small_2pl_bank.json`. If those change, re-derive.
+> `frontend/src/screens/tests/`, and the fixture pools in
+> `backend/app/psychometrics/fixtures/`. If those change, re-derive.
 
 Everything below is reached **over your SSH tunnel** to the EC2 dev instance — the stack
 binds to the instance's localhost; you forward the ports to your laptop.
@@ -446,12 +454,72 @@ an empty preview.
 
 ---
 
-## 5. (Optional) Verify the API directly — Swagger or curl
+## 5. Parallel forms + within-batch exposure + weighted/maximin (Assembly, A-031)
+The objective/exposure controls on a **single** assembly. Use `demo_mixed`.
+1. **Parallel forms + overlap:** set **Parallel forms = 3**, **Length 30**, target `12, 13, 12`,
+   **Max pairwise overlap = 10**. **Assemble** → History shows **3 forms**; any two share ≤ 10 items.
+   (Or load the **Parallel forms with exposure control** scenario.)
+2. **Rate-based exposure:** instead of a raw cap, set **Max exposure rate = 0.5** with 3 forms →
+   compiler caps use at `ceil(0.5×3)=2`. Assemble; no item appears in >2 forms.
+3. **Weighted minimax (protect a θ):** back to 1 form, target `7, 9, 7`, **Weights = `1, 3, 1`**
+   (triple-weight the centre). Assemble → the centre sits tighter on target than the wings.
+4. **Maximin:** switch **Method → maximin**. ✅ target-info / tolerance / weights **disappear**
+   (no target under maximin); assemble → the preview shows **achieved TIF only** (no target curve),
+   the badge reads *worst-point info*.
+
+## 6. Cross-validate a form against eatATA (read-only)
+Assemble a **single-form, unweighted minimax** form (e.g. the **Smoke test** scenario). On its
+**preview**, click **Validate against eatATA**.
+- ✅ Side-by-side **OR-Tools (CP-SAT) · production** vs **eatATA (R) · validation**: objectives,
+  **agreement/divergence** badge, item-selection match (Jaccard), |Δ| vs an `(L+1)/INFO_SCALE`
+  tolerance, solver (`lpSolve`) + time. On the demo data the two **agree** (identical selection).
+- This is read-only — eatATA never builds a deliverable form. (Weighted/maximin/multi-form report
+  *“not applicable”*.)
+
+## 7. Governance: review → approve → publish + form-QA report (Review tab, A-038–041)
+Open the **Review** tab for a test with an assembled form.
+1. **Form-QA report** (what a reviewer signs off): **answer key**, **key-balance** (+ imbalance
+   flag), **content coverage** vs blueprint, and the psychometric panel — **SE(θ) curve**,
+   **TCC** (expected score), **marginal reliability**, **actual-vs-target TIF**. All canonical D=1.
+2. **Gate actions** (enter an actor; role is recorded): **Submit for review → Approve · content
+   (SME) → Approve · psychometric → Publish**. Each appends to **Sign-off history** (who/when/
+   from→to/comment). Roles are recorded but **not enforced** (deliberate stub).
+3. **Reject path:** from a review gate, **Return to draft** requires a comment.
+4. **Freeze:** once the form leaves draft, the **Assembly** tab is frozen (no edit/re-assemble) and
+   the test status pill derives to `in_review`/`approved`/`published`. **Return to draft** unfreezes.
+5. **Withdraw** a published form → back to **draft** (re-publishing re-runs both gates).
+
+## 8. Cross-form comparability (equating evidence) — Review tab
+With **≥2 forms** on the test (assemble parallel forms in step 5 first), click **Run comparability
+report**.
+- ✅ Overlaid **TIF (+ target)**, **conditional SE**, and **TCC/expected-score** per form, with
+  **red divergence dots** where forms diverge beyond tolerance, a **✓ comparable / ⚠ divergence**
+  banner, max TIF/score deltas, and per-form reliability/info. Parallel forms overlay tightly
+  (pass); to *see* a flag, also assemble a very different-target form and compare.
+- **Comparability ≠ equating:** design-time interchangeability on the IRT scale — not score
+  conversion from response data.
+
+## 9. Longitudinal item exposure + eligibility feedback
+The usage history *across* assemblies, and its opt-in feedback into selection.
+1. **See usage:** in **Item pools** the **exposure** column shows `Np / Md` (published / draft).
+   Assemble a few forms and **publish** one (step 7) → watch its items' **published** count rise.
+2. **Over-exposure exclude (opt-in):** new test, in **Longitudinal exposure feedback** set
+   **Max cumulative use = 1**, assemble → items already used ≥1× (published) are **excluded** from
+   the new form.
+3. **Bidirectional under-use:** tick **Prefer under-used**, **Under-use weight = 1**, assemble →
+   selection is **biased toward under-utilized** items.
+4. **Default-off:** leave the section blank → assembly is exactly as before (this is the
+   byte-for-byte-unchanged guarantee). Distinct from the within-batch caps (step 5) and from
+   CAT administration-time exposure.
+
+---
+
+## 10. (Optional) Verify the API directly — Swagger or curl
 
 Independent of the UI, confirm the backend over the tunnel. In **http://localhost:8000/docs**
 use "Try it out", or curl:
 
-### 5a. Known-feasible blueprint → assemble → preview the form
+### 10a. Known-feasible blueprint → assemble → preview the form
 ```bash
 BASE=http://localhost:8000/api/v1
 
@@ -474,7 +542,7 @@ curl -s $BASE/forms/$FID | python3 -m json.tool   # item_ids (20) + tif: actual 
 **Expect:** `status` `optimal`/`feasible`; `tif` entries where `actual ≈ target` and
 `gap ≈ 0`.
 
-### 5b. Step through the engine
+### 10b. Step through the engine
 ```bash
 S=$(curl -s -X POST $BASE/preview/start -H 'content-type: application/json' -d "{\"form_id\":\"$FID\"}")
 # repeat: read next_action.payload.item_id, POST it to /preview/respond with the carried-back state…
@@ -483,7 +551,7 @@ S=$(curl -s -X POST $BASE/preview/start -H 'content-type: application/json' -d "
 (The UI does this loop for you; the integration test
 `backend/app/tests/integration/test_preview_api.py` is the canonical reference.)
 
-### 5b′. Simulated-data endpoints (genuine demo data, no real export wired)
+### 10b′. Simulated-data endpoints (genuine demo data, no real export wired)
 ```bash
 # catalog of selectable simulated banks
 curl -s $BASE/pool/catalog | python3 -c 'import sys,json;d=json.load(sys.stdin);print("default",d["default_pool_id"]);[print(" ",p["pool_id"],p["n_items"],"items",p["n_3pl"],"3PL",p["domains"]) for p in d["pools"]]'
@@ -503,7 +571,7 @@ curl -s "$BASE/forms/$FID/simulate?theta=2.0&seed=1" | python3 -c 'import sys,js
 **Expect:** `pool/items` → `simulated: true`, 48 items; `tif-curve` → 61 points;
 `simulate` (θ=2.0) → `final_theta` clearly positive (~1.7).
 
-### 5c. Infeasible vs invalid (two distinct failure modes)
+### 10c. Infeasible vs invalid (two distinct failure modes)
 ```bash
 # infeasible (solver): HTTP 201, status "infeasible", form_ids []
 curl -s -X POST $BASE/blueprints -H 'content-type: application/json' -d '{
