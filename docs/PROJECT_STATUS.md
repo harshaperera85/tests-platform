@@ -76,9 +76,15 @@ Walkthrough expanded to full end-to-end guide (linear + governance + exposure) i
   (`content_reviewer`/`psychometrician`/`publisher`) are a **deliberate permissive stub**:
   `authorize_transition` records the claimed role and never denies. Real authz wires in at
   that single chokepoint. Gates any exposure beyond a trusted network.
-- **Item-factory calibration seam** — real calibrated item bank replacing the simulated
-  pool. Parked until approaching v1 / real forms needed. To pin: a real sample export +
-  schema, esp. IRT scaling convention, tags, `enemy_of`, status, content, access mode.
+- **Item-factory calibration seam** — real item bank replacing the simulated pool. Parked
+  until approaching v1 / real forms needed. **Investigated read-only**
+  (`docs/item_factory_seam_investigation.md`): item-factory emits a **pre-calibration** bank
+  (content + tags + `enemy_of` + status; **no IRT params**). **Design captured** in
+  `docs/common_item_bank_design.md` (shared bank = two-stage lifecycle; two-axis item status —
+  editorial vs calibration; Linear is the field-test/calibration instrument; immutable single
+  `item_id`). **Asks to item-factory** drafted (`docs/item_factory_change_request.md`, not yet
+  sent). Open: a downstream **calibration-engine** (field responses → mirt → write-back) — owner
+  TBD (`common_item_bank_design.md` §10). All design-only; **nothing built, nothing unparked**.
 - **CAT platform endpoint seam** — Phase 2 on-ramp (org repo). Parked until committing to
   Phase 2 + ready for org involvement. To pin: endpoint shapes
   (start-session → next-item → respond → score → stop), CAT `TestConfig` schema, θ scaling,

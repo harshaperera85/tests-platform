@@ -33,10 +33,19 @@ Durable to-do list. Status as of the latest commit on `main`.
 Revisit when a real trigger arrives; **not blocking** current build (simulated data covers
 all paths, and the architecture is already seam-ready: the pool catalog is the item-data
 swap point, `CatConfig` + the strategy registry are the CAT slot).
-- **Item-factory export contract** → real calibrated item bank (replaces simulated pool).
-  Personal repo, **org-free**. *Trigger:* approaching v1 / need to assemble real forms.
-  To pin, need: a real sample export + field/schema, esp. the **IRT scaling convention**
-  (a on D=1 vs 1.702), tags, `enemy_of`, status, content; and how it's accessed (file/API/DB).
+- **Item-factory export contract** → real item bank (replaces simulated pool). Org repo
+  (`outsmart-college/item-factory-source`). *Trigger:* approaching v1 / need to assemble real forms.
+  **Investigated read-only** (`docs/item_factory_seam_investigation.md`, HEAD `5c3a0a6`): it emits a
+  **pre-calibration** bank (content + tags + `enemy_of` + status; **no IRT params** — "calibration"
+  there = inter-rater reliability, not item IRT), file-based (`item_bank.json` authoritative; SQLite
+  CAT-ready export incomplete). The IRT scaling question therefore lives at the **calibration** stage,
+  not here. **Design captured** in `docs/common_item_bank_design.md` (two-axis item model:
+  editorial vs calibration status; Linear-as-field-test-instrument loop; immutable single id). **Asks
+  to item-factory** drafted in `docs/item_factory_change_request.md` (complete the export, surface
+  TIMSS, flat tag dict, stable id) — **not yet sent**. To pin, still need: a real sample export +
+  confirmation of the asks; and the downstream **calibration-engine ownership** decision
+  (`common_item_bank_design.md` §10). **Decided:** adopt `instance_id` as canonical `item_id`
+  verbatim, never re-mint (single join key for parameter write-back).
   - *Follow-up when pools become dynamic:* make the editor's live per-constraint
     availability flag ("N match in pool") refresh when the bank changes — invalidate the
     `getPoolItems` query on import (or set a `staleTime`/`refetchInterval`). With today's
