@@ -13,7 +13,7 @@ free of any administration-model coupling.
 from __future__ import annotations
 
 import math
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
@@ -222,17 +222,39 @@ class ExposureFeedback(BaseModel):
 
 
 class Blueprint(BaseModel):
-    """Full assembly specification for one (or several parallel) forms."""
+    """Full assembly specification for one (or several parallel) forms.
 
+    Delivery-mode-agnostic (BP-MODES-1): one blueprint is satisfiable by fixed-form,
+    LOFT, and CAT. ``statistical_target`` is **optional** — a blueprint with none is a
+    *content-only* blueprint (fixed-form then assembles for feasibility only, still
+    reporting realized TIF; see ``docs/blueprint-delivery-mode-semantics.md`` §2.1).
+    """
+
+    #: schema revision (BP-MODES-1 §8): v1 = pre-amendment (required TIF target). Every
+    #: v1 document is a valid v2 document; stored v1 docs (no key) load as v2.
+    schema_version: int = 2
     name: str = "untitled-blueprint"
     length: int = Field(gt=0, description="items per form")
     num_forms: int = Field(default=1, ge=1)
     content_constraints: list[ContentConstraint] = Field(default_factory=list)
-    statistical_target: TIFTarget
+    #: optional (BP-MODES-1 A1): None ⇒ content-only blueprint (no TIF objective).
+    statistical_target: TIFTarget | None = None
     enemy_policy: EnemyPolicy = Field(default_factory=EnemyPolicy)
     exposure_target: ExposureTarget | None = None
     #: opt-in longitudinal-exposure eligibility feedback (default-off)
     exposure_feedback: ExposureFeedback | None = None
+    #: RESERVED (BP-MODES-1 A4): composite/multi-segment tests. The name is burned but
+    #: the behavior is unspecified — any non-None value is rejected (see validator).
+    segments: list[Any] | None = None
+
+    @model_validator(mode="after")
+    def _reject_reserved_segments(self) -> Blueprint:
+        if self.segments is not None:
+            raise ValueError(
+                "`segments` is reserved (BP-MODES-1 A4): composite/multi-segment "
+                "tests are not yet specified. Leave it unset (None)."
+            )
+        return self
 
     @model_validator(mode="after")
     def _check_feasible_shape(self) -> Blueprint:

@@ -176,6 +176,10 @@ def cross_validate_form(
 
     # Scope guards: the eatATA bridge solves single-form, unweighted minimax.
     tgt = blueprint.statistical_target
+    if tgt is None:
+        return _unsupported(
+            ortools, package, "content-only blueprint has no TIF objective to validate"
+        )
     if blueprint.num_forms != 1:
         return _unsupported(ortools, package, "cross-validation is single-form only")
     if tgt.method != "minimax":
@@ -260,17 +264,18 @@ def get_form(form_id: str, db: Session = Depends(get_db)) -> FormRead:
         raise HTTPException(status_code=404, detail="blueprint not found")
     target = Blueprint.model_validate(bp_row.spec).statistical_target
 
-    tif = [
-        TIFPoint(
-            theta=theta,
-            target=tgt,
-            actual=actual,
-            gap=actual - tgt,
-        )
-        for theta, tgt, actual in zip(
-            target.theta_points, target.target_info, row.tif_actual, strict=True
-        )
-    ]
+    # Content-only blueprints (BP-MODES-1 A1) have no target curve; the preview then
+    # carries no actual-vs-target points (realized TIF alone is on the tif-curve).
+    tif = (
+        [
+            TIFPoint(theta=theta, target=tgt, actual=actual, gap=actual - tgt)
+            for theta, tgt, actual in zip(
+                target.theta_points, target.target_info, row.tif_actual, strict=True
+            )
+        ]
+        if target is not None
+        else []
+    )
     return FormRead(
         id=row.id,
         blueprint_id=row.blueprint_id,
@@ -314,11 +319,13 @@ def get_form_tif_curve(
         )
         for i in range(n)
     ]
+    # Content-only blueprints have no target curve — the dense actual curve stands
+    # alone (theta_points/target_info empty, method "none").
     return TIFCurve(
-        theta_points=list(target.theta_points),
-        target_info=list(target.target_info),
-        tolerance=target.tolerance,
-        method=target.method,
+        theta_points=list(target.theta_points) if target is not None else [],
+        target_info=list(target.target_info) if target is not None else [],
+        tolerance=target.tolerance if target is not None else None,
+        method=target.method if target is not None else "none",
         curve=curve,
     )
 

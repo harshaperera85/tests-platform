@@ -116,9 +116,10 @@ def build_qa_report(db: Session, form: FormRow) -> FormQAReport:
         err_var += w * (1.0 / info if info > 1e-9 else 1e6)
     marginal_reliability = max(0.0, min(1.0, 1.0 - err_var))
 
-    # actual vs target TIF (at the blueprint θ points)
+    # actual vs target TIF (at the blueprint θ points). Content-only blueprints
+    # (BP-MODES-1 A1) carry no target, so there is nothing to compare against.
     tif: list[TIFActualTarget] = []
-    if blueprint:
+    if blueprint and blueprint.statistical_target is not None:
         t = blueprint.statistical_target
         for theta, tgt, actual in zip(
             t.theta_points, t.target_info, form.tif_actual, strict=False

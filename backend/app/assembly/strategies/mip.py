@@ -38,11 +38,17 @@ class MipStrategy(AssemblyStrategy):
         seed: int = 0,
     ) -> AssemblyResult:
         am = AtaModel(problem)
-        objective_var, value_scale = (
-            add_minimax_objective(am)
-            if problem.method == "minimax"
-            else add_maximin_objective(am)
-        )
+        # Content-only blueprint: no TIF objective — a pure feasibility solve over the
+        # content / enemy / length / exposure constraints. Realized TIF is still
+        # reported (tif_at over the reporting grid); there is no objective value.
+        objective_var: cp_model.IntVar | None = None
+        value_scale = 1
+        if not problem.feasibility_only:
+            objective_var, value_scale = (
+                add_minimax_objective(am)
+                if problem.method == "minimax"
+                else add_maximin_objective(am)
+            )
 
         solver = cp_model.CpSolver()
         solver.parameters.max_time_in_seconds = time_limit_s
@@ -73,5 +79,6 @@ class MipStrategy(AssemblyStrategy):
                     tif_actual=problem.tif_at(chosen),
                 )
             )
-        result.objective_value = solver.value(objective_var) / value_scale
+        if objective_var is not None:
+            result.objective_value = solver.value(objective_var) / value_scale
         return result

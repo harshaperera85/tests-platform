@@ -71,10 +71,16 @@ class RandomConstrainedStrategy(AssemblyStrategy):
                 )
             )
 
-        obj = max(
-            abs(f.tif_actual[k] - problem.target_info[k])
-            for f in forms
-            for k in range(len(problem.theta_points))
+        # Content-only blueprint: no target to miss, so no objective value (realized
+        # TIF is still reported on each form).
+        obj = (
+            None
+            if problem.feasibility_only
+            else max(
+                abs(f.tif_actual[k] - problem.target_info[k])
+                for f in forms
+                for k in range(len(problem.theta_points))
+            )
         )
         return AssemblyResult(
             strategy=self.name,

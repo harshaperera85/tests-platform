@@ -23,6 +23,14 @@ from app.psychometrics.bank import ItemPool
 from app.psychometrics.information import information_matrix
 from app.schemas.blueprint import Blueprint
 
+#: Theta grid used to *report* realized TIF for a content-only blueprint (one with no
+#: ``statistical_target``). Matches the QA / comparability reporting grid (−3 … 3 by
+#: 0.5) so the reported information curve is consistent across the app. Only used when
+#: there is no author-supplied target; targeted blueprints report at their own points.
+DEFAULT_REPORT_THETA: tuple[float, ...] = tuple(
+    round(-3.0 + 0.5 * i, 3) for i in range(13)
+)
+
 
 @dataclass(frozen=True)
 class ContentSet:
@@ -45,7 +53,7 @@ class CompiledProblem:
     info: tuple[tuple[float, ...], ...]
     theta_points: tuple[float, ...]
     target_info: tuple[float, ...]
-    method: Literal["minimax", "maximin"]
+    method: Literal["minimax", "maximin", "none"]
     tolerance: float | None
     length: int
     num_forms: int
@@ -66,6 +74,11 @@ class CompiledProblem:
     excluded_indices: tuple[int, ...] = ()
     exposure: tuple[int, ...] = ()
     underuse_weight: float = 0.0
+    #: content-only blueprint (BP-MODES-1 A1): assemble for feasibility only — no TIF
+    #: objective — while still reporting realized TIF (``target_info`` is then empty and
+    #: ``theta_points`` is the reporting grid). Default False ⇒ targeted assembly is
+    #: byte-for-byte unchanged.
+    feasibility_only: bool = False
 
     @property
     def n_items(self) -> int:
@@ -95,8 +108,16 @@ def compile_blueprint(
     item_ids = tuple(it.item_id for it in items)
     index_of = {iid: i for i, iid in enumerate(item_ids)}
 
-    theta_points = tuple(blueprint.statistical_target.theta_points)
-    target_info = tuple(blueprint.statistical_target.target_info)
+    # Content-only blueprint (no TIF target): assemble for feasibility only, but
+    # still report realized TIF at a default grid. Targeted blueprints are unchanged.
+    tgt = blueprint.statistical_target
+    feasibility_only = tgt is None
+    if tgt is None:
+        theta_points = DEFAULT_REPORT_THETA
+        target_info: tuple[float, ...] = ()
+    else:
+        theta_points = tuple(tgt.theta_points)
+        target_info = tuple(tgt.target_info)
     info_rows = information_matrix(items, theta_points)
     info = tuple(tuple(row) for row in info_rows)
 
@@ -173,18 +194,19 @@ def compile_blueprint(
         info=info,
         theta_points=theta_points,
         target_info=target_info,
-        method=blueprint.statistical_target.method,
-        tolerance=blueprint.statistical_target.tolerance,
+        method=tgt.method if tgt is not None else "none",
+        tolerance=tgt.tolerance if tgt is not None else None,
         length=blueprint.length,
         num_forms=blueprint.num_forms,
         content_sets=tuple(content_sets),
         enemy_pairs=tuple(sorted(enemy_pairs)),
         max_use_per_item=max_use,
         max_pairwise_overlap=max_pairwise_overlap,
-        weights=blueprint.statistical_target.resolved_weights,
+        weights=tgt.resolved_weights if tgt is not None else (),
         warnings=tuple(warnings),
         params=tuple((it.a, it.d, it.c, it.u) for it in items),
         excluded_indices=excluded_indices,
         exposure=exposure_vec,
         underuse_weight=underuse_weight,
+        feasibility_only=feasibility_only,
     )

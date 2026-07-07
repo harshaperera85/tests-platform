@@ -87,15 +87,17 @@ def build_comparability_report(
 ) -> ComparabilityReport:
     summaries = [_form_summary(f) for f in forms]
 
-    # common design target (from the first form's blueprint, if present)
+    # common design target (from the first form's blueprint, if present). A
+    # content-only blueprint (BP-MODES-1 A1) has no target curve to overlay.
     target: list[TargetPoint] = []
     bp_row = db.get(BlueprintRow, forms[0].blueprint_id) if forms else None
     if bp_row is not None:
         t = Blueprint.model_validate(bp_row.spec).statistical_target
-        target = [
-            TargetPoint(theta=th, target=tg)
-            for th, tg in zip(t.theta_points, t.target_info, strict=False)
-        ]
+        if t is not None:
+            target = [
+                TargetPoint(theta=th, target=tg)
+                for th, tg in zip(t.theta_points, t.target_info, strict=False)
+            ]
 
     # per-θ dispersion across forms (index aligns with _THETA_GRID)
     dispersion: list[DispersionPoint] = []
