@@ -154,6 +154,29 @@ The FastAPI surface (`api/main.py`) is **operator/authoring-facing** (runs, doma
 settings, review summaries) — there is **no operational "download calibrated item bank" endpoint**.
 Consumption is by reading the emitted files (SQLite + `item_bank.json`).
 
+### 5a. Curriculum **unit JSON** (verified 2026-07-07) — the §6 generator input
+
+Separate from the item bank: the curriculum inventory itself is exported as **one JSON file per
+unit** (`domains/<domain>/data/unit-NN-<slug>.json`; 11 files for pre_algebra at check time, all
+sharing exactly one shape — no variants):
+
+```json
+{"course_id": "<uuid>", "course_name": "Pre-Algebra New",
+ "unit_id": "<uuid>", "unit_order": 9, "unit_name": "Exponents",
+ "knowledge_components": [
+   {"id": "<uuid>", "order": 1, "name": "<KC statement>",
+    "complicators": [
+      {"id": "<uuid>", "order": 1, "name": "<sub-skill statement>",
+       "examples": "…", "misconceptions": "…"}]}]}
+```
+
+A *course* = the set of unit files sharing `course_id`. The human-authored master list behind
+these is `domains/<d>/curriculum_inventory.yml` (Units → KCs → Complicators, prose descriptions).
+tests-platform's curriculum→blueprint generator (`app/schemas/generator.py`,
+`services/blueprint_generator.py`, `POST /blueprints/generate`) consumes these unit documents
+**verbatim** (extra keys like `examples`/`misconceptions` ignored), keying constraints on the
+stable `unit_id` / KC `id`.
+
 ---
 
 ## 6. Internal gap found — the SQLite CAT-ready export can't carry the tags/enemies

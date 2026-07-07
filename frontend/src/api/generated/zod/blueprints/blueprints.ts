@@ -53,6 +53,122 @@ export const createBlueprintBody = zod.object({
 }).describe('Full assembly specification for one (or several parallel) forms.\n\nDelivery-mode-agnostic (BP-MODES-1): one blueprint is satisfiable by fixed-form,\nLOFT, and CAT. ``statistical_target`` is **optional** — a blueprint with none is a\n*content-only* blueprint (fixed-form then assembles for feasibility only, still\nreporting realized TIF; see ``docs/blueprint-delivery-mode-semantics.md`` §2.1).')
 
 /**
+ * Curriculum→blueprint generator (BP-MODES-1 §6).
+
+Consumes item-factory unit JSON documents and emits a blueprint: EOC test
+(grain=course, per-unit shares) or unit quiz (grain=unit, per-KC shares),
+largest-remainder rounding, per-binding TIF rules. When ``pool_id`` is given
+the blueprint is validated against that pool's tag counts (the §6 gate).
+The blueprint is returned, not stored — persist via ``POST /blueprints``.
+ * @summary Generate Blueprint From Curriculum
+ */
+export const generateBlueprintFromCurriculumBodyGrainDefault = "course";export const generateBlueprintFromCurriculumBodyNumFormsDefault = 1;export const generateBlueprintFromCurriculumBodyBindingDefault = "fixed_form";export const generateBlueprintFromCurriculumBodyStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumBodyUnitTagDefault = "unit";export const generateBlueprintFromCurriculumBodyKcTagDefault = "kc";export const generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMinimumMinOne = 0;export const generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMaximumMinOne = 0;export const generateBlueprintFromCurriculumBodyCognitiveMinimumsItemModeDefault = "count";
+
+export const generateBlueprintFromCurriculumBody = zod.object({
+  "units": zod.array(zod.object({
+  "course_id": zod.union([zod.string(),zod.null()]).optional(),
+  "course_name": zod.union([zod.string(),zod.null()]).optional(),
+  "unit_id": zod.string(),
+  "unit_order": zod.union([zod.number(),zod.null()]).optional(),
+  "unit_name": zod.union([zod.string(),zod.null()]).optional(),
+  "knowledge_components": zod.array(zod.object({
+  "id": zod.string(),
+  "order": zod.union([zod.number(),zod.null()]).optional(),
+  "name": zod.union([zod.string(),zod.null()]).optional(),
+  "complicators": zod.array(zod.object({
+  "id": zod.string(),
+  "order": zod.union([zod.number(),zod.null()]).optional(),
+  "name": zod.union([zod.string(),zod.null()]).optional()
+}).describe('One sub-skill of a KC (export also carries examples/misconceptions — ignored).')).optional()
+})).min(1)
+}).describe('One item-factory unit JSON file, verbatim.')).min(1),
+  "grain": zod.enum(['course', 'unit']).default(generateBlueprintFromCurriculumBodyGrainDefault),
+  "unit_id": zod.union([zod.string(),zod.null()]).optional(),
+  "length": zod.number(),
+  "num_forms": zod.number().min(1).default(generateBlueprintFromCurriculumBodyNumFormsDefault),
+  "name": zod.union([zod.string(),zod.null()]).optional(),
+  "binding": zod.enum(['fixed_form', 'loft', 'cat']).default(generateBlueprintFromCurriculumBodyBindingDefault),
+  "statistical_target": zod.union([zod.object({
+  "theta_points": zod.array(zod.number()).min(1),
+  "target_info": zod.array(zod.number()).min(1),
+  "method": zod.enum(['minimax', 'maximin']).default(generateBlueprintFromCurriculumBodyStatisticalTargetMethodDefault),
+  "tolerance": zod.union([zod.number(),zod.null()]).optional(),
+  "weights": zod.union([zod.array(zod.number()),zod.null()]).optional()
+}).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point — there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point\'s weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs — orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*.'),zod.null()]).optional(),
+  "unit_tag": zod.string().default(generateBlueprintFromCurriculumBodyUnitTagDefault),
+  "kc_tag": zod.string().default(generateBlueprintFromCurriculumBodyKcTagDefault),
+  "cognitive_minimums": zod.array(zod.object({
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
+  "minimum": zod.union([zod.number().min(generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMinimumMinOne),zod.null()]).optional(),
+  "maximum": zod.union([zod.number().min(generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(generateBlueprintFromCurriculumBodyCognitiveMinimumsItemModeDefault),
+  "label": zod.union([zod.string(),zod.null()]).optional()
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
+  "pool_id": zod.union([zod.string(),zod.null()]).optional()
+}).describe('Inputs for one generated blueprint.\n\n``units`` is the curriculum: one or more item-factory unit JSON documents (a\ncourse = its unit files). ``grain`` picks the §6 recipe: ``course`` = EOC /\nmid-course test (one proportion constraint per **unit**, share ∝ KCs +\ncomplicators in the unit); ``unit`` = unit quiz (one constraint per **KC**\nwithin ``unit_id``, share ∝ 1 + complicators). ``binding`` applies the per-mode\ntarget rule: content-only for CAT; a TIF target (with tolerance, for LOFT)\nattached for fixed-form/LOFT bindings.')
+
+export const generateBlueprintFromCurriculumResponseBlueprintSchemaVersionDefault = 2;export const generateBlueprintFromCurriculumResponseBlueprintNameDefault = "untitled-blueprint";export const generateBlueprintFromCurriculumResponseBlueprintNumFormsDefault = 1;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemModeDefault = "count";export const generateBlueprintFromCurriculumResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumResponseBlueprintEnemyPolicyEnforceDefault = true;export const generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxExposureRateMaxOne = 1;export const generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxPairwiseOverlapMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackPreferUnderusedDefault = false;export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightDefault = 0;
+export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightMin = 0;
+
+export const generateBlueprintFromCurriculumResponse = zod.object({
+  "blueprint": zod.object({
+  "schema_version": zod.number().default(generateBlueprintFromCurriculumResponseBlueprintSchemaVersionDefault),
+  "name": zod.string().default(generateBlueprintFromCurriculumResponseBlueprintNameDefault),
+  "length": zod.number().describe('items per form'),
+  "num_forms": zod.number().min(1).default(generateBlueprintFromCurriculumResponseBlueprintNumFormsDefault),
+  "content_constraints": zod.array(zod.object({
+  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
+  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
+  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
+  "minimum": zod.union([zod.number().min(generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMinimumMinOne),zod.null()]).optional(),
+  "maximum": zod.union([zod.number().min(generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMaximumMinOne),zod.null()]).optional(),
+  "mode": zod.enum(['count', 'proportion']).default(generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemModeDefault),
+  "label": zod.union([zod.string(),zod.null()]).optional()
+}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
+  "statistical_target": zod.union([zod.object({
+  "theta_points": zod.array(zod.number()).min(1),
+  "target_info": zod.array(zod.number()).min(1),
+  "method": zod.enum(['minimax', 'maximin']).default(generateBlueprintFromCurriculumResponseBlueprintStatisticalTargetMethodDefault),
+  "tolerance": zod.union([zod.number(),zod.null()]).optional(),
+  "weights": zod.union([zod.array(zod.number()),zod.null()]).optional()
+}).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point — there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point\'s weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs — orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*.'),zod.null()]).optional(),
+  "enemy_policy": zod.object({
+  "enforce": zod.boolean().default(generateBlueprintFromCurriculumResponseBlueprintEnemyPolicyEnforceDefault)
+}).optional().describe('How to honor ``enemy_of`` relations from the bank.\n\nWhen ``enforce`` is true, two items that are enemies of each other may not both\nappear in the same form (declared one-directionally in the bank; the compiler\nsymmetrizes).'),
+  "exposure_target": zod.union([zod.object({
+  "max_use_per_item": zod.union([zod.number().min(1),zod.null()]).optional(),
+  "max_exposure_rate": zod.union([zod.number().max(generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxExposureRateMaxOne),zod.null()]).optional(),
+  "max_pairwise_overlap": zod.union([zod.number().min(generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxPairwiseOverlapMinOne),zod.null()]).optional()
+}).describe('Optional caps on item reuse across assembled forms (multi-form jobs).\n\nTwo reuse levers:\n- **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.\n  Specify it directly, or as a target ``max_exposure_rate`` (proportion 0–1) that\n  the compiler translates to a count given the planned form count:\n  ``max_use ≈ ceil(rate × num_forms)`` (assumes **uniform form administration**).\n  A raw ``max_use_per_item`` is the low-level override and wins if both are set.\n- **pairwise overlap cap**: any two forms may share at most\n  ``max_pairwise_overlap`` items (distinct from the total per-item cap — it bounds\n  similarity *between forms*, e.g. for security across parallel administrations).'),zod.null()]).optional(),
+  "exposure_feedback": zod.union([zod.object({
+  "count_contexts": zod.array(zod.string()).optional(),
+  "max_cumulative": zod.union([zod.number().min(1),zod.null()]).optional(),
+  "prefer_underused": zod.boolean().optional(),
+  "underuse_weight": zod.number().min(generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightMin).optional()
+}).describe('**Opt-in, default-off** feedback from *longitudinal* item-exposure history into\nassembly eligibility.\n\nDistinct from :class:`ExposureTarget` (within-batch overlap/use/rate, governing a\nsingle multi-form assembly) and from CAT administration-time exposure control\n(Sympson-Hetter etc.). Uses cumulative usage *across* past assemblies/publications:\n- ``max_cumulative`` — hard-exclude items already used at least this many times\n  (over-exposure control).\n- ``prefer_underused`` + ``underuse_weight`` — bias selection toward under-utilized\n  items (bidirectional utilization). ``underuse_weight`` is in objective info-units\n  per unit of cumulative exposure: small = tie-breaker, large = strong preference.\n\nWhen this is absent the assembly is **byte-for-byte unchanged** (no eligibility\nconstraints/terms are added).'),zod.null()]).optional(),
+  "segments": zod.union([zod.array(zod.any()),zod.null()]).optional()
+}).describe('Full assembly specification for one (or several parallel) forms.\n\nDelivery-mode-agnostic (BP-MODES-1): one blueprint is satisfiable by fixed-form,\nLOFT, and CAT. ``statistical_target`` is **optional** — a blueprint with none is a\n*content-only* blueprint (fixed-form then assembles for feasibility only, still\nreporting realized TIF; see ``docs/blueprint-delivery-mode-semantics.md`` §2.1).'),
+  "shares": zod.array(zod.object({
+  "key": zod.string(),
+  "label": zod.union([zod.string(),zod.null()]).optional(),
+  "weight": zod.number(),
+  "share": zod.number(),
+  "count": zod.number()
+}).describe('How one unit/KC\'s item share was derived (weight → share → count).')),
+  "feasibility_checked": zod.boolean(),
+  "feasible": zod.boolean(),
+  "issues": zod.array(zod.object({
+  "constraint_key": zod.string(),
+  "required": zod.number(),
+  "available": zod.number(),
+  "message": zod.string()
+})),
+  "warnings": zod.array(zod.string())
+})
+
+/**
  * @summary Get Blueprint
  */
 export const getBlueprintParams = zod.object({

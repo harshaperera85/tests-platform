@@ -27,6 +27,8 @@ import type {
 import type {
   Blueprint,
   BlueprintRead,
+  GenerateBlueprintRequest,
+  GenerateBlueprintResponse,
   HTTPValidationError
 } from '../../model';
 
@@ -99,6 +101,77 @@ export const useCreateBlueprint = <TError = ErrorType<HTTPValidationError>,
       > => {
 
       const mutationOptions = getCreateBlueprintMutationOptions(options);
+
+      return useMutation(mutationOptions, queryClient);
+    }
+    /**
+ * Curriculum→blueprint generator (BP-MODES-1 §6).
+
+Consumes item-factory unit JSON documents and emits a blueprint: EOC test
+(grain=course, per-unit shares) or unit quiz (grain=unit, per-KC shares),
+largest-remainder rounding, per-binding TIF rules. When ``pool_id`` is given
+the blueprint is validated against that pool's tag counts (the §6 gate).
+The blueprint is returned, not stored — persist via ``POST /blueprints``.
+ * @summary Generate Blueprint From Curriculum
+ */
+export const generateBlueprintFromCurriculum = (
+    generateBlueprintRequest: BodyType<GenerateBlueprintRequest>,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<GenerateBlueprintResponse>(
+      {url: `/api/v1/blueprints/generate`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: generateBlueprintRequest, signal
+    },
+      options);
+    }
+  
+
+
+export const getGenerateBlueprintFromCurriculumMutationOptions = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateBlueprintFromCurriculum>>, TError,{data: BodyType<GenerateBlueprintRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof generateBlueprintFromCurriculum>>, TError,{data: BodyType<GenerateBlueprintRequest>}, TContext> => {
+
+const mutationKey = ['generateBlueprintFromCurriculum'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof generateBlueprintFromCurriculum>>, {data: BodyType<GenerateBlueprintRequest>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  generateBlueprintFromCurriculum(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type GenerateBlueprintFromCurriculumMutationResult = NonNullable<Awaited<ReturnType<typeof generateBlueprintFromCurriculum>>>
+    export type GenerateBlueprintFromCurriculumMutationBody = BodyType<GenerateBlueprintRequest>
+    export type GenerateBlueprintFromCurriculumMutationError = ErrorType<HTTPValidationError>
+
+    /**
+ * @summary Generate Blueprint From Curriculum
+ */
+export const useGenerateBlueprintFromCurriculum = <TError = ErrorType<HTTPValidationError>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof generateBlueprintFromCurriculum>>, TError,{data: BodyType<GenerateBlueprintRequest>}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof generateBlueprintFromCurriculum>>,
+        TError,
+        {data: BodyType<GenerateBlueprintRequest>},
+        TContext
+      > => {
+
+      const mutationOptions = getGenerateBlueprintFromCurriculumMutationOptions(options);
 
       return useMutation(mutationOptions, queryClient);
     }

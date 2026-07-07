@@ -7,8 +7,15 @@ from sqlalchemy.orm import Session
 
 from app.core.db import get_db
 from app.models.blueprint import BlueprintRow
+from app.psychometrics import pools
 from app.schemas.blueprint import Blueprint
+from app.schemas.generator import (
+    FeasibilityIssue,
+    GenerateBlueprintRequest,
+    GenerateBlueprintResponse,
+)
 from app.schemas.responses import BlueprintRead
+from app.services.blueprint_generator import check_feasibility, generate_blueprint
 
 router = APIRouter(prefix="/blueprints", tags=["blueprints"])
 
@@ -38,6 +45,46 @@ def create_blueprint(
     db.commit()
     db.refresh(row)
     return _to_read(row)
+
+
+@router.post("/generate", response_model=GenerateBlueprintResponse)
+def generate_blueprint_from_curriculum(
+    req: GenerateBlueprintRequest,
+) -> GenerateBlueprintResponse:
+    """Curriculum→blueprint generator (BP-MODES-1 §6).
+
+    Consumes item-factory unit JSON documents and emits a blueprint: EOC test
+    (grain=course, per-unit shares) or unit quiz (grain=unit, per-KC shares),
+    largest-remainder rounding, per-binding TIF rules. When ``pool_id`` is given
+    the blueprint is validated against that pool's tag counts (the §6 gate).
+    The blueprint is returned, not stored — persist via ``POST /blueprints``.
+    """
+    try:
+        blueprint, shares, warnings = generate_blueprint(req)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    checked, feasible = False, True
+    issues: list[FeasibilityIssue] = []
+    if req.pool_id is not None:
+        if not pools.is_known(req.pool_id):
+            raise HTTPException(
+                status_code=404, detail=f"unknown pool_id {req.pool_id!r}"
+            )
+        feasible, issues, notes = check_feasibility(
+            blueprint, pools.load_pool_by_id(req.pool_id)
+        )
+        warnings.extend(notes)
+        checked = True
+
+    return GenerateBlueprintResponse(
+        blueprint=blueprint,
+        shares=shares,
+        feasibility_checked=checked,
+        feasible=feasible,
+        issues=issues,
+        warnings=warnings,
+    )
 
 
 @router.get("/{blueprint_id}", response_model=BlueprintRead)

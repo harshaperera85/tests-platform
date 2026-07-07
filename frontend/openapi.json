@@ -484,6 +484,48 @@
         }
       }
     },
+    "/api/v1/blueprints/generate": {
+      "post": {
+        "tags": [
+          "blueprints"
+        ],
+        "summary": "Generate Blueprint From Curriculum",
+        "description": "Curriculum\u2192blueprint generator (BP-MODES-1 \u00a76).\n\nConsumes item-factory unit JSON documents and emits a blueprint: EOC test\n(grain=course, per-unit shares) or unit quiz (grain=unit, per-KC shares),\nlargest-remainder rounding, per-binding TIF rules. When ``pool_id`` is given\nthe blueprint is validated against that pool's tag counts (the \u00a76 gate).\nThe blueprint is returned, not stored \u2014 persist via ``POST /blueprints``.",
+        "operationId": "generate_blueprint_from_curriculum",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateBlueprintRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateBlueprintResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/blueprints/{blueprint_id}": {
       "get": {
         "tags": [
@@ -2126,6 +2168,151 @@
         "title": "CrossValidationResult",
         "description": "Full cross-validation payload for the UI.\n\n``status``: ``ok`` (ran and compared), ``unsupported`` (blueprint outside the\noracle's scope \u2014 single-form unweighted minimax only), ``oracle_unavailable``\n(service unreachable), or ``error``."
       },
+      "CurriculumComplicator": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "CurriculumComplicator",
+        "description": "One sub-skill of a KC (export also carries examples/misconceptions \u2014 ignored)."
+      },
+      "CurriculumKC": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "complicators": {
+            "items": {
+              "$ref": "#/components/schemas/CurriculumComplicator"
+            },
+            "type": "array",
+            "title": "Complicators"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "CurriculumKC"
+      },
+      "CurriculumUnit": {
+        "properties": {
+          "course_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Course Id"
+          },
+          "course_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Course Name"
+          },
+          "unit_id": {
+            "type": "string",
+            "title": "Unit Id"
+          },
+          "unit_order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Order"
+          },
+          "unit_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Name"
+          },
+          "knowledge_components": {
+            "items": {
+              "$ref": "#/components/schemas/CurriculumKC"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Knowledge Components"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unit_id",
+          "knowledge_components"
+        ],
+        "title": "CurriculumUnit",
+        "description": "One item-factory unit JSON file, verbatim."
+      },
       "CurvePoint": {
         "properties": {
           "theta": {
@@ -2297,6 +2484,34 @@
         "title": "ExposureTarget",
         "description": "Optional caps on item reuse across assembled forms (multi-form jobs).\n\nTwo reuse levers:\n- **per-item use cap**: an item appears in at most ``max_use_per_item`` forms.\n  Specify it directly, or as a target ``max_exposure_rate`` (proportion 0\u20131) that\n  the compiler translates to a count given the planned form count:\n  ``max_use \u2248 ceil(rate \u00d7 num_forms)`` (assumes **uniform form administration**).\n  A raw ``max_use_per_item`` is the low-level override and wins if both are set.\n- **pairwise overlap cap**: any two forms may share at most\n  ``max_pairwise_overlap`` items (distinct from the total per-item cap \u2014 it bounds\n  similarity *between forms*, e.g. for security across parallel administrations)."
       },
+      "FeasibilityIssue": {
+        "properties": {
+          "constraint_key": {
+            "type": "string",
+            "title": "Constraint Key"
+          },
+          "required": {
+            "type": "integer",
+            "title": "Required"
+          },
+          "available": {
+            "type": "integer",
+            "title": "Available"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "constraint_key",
+          "required",
+          "available",
+          "message"
+        ],
+        "title": "FeasibilityIssue"
+      },
       "FormLifecycle": {
         "properties": {
           "form_id": {
@@ -2466,6 +2681,161 @@
           "tif"
         ],
         "title": "FormRead"
+      },
+      "GenerateBlueprintRequest": {
+        "properties": {
+          "units": {
+            "items": {
+              "$ref": "#/components/schemas/CurriculumUnit"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Units"
+          },
+          "grain": {
+            "type": "string",
+            "enum": [
+              "course",
+              "unit"
+            ],
+            "title": "Grain",
+            "default": "course"
+          },
+          "unit_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Id"
+          },
+          "length": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Length"
+          },
+          "num_forms": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Num Forms",
+            "default": 1
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "binding": {
+            "type": "string",
+            "enum": [
+              "fixed_form",
+              "loft",
+              "cat"
+            ],
+            "title": "Binding",
+            "default": "fixed_form"
+          },
+          "statistical_target": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TIFTarget"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit_tag": {
+            "type": "string",
+            "title": "Unit Tag",
+            "default": "unit"
+          },
+          "kc_tag": {
+            "type": "string",
+            "title": "Kc Tag",
+            "default": "kc"
+          },
+          "cognitive_minimums": {
+            "items": {
+              "$ref": "#/components/schemas/ContentConstraint"
+            },
+            "type": "array",
+            "title": "Cognitive Minimums"
+          },
+          "pool_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pool Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "units",
+          "length"
+        ],
+        "title": "GenerateBlueprintRequest",
+        "description": "Inputs for one generated blueprint.\n\n``units`` is the curriculum: one or more item-factory unit JSON documents (a\ncourse = its unit files). ``grain`` picks the \u00a76 recipe: ``course`` = EOC /\nmid-course test (one proportion constraint per **unit**, share \u221d KCs +\ncomplicators in the unit); ``unit`` = unit quiz (one constraint per **KC**\nwithin ``unit_id``, share \u221d 1 + complicators). ``binding`` applies the per-mode\ntarget rule: content-only for CAT; a TIF target (with tolerance, for LOFT)\nattached for fixed-form/LOFT bindings."
+      },
+      "GenerateBlueprintResponse": {
+        "properties": {
+          "blueprint": {
+            "$ref": "#/components/schemas/Blueprint"
+          },
+          "shares": {
+            "items": {
+              "$ref": "#/components/schemas/ShareLine"
+            },
+            "type": "array",
+            "title": "Shares"
+          },
+          "feasibility_checked": {
+            "type": "boolean",
+            "title": "Feasibility Checked"
+          },
+          "feasible": {
+            "type": "boolean",
+            "title": "Feasible"
+          },
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/FeasibilityIssue"
+            },
+            "type": "array",
+            "title": "Issues"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blueprint",
+          "shares",
+          "feasibility_checked",
+          "feasible",
+          "issues",
+          "warnings"
+        ],
+        "title": "GenerateBlueprintResponse"
       },
       "HTTPValidationError": {
         "properties": {
@@ -3311,6 +3681,46 @@
         ],
         "title": "SessionState",
         "description": "Opaque-to-the-core administration state for one in-flight session.\n\nThe engine core treats this as a black box and only passes it back to the\nowning strategy. Concrete strategies refine ``data`` with their own typed\npayloads in Phase 1+."
+      },
+      "ShareLine": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label"
+          },
+          "weight": {
+            "type": "integer",
+            "title": "Weight"
+          },
+          "share": {
+            "type": "number",
+            "title": "Share"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "weight",
+          "share",
+          "count"
+        ],
+        "title": "ShareLine",
+        "description": "How one unit/KC's item share was derived (weight \u2192 share \u2192 count)."
       },
       "SimulationRead": {
         "properties": {
