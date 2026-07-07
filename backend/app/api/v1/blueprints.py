@@ -15,6 +15,7 @@ from app.schemas.generator import (
     GenerateBlueprintResponse,
 )
 from app.schemas.responses import BlueprintRead
+from app.services import curricula
 from app.services.blueprint_generator import check_feasibility, generate_blueprint
 
 router = APIRouter(prefix="/blueprints", tags=["blueprints"])
@@ -53,14 +54,23 @@ def generate_blueprint_from_curriculum(
 ) -> GenerateBlueprintResponse:
     """Curriculum→blueprint generator (BP-MODES-1 §6).
 
-    Consumes item-factory unit JSON documents and emits a blueprint: EOC test
-    (grain=course, per-unit shares) or unit quiz (grain=unit, per-KC shares),
-    largest-remainder rounding, per-binding TIF rules. When ``pool_id`` is given
-    the blueprint is validated against that pool's tag counts (the §6 gate).
-    The blueprint is returned, not stored — persist via ``POST /blueprints``.
+    Consumes a curriculum manifest (inline, or by ``course_id`` from the catalog)
+    and emits a blueprint: EOC test (grain=eoc, per-unit shares) or unit quiz
+    (grain=unit_quiz, per-KC shares), largest-remainder rounding, authored
+    cognitive profile, per-binding TIF rules. When ``pool_id`` is given the
+    blueprint is validated against that pool's tag counts (the §6 gate). The
+    blueprint is returned for review, not stored — persist via ``POST /blueprints``.
     """
+    manifest = req.manifest
+    if manifest is None:
+        assert req.course_id is not None  # enforced by the request validator
+        manifest = curricula.get_manifest(req.course_id)
+        if manifest is None:
+            raise HTTPException(
+                status_code=404, detail=f"unknown course_id {req.course_id!r}"
+            )
     try:
-        blueprint, shares, warnings = generate_blueprint(req)
+        blueprint, shares, warnings = generate_blueprint(req, manifest)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 

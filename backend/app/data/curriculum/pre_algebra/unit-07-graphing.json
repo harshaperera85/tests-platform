@@ -1,0 +1,151 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "60395bab-c6c2-4cc7-9bc8-2dda9431c703",
+ "unit_order": 7,
+ "unit_name": "Graphing",
+ "knowledge_components": [
+  {
+   "id": "d7f41428-dd9a-416e-9702-cbc73d458ca6",
+   "order": 1,
+   "name": "The coordinate plane provides a systematic framework for representing points in two-dimensional space using ordered pairs",
+   "complicators": [
+    {
+     "id": "3f4a5634-57c9-4e88-b117-8f27657a3f95",
+     "order": 1,
+     "name": "Identify components of the coordinate plane (axes and origin) and understand directional conventions"
+    },
+    {
+     "id": "e317490c-6af8-45b3-9c0b-e809a70c47bb",
+     "order": 2,
+     "name": "Interpret and plot ordered pairs accurately using the coordinate system"
+    },
+    {
+     "id": "24e232c2-605e-43ec-a3cb-1e6c294e6369",
+     "order": 3,
+     "name": "Plot ordered pairs in all quadrants and identify their locations relative to axes"
+    },
+    {
+     "id": "2a6e3bc4-d320-4f00-a368-e45b6949a070",
+     "order": 4,
+     "name": "Plot ordered pairs with different scales and fractional coordinates"
+    }
+   ]
+  },
+  {
+   "id": "cd41eb36-5ca2-44cd-b241-3faab6aa37c6",
+   "order": 2,
+   "name": "Slope represents the rate of change between two points",
+   "complicators": [
+    {
+     "id": "ac95434c-83b7-473a-a67f-f18a70a6d66e",
+     "order": 1,
+     "name": "Two points make a line. Identify or plot two points along the same line."
+    },
+    {
+     "id": "ac9826cf-4bc9-4eef-b140-95acc016c466",
+     "order": 2,
+     "name": "Calculate slope using rise over run with two points on a line"
+    }
+   ]
+  },
+  {
+   "id": "9b271e8e-d21f-457e-b5dd-2c0ce8170b89",
+   "order": 3,
+   "name": "Interpret slope as rates of change and understand slope meanings from the linear equations",
+   "complicators": [
+    {
+     "id": "47d54978-c27c-4f61-bef0-d64291478679",
+     "order": 1,
+     "name": "Interpret slope as rate of change and recognize positive and negative slopes"
+    },
+    {
+     "id": "ea79e367-ba82-44ff-956d-e76703da5582",
+     "order": 2,
+     "name": "Recognize and apply parallel and perpendicular slope relationships"
+    }
+   ]
+  },
+  {
+   "id": "f988e75c-6fe2-41e4-a30e-23d59e568b4b",
+   "order": 4,
+   "name": "Linear equations in slope-intercept form reveal the structure and behavior of lines through slope and y-intercept",
+   "complicators": [
+    {
+     "id": "9230a5d7-3754-4845-bacb-3b2cacc219cd",
+     "order": 1,
+     "name": "Identify slope and y-intercept from equations in y = mx + b form and understand their graphical meaning"
+    },
+    {
+     "id": "dd3a6693-d9f4-466c-aeb0-cf366c0a2996",
+     "order": 2,
+     "name": "Graph lines using slope-intercept form by plotting y-intercept and using slope to find additional points"
+    },
+    {
+     "id": "5ae3d42d-4933-4369-9e33-c5c841f4f44d",
+     "order": 3,
+     "name": "Write equations in slope-intercept form given slope and y-intercept or two points"
+    },
+    {
+     "id": "3d3a8627-ec2f-4d91-b230-4e117104ffad",
+     "order": 4,
+     "name": "Convert between different representations of linear relationships and slope-intercept form"
+    },
+    {
+     "id": "57fd8397-104c-4dac-89ca-1eb463da803d",
+     "order": 5,
+     "name": "Test for Bowen"
+    }
+   ]
+  },
+  {
+   "id": "f496dd81-aec1-418a-8c3a-45ae4d0ef1dc",
+   "order": 5,
+   "name": "Point-slope form provides a way to write linear equations using any known point and the slope",
+   "complicators": [
+    {
+     "id": "553b46a4-f0a2-4777-b0c2-fff876a7e045",
+     "order": 1,
+     "name": "Write and graph equations in point-slope form given a slope and a point"
+    },
+    {
+     "id": "5d44ff85-6d66-4c39-b0f8-c917c5b88414",
+     "order": 2,
+     "name": "Convert point-slope form to slope-intercept form by distributing and simplifying"
+    },
+    {
+     "id": "3927dfbf-2537-4a6b-99b4-b335586e59fe",
+     "order": 3,
+     "name": "Write point-slope equations from two points by first calculating slope then applying the formula"
+    }
+   ]
+  },
+  {
+   "id": "669c15b9-806b-450c-bdb3-a9320e4ac332",
+   "order": 6,
+   "name": "Linear equations in standard form provide an alternative representation emphasizing x and y coefficients and intercepts",
+   "complicators": [
+    {
+     "id": "ce34048b-a607-4bdb-932f-908f4e4b99c4",
+     "order": 1,
+     "name": "Identify key features of equations in standard form Ax + By = C and find x and y intercepts"
+    },
+    {
+     "id": "0b810866-3227-4e18-96a6-7440783097af",
+     "order": 2,
+     "name": "Graph lines in standard form using intercepts and understand when this method is most efficient"
+    },
+    {
+     "id": "fb4a7a4f-ae14-4c3e-849a-61f89a4581bc",
+     "order": 3,
+     "name": "Convert between slope-intercept, point-slope, and standard form while maintaining equivalency"
+    },
+    {
+     "id": "3f2247e1-2e81-4590-8421-e7d1e8d4f329",
+     "order": 4,
+     "name": "Choose appropriate and most efficient graphing methods based on the form of linear equation and given information."
+    }
+   ]
+  }
+ ]
+}

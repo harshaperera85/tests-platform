@@ -1,0 +1,85 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "ea766e01-30be-4174-bbfe-63997d8acee6",
+ "unit_order": 11,
+ "unit_name": "Polynomials",
+ "knowledge_components": [
+  {
+   "id": "f1de7dcf-bb99-4775-8908-62abc27ae6d9",
+   "order": 1,
+   "name": "Understand the terminology to reference monomials and polynomials",
+   "complicators": [
+    {
+     "id": "12a887cb-8f58-42a2-84cd-56b88dca270e",
+     "order": 1,
+     "name": "Identify and work with monomials as single terms containing coefficients and variables with whole number exponents"
+    },
+    {
+     "id": "00c23b3f-e838-4aa1-86c4-d0dc6b192ea9",
+     "order": 2,
+     "name": "Classify polynomials by number of terms (monomial binomial trinomial) and identify the degree of polynomial expressions"
+    },
+    {
+     "id": "a27ddb53-1584-4520-9cd4-9e4d0894d5ba",
+     "order": 3,
+     "name": "Evaluate polynomials through substitution and understand standard form organization by degree"
+    }
+   ]
+  },
+  {
+   "id": "7dd919a2-cd8f-4dd3-a286-ce982bebceaa",
+   "order": 2,
+   "name": "Like terms in polynomials share the same variable factors and can be combined through the distributive property, which allows for systematic addition and subtraction of polynomials",
+   "complicators": [
+    {
+     "id": "f8f4d18e-226d-4186-bf1c-1cc4c7131c72",
+     "order": 1,
+     "name": "Combine like terms through concrete examples like place value expanded form, other \"bases\""
+    },
+    {
+     "id": "1bc6d115-9afd-479f-97ec-dea3258b1888",
+     "order": 2,
+     "name": "Model the grouping and addition of like terms using the area model."
+    },
+    {
+     "id": "dd0f45c4-69e8-434b-a765-fe7ad60d6a6f",
+     "order": 3,
+     "name": "Identify like and unlike terms in polynomial expressions by matching variable parts and exponents exactly, then add/subtract the like terms."
+    },
+    {
+     "id": "c88d5db0-a3f3-4cfc-bacd-36d457a38175",
+     "order": 4,
+     "name": "Simplify polynomial expressions containing single and multiple variables and various combinations of like terms, including complex expressions involving nested groupings"
+    },
+    {
+     "id": "88cea17f-3adc-446d-9656-591f06d642f8",
+     "order": 5,
+     "name": "Add and subtract polynomials by identifying and combining like terms in horizontal and vertical formats"
+    }
+   ]
+  },
+  {
+   "id": "ab7196e7-28d0-49ff-8b2b-a582728bb6ef",
+   "order": 3,
+   "name": "Polynomial multiplication extends the distributive property to multiply terms and expressions systematically",
+   "complicators": [
+    {
+     "id": "fccce6d1-9fdf-4510-ad29-1206d8d3c4f9",
+     "order": 1,
+     "name": "Multiply monomials by applying coefficient multiplication and exponent addition rules from previous exponent knowledge"
+    },
+    {
+     "id": "a807dd2e-1386-41ab-b6b9-61189e8ff030",
+     "order": 2,
+     "name": "Multiply monomials by polynomials using the distributive property to multiply each term"
+    },
+    {
+     "id": "43c49a4f-b4fc-48ef-ad0f-425debda9e65",
+     "order": 3,
+     "name": "Multiply binomials using systematic distribution methods including FOIL and area model approaches"
+    }
+   ]
+  }
+ ]
+}

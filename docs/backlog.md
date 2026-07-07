@@ -20,6 +20,15 @@ Durable to-do list. Status as of the latest commit on `main`.
 - **Blueprint constraints** — cross-classified cells (content × cognitive, AND of tags)
   alongside marginals; per-constraint **count or proportion**. Read-only **item-pool
   viewer** (`/pool`).
+- **BP-MODES-1** (spec: `docs/blueprint-delivery-mode-semantics.md`) — §2 schema
+  amendments (optional TIF target ⇒ content-only blueprints w/ feasibility-only
+  assembly; `schema_version: 2`; reserved `segments`), content-only authoring UI,
+  and the **§6 curriculum→blueprint generator** (`POST /blueprints/generate`:
+  item-factory unit JSON → manifest → EOC / unit-quiz blueprints, largest-remainder
+  shares, authored cognitive profile per the pinned tag contract, feasibility gate
+  vs pool). **§3 (CAT conformance enforcement) is Ignite-owned** — implemented in
+  the Ignite CAT platform, arrives with the CAT-module merge; do not build it here.
+  §4 (LOFT engine) remains a later phase in this repo.
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
 
 ## Next up

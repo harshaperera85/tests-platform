@@ -12,6 +12,7 @@ from app.api.v1 import (
     assembly_jobs,
     audit,
     blueprints,
+    curricula,
     forms,
     health,
     pool,
@@ -25,6 +26,7 @@ api_router.include_router(health.router)
 api_router.include_router(tests.router)
 api_router.include_router(audit.router)
 api_router.include_router(blueprints.router)
+api_router.include_router(curricula.router)
 api_router.include_router(assembly_jobs.router)
 api_router.include_router(forms.router)
 api_router.include_router(pool.router)

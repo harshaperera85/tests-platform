@@ -1,96 +1,106 @@
-"""POST /blueprints/generate — curriculum→blueprint generator endpoint (§6)."""
+"""POST /blueprints/generate + GET /curricula — §6 generator endpoints."""
 
 from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-# A payload shaped exactly like the item-factory unit JSON export, including the
-# extra complicator keys (examples/misconceptions) the schema must tolerate.
-UNIT_DOC = {
-    "course_id": "36e3fbed-0000-0000-0000-000000000001",
-    "course_name": "Pre-Algebra Demo",
-    "unit_id": "unit-9",
-    "unit_order": 9,
-    "unit_name": "Exponents",
-    "knowledge_components": [
+PRE_ALGEBRA = "36e3fbed-61f1-4454-a41c-93e665bb1715"  # shipped catalog course
+
+# An inline manifest whose KC ids match the demo pool's KC tag values.
+MANIFEST = {
+    "course_id": "demo-course",
+    "course_name": "Demo Course",
+    "units": [
         {
-            "id": "algebra",
+            "unit_id": "u1",
             "order": 1,
-            "name": "Product rule for exponents",
-            "complicators": [
-                {"id": "c1", "order": 1, "name": "like bases",
-                 "examples": "x·x·x", "misconceptions": "- exponents multiply"},
-                {"id": "c2", "order": 2, "name": "coefficients"},
-                {"id": "c3", "order": 3, "name": "negative exponents"},
+            "name": "Unit One",
+            "kcs": [
+                {"kc_id": "algebra", "order": 1, "n_complicators": 3},
+                {"kc_id": "number", "order": 2, "n_complicators": 2},
             ],
-        },
-        {
-            "id": "number",
-            "order": 2,
-            "name": "Power of a power",
-            "complicators": [
-                {"id": "c4", "order": 1, "name": "nested"},
-                {"id": "c5", "order": 2, "name": "mixed"},
-            ],
-        },
+        }
     ],
 }
 
 
-def test_generate_quiz_with_feasibility(client: TestClient) -> None:
+def test_curricula_catalog(client: TestClient) -> None:
+    resp = client.get("/api/v1/curricula")
+    assert resp.status_code == 200
+    entries = {e["course_id"]: e for e in resp.json()}
+    assert PRE_ALGEBRA in entries
+    entry = entries[PRE_ALGEBRA]
+    assert entry["course_name"] == "Pre-Algebra New"
+    assert entry["n_units"] == 11 and entry["n_kcs"] == 60
+
+    one = client.get(f"/api/v1/curricula/{PRE_ALGEBRA}")
+    assert one.status_code == 200
+    assert len(one.json()["units"]) == 11
+    assert client.get("/api/v1/curricula/nope").status_code == 404
+
+
+def test_generate_eoc_from_catalog_course(client: TestClient) -> None:
+    resp = client.post(
+        "/api/v1/blueprints/generate",
+        json={"course_id": PRE_ALGEBRA, "grain": "eoc", "length": 60},
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert [s["count"] for s in body["shares"]] == [6, 5, 9, 4, 6, 6, 6, 4, 6, 5, 3]
+    bp = body["blueprint"]
+    assert bp["schema_version"] == 2
+    assert bp["statistical_target"] is None
+    assert all(c["mode"] == "count" for c in bp["content_constraints"])
+    assert body["feasibility_checked"] is False  # no pool_id supplied
+    # not auto-saved: the blueprint round-trips through explicit create
+    created = client.post("/api/v1/blueprints", json=bp)
+    assert created.status_code == 201, created.text
+
+
+def test_generate_quiz_inline_manifest_with_gate(client: TestClient) -> None:
     resp = client.post(
         "/api/v1/blueprints/generate",
         json={
-            "units": [UNIT_DOC],
-            "grain": "unit",
+            "manifest": MANIFEST,
+            "grain": "unit_quiz",
             "length": 10,
             "kc_tag": "KC",
             "pool_id": "small_2pl",
+            "cognitive_profile": {
+                "dimension": "bloom_process",
+                # demo pool Bloom values are lowercase; profile values are the pinned
+                # contract's — the gate should therefore flag them as unavailable
+                "distribution": {"Apply": 0.5, "Analyze": 0.5},
+            },
         },
     )
     assert resp.status_code == 200, resp.text
     body = resp.json()
     assert body["feasibility_checked"] is True
-    assert body["feasible"] is True and body["issues"] == []
-    # weights 4 and 3 over length 10 -> 6 and 4
-    assert [(s["key"], s["count"]) for s in body["shares"]] == [
-        ("algebra", 6),
-        ("number", 4),
-    ]
-    bp = body["blueprint"]
-    assert bp["schema_version"] == 2
-    assert bp["statistical_target"] is None  # content-only default
-    assert any("feasibility-only" in w for w in body["warnings"])
-    # the generated blueprint round-trips through the create endpoint
-    created = client.post("/api/v1/blueprints", json=bp)
-    assert created.status_code == 201, created.text
-
-
-def test_generate_course_grain_infeasible_flagged(client: TestClient) -> None:
-    resp = client.post(
-        "/api/v1/blueprints/generate",
-        json={
-            "units": [UNIT_DOC],
-            "grain": "course",
-            "length": 10,
-            "pool_id": "small_2pl",
-        },
-    )
-    assert resp.status_code == 200
-    body = resp.json()
-    # demo pool has no 'unit' tag dimension -> gate flags, does not error
-    assert body["feasibility_checked"] is True
+    assert [s["count"] for s in body["shares"]] == [6, 4]
+    # KC cells are satisfiable; the bloom_process marginals are not in this pool
+    keys = {i["constraint_key"] for i in body["issues"]}
+    assert keys == {"bloom_process=Apply", "bloom_process=Analyze"}
     assert body["feasible"] is False
-    assert body["issues"][0]["available"] == 0
 
 
 def test_generate_validation_errors(client: TestClient) -> None:
-    # LOFT target without tolerance -> 422 (BP-MODES-1 §4.1)
+    # unknown cognitive dimension -> 422 (pinned contract)
     resp = client.post(
         "/api/v1/blueprints/generate",
         json={
-            "units": [UNIT_DOC],
-            "grain": "unit",
+            "manifest": MANIFEST,
+            "length": 10,
+            "cognitive_profile": {"dimension": "dok", "distribution": {"1": 1.0}},
+        },
+    )
+    assert resp.status_code == 422
+
+    # LOFT target without tolerance -> 422 (§4.1)
+    resp = client.post(
+        "/api/v1/blueprints/generate",
+        json={
+            "manifest": MANIFEST,
             "length": 10,
             "binding": "loft",
             "statistical_target": {"theta_points": [0], "target_info": [5]},
@@ -99,16 +109,23 @@ def test_generate_validation_errors(client: TestClient) -> None:
     assert resp.status_code == 422
     assert "tolerance" in resp.json()["detail"]
 
-    # unknown pool -> 404
+    # exactly one curriculum source
     resp = client.post(
         "/api/v1/blueprints/generate",
-        json={"units": [UNIT_DOC], "grain": "unit", "length": 10, "pool_id": "nope"},
-    )
-    assert resp.status_code == 404
-
-    # unknown unit_id -> 422
-    resp = client.post(
-        "/api/v1/blueprints/generate",
-        json={"units": [UNIT_DOC], "grain": "unit", "unit_id": "missing", "length": 10},
+        json={"manifest": MANIFEST, "course_id": PRE_ALGEBRA, "length": 10},
     )
     assert resp.status_code == 422
+    resp = client.post("/api/v1/blueprints/generate", json={"length": 10})
+    assert resp.status_code == 422
+
+    # unknown catalog course -> 404; unknown pool -> 404
+    resp = client.post(
+        "/api/v1/blueprints/generate",
+        json={"course_id": "ghost", "length": 10},
+    )
+    assert resp.status_code == 404
+    resp = client.post(
+        "/api/v1/blueprints/generate",
+        json={"manifest": MANIFEST, "length": 10, "pool_id": "nope"},
+    )
+    assert resp.status_code == 404

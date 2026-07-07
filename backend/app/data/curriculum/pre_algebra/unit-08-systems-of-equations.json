@@ -1,0 +1,109 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "3b871a50-3937-426e-9422-dea07ba334bb",
+ "unit_order": 8,
+ "unit_name": "Systems of equations",
+ "knowledge_components": [
+  {
+   "id": "fa620dc0-32af-4d23-ac13-9ff5ff29a05a",
+   "order": 1,
+   "name": "Understand what a system of linear equations is and what it means to be a solution (connection to intersection and simultaneity).",
+   "complicators": [
+    {
+     "id": "d879d112-552b-4a7a-8556-57c2a8bd015a",
+     "order": 1,
+     "name": "A solution satisfies all equations at once — check by substituting into every equation."
+    },
+    {
+     "id": "ce9caf3d-66f8-4491-8aac-b60038184baa",
+     "order": 2,
+     "name": "Without solving, relate slopes and intercepts to solution types (equal slopes different intercepts → no solution; equal slopes equal intercepts → infinitely many)."
+    }
+   ]
+  },
+  {
+   "id": "7fa8d336-1416-41a0-810e-68a2bcc49642",
+   "order": 2,
+   "name": "Solve systems of linear equations by graphing (connection between graphical intersection and algebraic solution).",
+   "complicators": [
+    {
+     "id": "17fa4748-6d07-411b-a535-ca573c8422fd",
+     "order": 1,
+     "name": "Graph both equations in slope–intercept form and identify the intersection point as the solution understanding this represents values satisfying both equations."
+    },
+    {
+     "id": "c025e447-4c36-44c3-90de-2639545d8051",
+     "order": 2,
+     "name": "Graph equations given in standard form (choosing to use intercepts or convert to slope-intercept form) and identify the intersection point as the intersection point as the solution that satisfies both equations."
+    },
+    {
+     "id": "4b1e580c-73c5-41e6-af2e-55bcd175ffda",
+     "order": 3,
+     "name": "Estimate solutions from graphs with non-integer intersections and understand limitations of graphical precision while checking reasonableness through substitution."
+    },
+    {
+     "id": "0a1b5c33-c9a1-4d64-8256-f7e59c02165b",
+     "order": 4,
+     "name": "Identify special cases through graphing: parallel lines (no solution) and coincident lines (infinitely many solutions) connecting visual patterns to algebraic analysis."
+    }
+   ]
+  },
+  {
+   "id": "1d85c9ed-4524-4de8-9e81-40eb724bff88",
+   "order": 3,
+   "name": "Solve systems by substitution",
+   "complicators": [
+    {
+     "id": "f9fdee57-e019-4f0b-b73f-15b0c7c70f99",
+     "order": 1,
+     "name": "Solve systems when one variable is already isolated by substituting the expression into the other equation."
+    },
+    {
+     "id": "762902f8-c160-4266-983b-659210be8c5c",
+     "order": 2,
+     "name": "Isolate a variable strategically then substitute to create a single-variable equation."
+    }
+   ]
+  },
+  {
+   "id": "b0b04588-e723-4e19-8879-53b3c563faf9",
+   "order": 4,
+   "name": "Solve systems by elimination",
+   "complicators": [
+    {
+     "id": "5cc98403-c9fe-4cc2-b6b2-1805892e654c",
+     "order": 1,
+     "name": "Add or subtract equations when coefficients are already opposites to eliminate one variable directly."
+    },
+    {
+     "id": "2764371b-8dbf-4f2c-9b9d-aa4ffb107888",
+     "order": 2,
+     "name": "Multiply one equation by a constant to create opposite coefficients then eliminate through addition or subtraction."
+    },
+    {
+     "id": "294de43a-f18f-4a36-b236-c2e3b3a70041",
+     "order": 3,
+     "name": "Multiply both equations by different constants to align coefficients for elimination when needed."
+    }
+   ]
+  },
+  {
+   "id": "63f48dd2-e498-4f62-ab3d-24b16e7ed2e9",
+   "order": 5,
+   "name": "Use techniques strategically to make sense of and solve systems of equations",
+   "complicators": [
+    {
+     "id": "88a87ee6-5757-46fd-ae5e-48c3ded201d1",
+     "order": 1,
+     "name": "Reason about the number and nature of solutions using the structure of equations without fully solving, analyzing slopes in slope-intercept form or proportionality between equations."
+    },
+    {
+     "id": "d8751153-c256-4e0f-ae0d-2b3ac418d932",
+     "order": 2,
+     "name": "Determine and employ a preferred strategy to find the solution to the system of equations."
+    }
+   ]
+  }
+ ]
+}

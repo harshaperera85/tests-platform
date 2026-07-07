@@ -32,6 +32,8 @@ frontend/src/api/generated/   # orval-generated client (regenerated from OpenAPI
 
 # --- docker / data ---
 data/
+# re-include the in-repo curriculum catalog (simulated-data phase, not a runtime artifact)
+!backend/app/data/
 *.sqlite
 *.db
 pgdata/

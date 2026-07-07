@@ -6,11 +6,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type GenerateBlueprintRequestGrain = typeof GenerateBlueprintRequestGrain[keyof typeof GenerateBlueprintRequestGrain];
+export type CognitiveProfileDimension = typeof CognitiveProfileDimension[keyof typeof CognitiveProfileDimension];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GenerateBlueprintRequestGrain = {
-  eoc: 'eoc',
-  unit_quiz: 'unit_quiz',
+export const CognitiveProfileDimension = {
+  bloom_process: 'bloom_process',
+  bloom_knowledge: 'bloom_knowledge',
+  timss: 'timss',
 } as const;

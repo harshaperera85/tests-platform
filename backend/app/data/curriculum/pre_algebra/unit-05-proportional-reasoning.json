@@ -1,0 +1,146 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "953b958e-2ef5-4d6c-81ed-12ca93d361ac",
+ "unit_order": 5,
+ "unit_name": "Proportional reasoning",
+ "knowledge_components": [
+  {
+   "id": "881118ac-3299-4311-b292-dba5efcf9b85",
+   "order": 1,
+   "name": "Quantities in proportional relationships scale together multiplicatively",
+   "complicators": [
+    {
+     "id": "e83d51c9-0b17-42c2-b984-667ff6d8faaf",
+     "order": 1,
+     "name": "Recognize proportional relationships in concrete contexts and scale quantities up and down by whole number and fractional factors"
+    },
+    {
+     "id": "11bee677-1ee9-4376-891b-be27af9d126b",
+     "order": 2,
+     "name": "Determine the scale factor when given original and scaled quantities while distinguishing proportional from non-proportional situations"
+    }
+   ]
+  },
+  {
+   "id": "c0783d8a-99ff-4d6a-b3ee-b3c1473e1502",
+   "order": 2,
+   "name": "Ratios represent relationships between quantities in multiple forms, with unit rates expressing these relationships per one unit to enable comparison and decision-making",
+   "complicators": [
+    {
+     "id": "ac26aa8b-c1c0-413d-a9f9-b92f6ff94355",
+     "order": 1,
+     "name": "Identify, interpret, and write ratios from simple whole number relationships, understanding that ratios can be expressed in multiple forms. \nFlexibly work with the ratios part-to-part and part-to-whole. \nRatios do not need to be simplified."
+    },
+    {
+     "id": "97c5e80e-2036-4e0b-8d56-c76e4f5a77fe",
+     "order": 2,
+     "name": "Write ratios involving up to one fractional quantity. Ratios are simplified."
+    },
+    {
+     "id": "a5efd95e-3863-4808-82a0-c1453537d4f4",
+     "order": 3,
+     "name": "Find unit rates from given ratios and understand their meaning in context"
+    },
+    {
+     "id": "49796fbd-a653-44b8-bf2d-24e9475b6d66",
+     "order": 4,
+     "name": "Use unit rates to compare quantities and determine better value or make informed decisions"
+    }
+   ]
+  },
+  {
+   "id": "6afdbc60-fb49-42d6-912c-62ee4be0897d",
+   "order": 3,
+   "name": "Proportions are equations stating that two ratios are equal:\nIf a/b = c/d, then the ratios a:b and c:d are proportional",
+   "complicators": [
+    {
+     "id": "038b57b3-9dac-44f0-99d5-ede6e80b5ff1",
+     "order": 1,
+     "name": "Identify and write simple proportions with whole numbers, understanding that proportions show equivalent ratios."
+    },
+    {
+     "id": "992488ad-67b3-445d-b2df-7167fb081d15",
+     "order": 2,
+     "name": "Write and solve proportions involving one variable."
+    },
+    {
+     "id": "7faa62f5-844c-4d0f-91d7-78037c1d418e",
+     "order": 3,
+     "name": "Solve proportions using cross-multiplication."
+    }
+   ]
+  },
+  {
+   "id": "2a010db0-f9fc-46c7-b96b-b8862f68bcd2",
+   "order": 4,
+   "name": "Percents represent parts per hundred and can be written as a fraction or decimal",
+   "complicators": [
+    {
+     "id": "ecb644d1-07fd-4ed3-9b2b-7d59901f9a96",
+     "order": 1,
+     "name": "Determine whether the proportion of a whole (represented by a percent, decimal, or fraction) is less, same, or more than the starting whole to build intuitive number sense."
+    },
+    {
+     "id": "80ebfdc9-54cd-4697-be0e-98fb9ae8f02f",
+     "order": 2,
+     "name": "Convert between percents, decimals, and fractions for whole number percents 100% and less."
+    },
+    {
+     "id": "bcbe50d5-5cdd-446d-aef6-2b2ebaecd656",
+     "order": 3,
+     "name": "Convert between percents, decimals, and fractions for whole number percents over 100%."
+    },
+    {
+     "id": "482dd3f5-a8f6-4f55-85ae-82ae836d0c0d",
+     "order": 4,
+     "name": "Convert between percents, decimals, and fractions for decimal numbers, percents 0% and greater"
+    }
+   ]
+  },
+  {
+   "id": "9283646c-5492-4622-a558-d925defa21b0",
+   "order": 5,
+   "name": "Percent equations follow the form: part = percent × whole\nThis relationship can be rearranged to find any unknown value",
+   "complicators": [
+    {
+     "id": "bb4b07a1-7069-4b26-b1f7-9693a46b8404",
+     "order": 1,
+     "name": "Find the part when given the percent and whole."
+    },
+    {
+     "id": "e4a71cfc-52dc-46a3-b8ae-cc59d3f3fe37",
+     "order": 2,
+     "name": "Find the percent when given the part and whole"
+    },
+    {
+     "id": "8108e51a-6d33-482c-93a3-0faa6910565d",
+     "order": 3,
+     "name": "Find the whole when given the part and percent, solving for the original total."
+    }
+   ]
+  },
+  {
+   "id": "beafb3eb-48aa-413a-8fe9-022f66ebc1a1",
+   "order": 6,
+   "name": "Percent change represents increase or decrease from an original value:\nPercent change = (new value - original value) ÷ original value × 100%",
+   "complicators": [
+    {
+     "id": "e189c74d-a207-4440-947a-640fe4d01ab9",
+     "order": 1,
+     "name": "Calculate and apply percent increase and decrease and know the difference between the two"
+    },
+    {
+     "id": "9dd71284-ae40-4fea-b24e-c525ab14f77d",
+     "order": 2,
+     "name": "Determine the outcome value after a percent change to the starting value"
+    },
+    {
+     "id": "dddd644d-09a9-46ee-8a25-642b530d6ff2",
+     "order": 3,
+     "name": "Work with compound percent changes and understand why they don't simply add."
+    }
+   ]
+  }
+ ]
+}

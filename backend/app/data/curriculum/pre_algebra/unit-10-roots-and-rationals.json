@@ -1,0 +1,129 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "d9b5d396-6d3e-4e06-8c3a-4ef519a43e1e",
+ "unit_order": 10,
+ "unit_name": "Roots and rationals",
+ "knowledge_components": [
+  {
+   "id": "b46948ca-c2ad-4404-a372-3b8e23caa8ed",
+   "order": 1,
+   "name": "Square roots represent the inverse operation of squaring:\r\nThe square root of a number is the value that, when multiplied by itself, gives the original number",
+   "complicators": [
+    {
+     "id": "4f708a66-ef81-4451-9e20-685adcac9a33",
+     "order": 1,
+     "name": "Find square roots of perfect square integers"
+    },
+    {
+     "id": "6b9813dc-c903-430d-a209-d61c61b0f0c2",
+     "order": 2,
+     "name": "Find square roots of perfect square fractions and decimals"
+    },
+    {
+     "id": "d1a3815b-cfe2-4297-810e-c6765a65d68a",
+     "order": 3,
+     "name": "Understand square root notation and properties, including negative square roots and ±solutions"
+    },
+    {
+     "id": "0859b0d1-f634-4dd9-9ca9-f375ef1d8058",
+     "order": 4,
+     "name": "Simplify radical expressions involving perfect squares using absolute value to capture two possible solutions"
+    }
+   ]
+  },
+  {
+   "id": "9ff395bf-426b-4b85-9f97-caa38eacf717",
+   "order": 2,
+   "name": "Other roots extend the concept beyond square roots:\r\nCube roots, fourth roots, and higher-order roots follow similar inverse relationships",
+   "complicators": [
+    {
+     "id": "f73a0120-622f-4b75-8595-0a0a0185a0f1",
+     "order": 1,
+     "name": "Find cube roots of perfect cube integers and simple fractions"
+    },
+    {
+     "id": "8f08886b-46a8-432a-88d8-f38acb9aa36a",
+     "order": 2,
+     "name": "Compare behavior of even roots vs odd roots with positive and negative numbers"
+    },
+    {
+     "id": "6fc804ce-dac5-428b-a3b7-74f8cf6a42af",
+     "order": 3,
+     "name": "Work with fourth roots and fifth roots of appropriate perfect powers"
+    }
+   ]
+  },
+  {
+   "id": "8a6726fb-2187-4886-91bd-42157f692692",
+   "order": 3,
+   "name": "Estimating roots involves using perfect powers as reference points:\r\nFor non-perfect powers, identify nearby perfect powers and refine estimates for any root type",
+   "complicators": [
+    {
+     "id": "274d5e26-d47c-4029-bbf9-a9e327f31b53",
+     "order": 1,
+     "name": "Identify which perfect powers a non-perfect root falls between for square roots and cube roots"
+    },
+    {
+     "id": "139ab911-5efa-4d29-b927-561225af93be",
+     "order": 2,
+     "name": "Develop approximation strategies. Understand how to discern levels of approximation and differentiate from exact values."
+    }
+   ]
+  },
+  {
+   "id": "c5be0a9b-49a6-4bde-a146-4d0d63761e86",
+   "order": 4,
+   "name": "Real numbers are classified as either rational or irrational based on whether they can be expressed as ratios of integers:\r\nRational numbers can be written as a/b where a and b are integers and b ≠ 0; irrational numbers cannot",
+   "complicators": [
+    {
+     "id": "756d1ff9-1b6c-44dd-a7f8-f13b678ba841",
+     "order": 1,
+     "name": "Classify basic number forms as rational and express them as ratios when needed"
+    },
+    {
+     "id": "a0b73030-1b6e-43d2-b8fc-4dbca1993fa4",
+     "order": 2,
+     "name": "Identify irrational numbers and distinguish them from similar-looking rational numbers"
+    },
+    {
+     "id": "f532e87e-ca4e-4485-a8bc-13a35a355519",
+     "order": 3,
+     "name": "Use decimal patterns to classify numbers as rational or irrational"
+    }
+   ]
+  },
+  {
+   "id": "621abeb1-0ce9-4551-a312-573196bf2535",
+   "order": 5,
+   "name": "Root operations follow specific rules for multiplication, addition, and simplification:\r\nUnderstanding when roots can be combined or separated",
+   "complicators": [
+    {
+     "id": "2d9db590-0f42-4a41-b148-564ae958e638",
+     "order": 1,
+     "name": "Apply product and quotient rules with perfect squares"
+    },
+    {
+     "id": "8e1125f1-39d9-45bd-9347-80dd1ede4533",
+     "order": 2,
+     "name": "Work with variables in perfect square expressions"
+    },
+    {
+     "id": "e1d00e9c-5267-451f-9725-d4d3ce9cc234",
+     "order": 3,
+     "name": "Add and subtract like radicals, recognizing when radicals cannot be combined"
+    },
+    {
+     "id": "867d6bb2-d9b1-4610-b6c2-da739aa51abb",
+     "order": 4,
+     "name": "Simplify radicals by factoring out perfect squares and reducing expressions"
+    },
+    {
+     "id": "7c6e4962-65b6-4503-b87a-32a632c93633",
+     "order": 5,
+     "name": "Understand properties of operations between rational and irrational numbers"
+    }
+   ]
+  }
+ ]
+}

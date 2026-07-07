@@ -5,5 +5,6 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
+import type { CognitiveProfile } from './cognitiveProfile';
 
-export type CurriculumUnitUnitName = string | null;
+export type GenerateBlueprintRequestCognitiveProfile = CognitiveProfile | null;

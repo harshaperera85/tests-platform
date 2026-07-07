@@ -107,11 +107,12 @@ export const useCreateBlueprint = <TError = ErrorType<HTTPValidationError>,
     /**
  * Curriculum→blueprint generator (BP-MODES-1 §6).
 
-Consumes item-factory unit JSON documents and emits a blueprint: EOC test
-(grain=course, per-unit shares) or unit quiz (grain=unit, per-KC shares),
-largest-remainder rounding, per-binding TIF rules. When ``pool_id`` is given
-the blueprint is validated against that pool's tag counts (the §6 gate).
-The blueprint is returned, not stored — persist via ``POST /blueprints``.
+Consumes a curriculum manifest (inline, or by ``course_id`` from the catalog)
+and emits a blueprint: EOC test (grain=eoc, per-unit shares) or unit quiz
+(grain=unit_quiz, per-KC shares), largest-remainder rounding, authored
+cognitive profile, per-binding TIF rules. When ``pool_id`` is given the
+blueprint is validated against that pool's tag counts (the §6 gate). The
+blueprint is returned for review, not stored — persist via ``POST /blueprints``.
  * @summary Generate Blueprint From Curriculum
  */
 export const generateBlueprintFromCurriculum = (

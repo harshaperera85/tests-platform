@@ -173,9 +173,29 @@ sharing exactly one shape — no variants):
 A *course* = the set of unit files sharing `course_id`. The human-authored master list behind
 these is `domains/<d>/curriculum_inventory.yml` (Units → KCs → Complicators, prose descriptions).
 tests-platform's curriculum→blueprint generator (`app/schemas/generator.py`,
-`services/blueprint_generator.py`, `POST /blueprints/generate`) consumes these unit documents
-**verbatim** (extra keys like `examples`/`misconceptions` ignored), keying constraints on the
-stable `unit_id` / KC `id`.
+`services/blueprint_generator.py`, `POST /blueprints/generate`) normalizes these unit documents
+into a minimal **curriculum manifest** and keys constraints on the stable `unit_id` / KC `id`
+verbatim (never re-minted — the pool importer will use the same identifiers).
+
+### 5b. Cognitive tag contract (pinned at the 2026-07-07 design review)
+
+Cognitive tagging happens **once, in item-factory, at template-authoring time**
+(`src/template_specs.py: TemplateSpec`); tests-platform treats cognitive tags as **read-only
+imported item attributes** and builds no tagging/re-classification machinery. The dimensions
+that actually exist on items — and therefore the only cognitive `tag_type`s tests-platform
+emits or accepts:
+
+| dimension | values |
+|---|---|
+| `bloom_process` | Remember, Understand, Apply, Analyze, Evaluate, Create |
+| `bloom_knowledge` | Factual, Conceptual, Procedural, Metacognitive |
+| `timss` | Knowing, Applying, Reasoning |
+
+Bloom is **two-dimensional** (Anderson & Krathwohl) — never a generic `bloom` tag. **DOK is
+not tagged upstream yet** — no `dok` constraints until item-factory carries it. Pool tag names
+follow the `export_cat_ready()` fields (`bloom_process`, `bloom_knowledge`,
+`timss_classification` → dimension `timss`, `enemy_of`) — the future input contract for the
+real pool importer.
 
 ---
 

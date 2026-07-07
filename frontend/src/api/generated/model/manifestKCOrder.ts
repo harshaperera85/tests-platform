@@ -6,4 +6,4 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type CurriculumComplicatorName = string | null;
+export type ManifestKCOrder = number | null;

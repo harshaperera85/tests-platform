@@ -6,6 +6,8 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { getAssemblyJob } from "../../api/generated/endpoints/assembly-jobs/assembly-jobs";
+import { useGenerateBlueprintFromCurriculum } from "../../api/generated/endpoints/blueprints/blueprints";
+import { useListCurricula } from "../../api/generated/endpoints/curricula/curricula";
 import { useGetPoolCatalog, useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
 import { useListScenarios } from "../../api/generated/endpoints/scenarios/scenarios";
 import {
@@ -15,7 +17,11 @@ import {
   useAssembleTest,
   useUpdateTest,
 } from "../../api/generated/endpoints/tests/tests";
-import type { Blueprint, ScenarioRead } from "../../api/generated/model";
+import type {
+  Blueprint,
+  GenerateBlueprintResponse,
+  ScenarioRead,
+} from "../../api/generated/model";
 import { Alert, Button, Card, Field, Pill, Select, Spinner, TextInput } from "../../components/ui";
 
 type Predicate = { tag_type: string; tag_value: string };
@@ -27,6 +33,14 @@ type ConstraintRow = {
   mode: "count" | "proportion";
 };
 type Method = "minimax" | "maximin";
+
+// The pinned cognitive tag contract (item-factory authored; read-only here).
+// Bloom is two-dimensional — never a generic "bloom"; DOK is not tagged upstream yet.
+const COGNITIVE_DIMENSIONS: Record<string, string[]> = {
+  bloom_process: ["Remember", "Understand", "Apply", "Analyze", "Evaluate", "Create"],
+  bloom_knowledge: ["Factual", "Conceptual", "Procedural", "Metacognitive"],
+  timss: ["Knowing", "Applying", "Reasoning"],
+};
 
 type Fields = {
   length: string;
@@ -162,6 +176,18 @@ export function BlueprintEditorScreen({
   const [polling, setPolling] = useState(false);
   const [jobStatus, setJobStatus] = useState<string | null>(null);
 
+  // --- Generate from curriculum (BP-MODES-1 §6) ---
+  const curricula = useListCurricula();
+  const generateBp = useGenerateBlueprintFromCurriculum();
+  const [genCourseId, setGenCourseId] = useState("");
+  const [genGrain, setGenGrain] = useState<"eoc" | "unit_quiz">("eoc");
+  const [genUnitId, setGenUnitId] = useState("");
+  const [genLength, setGenLength] = useState("20");
+  const [genDim, setGenDim] = useState("");
+  const [genShares, setGenShares] = useState<Record<string, string>>({});
+  const [genResult, setGenResult] = useState<GenerateBlueprintResponse | null>(null);
+  const [genError, setGenError] = useState<string | null>(null);
+
   const qc = useQueryClient();
   const catalog = useGetPoolCatalog();
   const scenarios = useListScenarios();
@@ -239,10 +265,8 @@ export function BlueprintEditorScreen({
   });
   const valid = Object.keys(errors).length === 0;
 
-  function applyScenario(s: ScenarioRead) {
-    const f = fieldsFromBlueprint(s.blueprint);
-    setPoolId(s.pool_id);
-    setName(s.blueprint.name ?? "scenario");
+  function applyFields(f: Fields, bpName: string) {
+    setName(bpName);
     setLength(f.length);
     setNumForms(f.numForms);
     setMaxUse(f.maxUse);
@@ -261,6 +285,57 @@ export function BlueprintEditorScreen({
     setInfeasible(null);
     setSubmitError(null);
     setWarnings([]);
+  }
+
+  function applyScenario(s: ScenarioRead) {
+    setPoolId(s.pool_id);
+    applyFields(fieldsFromBlueprint(s.blueprint), s.blueprint.name ?? "scenario");
+  }
+
+  async function generateFromCurriculum() {
+    setGenError(null);
+    setGenResult(null);
+    const distribution: Record<string, number> = {};
+    for (const [value, share] of Object.entries(genShares)) {
+      const n = Number(share);
+      if (share.trim() !== "" && !Number.isNaN(n) && n > 0) distribution[value] = n;
+    }
+    try {
+      const res = await generateBp.mutateAsync({
+        data: {
+          course_id: genCourseId,
+          grain: genGrain,
+          unit_id: genGrain === "unit_quiz" ? genUnitId || undefined : undefined,
+          length: Number(genLength),
+          pool_id: poolId,
+          ...(genDim && Object.keys(distribution).length
+            ? {
+                cognitive_profile: {
+                  dimension: genDim as "bloom_process" | "bloom_knowledge" | "timss",
+                  distribution,
+                },
+              }
+            : {}),
+        },
+      });
+      setGenResult(res);
+      // load the generated blueprint into the editor for review; save is explicit
+      applyFields(
+        fieldsFromBlueprint(res.blueprint),
+        res.blueprint.name ?? "generated-blueprint",
+      );
+    } catch (e) {
+      const detail = (
+        e as { response?: { data?: { detail?: unknown } } }
+      )?.response?.data?.detail;
+      setGenError(
+        typeof detail === "string"
+          ? detail
+          : e instanceof Error
+            ? e.message
+            : "Generation failed.",
+      );
+    }
   }
 
   function updateConstraint(i: number, patch: Partial<ConstraintRow>) {
@@ -477,6 +552,110 @@ export function BlueprintEditorScreen({
             {pool.data.simulated ? "Simulated bank" : "Bank"}: {pool.data.n_items} items
             {tagSummary?.domain && " · domains " + Object.keys(tagSummary.domain).join(", ")}
           </p>
+        )}
+      </Card>
+
+      <Card
+        title="Generate from curriculum"
+        subtitle="Derive a blueprint from an item-factory course: pick the course, test type, and length; optionally add an authored cognitive profile. The result loads into the editor below for review — saving stays explicit."
+      >
+        <div className="grid grid-cols-4 items-end gap-4">
+          <Field label="Course">
+            <Select value={genCourseId} onChange={(e) => { setGenCourseId(e.target.value); setGenUnitId(""); }}>
+              <option value="">— pick a course —</option>
+              {(curricula.data ?? []).map((c) => (
+                <option key={c.course_id} value={c.course_id}>
+                  {c.course_name ?? c.course_id} — {c.n_units} units, {c.n_kcs} KCs
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field label="Test type">
+            <Select value={genGrain}
+              onChange={(e) => setGenGrain(e.target.value as "eoc" | "unit_quiz")}>
+              <option value="eoc">End-of-course test</option>
+              <option value="unit_quiz">Unit quiz</option>
+            </Select>
+          </Field>
+          {genGrain === "unit_quiz" && (
+            <Field label="Unit">
+              <Select value={genUnitId} onChange={(e) => setGenUnitId(e.target.value)}>
+                <option value="">— pick a unit —</option>
+                {(curricula.data ?? [])
+                  .find((c) => c.course_id === genCourseId)
+                  ?.units.map((u) => (
+                    <option key={u.unit_id} value={u.unit_id}>
+                      {u.name ?? u.unit_id}
+                    </option>
+                  ))}
+              </Select>
+            </Field>
+          )}
+          <Field label="Length">
+            <TextInput type="number" min={1} value={genLength}
+              onChange={(e) => setGenLength(e.target.value)} />
+          </Field>
+          <Field label="Cognitive profile" hint="authored, not derived from curriculum">
+            <Select value={genDim}
+              onChange={(e) => { setGenDim(e.target.value); setGenShares({}); }}>
+              <option value="">(none)</option>
+              {Object.keys(COGNITIVE_DIMENSIONS).map((d) => (
+                <option key={d} value={d}>{d}</option>
+              ))}
+            </Select>
+          </Field>
+        </div>
+        {genDim && (
+          <div className="mt-3 flex flex-wrap items-end gap-3">
+            {COGNITIVE_DIMENSIONS[genDim].map((v) => (
+              <Field key={v} label={v}>
+                <TextInput type="number" min={0} max={1} step="0.05" className="w-24"
+                  value={genShares[v] ?? ""} placeholder="share"
+                  onChange={(e) => setGenShares((s) => ({ ...s, [v]: e.target.value }))} />
+              </Field>
+            ))}
+            <span className="pb-2 text-xs text-ink-400">shares must sum to 1</span>
+          </div>
+        )}
+        <div className="mt-3 flex items-center gap-3">
+          <Button
+            onClick={generateFromCurriculum}
+            disabled={!genCourseId || generateBp.isPending ||
+              (genGrain === "unit_quiz" && !genUnitId)}
+          >
+            {generateBp.isPending ? "Generating…" : "Generate blueprint"}
+          </Button>
+          {genResult && (
+            <Pill tone={genResult.feasible ? "ok" : "warn"}>
+              {genResult.feasible
+                ? `feasible on '${poolId}'`
+                : `${genResult.issues.length} feasibility issue(s) on '${poolId}'`}
+            </Pill>
+          )}
+        </div>
+        {genError && <Alert tone="error" title="Generation failed">{genError}</Alert>}
+        {genResult && (
+          <div className="mt-3 space-y-2">
+            <p className="text-xs text-ink-500">
+              {genResult.shares.map((s) =>
+                `${s.label ?? s.key}: ${s.count}`).join(" · ")} (Σ ={" "}
+              {genResult.shares.reduce((a, s) => a + s.count, 0)})
+            </p>
+            {!genResult.feasible && (
+              <Alert tone="warn" title="Feasibility issues vs the selected pool">
+                <ul className="list-disc pl-4">
+                  {genResult.issues.map((i, k) => <li key={k}>{i.message}</li>)}
+                </ul>
+              </Alert>
+            )}
+            {genResult.warnings.length > 0 && (
+              <Alert tone="info" title="Generator notes">
+                <ul className="list-disc pl-4">
+                  {genResult.warnings.map((w, k) => <li key={k}>{w}</li>)}
+                </ul>
+              </Alert>
+            )}
+          </div>
         )}
       </Card>
 

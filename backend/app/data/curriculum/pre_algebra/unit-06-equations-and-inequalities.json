@@ -1,0 +1,158 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "67072ff5-b24a-48f7-a315-a3d64134a976",
+ "unit_order": 6,
+ "unit_name": "Equations and inequalities",
+ "knowledge_components": [
+  {
+   "id": "ed2076e2-7f79-4db7-9c20-f16683c72228",
+   "order": 1,
+   "name": "Equations are sentences with an equal sign that can be true or false or ambiguous. Substitution is one way to find values that make the equation true.",
+   "complicators": [
+    {
+     "id": "005e9bd3-e8ae-416f-a2b3-dddad0688150",
+     "order": 1,
+     "name": "Understand that equations state two expressions are equal, and identify what makes a value a solution"
+    },
+    {
+     "id": "c9f79d4f-f08a-4b3e-8234-6c0be52329ba",
+     "order": 2,
+     "name": "Verify solutions by substituting values into both sides of an equation and checking for equality"
+    }
+   ]
+  },
+  {
+   "id": "102eeb78-4231-4626-bf16-9417f5a833e8",
+   "order": 2,
+   "name": "Performing the same arithmetic operation on both sides of an equation will maintain the equivalence. Strategically and systematically using inverse operations can isolate variables to determine the value(s) that will make the equation true.",
+   "complicators": [
+    {
+     "id": "c2f6b6b3-29d5-498a-a322-75806bd9ba47",
+     "order": 1,
+     "name": "Without solving, perform the same operation on both sides of an equation to maintain balance."
+    },
+    {
+     "id": "be9f0b7b-37d8-4f3b-82ff-9f1df8871ae4",
+     "order": 2,
+     "name": "Solve one-step equations using addition and subtraction as inverse operations, understanding why these maintain balance"
+    },
+    {
+     "id": "4f1b9cb9-06f9-433e-ac95-be9866d8170b",
+     "order": 3,
+     "name": "Solve one-step equations using multiplication and division as inverse operations, including negative coefficients"
+    }
+   ]
+  },
+  {
+   "id": "e7a3533f-cb77-4b0a-880c-44434185c8b5",
+   "order": 3,
+   "name": "The rules of arithmetic can be applied within any part of an expression on each side of an equation to collect like-terms. Multiple inverse operations can be employed to isolate variables.",
+   "complicators": [
+    {
+     "id": "aa74d266-0f18-40f3-8e93-b33132c592fb",
+     "order": 1,
+     "name": "Apply the systematic two-step process: first undo addition/subtraction, then undo multiplication/division"
+    },
+    {
+     "id": "0c234b06-4780-49d6-bb20-409be1cb2837",
+     "order": 2,
+     "name": "Before isolating the variable, simplify each side completely — distribute and combine like terms first."
+    },
+    {
+     "id": "8ccf0006-0a9c-4671-8333-db1ce17cb0f8",
+     "order": 3,
+     "name": "Solve equations with variables in the denominator"
+    },
+    {
+     "id": "1ac7a6ed-475b-4dc6-90fc-548b08fa30c5",
+     "order": 4,
+     "name": "Cross-multiply proportions with variable expressions on both sides"
+    }
+   ]
+  },
+  {
+   "id": "d8e61f2c-01fa-46b2-ba46-6826832a27fa",
+   "order": 4,
+   "name": "Multi-step equations require systematic application of properties and strategic thinking to efficiently isolate variables",
+   "complicators": [
+    {
+     "id": "b52ff767-0d8c-4154-819e-22a0027a0005",
+     "order": 1,
+     "name": "To solve a linear equation with terms on both sides, collect like terms and apply inverse operations to isolate the variable."
+    },
+    {
+     "id": "463b19d5-58db-43da-96d2-a7668dbc39ab",
+     "order": 2,
+     "name": "Apply systematic approaches to complex equations involving parentheses, combining terms, and multiple operations"
+    },
+    {
+     "id": "07c97942-5c8c-4e5e-8dde-ca4281b66157",
+     "order": 3,
+     "name": "If solving produces a true statement (e.g., 0 = 0), the equation is an identity with infinitely many solutions. If it produces a false statement (e.g., 3 = 5), it is a contradiction with no solution."
+    }
+   ]
+  },
+  {
+   "id": "89e440c7-4c85-4a11-bb58-db87b175aa51",
+   "order": 5,
+   "name": "Absolute value equations can have zero one or two solutions depending on the relationship between distance and the given value",
+   "complicators": [
+    {
+     "id": "a33ae39b-4440-4de9-a360-a69305f1762e",
+     "order": 1,
+     "name": "Solve simple absolute value equations and understand why they typically have two solutions representing equal distances from zero"
+    },
+    {
+     "id": "710b7420-41d0-4050-b001-871fb8508fc3",
+     "order": 2,
+     "name": "Solve absolute value equations with expressions inside by isolating the absolute value first then considering both cases"
+    }
+   ]
+  },
+  {
+   "id": "3c38b0b3-6ff2-4b30-9436-840c4f936653",
+   "order": 6,
+   "name": "Inequalities represent solution ranges rather than single values.",
+   "complicators": [
+    {
+     "id": "84d82c0e-68b0-4f77-be8b-b8d3ece49381",
+     "order": 1,
+     "name": "Understand inequality symbolism, recognizing solution ranges"
+    },
+    {
+     "id": "7c6fdfd1-caa0-47a7-babc-8485123f99f0",
+     "order": 2,
+     "name": "Represent inequalities on a number line"
+    },
+    {
+     "id": "f53dcb2a-8622-42a3-95b3-07f86ae31c5f",
+     "order": 3,
+     "name": "Understand inequality symbols and solve one-step inequalities using inverse operations, recognizing solution ranges (no sign flip)"
+    }
+   ]
+  },
+  {
+   "id": "ad4bfdcd-acc5-467c-a23c-27c5440daa8f",
+   "order": 7,
+   "name": "Inequalities can be operated on like equations to find the solution set.",
+   "complicators": [
+    {
+     "id": "0ef870fa-259a-4a31-8a64-0d283c10b994",
+     "order": 1,
+     "name": "Given an inequality, verify that its inverse is true"
+    },
+    {
+     "id": "78aafd28-d9e8-4014-a094-292eade75446",
+     "order": 2,
+     "name": "When multiplying or dividing both sides of an inequality by a negative number, the sign flips."
+    },
+    {
+     "id": "6d011c2d-02d5-4f61-9255-04be076e48c2",
+     "order": 3,
+     "name": "Solve multi-step inequalities."
+    }
+   ]
+  }
+ ]
+}

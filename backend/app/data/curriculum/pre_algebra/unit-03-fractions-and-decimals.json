@@ -1,0 +1,225 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "ca06c17b-1f9d-4d89-bcb0-7c44874b4653",
+ "unit_order": 3,
+ "unit_name": "Fractions and decimals",
+ "knowledge_components": [
+  {
+   "id": "e2112e3a-19fa-4731-9e2c-8027fd170fea",
+   "order": 1,
+   "name": "Understand the structure and meaning of fractions and their connection to division",
+   "complicators": [
+    {
+     "id": "e4832bb6-9e87-4288-978b-7387aa0fe1e4",
+     "order": 1,
+     "name": "Make meaning of fractions (numerator and denominator)"
+    },
+    {
+     "id": "84c59fce-44d7-48f2-9b35-a5954df69a17",
+     "order": 2,
+     "name": "Fractions are copies of unit fractions"
+    },
+    {
+     "id": "a544352e-f3a0-4ed8-b131-6499ff65252e",
+     "order": 3,
+     "name": "Match, identify, and compose fractions"
+    },
+    {
+     "id": "19c05913-436e-471e-893b-c0bad5075ebd",
+     "order": 4,
+     "name": "Model division problems by using fractions"
+    }
+   ]
+  },
+  {
+   "id": "0ccaee6a-a9b7-4353-80da-37db36121821",
+   "order": 2,
+   "name": "Flexibly manipulate and convert between equivalent representations of fractions",
+   "complicators": [
+    {
+     "id": "0ce23b09-5427-4f88-a14d-7fdb6e5e15d7",
+     "order": 1,
+     "name": "Create and identify equivalent fractions"
+    },
+    {
+     "id": "4e5157f9-dcc2-4e4a-98da-a89ed8240080",
+     "order": 2,
+     "name": "Convert between improper fractions and mixed numbers while maintaining equivalency"
+    },
+    {
+     "id": "efe88659-61f3-4dd4-87cc-4c903add14f8",
+     "order": 3,
+     "name": "Reduce and simplify fractions"
+    }
+   ]
+  },
+  {
+   "id": "210042ef-cc6b-46da-b1f7-5414bf877393",
+   "order": 3,
+   "name": "Fractions are compared using benchmark values and common denominators",
+   "complicators": [
+    {
+     "id": "5b18079d-4f7b-4e53-896b-15bb69e1baa5",
+     "order": 1,
+     "name": "Develop understanding of the value of a fraction by relating it to benchmark fractions such as nearest wholes and halves (sometimes quarters)"
+    },
+    {
+     "id": "d8f072ed-bea8-4226-a1ec-f169682f4c44",
+     "order": 2,
+     "name": "Compare fractions by using understanding of denominators and relative size"
+    },
+    {
+     "id": "833f703a-1f0c-41fb-95af-ee4ecc359b52",
+     "order": 3,
+     "name": "Order multiple fractions from least to greatest or greatest to least using systematic comparison strategies"
+    },
+    {
+     "id": "779ad219-66bc-46d5-ba2b-5dcaecaeab52",
+     "order": 4,
+     "name": "Use common denominators and equivalent fractions to compare and order fractions"
+    }
+   ]
+  },
+  {
+   "id": "ad25ed37-f802-497a-b009-7a54784965c9",
+   "order": 4,
+   "name": "Fraction addition and subtraction require common denominators for combining parts",
+   "complicators": [
+    {
+     "id": "43025c0b-cbae-456a-8c75-88f0da1bbd94",
+     "order": 1,
+     "name": "Add and subtract fractions with like denominators"
+    },
+    {
+     "id": "781342ae-a10f-48f0-b53f-3f7a4aec4065",
+     "order": 2,
+     "name": "Compose and decompose fractions (including mixed numbers and improper fractions)"
+    },
+    {
+     "id": "4bcfb0d4-4575-4886-bfec-836a7ad41c01",
+     "order": 3,
+     "name": "Estimate and benchmark sums and differences of fractions with different denominators for reasonableness of answers before calculating"
+    },
+    {
+     "id": "b6a0fddb-25b4-4ec6-a474-19381e4fba92",
+     "order": 4,
+     "name": "Identify common denominators and set up equivalent fractions before adding and subtracting fractions (does NOT need to be least common multiple)"
+    },
+    {
+     "id": "9ca0b6bc-8ab8-41f4-b35d-8fc407d4c31b",
+     "order": 5,
+     "name": "Add and subtract fractions with unlike denominators"
+    }
+   ]
+  },
+  {
+   "id": "4c4eeab2-8181-425e-9c74-cece6b5c976d",
+   "order": 5,
+   "name": "Understand the mechanics and conceptual underpinnings of multiplying fractions",
+   "complicators": [
+    {
+     "id": "a73f487d-c1fe-4d14-b086-7a553aa59cfb",
+     "order": 1,
+     "name": "Intuitively multiply fractions using expansion, multiplicative inverses, equivalent fractions, and properties of fractions."
+    },
+    {
+     "id": "37dcadab-afe6-4cde-bcec-c415c0219577",
+     "order": 2,
+     "name": "There exists a multiplicative inverse for each integer n where n*(1/n) = 1. If a*b=n, then it still holds where ab*(1/a)(1/b)=1."
+    },
+    {
+     "id": "3f8b6d99-220e-4e59-b9f9-c01b33d61e3d",
+     "order": 3,
+     "name": "Multiply fractions by multiplying numerators and denominators, understanding 'of' as multiplication"
+    },
+    {
+     "id": "1ed07b92-f267-4e74-b9cc-32e49e4cb998",
+     "order": 4,
+     "name": "Multiply fractions and recognize and determine the factors that created the product."
+    },
+    {
+     "id": "b88f1039-7033-4a3d-bd2f-ddd1a5bf5cae",
+     "order": 5,
+     "name": "Multiply fractions and expand the numerator and denominator into factors, recognizing when there are common factors n/n that can be crossed out as 1"
+    }
+   ]
+  },
+  {
+   "id": "b2857131-c246-4336-8a31-ae3190c4714f",
+   "order": 6,
+   "name": "Understand the conceptual foundation and mechanics of dividing fractions and their relationship to multiplication",
+   "complicators": [
+    {
+     "id": "74114d34-55c6-46f1-aa0e-41bb9522bdc4",
+     "order": 1,
+     "name": "Develop conceptual understanding of division as finding how many groups fit using concrete models"
+    },
+    {
+     "id": "181c28d1-2bd2-4553-909d-9b8eecc1624f",
+     "order": 2,
+     "name": "Apply reciprocal method systematically with conceptual understanding"
+    },
+    {
+     "id": "b7f2c2e3-bb61-4851-a6a9-aa2c9771385d",
+     "order": 3,
+     "name": "Challenging division of fractions and mixed numbers. Multiply by the reciprocal, reduce by shared factors."
+    }
+   ]
+  },
+  {
+   "id": "ddf77147-b13c-49ec-a2f4-ca9e68d7b5ec",
+   "order": 7,
+   "name": "Understand decimal notation as an extension of place value to represent fractional parts and their connection to fractions",
+   "complicators": [
+    {
+     "id": "60cc2790-b3d0-453e-8770-cc66b3259804",
+     "order": 1,
+     "name": "Translate between decimals and their fraction equivalents using place value understanding"
+    },
+    {
+     "id": "d5045d81-ee1d-4c1d-b7a7-db2a041448db",
+     "order": 2,
+     "name": "Decompose and compose decimals using unit fractions and place value relationships"
+    },
+    {
+     "id": "d7851650-f413-47b8-b75c-af1583c0b7e7",
+     "order": 3,
+     "name": "Convert between fractions and decimals using equivalent fraction methods"
+    },
+    {
+     "id": "a44592d6-21fd-467d-8b71-b1af0ecc6af6",
+     "order": 4,
+     "name": "Convert between fractions and decimals using division"
+    }
+   ]
+  },
+  {
+   "id": "18df548c-805d-45c8-a39c-92bd357e6124",
+   "order": 8,
+   "name": "Understand decimal operations and their relationship to fraction operations and place value principles",
+   "complicators": [
+    {
+     "id": "70083a1b-91a9-4331-bf0e-7ddac6720f0e",
+     "order": 1,
+     "name": "Estimate decimal operations for reasonableness using benchmark values"
+    },
+    {
+     "id": "7406db60-bf08-4cd3-bd45-dbe320b65324",
+     "order": 2,
+     "name": "Add and subtract decimals using place value alignment"
+    },
+    {
+     "id": "6b26100a-a040-4af4-9d81-c50d6cca5401",
+     "order": 3,
+     "name": "Multiply decimals using place value patterns and relationship to fraction multiplication"
+    },
+    {
+     "id": "de0a9f97-7d61-460c-a499-a2a2638bf8d4",
+     "order": 4,
+     "name": "Divide decimals using place value understanding and connection to fraction division"
+    }
+   ]
+  }
+ ]
+}

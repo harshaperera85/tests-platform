@@ -1,0 +1,92 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "c31d4797-c217-4215-a99f-1943416a3218",
+ "unit_order": 4,
+ "unit_name": "Expressions",
+ "knowledge_components": [
+  {
+   "id": "b472823d-d889-4fa1-95d1-b4f6a4aef1d4",
+   "order": 1,
+   "name": "Variables represent quantities that function within arithmetic and algebraic rules",
+   "complicators": [
+    {
+     "id": "5c787840-e4d5-4234-97a4-d8346812e621",
+     "order": 1,
+     "name": "Understand single variables as placeholders for numbers in arithmetic contexts, up to two operations"
+    },
+    {
+     "id": "072d375e-1e47-4ddd-826b-284524ba82cc",
+     "order": 2,
+     "name": "Recognize that variables follow arithmetic properties (commutative associative distributive), up to two variables"
+    },
+    {
+     "id": "ce543847-a329-4dc9-a25a-680ded6ce75c",
+     "order": 3,
+     "name": "Work with multiple variables in expressions"
+    }
+   ]
+  },
+  {
+   "id": "bc8360f6-c0ab-47b0-add7-95782963be42",
+   "order": 2,
+   "name": "Verbal statements and mathematical relationships can be represented as algebraic expressions",
+   "complicators": [
+    {
+     "id": "5e759a3a-52b2-4bfb-862d-457458a3a32f",
+     "order": 1,
+     "name": "Translate simple phrases (sum, difference, product, quotient)"
+    },
+    {
+     "id": "f7e5c15c-e36d-48fc-853f-2260684f98a4",
+     "order": 2,
+     "name": "Translate multi-operation phrases"
+    }
+   ]
+  },
+  {
+   "id": "ea1271ce-d640-4d4d-baba-bed793140871",
+   "order": 3,
+   "name": "Expressions are built from terms with distinct roles (coefficients variables constants)",
+   "complicators": [
+    {
+     "id": "d5c72e45-e84e-4f8b-b816-8c7bc08f4b78",
+     "order": 1,
+     "name": "Identify terms coefficients variables and constants"
+    },
+    {
+     "id": "ab407cd1-031f-4f5a-a194-40baacfaf27a",
+     "order": 2,
+     "name": "Distinguish between like terms and unlike terms"
+    },
+    {
+     "id": "fac260a8-fb54-498a-a262-5d0b55927d45",
+     "order": 3,
+     "name": "Understand how coefficients and variables interact within a term"
+    }
+   ]
+  },
+  {
+   "id": "21b34621-2351-4a48-9729-1fc8248fd887",
+   "order": 4,
+   "name": "Equivalent expressions can be formed by combining like terms and applying properties",
+   "complicators": [
+    {
+     "id": "a54db20f-bcec-46d9-b11c-2da89b6a3e7a",
+     "order": 1,
+     "name": "Combine like terms by adding/subtracting coefficients"
+    },
+    {
+     "id": "851004ee-5daf-4bee-9a0a-fdee2a955940",
+     "order": 2,
+     "name": "Apply distributive property to expand/factor expressions"
+    },
+    {
+     "id": "8976eeec-385b-4c5d-bd15-5dfbb747b1c0",
+     "order": 3,
+     "name": "Simplify expressions with multiple variables and coefficients and verify equivalent expressions"
+    }
+   ]
+  }
+ ]
+}

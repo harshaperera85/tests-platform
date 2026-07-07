@@ -6,4 +6,4 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type CurriculumKCName = string | null;
+export type CurriculumSummaryCourseName = string | null;

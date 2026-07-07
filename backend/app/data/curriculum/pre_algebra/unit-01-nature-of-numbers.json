@@ -1,0 +1,146 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "18d04d3e-89d3-4253-bd85-d3d1b9d7a0b7",
+ "unit_order": 1,
+ "unit_name": "Nature of numbers",
+ "knowledge_components": [
+  {
+   "id": "fdc8f58e-01b7-45ec-95b6-19995f8ab022",
+   "order": 1,
+   "name": "Place value positions represent powers of 10, and multiplying or dividing by 10 changes the value of numbers",
+   "complicators": [
+    {
+     "id": "89328044-c92c-48e9-86df-bceafd86abb2",
+     "order": 1,
+     "name": "Identify place value positions and understand that each position represents a power of 10"
+    },
+    {
+     "id": "001a4f8c-c8f6-4873-a3df-3f46e25b9d7b",
+     "order": 2,
+     "name": "Multiplying by ten increases the value of a number and dividing by ten decreases the value of a number. When doing so, the digits do not change, just their value."
+    },
+    {
+     "id": "0fa92af9-d6e3-4140-a1d6-f033d558328b",
+     "order": 3,
+     "name": "Compare relative values of same digits in different positions using multiplicative relationships"
+    },
+    {
+     "id": "487ab034-cbfe-4bc4-a897-bdb212d130b4",
+     "order": 4,
+     "name": "Fluently manipulate, utilize, and compare numbers based on an understanding of place value."
+    }
+   ]
+  },
+  {
+   "id": "6260c97e-59a6-486e-bfdc-b05751649cf2",
+   "order": 2,
+   "name": "Standard rounding rules help estimate and simplify computations",
+   "complicators": [
+    {
+     "id": "01dfba04-2ecd-466f-a4b2-6ec622e5b3a5",
+     "order": 1,
+     "name": "Use rounding strategically to build number sense, judge reasonableness of answers, and estimate results of calculations (single step)"
+    },
+    {
+     "id": "6cee2175-ae83-4377-b2bb-76c00684bc6f",
+     "order": 2,
+     "name": "Apply standard rounding rules for whole numbers and decimals to specified place values and determine which place value is best to use"
+    },
+    {
+     "id": "f73a7903-e91f-469e-a829-33c71c73d7b2",
+     "order": 3,
+     "name": "Understand the impact of rounding on computational accuracy and make directional predictions. Estimate results of single-step and multi-step calculations."
+    }
+   ]
+  },
+  {
+   "id": "745d53d1-cf0c-4d4e-b341-496ce1d0aae1",
+   "order": 3,
+   "name": "The properties of addition and multiplication form the foundation of arithmetic, revealing how numbers relate, combine, and can be manipulated with consistency",
+   "complicators": [
+    {
+     "id": "dbb91724-ee9e-44d7-bf8c-de6d5e71e5aa",
+     "order": 1,
+     "name": "Apply identity properties with 0 and 1 in computational contexts"
+    },
+    {
+     "id": "11cd3f5a-c56d-42a3-a7d3-395d4e6d2ff0",
+     "order": 2,
+     "name": "Use commutative and associative properties to reorganize calculations efficiently"
+    },
+    {
+     "id": "172f533d-b72d-44bc-832b-763238526084",
+     "order": 3,
+     "name": "Employ the inverse relationships between operations (without getting into negative numbers yet)"
+    },
+    {
+     "id": "da72847e-5d5f-4d02-8f5a-3a453faa6c7d",
+     "order": 4,
+     "name": "Apply inverse relationships and identity, commutative and associative properties with single variables to start practicing the generalizability of the properties and relationships."
+    }
+   ]
+  },
+  {
+   "id": "7bde5713-640a-4caa-975b-39c6b4ad8b29",
+   "order": 4,
+   "name": "The distributive property shows how multiplication spreads across addition to break apart or combine expressions.",
+   "complicators": [
+    {
+     "id": "a5c5c214-84b6-47ba-a925-744e031dc6aa",
+     "order": 1,
+     "name": "Practice the area model with partial products to see the distributive property work visually (up to three additive terms)"
+    },
+    {
+     "id": "ab265690-18a1-46ea-9550-b36469d971a2",
+     "order": 2,
+     "name": "Practice the distributive property symbolically with problems that can use mental math"
+    },
+    {
+     "id": "e269ce1e-657e-4fda-bf60-8fd09d224c94",
+     "order": 3,
+     "name": "Apply the distributive property to simplify expressions or as a strategy for more manageable calculations."
+    }
+   ]
+  },
+  {
+   "id": "d4f1e0e6-7713-4235-9e4c-60e02bc02146",
+   "order": 5,
+   "name": "Exponents represent repeated multiplication of equal factors",
+   "complicators": [
+    {
+     "id": "9a0d9e90-e417-4db7-ae13-08b42b0a886b",
+     "order": 1,
+     "name": "Interpret exponent notation and evaluate simple powers with positive integer bases"
+    },
+    {
+     "id": "012e1d62-49f8-43be-af22-6973e453cafc",
+     "order": 2,
+     "name": "Special cases:\n- Consider basic fractions and decimals as bases, compared to their original or additive values.\n- Powers of 0 and 1"
+    }
+   ]
+  },
+  {
+   "id": "72d94166-96f6-4a47-a972-fc63c973b43f",
+   "order": 6,
+   "name": "Order of operations ensures consistent computation results",
+   "complicators": [
+    {
+     "id": "5410e374-55ee-440f-a48c-ae3c4cf248b8",
+     "order": 1,
+     "name": "Apply PEMDAS to expressions with parentheses and basic operations."
+    },
+    {
+     "id": "ba917820-df16-40ec-bf14-194cc5027eb6",
+     "order": 2,
+     "name": "Apply PEMDAS to expressions with nested parentheses/brackets."
+    },
+    {
+     "id": "9b260ef1-78a8-44e4-b9ac-6bebe125819e",
+     "order": 3,
+     "name": "Simplify expressions that use a fraction bar as a grouping symbol"
+    }
+   ]
+  }
+ ]
+}

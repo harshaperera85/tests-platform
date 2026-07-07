@@ -5,29 +5,30 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
-import type { CurriculumUnit } from './curriculumUnit';
+import type { GenerateBlueprintRequestManifest } from './generateBlueprintRequestManifest';
+import type { GenerateBlueprintRequestCourseId } from './generateBlueprintRequestCourseId';
 import type { GenerateBlueprintRequestGrain } from './generateBlueprintRequestGrain';
 import type { GenerateBlueprintRequestUnitId } from './generateBlueprintRequestUnitId';
 import type { GenerateBlueprintRequestName } from './generateBlueprintRequestName';
 import type { GenerateBlueprintRequestBinding } from './generateBlueprintRequestBinding';
 import type { GenerateBlueprintRequestStatisticalTarget } from './generateBlueprintRequestStatisticalTarget';
-import type { ContentConstraint } from './contentConstraint';
+import type { GenerateBlueprintRequestCognitiveProfile } from './generateBlueprintRequestCognitiveProfile';
 import type { GenerateBlueprintRequestPoolId } from './generateBlueprintRequestPoolId';
 
 /**
  * Inputs for one generated blueprint.
 
-``units`` is the curriculum: one or more item-factory unit JSON documents (a
-course = its unit files). ``grain`` picks the §6 recipe: ``course`` = EOC /
-mid-course test (one proportion constraint per **unit**, share ∝ KCs +
-complicators in the unit); ``unit`` = unit quiz (one constraint per **KC**
-within ``unit_id``, share ∝ 1 + complicators). ``binding`` applies the per-mode
-target rule: content-only for CAT; a TIF target (with tolerance, for LOFT)
-attached for fixed-form/LOFT bindings.
+The curriculum comes either inline (``manifest``) or from the server catalog
+(``course_id``, see ``GET /curricula``) — exactly one. ``grain`` picks the §6
+recipe: ``eoc`` = end-of-course / mid-course test (one count constraint per
+**unit**, share ∝ KCs + complicators in the unit); ``unit_quiz`` = one
+constraint per **KC** within ``unit_id`` (share ∝ 1 + complicators).
+Content-only by default; ``statistical_target`` optionally attaches a TIF
+template for fixed-form/LOFT bindings (LOFT requires a tolerance, §4.1).
  */
 export interface GenerateBlueprintRequest {
-  /** @minItems 1 */
-  units: CurriculumUnit[];
+  manifest?: GenerateBlueprintRequestManifest;
+  course_id?: GenerateBlueprintRequestCourseId;
   grain?: GenerateBlueprintRequestGrain;
   unit_id?: GenerateBlueprintRequestUnitId;
   /** */
@@ -39,6 +40,6 @@ export interface GenerateBlueprintRequest {
   statistical_target?: GenerateBlueprintRequestStatisticalTarget;
   unit_tag?: string;
   kc_tag?: string;
-  cognitive_minimums?: ContentConstraint[];
+  cognitive_profile?: GenerateBlueprintRequestCognitiveProfile;
   pool_id?: GenerateBlueprintRequestPoolId;
 }

@@ -1,20 +1,26 @@
 """Curriculum→blueprint generator (BP-MODES-1 §6).
 
-Turns item-factory unit JSON (Course → Unit → KC → Complicator) into blueprints valid
-under the spec, at two grains:
+Pipeline: item-factory **unit JSONs** → :func:`normalize_unit_documents` → a minimal
+**curriculum manifest** → :func:`generate_blueprint`. The generator reads only
+manifests.
 
-- **course** (EOC / mid-course test): one proportion constraint per **unit**, share
-  ∝ (KCs + complicators in the unit) / (course total).
-- **unit** (unit quiz): one constraint per **KC** within the chosen unit, share
+Recipes (shares → whole item counts by **largest-remainder** rounding, summing exactly
+to the requested length; emitted as **count min = max** constraints per §2):
+
+- **eoc** (end-of-course / mid-course): one constraint per **unit**, share
+  ∝ (KCs + complicators in the unit) / course totals.
+- **unit_quiz**: one constraint per **KC** in the chosen unit, share
   ∝ (1 + complicators in the KC).
 
-Shares are resolved to whole item counts by **largest-remainder** rounding (counts sum
-exactly to the form length) and emitted as proportion constraints with
-``minimum = maximum = count / length`` — exactly recoverable by the fixed-form
-compiler's ``round(p × length)``, and lenient under CAT's floor/ceil running semantics
-(§3.2). Binding rules per §2.1/§4.1: CAT is content-only (a supplied TIF target is
-dropped with a warning); a LOFT target must carry a tolerance (the §4.1 acceptance
-band) or generation is rejected.
+The **cognitive profile** is an authored input (tags are read-only item-factory
+attributes — see ``schemas.generator.COGNITIVE_DIMENSIONS``): a distribution becomes
+marginal proportion constraints (largest-remainder over the length, then
+``count/length`` so the compiler's ``round(p × L)`` recovers the counts exactly);
+per-unit minimums become cross-classified {unit × dimension} count cells.
+
+Binding rules per §2.1/§4.1: content-only is the default; CAT drops a supplied TIF
+target with a warning; a LOFT target must carry a tolerance (the §4.1 acceptance band)
+or generation is rejected.
 
 Feasibility (§6: generated blueprints MUST pass structural validation against the
 target pool before being offered for delivery): each constraint's resolved minimum is
@@ -29,9 +35,12 @@ import math
 from app.psychometrics.bank import ItemPool
 from app.schemas.blueprint import Blueprint, ContentConstraint
 from app.schemas.generator import (
+    CurriculumManifest,
     CurriculumUnit,
     FeasibilityIssue,
     GenerateBlueprintRequest,
+    ManifestKC,
+    ManifestUnit,
     ShareLine,
 )
 
@@ -60,25 +69,73 @@ def largest_remainder(weights: list[int], total: int) -> list[int]:
     return counts
 
 
-def _share_rows(req: GenerateBlueprintRequest) -> tuple[list[ShareLine], str]:
+def normalize_unit_documents(docs: list[CurriculumUnit]) -> CurriculumManifest:
+    """Derive the minimal curriculum manifest from raw item-factory unit JSONs.
+
+    A course = its unit files sharing ``course_id``; mixed course_ids are rejected.
+    Units and KCs are ordered by their export ``order`` (input order breaks ties).
+    Identifiers are carried verbatim.
+    """
+    if not docs:
+        raise ValueError("no unit documents supplied")
+    course_ids = {d.course_id for d in docs if d.course_id is not None}
+    if len(course_ids) > 1:
+        raise ValueError(
+            f"unit documents span several course_ids: {sorted(course_ids)}"
+        )
+    seen: set[str] = set()
+    for d in docs:
+        if d.unit_id in seen:
+            raise ValueError(f"duplicate unit_id {d.unit_id!r} in unit documents")
+        seen.add(d.unit_id)
+
+    ordered = sorted(
+        enumerate(docs), key=lambda p: (p[1].unit_order is None, p[1].unit_order, p[0])
+    )
+    units = [
+        ManifestUnit(
+            unit_id=d.unit_id,
+            order=d.unit_order,
+            name=d.unit_name,
+            kcs=[
+                ManifestKC(
+                    kc_id=kc.id,
+                    order=kc.order,
+                    name=kc.name,
+                    n_complicators=len(kc.complicators),
+                )
+                for kc in sorted(
+                    d.knowledge_components,
+                    key=lambda k: (k.order is None, k.order),
+                )
+            ],
+        )
+        for _, d in ordered
+    ]
+    return CurriculumManifest(
+        course_id=next(iter(course_ids), "unknown-course"),
+        course_name=next((d.course_name for d in docs if d.course_name), None),
+        units=units,
+    )
+
+
+def _share_rows(
+    manifest: CurriculumManifest, req: GenerateBlueprintRequest
+) -> tuple[list[ShareLine], str]:
     """The §6 recipe: (key, weight) rows for the chosen grain + the tag dimension."""
-    if req.grain == "course":
+    if req.grain == "eoc":
         rows = [
             (
                 u.unit_id,
-                u.unit_name,
-                len(u.knowledge_components)
-                + sum(len(kc.complicators) for kc in u.knowledge_components),
+                u.name,
+                len(u.kcs) + sum(kc.n_complicators for kc in u.kcs),
             )
-            for u in req.units
+            for u in manifest.units
         ]
         tag_dim = req.unit_tag
-    else:  # unit quiz
-        unit = _resolve_unit(req)
-        rows = [
-            (kc.id, kc.name, 1 + len(kc.complicators))
-            for kc in unit.knowledge_components
-        ]
+    else:  # unit_quiz
+        unit = _resolve_unit(manifest, req)
+        rows = [(kc.kc_id, kc.name, 1 + kc.n_complicators) for kc in unit.kcs]
         tag_dim = req.kc_tag
 
     weights = [w for _, _, w in rows]
@@ -93,29 +150,76 @@ def _share_rows(req: GenerateBlueprintRequest) -> tuple[list[ShareLine], str]:
     return shares, tag_dim
 
 
-def _resolve_unit(req: GenerateBlueprintRequest) -> CurriculumUnit:
+def _resolve_unit(
+    manifest: CurriculumManifest, req: GenerateBlueprintRequest
+) -> ManifestUnit:
     if req.unit_id is None:
-        if len(req.units) == 1:
-            return req.units[0]
-        raise ValueError("grain='unit' with several units needs unit_id")
-    for u in req.units:
+        if len(manifest.units) == 1:
+            return manifest.units[0]
+        raise ValueError("grain='unit_quiz' with several units needs unit_id")
+    for u in manifest.units:
         if u.unit_id == req.unit_id:
             return u
-    raise ValueError(f"unit_id {req.unit_id!r} not found in the supplied units")
+    raise ValueError(f"unit_id {req.unit_id!r} not found in the curriculum")
+
+
+def _cognitive_constraints(
+    manifest: CurriculumManifest, req: GenerateBlueprintRequest
+) -> list[ContentConstraint]:
+    """Authored cognitive profile → marginal proportions + cross-classified cells."""
+    profile = req.cognitive_profile
+    if profile is None:
+        return []
+    out: list[ContentConstraint] = []
+
+    if profile.distribution:
+        values = list(profile.distribution.keys())
+        counts = largest_remainder(
+            # scale shares to integers to keep largest_remainder exact-friendly
+            [round(profile.distribution[v] * 1_000_000) for v in values],
+            req.length,
+        )
+        for value, count in zip(values, counts, strict=True):
+            out.append(
+                ContentConstraint(
+                    tag_type=profile.dimension,
+                    tag_value=value,
+                    minimum=count / req.length,
+                    maximum=count / req.length,
+                    mode="proportion",
+                )
+            )
+
+    known_units = {u.unit_id for u in manifest.units}
+    for m in profile.per_unit_minimums:
+        if m.unit_id not in known_units:
+            raise ValueError(
+                f"per_unit_minimums references unknown unit_id {m.unit_id!r}"
+            )
+        out.append(
+            ContentConstraint(
+                tags={req.unit_tag: m.unit_id, profile.dimension: m.value},
+                minimum=m.minimum,
+                mode="count",
+            )
+        )
+    return out
 
 
 def generate_blueprint(
-    req: GenerateBlueprintRequest,
+    req: GenerateBlueprintRequest, manifest: CurriculumManifest
 ) -> tuple[Blueprint, list[ShareLine], list[str]]:
     """Generate one blueprint; returns (blueprint, share breakdown, warnings).
 
-    Raises ``ValueError`` on structural problems (unknown unit_id, LOFT target
-    without tolerance, unweightable curriculum).
+    ``manifest`` is the resolved curriculum (inline or from the catalog — the
+    caller resolves ``course_id``). Raises ``ValueError`` on structural problems
+    (unknown unit_id, LOFT target without tolerance, unweightable curriculum).
     """
     warnings: list[str] = []
-    shares, tag_dim = _share_rows(req)
+    shares, tag_dim = _share_rows(manifest, req)
 
-    # Binding rules (§2.1 / §4.1 / §6 "per binding mode").
+    # Binding rules (§2.1 / §4.1). Content-only is the default — no warning for
+    # fixed-form; LOFT content-only gets the §2.1(2) authoring notice.
     target = req.statistical_target
     if req.binding == "cat":
         if target is not None:
@@ -135,33 +239,28 @@ def generate_blueprint(
                 "content-only LOFT blueprint: forms will be parallel in content "
                 "only, not statistically (BP-MODES-1 §2.1)."
             )
-    elif target is None:  # fixed_form
-        warnings.append(
-            "content-only blueprint: fixed-form assembly will be feasibility-only "
-            "(no TIF objective; realized TIF still reported)."
-        )
 
+    # §2: exact cells are expressed as counts (min = max), never proportions.
     constraints = [
         ContentConstraint(
             tag_type=tag_dim,
             tag_value=s.key,
-            minimum=s.count / req.length,
-            maximum=s.count / req.length,
-            mode="proportion",
+            minimum=s.count,
+            maximum=s.count,
+            mode="count",
             label=s.label,
         )
         for s in shares
     ]
-    constraints.extend(req.cognitive_minimums)
+    constraints.extend(_cognitive_constraints(manifest, req))
 
     if req.name:
         name = req.name
-    elif req.grain == "course":
-        course = req.units[0].course_name or req.units[0].course_id or "course"
-        name = f"{course} — EOC"
+    elif req.grain == "eoc":
+        name = f"{manifest.course_name or manifest.course_id} — EOC"
     else:
-        unit = _resolve_unit(req)
-        name = f"{unit.unit_name or unit.unit_id} — quiz"
+        unit = _resolve_unit(manifest, req)
+        name = f"{unit.name or unit.unit_id} — quiz"
 
     blueprint = Blueprint(
         name=name,

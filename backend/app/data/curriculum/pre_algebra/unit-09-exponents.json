@@ -1,0 +1,139 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "5c07321c-493d-4615-9d48-9c440088925e",
+ "unit_order": 9,
+ "unit_name": "Exponents",
+ "knowledge_components": [
+  {
+   "id": "1da6a2b2-8365-4884-85de-246cb113d720",
+   "order": 1,
+   "name": "Product rule for exponents: When multiplying like-bases, the exponents get added",
+   "complicators": [
+    {
+     "id": "bf715cff-c21b-43a8-9ee1-1630aab62e96",
+     "order": 1,
+     "name": "When multiplying terms of the same base with no coefficients, the expanded multiplication shows why the exponents get added."
+    },
+    {
+     "id": "d341e37d-399d-477e-b42e-5e9b5fd5147c",
+     "order": 2,
+     "name": "When multiplying terms of the same base with one coefficient, the coefficient does not get exponentiated."
+    },
+    {
+     "id": "2e467b1b-b197-4e92-ac72-08ea0ee18b29",
+     "order": 3,
+     "name": "When multiplying terms of the same base with more than one positive coefficient, the coefficients get multiplied."
+    },
+    {
+     "id": "32c07881-54ee-44d6-9643-08ec7aa67762",
+     "order": 4,
+     "name": "When multiplying terms of the same base with negative coefficients,  pay attention to whether the negative sign applies to the base or the term."
+    },
+    {
+     "id": "58ab31b0-ab62-41d6-afd6-cb37090b7b6f",
+     "order": 5,
+     "name": "When multiplying terms of different bases with coefficients, combine like terms."
+    }
+   ]
+  },
+  {
+   "id": "e3316b3f-aab2-4681-9af0-ab8d7ae70a6d",
+   "order": 2,
+   "name": "Power rule for exponents: When raising an exponent to another power, the exponents get multiplied",
+   "complicators": [
+    {
+     "id": "b99cfe34-5b24-422b-8490-3e902067dd7e",
+     "order": 1,
+     "name": "When raising a single term with positive coefficients to a power, the use of parentheses determines what gets exponentiated."
+    },
+    {
+     "id": "07fa8a3a-f021-455e-b0b3-c1ed1c3eb5f1",
+     "order": 2,
+     "name": "When raising multi-variable terms with positive or negative coefficients to a power, the use of parentheses determines what gets exponentiated."
+    },
+    {
+     "id": "fde5b822-e9a4-479d-932b-6d3a2272e542",
+     "order": 3,
+     "name": "When raising a fractional term to a power, the power gets applied to the numerator and denominator."
+    }
+   ]
+  },
+  {
+   "id": "1ccaa0cd-edbe-4583-9558-fa7f89e623df",
+   "order": 3,
+   "name": "Quotient rule for exponents: When dividing like-bases, the exponents get subtracted",
+   "complicators": [
+    {
+     "id": "5e115ac3-7db5-425b-8e26-4c985d5b0ee2",
+     "order": 1,
+     "name": "When dividing terms of the same base (where the exponent degree of the numerator is the same or larger than the exponent degree of the denominator), the bases cancel out, which is why you can subtract the exponents."
+    },
+    {
+     "id": "d53cce16-f006-4d81-ba8a-3190d1cf8312",
+     "order": 2,
+     "name": "Examining single-variable  fractions with exponentiated terms, the product, power, and quotient rules can all be applied."
+    },
+    {
+     "id": "6eb1133a-c5e9-46f8-a6e0-9f8b795c36ee",
+     "order": 3,
+     "name": "Examining multi-variable fractions with exponentiated terms, the product, power, and quotient rules can all be applied."
+    }
+   ]
+  },
+  {
+   "id": "2e28a764-2667-40bb-96b1-7918fe888f45",
+   "order": 4,
+   "name": "Negative exponents represent a reciprocal",
+   "complicators": [
+    {
+     "id": "992bab32-2a4d-4231-a6a6-5a6c5cf6260e",
+     "order": 1,
+     "name": "When dividing terms of the same base (where the exponent degree of the denominator is less than the exponent degree of the numerator), the bases cancel out, which is how negative exponents are derived."
+    },
+    {
+     "id": "a67988b1-ead0-4756-9ad7-828a3aa7d342",
+     "order": 2,
+     "name": "When fractions are raised to a negative exponent, the exponent gets applied to both the numerator and denominator."
+    },
+    {
+     "id": "fca7de63-93cd-4bef-98d7-bf38ea35a219",
+     "order": 3,
+     "name": "Examine multi-variable fractions with exponentiated terms, raised to negative exponents, the product, power, and quotient rules can all be applied."
+    }
+   ]
+  },
+  {
+   "id": "4060d072-92d4-47f1-8a85-f90c36004379",
+   "order": 5,
+   "name": "Scientific notation is a convention used to efficiently communicate very small and very large numbers.  It is defined as n*10ᵐ",
+   "complicators": [
+    {
+     "id": "2895095b-c60c-4a1e-b252-cb826927b451",
+     "order": 1,
+     "name": "Our place value system is built from powers of ten, where each power of ten denotes a distinct place value, which can be represented in a variety of formats."
+    },
+    {
+     "id": "224b7f14-7d7e-499b-b5a5-dfbbdc2fe6a0",
+     "order": 2,
+     "name": "Scientific notation is composed of the form a*10^n, where 1 \\le a < 10. When n is positive, it can be used to denote very large numbers."
+    },
+    {
+     "id": "7b9e0718-110a-4d5b-b9a4-fdeb98b1c926",
+     "order": 3,
+     "name": "In scientific notation a*10^n, when n is negative, it can be used to denote very small numbers."
+    },
+    {
+     "id": "bdf58b71-21b0-4f27-8dcb-80226a05e9fa",
+     "order": 4,
+     "name": "When operating on scientific notation expressions, exponent rules apply."
+    },
+    {
+     "id": "737bef94-7c88-4fce-90e1-0f07f00555ce",
+     "order": 5,
+     "name": "DELETE"
+    }
+   ]
+  }
+ ]
+}

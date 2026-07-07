@@ -5,5 +5,6 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
+import type { CognitiveProfileDistributionAnyOf } from './cognitiveProfileDistributionAnyOf';
 
-export type CurriculumUnitCourseId = string | null;
+export type CognitiveProfileDistribution = CognitiveProfileDistributionAnyOf | null;

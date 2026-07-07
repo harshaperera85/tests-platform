@@ -1,0 +1,134 @@
+{
+ "course_id": "36e3fbed-61f1-4454-a41c-93e665bb1715",
+ "course_name": "Pre-Algebra New",
+ "unit_id": "d70a1fe3-fcdc-458e-a1d6-812785dcaf59",
+ "unit_order": 2,
+ "unit_name": "Negative numbers",
+ "knowledge_components": [
+  {
+   "id": "63c66138-4d9a-48cb-8eb2-9b23ac2ef72a",
+   "order": 1,
+   "name": "Negative numbers are values less than zero and are the additive opposites to positive numbers",
+   "complicators": [
+    {
+     "id": "2310c377-253c-4d4f-8d54-83cbb0efae4c",
+     "order": 1,
+     "name": "Recognize and represent when negative integers are applicable"
+    },
+    {
+     "id": "aaeb1d09-8f80-431d-87d0-f886d395c462",
+     "order": 2,
+     "name": "Recognize the additive inverse for rational numbers"
+    }
+   ]
+  },
+  {
+   "id": "6322c687-83a2-45c5-9369-a5f3e47a3347",
+   "order": 2,
+   "name": "Understanding negative numbers on the number line involves both position (for comparing and ordering) and distance from zero (absolute value)",
+   "complicators": [
+    {
+     "id": "f0e1b76e-7bc2-41a3-abd9-f28f3ad4fb8d",
+     "order": 1,
+     "name": "Represent negative rational values in a model "
+    },
+    {
+     "id": "6647d570-55eb-4fee-a374-04b91819dd14",
+     "order": 2,
+     "name": "Understand absolute value as distance from zero on the number line and evaluate absolute value expressions with concrete numbers."
+    },
+    {
+     "id": "f821eb52-1d06-42c6-b794-368504ea1cd3",
+     "order": 3,
+     "name": "Compare and order two rational numbers"
+    },
+    {
+     "id": "ec82be37-d687-45e1-8d5a-f5862023c596",
+     "order": 4,
+     "name": "Compare and order 3-5 rational numbers"
+    }
+   ]
+  },
+  {
+   "id": "878bc3ed-a8ac-4c35-ac65-77b1e29a1745",
+   "order": 3,
+   "name": "Adding and subtracting integers uses the additive inverse principle to combine opposite quantities",
+   "complicators": [
+    {
+     "id": "80663786-e6bd-451d-8d3e-a407ef6f3dbe",
+     "order": 1,
+     "name": "Add two integers where the sum is not zero"
+    },
+    {
+     "id": "efbb50c0-5728-4aba-b75d-90a069c5a6e2",
+     "order": 2,
+     "name": "Recognize subtraction as adding the additive inverse: a - b = a + (-b)"
+    },
+    {
+     "id": "4b1b0f43-340b-479d-8143-663d1a8dcd87",
+     "order": 3,
+     "name": "Subtract negative numbers"
+    },
+    {
+     "id": "d1c937b5-47a0-42e5-9e1a-cd7195591b0e",
+     "order": 4,
+     "name": "Add and subtract multi-step expressions with negative and positive values"
+    }
+   ]
+  },
+  {
+   "id": "b39bcf9a-c659-477c-ab49-e94b665d0c95",
+   "order": 4,
+   "name": "Operations with negative integers follow consistent patterns: multiplication and division have sign rules while absolute value and negation expressions must be carefully parsed using order of operations",
+   "complicators": [
+    {
+     "id": "88910b98-3146-4f04-83ef-6406a008b187",
+     "order": 1,
+     "name": "Apply sign rules for multiplication and division with two factors"
+    },
+    {
+     "id": "c70d8044-f02f-4504-a4df-05adf1a3ad1d",
+     "order": 2,
+     "name": "Apply sign rules for multiplication and division for 3-4 terms"
+    },
+    {
+     "id": "9827f44d-6037-420d-9ea5-350225b95c9f",
+     "order": 3,
+     "name": "Simplify expressions with negative bases, paying attention to parentheses"
+    },
+    {
+     "id": "675556b5-60a9-4a50-b83f-4cdba5ae5262",
+     "order": 4,
+     "name": "Parse and evaluate complex absolute value and negation notation: -|x| vs -|-x| vs -(-x)"
+    }
+   ]
+  },
+  {
+   "id": "300cc453-756f-4c43-bf30-b76008744722",
+   "order": 5,
+   "name": "Arithmetic properties maintain consistency when extended to additive inverses and integer operations",
+   "complicators": [
+    {
+     "id": "ad63ec25-235f-4b6a-95bb-23d36f9bc272",
+     "order": 1,
+     "name": "Apply commutative and associative properties with positive and negative integers"
+    },
+    {
+     "id": "38d3c379-5075-4a3a-95ab-d6f3c31fa944",
+     "order": 2,
+     "name": "Use distributive property with negative numbers"
+    },
+    {
+     "id": "618afb23-a149-4926-91ab-581cdd4bad0e",
+     "order": 3,
+     "name": "Simplify two-step expressions with negative integers, following the order of operations convention"
+    },
+    {
+     "id": "84c9df05-b47e-4afc-89a6-c7a6e2c0b992",
+     "order": 4,
+     "name": "Simplify multi-operation expressions with negative values, following the order of operations convention"
+    }
+   ]
+  }
+ ]
+}

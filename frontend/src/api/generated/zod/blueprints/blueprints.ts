@@ -55,34 +55,35 @@ export const createBlueprintBody = zod.object({
 /**
  * Curriculum→blueprint generator (BP-MODES-1 §6).
 
-Consumes item-factory unit JSON documents and emits a blueprint: EOC test
-(grain=course, per-unit shares) or unit quiz (grain=unit, per-KC shares),
-largest-remainder rounding, per-binding TIF rules. When ``pool_id`` is given
-the blueprint is validated against that pool's tag counts (the §6 gate).
-The blueprint is returned, not stored — persist via ``POST /blueprints``.
+Consumes a curriculum manifest (inline, or by ``course_id`` from the catalog)
+and emits a blueprint: EOC test (grain=eoc, per-unit shares) or unit quiz
+(grain=unit_quiz, per-KC shares), largest-remainder rounding, authored
+cognitive profile, per-binding TIF rules. When ``pool_id`` is given the
+blueprint is validated against that pool's tag counts (the §6 gate). The
+blueprint is returned for review, not stored — persist via ``POST /blueprints``.
  * @summary Generate Blueprint From Curriculum
  */
-export const generateBlueprintFromCurriculumBodyGrainDefault = "course";export const generateBlueprintFromCurriculumBodyNumFormsDefault = 1;export const generateBlueprintFromCurriculumBodyBindingDefault = "fixed_form";export const generateBlueprintFromCurriculumBodyStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumBodyUnitTagDefault = "unit";export const generateBlueprintFromCurriculumBodyKcTagDefault = "kc";export const generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMinimumMinOne = 0;export const generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMaximumMinOne = 0;export const generateBlueprintFromCurriculumBodyCognitiveMinimumsItemModeDefault = "count";
+export const generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsDefault = 0;
+export const generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsMin = 0;export const generateBlueprintFromCurriculumBodyGrainDefault = "eoc";export const generateBlueprintFromCurriculumBodyNumFormsDefault = 1;export const generateBlueprintFromCurriculumBodyBindingDefault = "fixed_form";export const generateBlueprintFromCurriculumBodyStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumBodyUnitTagDefault = "unit";export const generateBlueprintFromCurriculumBodyKcTagDefault = "kc";
 
 export const generateBlueprintFromCurriculumBody = zod.object({
-  "units": zod.array(zod.object({
-  "course_id": zod.union([zod.string(),zod.null()]).optional(),
+  "manifest": zod.union([zod.object({
+  "course_id": zod.string(),
   "course_name": zod.union([zod.string(),zod.null()]).optional(),
+  "units": zod.array(zod.object({
   "unit_id": zod.string(),
-  "unit_order": zod.union([zod.number(),zod.null()]).optional(),
-  "unit_name": zod.union([zod.string(),zod.null()]).optional(),
-  "knowledge_components": zod.array(zod.object({
-  "id": zod.string(),
   "order": zod.union([zod.number(),zod.null()]).optional(),
   "name": zod.union([zod.string(),zod.null()]).optional(),
-  "complicators": zod.array(zod.object({
-  "id": zod.string(),
+  "kcs": zod.array(zod.object({
+  "kc_id": zod.string(),
   "order": zod.union([zod.number(),zod.null()]).optional(),
-  "name": zod.union([zod.string(),zod.null()]).optional()
-}).describe('One sub-skill of a KC (export also carries examples/misconceptions — ignored).')).optional()
+  "name": zod.union([zod.string(),zod.null()]).optional(),
+  "n_complicators": zod.number().min(generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsMin).optional()
 })).min(1)
-}).describe('One item-factory unit JSON file, verbatim.')).min(1),
-  "grain": zod.enum(['course', 'unit']).default(generateBlueprintFromCurriculumBodyGrainDefault),
+})).min(1)
+}).describe('The minimal curriculum shape the generator reads (derived from unit JSONs).'),zod.null()]).optional(),
+  "course_id": zod.union([zod.string(),zod.null()]).optional(),
+  "grain": zod.enum(['eoc', 'unit_quiz']).default(generateBlueprintFromCurriculumBodyGrainDefault),
   "unit_id": zod.union([zod.string(),zod.null()]).optional(),
   "length": zod.number(),
   "num_forms": zod.number().min(1).default(generateBlueprintFromCurriculumBodyNumFormsDefault),
@@ -97,17 +98,17 @@ export const generateBlueprintFromCurriculumBody = zod.object({
 }).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point — there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point\'s weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs — orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*.'),zod.null()]).optional(),
   "unit_tag": zod.string().default(generateBlueprintFromCurriculumBodyUnitTagDefault),
   "kc_tag": zod.string().default(generateBlueprintFromCurriculumBodyKcTagDefault),
-  "cognitive_minimums": zod.array(zod.object({
-  "tag_type": zod.union([zod.string(),zod.null()]).optional(),
-  "tag_value": zod.union([zod.string(),zod.null()]).optional(),
-  "tags": zod.union([zod.record(zod.string(), zod.string()),zod.null()]).optional(),
-  "minimum": zod.union([zod.number().min(generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMinimumMinOne),zod.null()]).optional(),
-  "maximum": zod.union([zod.number().min(generateBlueprintFromCurriculumBodyCognitiveMinimumsItemMaximumMinOne),zod.null()]).optional(),
-  "mode": zod.enum(['count', 'proportion']).default(generateBlueprintFromCurriculumBodyCognitiveMinimumsItemModeDefault),
-  "label": zod.union([zod.string(),zod.null()]).optional()
-}).describe('A min/max bound on the items satisfying a tag predicate.\n\nTwo ways to target items (an item must match **all** predicates):\n- **Marginal** (one tag dimension): set ``tag_type`` + ``tag_value`` — e.g.\n  ``KC=algebra`` or ``Bloom=apply``.\n- **Cross-classified cell** (a content × cognitive table cell): set ``tags`` to a\n  mapping of dimension → value — e.g. ``{\"KC\": \"algebra\", \"Bloom\": \"apply\"}``\n  means *algebra AND apply*.\n\nBounds are interpreted per ``mode``: ``count`` = absolute item counts;\n``proportion`` = a fraction in [0, 1] of the form length, resolved to a count by\nthe compiler (nearest integer). At least one of ``minimum`` / ``maximum`` set.')).optional(),
+  "cognitive_profile": zod.union([zod.object({
+  "dimension": zod.enum(['bloom_process', 'bloom_knowledge', 'timss']),
+  "distribution": zod.union([zod.record(zod.string(), zod.number()),zod.null()]).optional(),
+  "per_unit_minimums": zod.array(zod.object({
+  "unit_id": zod.string(),
+  "value": zod.string(),
+  "minimum": zod.number().min(1)
+}).describe('A cross-classified cell minimum: at least ``minimum`` items in ``unit_id``\ncarrying ``value`` on the profile\'s dimension.')).optional()
+}).describe('Authored cognitive requirements (never derived from the curriculum).\n\n``distribution`` (value → share of the form, shares summing to 1) is emitted as\nmarginal proportion constraints; ``per_unit_minimums`` as cross-classified\n{unit × dimension} count minimums. ``dimension`` and every value are validated\nagainst the pinned :data:`COGNITIVE_DIMENSIONS` contract.'),zod.null()]).optional(),
   "pool_id": zod.union([zod.string(),zod.null()]).optional()
-}).describe('Inputs for one generated blueprint.\n\n``units`` is the curriculum: one or more item-factory unit JSON documents (a\ncourse = its unit files). ``grain`` picks the §6 recipe: ``course`` = EOC /\nmid-course test (one proportion constraint per **unit**, share ∝ KCs +\ncomplicators in the unit); ``unit`` = unit quiz (one constraint per **KC**\nwithin ``unit_id``, share ∝ 1 + complicators). ``binding`` applies the per-mode\ntarget rule: content-only for CAT; a TIF target (with tolerance, for LOFT)\nattached for fixed-form/LOFT bindings.')
+}).describe('Inputs for one generated blueprint.\n\nThe curriculum comes either inline (``manifest``) or from the server catalog\n(``course_id``, see ``GET /curricula``) — exactly one. ``grain`` picks the §6\nrecipe: ``eoc`` = end-of-course / mid-course test (one count constraint per\n**unit**, share ∝ KCs + complicators in the unit); ``unit_quiz`` = one\nconstraint per **KC** within ``unit_id`` (share ∝ 1 + complicators).\nContent-only by default; ``statistical_target`` optionally attaches a TIF\ntemplate for fixed-form/LOFT bindings (LOFT requires a tolerance, §4.1).')
 
 export const generateBlueprintFromCurriculumResponseBlueprintSchemaVersionDefault = 2;export const generateBlueprintFromCurriculumResponseBlueprintNameDefault = "untitled-blueprint";export const generateBlueprintFromCurriculumResponseBlueprintNumFormsDefault = 1;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemModeDefault = "count";export const generateBlueprintFromCurriculumResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumResponseBlueprintEnemyPolicyEnforceDefault = true;export const generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxExposureRateMaxOne = 1;export const generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxPairwiseOverlapMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackPreferUnderusedDefault = false;export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightDefault = 0;
 export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightMin = 0;
