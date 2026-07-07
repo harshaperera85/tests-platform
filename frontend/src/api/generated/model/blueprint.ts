@@ -6,15 +6,22 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { ContentConstraint } from './contentConstraint';
-import type { TIFTarget } from './tIFTarget';
+import type { BlueprintStatisticalTarget } from './blueprintStatisticalTarget';
 import type { EnemyPolicy } from './enemyPolicy';
 import type { BlueprintExposureTarget } from './blueprintExposureTarget';
 import type { BlueprintExposureFeedback } from './blueprintExposureFeedback';
+import type { BlueprintSegments } from './blueprintSegments';
 
 /**
  * Full assembly specification for one (or several parallel) forms.
+
+Delivery-mode-agnostic (BP-MODES-1): one blueprint is satisfiable by fixed-form,
+LOFT, and CAT. ``statistical_target`` is **optional** — a blueprint with none is a
+*content-only* blueprint (fixed-form then assembles for feasibility only, still
+reporting realized TIF; see ``docs/blueprint-delivery-mode-semantics.md`` §2.1).
  */
 export interface Blueprint {
+  schema_version?: number;
   name?: string;
   /**
    * items per form
@@ -23,8 +30,9 @@ export interface Blueprint {
   /** @minimum 1 */
   num_forms?: number;
   content_constraints?: ContentConstraint[];
-  statistical_target: TIFTarget;
+  statistical_target?: BlueprintStatisticalTarget;
   enemy_policy?: EnemyPolicy;
   exposure_target?: BlueprintExposureTarget;
   exposure_feedback?: BlueprintExposureFeedback;
+  segments?: BlueprintSegments;
 }

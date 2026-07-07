@@ -1528,6 +1528,11 @@
       },
       "Blueprint": {
         "properties": {
+          "schema_version": {
+            "type": "integer",
+            "title": "Schema Version",
+            "default": 2
+          },
           "name": {
             "type": "string",
             "title": "Name",
@@ -1553,7 +1558,14 @@
             "title": "Content Constraints"
           },
           "statistical_target": {
-            "$ref": "#/components/schemas/TIFTarget"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TIFTarget"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "enemy_policy": {
             "$ref": "#/components/schemas/EnemyPolicy"
@@ -1577,15 +1589,26 @@
                 "type": "null"
               }
             ]
+          },
+          "segments": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Segments"
           }
         },
         "type": "object",
         "required": [
-          "length",
-          "statistical_target"
+          "length"
         ],
         "title": "Blueprint",
-        "description": "Full assembly specification for one (or several parallel) forms."
+        "description": "Full assembly specification for one (or several parallel) forms.\n\nDelivery-mode-agnostic (BP-MODES-1): one blueprint is satisfiable by fixed-form,\nLOFT, and CAT. ``statistical_target`` is **optional** \u2014 a blueprint with none is a\n*content-only* blueprint (fixed-form then assembles for feasibility only, still\nreporting realized TIF; see ``docs/blueprint-delivery-mode-semantics.md`` \u00a72.1)."
       },
       "BlueprintRead": {
         "properties": {

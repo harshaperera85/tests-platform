@@ -101,11 +101,12 @@ function fieldsFromBlueprint(bp: Blueprint): Fields {
       bp.exposure_target?.max_pairwise_overlap != null
         ? String(bp.exposure_target.max_pairwise_overlap)
         : "",
-    thetaText: (t.theta_points ?? []).join(", "),
-    infoText: (t.target_info ?? []).join(", "),
-    weightsText: (t.weights ?? []).join(", "),
-    tolerance: t.tolerance != null ? String(t.tolerance) : "",
-    method: (t.method as Method) ?? "minimax",
+    // content-only blueprints (BP-MODES-1) carry no statistical_target — blank fields
+    thetaText: (t?.theta_points ?? []).join(", "),
+    infoText: (t?.target_info ?? []).join(", "),
+    weightsText: (t?.weights ?? []).join(", "),
+    tolerance: t?.tolerance != null ? String(t.tolerance) : "",
+    method: (t?.method as Method) ?? "minimax",
     constraints: (bp.content_constraints ?? []).map((c) => {
       const predicates: Predicate[] = c.tags
         ? Object.entries(c.tags).map(([tag_type, tag_value]) => ({ tag_type, tag_value }))

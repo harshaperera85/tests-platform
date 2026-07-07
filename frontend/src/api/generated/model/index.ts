@@ -23,6 +23,8 @@ export * from './blueprint';
 export * from './blueprintExposureFeedback';
 export * from './blueprintExposureTarget';
 export * from './blueprintRead';
+export * from './blueprintSegments';
+export * from './blueprintStatisticalTarget';
 export * from './comparabilityReport';
 export * from './comparabilityRequest';
 export * from './contentConstraint';

@@ -52,9 +52,15 @@ export function AboutTab() {
             <dt className="text-ink-500">Content constraints</dt>
             <dd className="text-ink-900">{(bp.content_constraints ?? []).length}</dd>
             <dt className="text-ink-500">TIF target (θ)</dt>
-            <dd className="text-ink-900">{bp.statistical_target.theta_points.join(", ")}</dd>
+            <dd className="text-ink-900">
+              {bp.statistical_target
+                ? bp.statistical_target.theta_points.join(", ")
+                : "none (content-only)"}
+            </dd>
             <dt className="text-ink-500">TIF method</dt>
-            <dd className="text-ink-900">{bp.statistical_target.method ?? "minimax"}</dd>
+            <dd className="text-ink-900">
+              {bp.statistical_target ? (bp.statistical_target.method ?? "minimax") : "—"}
+            </dd>
           </dl>
         )}
       </Card>
