@@ -64,10 +64,13 @@ export function FormPreviewScreen({
   const byId = new Map<string, PoolItem>(
     (pool.data?.items ?? []).map((it) => [it.item_id, it]),
   );
-  const worstGap = Math.max(...f.tif.map((p) => Math.abs(p.gap)));
   const tol = curve.data?.tolerance ?? null;
   // maximin has no target — show achieved TIF only (no target curve / gap).
   const isMaximin = curve.data?.method === "maximin";
+  // content-only blueprint (BP-MODES-1): no target at all — achieved TIF only.
+  const isContentOnly = curve.data?.method === "none" || f.tif.length === 0;
+  const showTarget = !isMaximin && !isContentOnly;
+  const worstGap = showTarget ? Math.max(...f.tif.map((p) => Math.abs(p.gap))) : 0;
 
   const actualData = (curve.data?.curve ?? []).map((p) => ({
     theta: Number(p.theta.toFixed(3)),
@@ -101,19 +104,23 @@ export function FormPreviewScreen({
         }
       >
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          {isMaximin ? (
+          {isContentOnly ? (
+            <Pill tone="info">content-only — no TIF target</Pill>
+          ) : isMaximin ? (
             <Pill tone="ok">worst-point info = {Math.min(...f.tif.map((p) => p.actual)).toFixed(3)}</Pill>
           ) : (
             <Pill tone={worstGap < 0.5 ? "ok" : "warn"}>
               worst |actual − target| = {worstGap.toFixed(3)}
             </Pill>
           )}
-          {curve.data && <Pill tone="info">method: {curve.data.method}</Pill>}
-          {!isMaximin && tol != null && <Pill>tolerance ±{tol}</Pill>}
+          {curve.data && !isContentOnly && <Pill tone="info">method: {curve.data.method}</Pill>}
+          {showTarget && tol != null && <Pill>tolerance ±{tol}</Pill>}
           <span className="text-sm text-ink-600">
-            {isMaximin
-              ? "Test Information Function (achieved; maximin — no target)"
-              : "Test Information Function vs. blueprint target"}
+            {isContentOnly
+              ? "Test Information Function (achieved; content-only — feasibility assembly)"
+              : isMaximin
+                ? "Test Information Function (achieved; maximin — no target)"
+                : "Test Information Function vs. blueprint target"}
           </span>
         </div>
         <div className="h-72 w-full">
@@ -137,7 +144,7 @@ export function FormPreviewScreen({
                 />
                 <Tooltip />
                 <Legend />
-                {!isMaximin &&
+                {showTarget &&
                   tol != null &&
                   targetData.map((t) => (
                     <ReferenceArea
@@ -160,7 +167,7 @@ export function FormPreviewScreen({
                   dot={false}
                   isAnimationActive={false}
                 />
-                {!isMaximin && (
+                {showTarget && (
                   <Scatter data={targetData} dataKey="target" name="target" fill="#0f172a">
                     {tol != null && <ErrorBar dataKey="tol" stroke="#64748b" width={4} />}
                   </Scatter>
@@ -169,6 +176,7 @@ export function FormPreviewScreen({
             </ResponsiveContainer>
           )}
         </div>
+        {f.tif.length > 0 && (
         <div className="mt-3 overflow-hidden rounded-lg border border-ink-100">
           <table className="w-full text-sm">
             <thead className="bg-ink-50 text-ink-600">
@@ -200,6 +208,7 @@ export function FormPreviewScreen({
             </tbody>
           </table>
         </div>
+        )}
       </Card>
 
       <ConstraintCheck blueprint={blueprint.data?.blueprint} form={f} byId={byId} />

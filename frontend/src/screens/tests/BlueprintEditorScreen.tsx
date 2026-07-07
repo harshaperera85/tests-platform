@@ -37,6 +37,7 @@ type Fields = {
   expMax: string;
   expPrefer: boolean;
   expWeight: string;
+  hasTarget: boolean;
   thetaText: string;
   infoText: string;
   weightsText: string;
@@ -54,6 +55,7 @@ const DEFAULT_FIELDS: Fields = {
   expMax: "",
   expPrefer: false,
   expWeight: "",
+  hasTarget: true,
   thetaText: "-1, 0, 1",
   infoText: "8, 11, 8",
   weightsText: "",
@@ -102,6 +104,7 @@ function fieldsFromBlueprint(bp: Blueprint): Fields {
         ? String(bp.exposure_target.max_pairwise_overlap)
         : "",
     // content-only blueprints (BP-MODES-1) carry no statistical_target — blank fields
+    hasTarget: t != null,
     thetaText: (t?.theta_points ?? []).join(", "),
     infoText: (t?.target_info ?? []).join(", "),
     weightsText: (t?.weights ?? []).join(", "),
@@ -146,6 +149,7 @@ export function BlueprintEditorScreen({
   const [expPrefer, setExpPrefer] = useState(base.expPrefer);
   const [expWeight, setExpWeight] = useState(base.expWeight);
   const [constraints, setConstraints] = useState<ConstraintRow[]>(base.constraints);
+  const [hasTarget, setHasTarget] = useState(base.hasTarget);
   const [thetaText, setThetaText] = useState(base.thetaText);
   const [infoText, setInfoText] = useState(base.infoText);
   const [weightsText, setWeightsText] = useState(base.weightsText);
@@ -175,14 +179,17 @@ export function BlueprintEditorScreen({
   const errors: Record<string, string> = {};
   if (!Number.isInteger(len) || len <= 0) errors.length = "Length must be a positive integer.";
   if (!Number.isInteger(nForms) || nForms <= 0) errors.numForms = "Forms must be ≥ 1.";
-  if (theta.length === 0) errors.theta = "Enter at least one θ point.";
-  // maximin has no target: target_info/tolerance/weights are not validated/required.
-  if (isMinimax) {
-    if (info.length !== theta.length) errors.info = "Target info count must match θ points.";
-    if (info.some((v) => Number.isNaN(v) || v < 0)) errors.info = "Target info must be ≥ 0.";
-    if (weights.length > 0) {
-      if (weights.length !== theta.length) errors.weights = "Weights count must match θ points.";
-      else if (weights.some((w) => Number.isNaN(w) || w <= 0)) errors.weights = "Weights must be > 0.";
+  // content-only blueprint (BP-MODES-1 §2.1): no TIF fields to validate at all.
+  if (hasTarget) {
+    if (theta.length === 0) errors.theta = "Enter at least one θ point.";
+    // maximin has no target: target_info/tolerance/weights are not validated/required.
+    if (isMinimax) {
+      if (info.length !== theta.length) errors.info = "Target info count must match θ points.";
+      if (info.some((v) => Number.isNaN(v) || v < 0)) errors.info = "Target info must be ≥ 0.";
+      if (weights.length > 0) {
+        if (weights.length !== theta.length) errors.weights = "Weights count must match θ points.";
+        else if (weights.some((w) => Number.isNaN(w) || w <= 0)) errors.weights = "Weights must be > 0.";
+      }
     }
   }
   const rateNum = numOrUndef(maxRate);
@@ -244,6 +251,7 @@ export function BlueprintEditorScreen({
     setExpMax(f.expMax);
     setExpPrefer(f.expPrefer);
     setExpWeight(f.expWeight);
+    setHasTarget(f.hasTarget);
     setThetaText(f.thetaText);
     setInfoText(f.infoText);
     setWeightsText(f.weightsText);
@@ -318,13 +326,17 @@ export function BlueprintEditorScreen({
       name,
       length: len,
       num_forms: nForms,
-      statistical_target: {
-        theta_points: theta,
-        target_info: info,
-        method,
-        tolerance: isMinimax ? numOrUndef(tolerance) : undefined,
-        weights: weightsClean,
-      },
+      // content-only (BP-MODES-1 A1): omit the target — fixed-form assembly is then
+      // feasibility-only (no TIF objective) and still reports realized TIF.
+      statistical_target: hasTarget
+        ? {
+            theta_points: theta,
+            target_info: info,
+            method,
+            tolerance: isMinimax ? numOrUndef(tolerance) : undefined,
+            weights: weightsClean,
+          }
+        : null,
       exposure_target: exposure,
       exposure_feedback: exposureFeedback,
       content_constraints: constraints
@@ -406,8 +418,11 @@ export function BlueprintEditorScreen({
       const formIds = job.form_ids ?? [];
       if (!formIds.length || (job.status !== "optimal" && job.status !== "feasible")) {
         setInfeasible(
-          `Assembly ${job.status}: no feasible form for these constraints + TIF target on ` +
-            `pool '${poolId}'. Loosen a constraint, lower the target, or reduce forms.`,
+          hasTarget
+            ? `Assembly ${job.status}: no feasible form for these constraints + TIF target on ` +
+              `pool '${poolId}'. Loosen a constraint, lower the target, or reduce forms.`
+            : `Assembly ${job.status}: no feasible form for these content constraints on ` +
+              `pool '${poolId}'. Loosen a constraint or reduce forms.`,
         );
         return;
       }
@@ -630,41 +645,68 @@ export function BlueprintEditorScreen({
         title="Statistical target (TIF)"
         subtitle="Target test information at θ points — what makes forms psychometrically parallel."
       >
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Method">
-            <Select value={method} onChange={(e) => setMethod(e.target.value as Method)}>
-              <option value="minimax">minimax (match target)</option>
-              <option value="maximin">maximin (maximize worst point)</option>
-            </Select>
-          </Field>
-          <Field label="Theta points" hint={errors.theta ?? "comma-separated"}>
-            <TextInput value={thetaText} aria-invalid={Boolean(errors.theta)}
-              onChange={(e) => setThetaText(e.target.value)} />
-          </Field>
-          {isMinimax ? (
-            <>
-              <Field label="Target info" hint={errors.info ?? "comma-separated, same length"}>
-                <TextInput value={infoText} aria-invalid={Boolean(errors.info)}
-                  onChange={(e) => setInfoText(e.target.value)} />
-              </Field>
-              <Field label="Weights" hint={errors.weights ?? "per-θ, default 1; raise to protect a θ"}>
-                <TextInput value={weightsText} placeholder="1, 1, 1"
-                  aria-invalid={Boolean(errors.weights)}
-                  onChange={(e) => setWeightsText(e.target.value)} />
-              </Field>
-              <Field label="Tolerance" hint="optional absolute band">
-                <TextInput type="number" value={tolerance} placeholder="(none)"
-                  onChange={(e) => setTolerance(e.target.value)} />
-              </Field>
-            </>
-          ) : (
-            <div className="col-span-2 rounded-lg bg-ink-50 px-3 py-2 text-xs text-ink-500">
-              <span className="font-medium text-ink-700">maximin</span> maximizes information at
-              the worst θ point — there is no target, so target-info, weights, and tolerance
-              don’t apply. The preview shows the achieved TIF only.
-            </div>
-          )}
-        </div>
+        <label className="mb-3 flex items-center gap-2 text-sm text-ink-700">
+          <input
+            type="checkbox"
+            checked={hasTarget}
+            onChange={(e) => {
+              setHasTarget(e.target.checked);
+              // re-enabling on a content-only blueprint: start from sensible defaults
+              if (e.target.checked && thetaText.trim() === "") {
+                setThetaText(DEFAULT_FIELDS.thetaText);
+                setInfoText(DEFAULT_FIELDS.infoText);
+              }
+            }}
+          />
+          set a statistical (TIF) target
+        </label>
+        {hasTarget ? (
+          <div className="grid grid-cols-2 gap-4">
+            <Field label="Method">
+              <Select value={method} onChange={(e) => setMethod(e.target.value as Method)}>
+                <option value="minimax">minimax (match target)</option>
+                <option value="maximin">maximin (maximize worst point)</option>
+              </Select>
+            </Field>
+            <Field label="Theta points" hint={errors.theta ?? "comma-separated"}>
+              <TextInput value={thetaText} aria-invalid={Boolean(errors.theta)}
+                onChange={(e) => setThetaText(e.target.value)} />
+            </Field>
+            {isMinimax ? (
+              <>
+                <Field label="Target info" hint={errors.info ?? "comma-separated, same length"}>
+                  <TextInput value={infoText} aria-invalid={Boolean(errors.info)}
+                    onChange={(e) => setInfoText(e.target.value)} />
+                </Field>
+                <Field label="Weights" hint={errors.weights ?? "per-θ, default 1; raise to protect a θ"}>
+                  <TextInput value={weightsText} placeholder="1, 1, 1"
+                    aria-invalid={Boolean(errors.weights)}
+                    onChange={(e) => setWeightsText(e.target.value)} />
+                </Field>
+                <Field label="Tolerance" hint="optional absolute band">
+                  <TextInput type="number" value={tolerance} placeholder="(none)"
+                    onChange={(e) => setTolerance(e.target.value)} />
+                </Field>
+              </>
+            ) : (
+              <div className="col-span-2 rounded-lg bg-ink-50 px-3 py-2 text-xs text-ink-500">
+                <span className="font-medium text-ink-700">maximin</span> maximizes information at
+                the worst θ point — there is no target, so target-info, weights, and tolerance
+                don’t apply. The preview shows the achieved TIF only.
+              </div>
+            )}
+          </div>
+        ) : (
+          // authoring-time notice per BP-MODES-1 §2.1: legal, but say what it gives up.
+          <Alert tone="info" title="Content-only blueprint">
+            No TIF target: assembly is <em>feasibility-only</em> — items are selected to
+            satisfy the content, enemy, length, and exposure constraints with no
+            information objective. Forms are parallel in <em>content only</em>, not
+            statistically; realized TIF is still computed and reported. Fine for
+            low-stakes forms — set a target when score comparability across forms
+            matters.
+          </Alert>
+        )}
       </Card>
 
       <div className="space-y-3">

@@ -236,20 +236,26 @@ function QAReport({ formId }: { formId: string }) {
         </div>
         <div>
           <div className="mb-1 font-medium text-ink-700">Actual vs target TIF</div>
-          <table className="w-full tabular-nums">
-            <thead className="text-ink-500">
-              <tr><th className="text-left">θ</th><th className="text-right">target</th><th className="text-right">actual</th></tr>
-            </thead>
-            <tbody>
-              {r.tif_actual_vs_target.map((p) => (
-                <tr key={p.theta} className="border-t border-ink-100">
-                  <td>{p.theta}</td>
-                  <td className="text-right">{p.target.toFixed(2)}</td>
-                  <td className="text-right">{p.actual.toFixed(3)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          {r.tif_actual_vs_target.length > 0 ? (
+            <table className="w-full tabular-nums">
+              <thead className="text-ink-500">
+                <tr><th className="text-left">θ</th><th className="text-right">target</th><th className="text-right">actual</th></tr>
+              </thead>
+              <tbody>
+                {r.tif_actual_vs_target.map((p) => (
+                  <tr key={p.theta} className="border-t border-ink-100">
+                    <td>{p.theta}</td>
+                    <td className="text-right">{p.target.toFixed(2)}</td>
+                    <td className="text-right">{p.actual.toFixed(3)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-xs text-ink-400">
+              content-only blueprint — no TIF target to compare against
+            </p>
+          )}
         </div>
       </div>
 
