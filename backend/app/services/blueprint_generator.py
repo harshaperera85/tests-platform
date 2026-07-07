@@ -5,7 +5,12 @@ Pipeline: item-factory **unit JSONs** → :func:`normalize_unit_documents` → a
 manifests.
 
 Recipes (shares → whole item counts by **largest-remainder** rounding, summing exactly
-to the requested length; emitted as **count min = max** constraints per §2):
+to the requested length). Cell encoding follows the binding unless overridden by
+``constraint_mode``: fixed-form/LOFT get **count min = max** cells (fixed length,
+exact allocation, §2); CAT gets **proportion min = max** cells (length is emergent —
+§3.2 interprets proportions against the realized length with floor/ceil slack,
+whereas count minimums summing to a fixed-form length would be structurally
+impossible under a smaller ``max_items``, §3.4(4)):
 
 - **eoc** (end-of-course / mid-course): one constraint per **unit**, share
   ∝ (KCs + complicators in the unit) / course totals.
@@ -240,18 +245,37 @@ def generate_blueprint(
                 "only, not statistically (BP-MODES-1 §2.1)."
             )
 
-    # §2: exact cells are expressed as counts (min = max), never proportions.
-    constraints = [
-        ContentConstraint(
-            tag_type=tag_dim,
-            tag_value=s.key,
-            minimum=s.count,
-            maximum=s.count,
-            mode="count",
-            label=s.label,
-        )
-        for s in shares
-    ]
+    # Cell encoding: counts for fixed-length bindings (§2 exact cells); proportions
+    # for CAT (scale-free under emergent length, §3.2). Explicit override wins.
+    cell_mode = req.constraint_mode or (
+        "proportion" if req.binding == "cat" else "count"
+    )
+    if cell_mode == "count":
+        constraints = [
+            ContentConstraint(
+                tag_type=tag_dim,
+                tag_value=s.key,
+                minimum=s.count,
+                maximum=s.count,
+                mode="count",
+                label=s.label,
+            )
+            for s in shares
+        ]
+    else:
+        # min = max = count/length round-trips exactly through the fixed-form
+        # compiler's round(p × L) and scales with a CAT session's realized length.
+        constraints = [
+            ContentConstraint(
+                tag_type=tag_dim,
+                tag_value=s.key,
+                minimum=s.count / req.length,
+                maximum=s.count / req.length,
+                mode="proportion",
+                label=s.label,
+            )
+            for s in shares
+        ]
     constraints.extend(_cognitive_constraints(manifest, req))
 
     if req.name:

@@ -2797,6 +2797,21 @@
             "title": "Binding",
             "default": "fixed_form"
           },
+          "constraint_mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "count",
+                  "proportion"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Constraint Mode"
+          },
           "statistical_target": {
             "anyOf": [
               {

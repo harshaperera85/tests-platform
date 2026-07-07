@@ -167,6 +167,12 @@ class GenerateBlueprintRequest(BaseModel):
     num_forms: int = Field(default=1, ge=1)
     name: str | None = None
     binding: Literal["fixed_form", "loft", "cat"] = "fixed_form"
+    #: How the content cells are encoded. Default (None) follows the binding:
+    #: fixed_form/loft → count min=max (fixed length, exact allocation, §2);
+    #: cat → proportion min=max (length is emergent — §3.2 interprets proportions
+    #: against the realized length, while count minimums summing to a fixed-form
+    #: length would be structurally impossible under a smaller max_items, §3.4(4)).
+    constraint_mode: Literal["count", "proportion"] | None = None
     statistical_target: TIFTarget | None = None
     #: pool tag dimensions holding an item's unit / KC id
     unit_tag: str = "unit"

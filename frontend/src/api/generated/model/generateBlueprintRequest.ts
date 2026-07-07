@@ -11,6 +11,7 @@ import type { GenerateBlueprintRequestGrain } from './generateBlueprintRequestGr
 import type { GenerateBlueprintRequestUnitId } from './generateBlueprintRequestUnitId';
 import type { GenerateBlueprintRequestName } from './generateBlueprintRequestName';
 import type { GenerateBlueprintRequestBinding } from './generateBlueprintRequestBinding';
+import type { GenerateBlueprintRequestConstraintMode } from './generateBlueprintRequestConstraintMode';
 import type { GenerateBlueprintRequestStatisticalTarget } from './generateBlueprintRequestStatisticalTarget';
 import type { GenerateBlueprintRequestCognitiveProfile } from './generateBlueprintRequestCognitiveProfile';
 import type { GenerateBlueprintRequestPoolId } from './generateBlueprintRequestPoolId';
@@ -37,6 +38,7 @@ export interface GenerateBlueprintRequest {
   num_forms?: number;
   name?: GenerateBlueprintRequestName;
   binding?: GenerateBlueprintRequestBinding;
+  constraint_mode?: GenerateBlueprintRequestConstraintMode;
   statistical_target?: GenerateBlueprintRequestStatisticalTarget;
   unit_tag?: string;
   kc_tag?: string;

@@ -89,6 +89,7 @@ export const generateBlueprintFromCurriculumBody = zod.object({
   "num_forms": zod.number().min(1).default(generateBlueprintFromCurriculumBodyNumFormsDefault),
   "name": zod.union([zod.string(),zod.null()]).optional(),
   "binding": zod.enum(['fixed_form', 'loft', 'cat']).default(generateBlueprintFromCurriculumBodyBindingDefault),
+  "constraint_mode": zod.union([zod.enum(['count', 'proportion']),zod.null()]).optional(),
   "statistical_target": zod.union([zod.object({
   "theta_points": zod.array(zod.number()).min(1),
   "target_info": zod.array(zod.number()).min(1),

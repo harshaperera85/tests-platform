@@ -238,6 +238,44 @@ def test_cognitive_per_unit_minimum_unknown_unit(
         generate_blueprint(req, pre_algebra)
 
 
+# -------------------------------------------------- cell encoding per binding
+def test_cat_binding_emits_proportion_cells(pre_algebra: CurriculumManifest) -> None:
+    bp, shares, _ = generate_blueprint(
+        GenerateBlueprintRequest(
+            manifest=pre_algebra, grain="eoc", length=60, binding="cat"
+        ),
+        pre_algebra,
+    )
+    cells = bp.content_constraints
+    assert all(c.mode == "proportion" for c in cells)
+    # scale-free: proportions resolve to the same counts at the authored length…
+    assert [c.resolved_minimum(60) for c in cells] == [s.count for s in shares]
+    # …and to a scaled allocation at a smaller CAT realized length (§3.2),
+    # where fixed count-minimums summing to 60 would be impossible (§3.4(4))
+    assert sum(c.resolved_minimum(30) or 0 for c in cells) <= 33  # ≈ 30 ± rounding
+
+
+def test_constraint_mode_override(pre_algebra: CurriculumManifest) -> None:
+    # force proportions on a fixed-form binding
+    bp, _, _ = generate_blueprint(
+        GenerateBlueprintRequest(
+            manifest=pre_algebra, grain="eoc", length=60,
+            constraint_mode="proportion",
+        ),
+        pre_algebra,
+    )
+    assert all(c.mode == "proportion" for c in bp.content_constraints)
+    # force counts on a CAT binding
+    bp, _, _ = generate_blueprint(
+        GenerateBlueprintRequest(
+            manifest=pre_algebra, grain="eoc", length=60, binding="cat",
+            constraint_mode="count",
+        ),
+        pre_algebra,
+    )
+    assert all(c.mode == "count" for c in bp.content_constraints)
+
+
 # ------------------------------------------------------------ binding rules
 def _target(tol: float | None = None) -> TIFTarget:
     return TIFTarget(theta_points=[0.0], target_info=[5.0], tolerance=tol)

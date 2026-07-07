@@ -77,6 +77,7 @@ export * from './formRead';
 export * from './generateBlueprintRequest';
 export * from './generateBlueprintRequestBinding';
 export * from './generateBlueprintRequestCognitiveProfile';
+export * from './generateBlueprintRequestConstraintMode';
 export * from './generateBlueprintRequestCourseId';
 export * from './generateBlueprintRequestGrain';
 export * from './generateBlueprintRequestManifest';
