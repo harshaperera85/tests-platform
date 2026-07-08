@@ -57,7 +57,9 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   not here. **Design captured** in `docs/common_item_bank_design.md` (two-axis item model:
   editorial vs calibration status; Linear-as-field-test-instrument loop; immutable single id). **Asks
   to item-factory** drafted in `docs/item_factory_change_request.md` (complete the export, surface
-  TIMSS, flat tag dict, stable id) — **not yet sent**. To pin, still need: a real sample export +
+  TIMSS, flat tag dict w/ pinned keys, stable id, unit-JSON as versioned contract) —
+  **refreshed 2026-07-08 against the design-review facts; ready to send, not yet sent**.
+  Folds in the calibration-engine-ownership question as an opener. To pin, still need: a real sample export +
   confirmation of the asks; and the downstream **calibration-engine ownership** decision
   (`common_item_bank_design.md` §10). **Decided:** adopt `instance_id` as canonical `item_id`
   verbatim, never re-mint (single join key for parameter write-back).
