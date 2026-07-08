@@ -1,0 +1,10 @@
+kc_id: '9.3'
+unit: 'Unit 9: Exponents'
+complicator: 1
+complicator_dimensions:
+- symbolic_quotient_simplification
+- numeric_base_quotient
+- expanded_factor_representation
+- equal_exponents_yield_one
+- solve_for_missing_exponent
+- equivalent_expression_matching

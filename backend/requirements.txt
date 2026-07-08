@@ -11,4 +11,5 @@ redis
 rq
 httpx
 python-dotenv
+pyyaml
 ortools

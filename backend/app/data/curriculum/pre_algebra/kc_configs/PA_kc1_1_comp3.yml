@@ -1,0 +1,7 @@
+kc_id: '1.1'
+unit: 'Unit 1: Nature of Numbers'
+complicator: 3
+complicator_dimensions:
+- same_digit_position_comparison
+- multiplicative_relationship_identification
+- place_value_ratio_computation

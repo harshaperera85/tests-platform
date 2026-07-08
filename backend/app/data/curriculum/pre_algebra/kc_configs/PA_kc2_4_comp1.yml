@@ -1,0 +1,9 @@
+kc_id: '2.4'
+unit: 'Unit 2: Negative numbers'
+complicator: 1
+complicator_dimensions:
+- multiplication_two_integers
+- division_two_integers
+- negation_of_a_number
+- sign_determination_only
+- missing_factor_or_dividend

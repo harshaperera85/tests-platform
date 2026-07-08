@@ -4,7 +4,9 @@ Mirrors the simulated-pool pattern (`psychometrics/pools.py`): until a live
 item-factory feed is wired, the platform ships curriculum data in-repo. The files
 under ``app/data/curriculum/<slug>/unit-*.json`` are item-factory **unit JSON**
 exports (slimmed to the consumed fields — complicator ``examples``/``misconceptions``
-prose dropped); they are normalized into manifests at first access and cached.
+prose dropped); an optional ``<slug>/kc_configs/*.yml`` directory (slimmed
+item-factory kc_configs) supplies §6.1 dimension counts where authored. Normalized
+into manifests at first access and cached.
 """
 
 from __future__ import annotations
@@ -32,7 +34,12 @@ def _catalog() -> dict[str, CurriculumManifest]:
         ]
         if not docs:
             continue
-        manifest = normalize_unit_documents(docs)
+        # optional kc_configs/ alongside the unit JSONs supplies the §6.1
+        # dimension counts (partial coverage; the rest is imputed)
+        kc_dir = course_dir / "kc_configs"
+        manifest = normalize_unit_documents(
+            docs, kc_configs_dir=kc_dir if kc_dir.is_dir() else None
+        )
         out[manifest.course_id] = manifest
     return out
 

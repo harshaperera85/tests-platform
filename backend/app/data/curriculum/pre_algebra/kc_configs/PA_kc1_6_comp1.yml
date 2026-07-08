@@ -1,0 +1,9 @@
+kc_id: '1.6'
+unit: 'Unit 1: Nature of numbers'
+complicator: 1
+complicator_dimensions:
+- identify_first_operation
+- evaluate_expression_to_value
+- compare_two_expressions
+- stepwise_evaluation_ordering
+- translate_word_problem_to_expression

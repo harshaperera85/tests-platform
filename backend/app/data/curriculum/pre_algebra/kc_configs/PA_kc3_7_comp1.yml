@@ -1,0 +1,8 @@
+kc_id: '3.7'
+unit: 'Unit 3: Fractions and decimals'
+complicator: 1
+complicator_dimensions:
+- decimal_to_fraction
+- fraction_to_decimal
+- mixed_or_expanded_form_equivalence
+- place_value_denominator_mapping

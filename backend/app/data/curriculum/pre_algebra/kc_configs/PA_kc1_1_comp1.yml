@@ -1,0 +1,10 @@
+kc_id: '1.1'
+unit: 'Unit 1: Nature of numbers'
+complicator: 1
+complicator_dimensions:
+- name_position_of_digit
+- value_of_digit_in_position
+- digit_in_named_position
+- expanded_form_to_standard
+- standard_to_expanded_form
+- same_digit_different_positions

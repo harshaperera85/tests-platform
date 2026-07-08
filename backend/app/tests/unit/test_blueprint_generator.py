@@ -32,6 +32,7 @@ from app.services.blueprint_generator import (
     check_feasibility,
     generate_blueprint,
     largest_remainder,
+    load_kc_config_dimensions,
     normalize_unit_documents,
     resolve_scope,
 )
@@ -46,9 +47,13 @@ def _raw_units() -> list[CurriculumUnit]:
     ]
 
 
+KC_CONFIGS = FIXTURES / "kc_configs"
+
+
 @pytest.fixture(scope="module")
 def pre_algebra() -> CurriculumManifest:
-    return normalize_unit_documents(_raw_units())
+    """The catalog view: unit JSONs + the 16 authored kc_configs (median 5)."""
+    return normalize_unit_documents(_raw_units(), kc_configs_dir=KC_CONFIGS)
 
 
 def _synthetic_manifest() -> CurriculumManifest:
@@ -127,21 +132,42 @@ def test_manifest_kc_count_sugar() -> None:
 
 
 # --------------------------------------------------- §6.1 dimension weights
-def test_fixtures_fully_imputed_degenerate_case(
-    pre_algebra: CurriculumManifest,
-) -> None:
-    """No dimension data ⇒ every complicator imputed at median fallback 1.0 —
-    the spec's degenerate case where weights reduce to complicator counts."""
+def test_kc_config_dimensions_loaded() -> None:
+    """The 16 authored pre-algebra kc_configs parse to positional keys; the
+    known-count median is 5 (the imputation value for the other ~183)."""
+    dims = load_kc_config_dimensions(KC_CONFIGS)
+    assert len(dims) == 16
+    assert dims[(9, 1, 1)] == 6 and dims[(9, 1, 2)] == 5 and dims[(9, 3, 1)] == 6
+    assert sorted(dims.values())[len(dims) // 2] == 5  # median
+
+
+def test_real_dimension_weights_with_median_5(pre_algebra: CurriculumManifest) -> None:
+    """§6.1 on the real data: dimension sums where kc_configs exist, median-5
+    imputation elsewhere, imputed fraction reported (183 of 199)."""
     req = GenerateBlueprintRequest(
         manifest=pre_algebra, test_type="cumulative_final", length=60
     )
     bp, shares, imputed_fraction, warnings = generate_blueprint(req, pre_algebra)
-    assert imputed_fraction == 1.0
+    assert imputed_fraction == pytest.approx(183 / 199)
     assert any("imputed" in w for w in warnings)
-    # w(unit) = Σ complicators (all weights 1.0 each)
-    assert [s.weight for s in shares] == [19, 18, 32, 11, 19, 20, 20, 13, 19, 17, 11]
+    assert [s.weight for s in shares] == [
+        95, 89, 159, 55, 95, 100, 100, 65, 97, 86, 54,
+    ]
     assert [s.count for s in shares] == [6, 5, 10, 3, 6, 6, 6, 4, 6, 5, 3]
     assert sum(s.count for s in shares) == 60
+
+
+def test_without_kc_configs_fully_imputed_degenerate_case() -> None:
+    """No dimension data at all ⇒ every complicator imputed at the fallback 1.0 —
+    the spec's degenerate case where weights reduce to complicator counts."""
+    manifest = normalize_unit_documents(_raw_units())  # no kc_configs_dir
+    req = GenerateBlueprintRequest(
+        manifest=manifest, test_type="cumulative_final", length=60
+    )
+    _, shares, imputed_fraction, _ = generate_blueprint(req, manifest)
+    assert imputed_fraction == 1.0
+    assert [s.weight for s in shares] == [19, 18, 32, 11, 19, 20, 20, 13, 19, 17, 11]
+    assert [s.count for s in shares] == [6, 5, 10, 3, 6, 6, 6, 4, 6, 5, 3]
 
 
 def test_dimension_sums_and_median_imputation() -> None:
@@ -210,7 +236,7 @@ def test_mid_and_eoc_renormalized_shares(pre_algebra: CurriculumManifest) -> Non
         ),
         pre_algebra,
     )
-    assert [s.weight for s in mid] == [19, 18, 32, 11, 19, 20]
+    assert [s.weight for s in mid] == [95, 89, 159, 55, 95, 100]
     assert [s.count for s in mid] == [5, 4, 8, 3, 5, 5]
     _, eoc, _, _ = generate_blueprint(
         GenerateBlueprintRequest(
@@ -218,7 +244,7 @@ def test_mid_and_eoc_renormalized_shares(pre_algebra: CurriculumManifest) -> Non
         ),
         pre_algebra,
     )
-    assert [s.weight for s in eoc] == [20, 13, 19, 17, 11]
+    assert [s.weight for s in eoc] == [100, 65, 97, 86, 54]
     assert [s.count for s in eoc] == [8, 5, 7, 6, 4]
 
 
@@ -256,8 +282,11 @@ def test_unit_quiz_shares_and_complicator_maxima(
         unit_id=exponents.unit_id,
         length=12,
     )
-    bp, shares, _, _ = generate_blueprint(req, pre_algebra)
-    assert [s.weight for s in shares] == [5, 3, 3, 3, 5]
+    bp, shares, imputed_fraction, _ = generate_blueprint(req, pre_algebra)
+    # KC 9.1 has authored dims 6,5 + three imputed 5s = 26; 16/19 imputed in scope
+    assert [s.weight for s in shares] == [26, 15, 16, 15, 25]
+    assert [s.n_imputed for s in shares] == [3, 3, 2, 3, 5]
+    assert imputed_fraction == pytest.approx(16 / 19)
     assert [s.count for s in shares] == [3, 2, 2, 2, 3]
     # per-KC cells are count min=max (LOFT default binding); 19 complicator maxima
     kc_cells = bp.content_constraints[:5]

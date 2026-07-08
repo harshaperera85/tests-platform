@@ -41,6 +41,9 @@ from __future__ import annotations
 import math
 import statistics
 from collections.abc import Sequence
+from pathlib import Path
+
+import yaml
 
 from app.psychometrics.bank import ItemPool
 from app.schemas.blueprint import Blueprint, ContentConstraint
@@ -80,15 +83,48 @@ def largest_remainder(weights: Sequence[float], total: int) -> list[int]:
     return counts
 
 
-def normalize_unit_documents(docs: list[CurriculumUnit]) -> CurriculumManifest:
+def load_kc_config_dimensions(kc_configs_dir: Path) -> dict[tuple[int, int, int], int]:
+    """Parse item-factory ``kc_configs/*.yml`` into dimension counts.
+
+    Each file carries ``kc_id`` ("<unit>.<kc>", e.g. "9.1"), ``complicator`` (the
+    1-based order within the KC), and ``complicator_dimensions`` (the list whose
+    length is the §6.1 weight). Returns
+    ``{(unit_order, kc_order, complicator_order): n_dimensions}``. Files that don't
+    parse to that shape are skipped — coverage is expected to be partial (the
+    imputation path owns the gaps).
+    """
+    out: dict[tuple[int, int, int], int] = {}
+    for path in sorted(kc_configs_dir.glob("*.yml")):
+        try:
+            doc = yaml.safe_load(path.read_text())
+            unit_s, kc_s = str(doc["kc_id"]).split(".")
+            key = (int(unit_s), int(kc_s), int(doc["complicator"]))
+            n = len(doc["complicator_dimensions"])
+        except (KeyError, TypeError, ValueError, yaml.YAMLError):
+            continue
+        if n >= 1:
+            out[key] = n
+    return out
+
+
+def normalize_unit_documents(
+    docs: list[CurriculumUnit],
+    *,
+    kc_configs_dir: Path | None = None,
+) -> CurriculumManifest:
     """Derive the minimal curriculum manifest from raw item-factory unit JSONs.
 
     A course = its unit files sharing ``course_id``; mixed course_ids are rejected.
     Units and KCs are ordered by their export ``order`` (input order breaks ties).
-    Identifiers are carried verbatim. Per-complicator dimension counts are carried
-    when the export supplies them (``n_dimensions`` / ``dimensions``), else left
-    unknown for §6.1 imputation.
+    Identifiers are carried verbatim. Per-complicator dimension counts come from,
+    in priority order: the unit JSON itself (``n_dimensions`` / ``dimensions``,
+    once item-factory surfaces them — issue #1 R7), else the optional
+    ``kc_configs_dir`` (matched positionally: unit order × KC order × complicator
+    order, the kc_config file coordinates), else left unknown for §6.1 imputation.
     """
+    kc_dims: dict[tuple[int, int, int], int] = (
+        load_kc_config_dimensions(kc_configs_dir) if kc_configs_dir else {}
+    )
     if not docs:
         raise ValueError("no unit documents supplied")
     course_ids = {d.course_id for d in docs if d.course_id is not None}
@@ -101,6 +137,15 @@ def normalize_unit_documents(docs: list[CurriculumUnit]) -> CurriculumManifest:
         if d.unit_id in seen:
             raise ValueError(f"duplicate unit_id {d.unit_id!r} in unit documents")
         seen.add(d.unit_id)
+
+    def _dims(
+        d: CurriculumUnit, kc_order: int | None, c_order: int | None, inline: int | None
+    ) -> int | None:
+        if inline is not None:  # the unit JSON itself wins once R7 lands
+            return inline
+        if d.unit_order is None or kc_order is None or c_order is None:
+            return None
+        return kc_dims.get((d.unit_order, kc_order, c_order))
 
     ordered = sorted(
         enumerate(docs), key=lambda p: (p[1].unit_order is None, p[1].unit_order, p[0])
@@ -116,7 +161,12 @@ def normalize_unit_documents(docs: list[CurriculumUnit]) -> CurriculumManifest:
                     order=kc.order,
                     name=kc.name,
                     complicators=[
-                        ManifestComplicator(id=c.id, n_dimensions=c.dimension_count)
+                        ManifestComplicator(
+                            id=c.id,
+                            n_dimensions=_dims(
+                                d, kc.order, c.order, c.dimension_count
+                            ),
+                        )
                         for c in kc.complicators
                     ],
                 )

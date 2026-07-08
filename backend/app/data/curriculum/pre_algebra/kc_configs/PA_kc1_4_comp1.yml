@@ -1,0 +1,9 @@
+kc_id: '1.4'
+unit: 'Unit 1: Nature of numbers'
+complicator: 1
+complicator_dimensions:
+- compute_partial_products_to_total
+- identify_partial_products_in_model
+- find_missing_factor_from_model
+- match_model_to_expression
+- verify_correct_decomposition

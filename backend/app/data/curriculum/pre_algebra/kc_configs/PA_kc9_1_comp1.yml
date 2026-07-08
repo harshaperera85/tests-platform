@@ -1,0 +1,10 @@
+kc_id: '9.1'
+unit: 'Unit 9: Exponents'
+complicator: 1
+complicator_dimensions:
+- literal_variable_base_product
+- numeric_base_product
+- fractional_base_product
+- expanded_form_equivalence
+- missing_exponent_solving
+- misconception_diagnosis

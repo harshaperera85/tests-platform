@@ -35,6 +35,11 @@ exclude = ["alembic/versions/"]
 module = ["app.tests.*"]
 ignore_errors = true
 
+# pyyaml ships no stubs; safe_load returns Any regardless, so stubs add nothing.
+[[tool.mypy.overrides]]
+module = ["yaml", "yaml.*"]
+ignore_missing_imports = true
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["app/tests"]

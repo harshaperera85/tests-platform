@@ -1,0 +1,8 @@
+kc_id: '1.1'
+unit: 'Unit 1: Nature of Numbers'
+complicator: 4
+complicator_dimensions:
+- decimal_comparison
+- decimal_ordering
+- digit_value_identification
+- number_construction_from_clues

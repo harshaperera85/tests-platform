@@ -1,0 +1,8 @@
+kc_id: '11.3'
+unit: 'Unit 11: Polynomials'
+complicator: 1
+complicator_dimensions:
+- coefficient_multiplication
+- exponent_addition
+- sign_handling
+- implicit_exponent_recognition

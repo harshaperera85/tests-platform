@@ -1,0 +1,8 @@
+kc_id: '2.2'
+unit: 'Unit 2: Negative numbers'
+complicator: 1
+complicator_dimensions:
+- read_value_from_number_line
+- locate_value_on_number_line
+- position_relative_to_tick_marks
+- integer_vs_decimal_placement

@@ -47,9 +47,10 @@ def test_generate_cumulative_final_from_catalog(client: TestClient) -> None:
     )
     assert resp.status_code == 200, resp.text
     body = resp.json()
-    # §6.1 degenerate case (no dimension data): weights = complicator counts
+    # §6.1 on the shipped catalog: 16 authored kc_configs, the rest imputed at
+    # the median (5) — 183 of 199 complicators
     assert [s["count"] for s in body["shares"]] == [6, 5, 10, 3, 6, 6, 6, 4, 6, 5, 3]
-    assert body["imputed_fraction"] == 1.0
+    assert abs(body["imputed_fraction"] - 183 / 199) < 1e-9
     assert any("imputed" in w for w in body["warnings"])
     bp = body["blueprint"]
     assert bp["schema_version"] == 2

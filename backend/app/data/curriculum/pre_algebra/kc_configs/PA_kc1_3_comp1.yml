@@ -1,0 +1,9 @@
+kc_id: '1.3'
+unit: 'Unit 1: Nature of numbers'
+complicator: 1
+complicator_dimensions:
+- additive_identity_zero
+- multiplicative_identity_one
+- zero_property_of_multiplication
+- self_inverse_subtraction_and_division
+- division_by_zero_undefined

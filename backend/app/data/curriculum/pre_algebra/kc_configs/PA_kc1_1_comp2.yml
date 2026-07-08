@@ -1,0 +1,10 @@
+kc_id: '1.1'
+unit: 'Unit 1: Nature of numbers'
+complicator: 2
+complicator_dimensions:
+- multiply_by_powers_of_ten
+- divide_by_powers_of_ten
+- mixed_multiply_and_divide
+- find_missing_factor_or_operand
+- equivalent_expression_recognition
+- value_comparison_after_scaling

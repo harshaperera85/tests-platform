@@ -1,0 +1,10 @@
+kc_id: '10.1'
+unit: 'Unit 10: Roots and rationals'
+complicator: 1
+complicator_dimensions:
+- compute_square_root_of_perfect_square
+- identify_perfect_square_integers
+- inverse_relationship_square_and_root
+- solve_for_radicand_given_root
+- order_or_compare_perfect_squares_and_roots
+- diagnose_square_root_misconception
