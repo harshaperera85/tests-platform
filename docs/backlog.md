@@ -56,10 +56,11 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   CAT-ready export incomplete). The IRT scaling question therefore lives at the **calibration** stage,
   not here. **Design captured** in `docs/common_item_bank_design.md` (two-axis item model:
   editorial vs calibration status; Linear-as-field-test-instrument loop; immutable single id). **Asks
-  to item-factory** drafted in `docs/item_factory_change_request.md` (complete the export, surface
+  to item-factory** in `docs/item_factory_change_request.md` (complete the export, surface
   TIMSS, flat tag dict w/ pinned keys, stable id, unit-JSON as versioned contract) —
-  **refreshed 2026-07-08 against the design-review facts; ready to send, not yet sent**.
-  Folds in the calibration-engine-ownership question as an opener. To pin, still need: a real sample export +
+  **SENT 2026-07-08 as `outsmart-college/item-factory-source#1`; awaiting answers** to:
+  (a) which artifact is the export contract, (b) timing per ask, (c) the
+  calibration-engine-ownership opener. Importer build (#9) starts on the reply. To pin, still need: a real sample export +
   confirmation of the asks; and the downstream **calibration-engine ownership** decision
   (`common_item_bank_design.md` §10). **Decided:** adopt `instance_id` as canonical `item_id`
   verbatim, never re-mint (single join key for parameter write-back).
