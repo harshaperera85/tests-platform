@@ -34,7 +34,13 @@ Durable to-do list. Status as of the latest commit on `main`.
 ## Next up
 - **Operational walkthrough** — hands-on validation of the linear path on simulated data.
   Guide: `docs/walkthroughs/phase1_linear_walkthrough.md`. Log findings in its table;
-  triage bugs vs. cosmetics.
+  triage bugs vs. cosmetics. **Deliberately deferred (2026-07-08): run when ready to
+  merge in the CAT platform — as the ENTRY GATE to that work (certify a clean `main`
+  baseline BEFORE touching any CAT integration, so findings aren't conflated with
+  merge regressions).** Until then, correctness is held by the automated gates (test
+  tiers, oracle parity, contract regen, per-phase live smokes). Keep the guide honest
+  as features land — it does not yet cover the content-only TIF toggle or the
+  Generate-from-curriculum flow (BP-MODES-1); add those before the run.
 
 ## Parked
 
