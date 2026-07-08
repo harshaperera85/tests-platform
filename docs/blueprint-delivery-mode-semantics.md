@@ -292,21 +292,58 @@ class BlueprintBinding(BaseModel):
   registry; `cognitive_framework`/`cognitive_level`), matching the pool-item
   tag contract fixed-form assembly already uses.
 
-## 6. Generator note (informative)
+## 6. Generator note (informative; rev. 2026-07-09)
 
 The curriculum→blueprint generator (lives in tests-platform; consumes
-item-factory unit JSON: Course → Unit → KC → Complicator) emits blueprints
-valid under this spec:
+item-factory curriculum data: Course → Unit → KC → Complicator →
+**Dimension**) emits blueprints valid under this spec.
 
-- **EOC / mid-course tests:** one proportion constraint per **unit**, share ∝
-  (KCs + complicators in unit) / (course total), largest-remainder rounding.
-- **Unit quizzes:** one constraint per **KC** within the unit, share ∝
-  (1 + complicators in KC), same rounding; optional cross-cell cognitive
-  minimums (Bloom's / DOK / TIMSS per program).
-- Per binding mode: content-only for CAT; TIF template + tolerance attached
-  for fixed-form and LOFT bindings.
-- Generated blueprints MUST pass structural feasibility validation against the
-  target pool's `tag_summary` before being offered for delivery.
+### 6.1 Weight function (supersedes the earlier "KCs + complicators" rule)
+
+The atomic content unit is the **dimension** (skill) inside a complicator —
+item-factory selects one parent item per dimension, so pool mass is
+proportional to dimension counts by construction. Weights are pure sums up
+the hierarchy:
+
+```
+w(complicator) = n_dimensions        # from its kc_config; ≥ 1 by construction
+w(KC)          = Σ w(complicators)   # deeper KCs weigh more automatically
+w(unit)        = Σ w(KCs)            # broader/deeper units weigh more automatically
+```
+
+A single-dimension complicator weighs exactly 1; the old
+count-the-complicators rule is the degenerate case where every complicator
+is single-dimension. **Imputation:** where a complicator's kc_config does
+not yet exist, impute the domain median dimension count and report the
+imputed fraction in the generator output — blueprints built on partly
+imputed weights are honestly labeled, never silently exact.
+
+### 6.2 Test-type shapes (one generator, one weight function, four scopes)
+
+The generator takes a `scope` parameter (unit-id subset); constraint grain
+is chosen so guarantees remain arithmetically possible at each length:
+
+| Test | Mode | Scope | Content constraints | Cognitive constraints |
+|---|---|---|---|---|
+| Unit quiz | LOFT | one unit | per-KC shares ∝ w(KC); plus per-complicator **maximum** (1–2) so a fixed form cannot drill one complicator | test-level marginal profile only |
+| Mid-course | CAT | first-half units | per-unit shares ∝ w(unit), renormalized within scope | marginal profile (+ per-unit floors where claims require) |
+| End-of-course | CAT | second-half units | same | same |
+| Cumulative final | CAT | all units | per-unit shares ∝ w(unit) (thin minimums — the §7-verified regime) | marginal profile + a handful of claim-critical cells (e.g. ≥1 Reasoning per unit) |
+
+Largest-remainder rounding throughout. Per binding mode: content-only for
+CAT; TIF template + tolerance attached for fixed-form and LOFT bindings.
+Generated blueprints MUST pass structural feasibility validation against
+the target pool's `tag_summary` before being offered for delivery.
+
+### 6.3 Cognitive-level claims are program-level claims
+
+A single short test cannot support mastery claims for every
+(content × cognitive) cell — the arithmetic forbids it. The program can:
+quizzes sample KC × cognitive densely within units, interims sample
+unit × cognitive coarsely, and course-level aggregation pools the evidence
+per cell. Each blueprint therefore guarantees only what its length honestly
+carries; cell-level mastery claims are certified by aggregation across the
+assessment program, not by any single form.
 
 ## 7. Verification protocol (acceptance criteria)
 
