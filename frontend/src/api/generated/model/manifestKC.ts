@@ -7,11 +7,13 @@
  */
 import type { ManifestKCOrder } from './manifestKCOrder';
 import type { ManifestKCName } from './manifestKCName';
+import type { ManifestComplicator } from './manifestComplicator';
+import type { ManifestKCNComplicators } from './manifestKCNComplicators';
 
 export interface ManifestKC {
   kc_id: string;
   order?: ManifestKCOrder;
   name?: ManifestKCName;
-  /** @minimum 0 */
-  n_complicators?: number;
+  complicators?: ManifestComplicator[];
+  n_complicators?: ManifestKCNComplicators;
 }

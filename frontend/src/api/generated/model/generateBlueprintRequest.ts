@@ -7,8 +7,9 @@
  */
 import type { GenerateBlueprintRequestManifest } from './generateBlueprintRequestManifest';
 import type { GenerateBlueprintRequestCourseId } from './generateBlueprintRequestCourseId';
-import type { GenerateBlueprintRequestGrain } from './generateBlueprintRequestGrain';
+import type { GenerateBlueprintRequestTestType } from './generateBlueprintRequestTestType';
 import type { GenerateBlueprintRequestUnitId } from './generateBlueprintRequestUnitId';
+import type { GenerateBlueprintRequestScopeUnitIds } from './generateBlueprintRequestScopeUnitIds';
 import type { GenerateBlueprintRequestName } from './generateBlueprintRequestName';
 import type { GenerateBlueprintRequestBinding } from './generateBlueprintRequestBinding';
 import type { GenerateBlueprintRequestConstraintMode } from './generateBlueprintRequestConstraintMode';
@@ -17,31 +18,47 @@ import type { GenerateBlueprintRequestCognitiveProfile } from './generateBluepri
 import type { GenerateBlueprintRequestPoolId } from './generateBlueprintRequestPoolId';
 
 /**
- * Inputs for one generated blueprint.
+ * Inputs for one generated blueprint (§6.2: one generator, one weight
+function, four scopes).
 
 The curriculum comes either inline (``manifest``) or from the server catalog
-(``course_id``, see ``GET /curricula``) — exactly one. ``grain`` picks the §6
-recipe: ``eoc`` = end-of-course / mid-course test (one count constraint per
-**unit**, share ∝ KCs + complicators in the unit); ``unit_quiz`` = one
-constraint per **KC** within ``unit_id`` (share ∝ 1 + complicators).
-Content-only by default; ``statistical_target`` optionally attaches a TIF
-template for fixed-form/LOFT bindings (LOFT requires a tolerance, §4.1).
+(``course_id``, see ``GET /curricula``) — exactly one. ``test_type`` picks the
+§6.2 shape:
+
+- ``unit_quiz`` — one unit (``unit_id``): per-KC shares ∝ w(KC), plus a
+  per-complicator **maximum** so a form cannot drill one complicator.
+  Default binding: LOFT.
+- ``mid_course`` — first-half units; ``end_of_course`` — second-half units;
+  ``cumulative_final`` — all units: per-unit shares ∝ w(unit), renormalized
+  within scope. Default binding: CAT. ``scope_unit_ids`` overrides the
+  derived scope for any of the three.
+
+Weights follow §6.1 (dimension sums with median imputation). Content-only by
+default; ``statistical_target`` optionally attaches a TIF template for
+fixed-form/LOFT bindings (LOFT requires a tolerance, §4.1).
  */
 export interface GenerateBlueprintRequest {
   manifest?: GenerateBlueprintRequestManifest;
   course_id?: GenerateBlueprintRequestCourseId;
-  grain?: GenerateBlueprintRequestGrain;
+  test_type?: GenerateBlueprintRequestTestType;
   unit_id?: GenerateBlueprintRequestUnitId;
+  scope_unit_ids?: GenerateBlueprintRequestScopeUnitIds;
   /** */
   length: number;
   /** @minimum 1 */
   num_forms?: number;
   name?: GenerateBlueprintRequestName;
   binding?: GenerateBlueprintRequestBinding;
+  /**
+   * @minimum 1
+   * @maximum 2
+   */
+  max_per_complicator?: number;
   constraint_mode?: GenerateBlueprintRequestConstraintMode;
   statistical_target?: GenerateBlueprintRequestStatisticalTarget;
   unit_tag?: string;
   kc_tag?: string;
+  complicator_tag?: string;
   cognitive_profile?: GenerateBlueprintRequestCognitiveProfile;
   pool_id?: GenerateBlueprintRequestPoolId;
 }

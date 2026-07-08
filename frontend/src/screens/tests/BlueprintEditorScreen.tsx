@@ -180,7 +180,9 @@ export function BlueprintEditorScreen({
   const curricula = useListCurricula();
   const generateBp = useGenerateBlueprintFromCurriculum();
   const [genCourseId, setGenCourseId] = useState("");
-  const [genGrain, setGenGrain] = useState<"eoc" | "unit_quiz">("eoc");
+  const [genTestType, setGenTestType] = useState<
+    "unit_quiz" | "mid_course" | "end_of_course" | "cumulative_final"
+  >("cumulative_final");
   const [genUnitId, setGenUnitId] = useState("");
   const [genLength, setGenLength] = useState("20");
   const [genDim, setGenDim] = useState("");
@@ -304,8 +306,8 @@ export function BlueprintEditorScreen({
       const res = await generateBp.mutateAsync({
         data: {
           course_id: genCourseId,
-          grain: genGrain,
-          unit_id: genGrain === "unit_quiz" ? genUnitId || undefined : undefined,
+          test_type: genTestType,
+          unit_id: genTestType === "unit_quiz" ? genUnitId || undefined : undefined,
           length: Number(genLength),
           pool_id: poolId,
           ...(genDim && Object.keys(distribution).length
@@ -570,14 +572,18 @@ export function BlueprintEditorScreen({
               ))}
             </Select>
           </Field>
-          <Field label="Test type">
-            <Select value={genGrain}
-              onChange={(e) => setGenGrain(e.target.value as "eoc" | "unit_quiz")}>
-              <option value="eoc">End-of-course test</option>
-              <option value="unit_quiz">Unit quiz</option>
+          <Field label="Test type" hint="quiz → LOFT-bound; others → CAT-bound">
+            <Select value={genTestType}
+              onChange={(e) =>
+                setGenTestType(e.target.value as typeof genTestType)
+              }>
+              <option value="unit_quiz">Unit quiz (one unit)</option>
+              <option value="mid_course">Mid-course (first-half units)</option>
+              <option value="end_of_course">End-of-course (second-half units)</option>
+              <option value="cumulative_final">Cumulative final (all units)</option>
             </Select>
           </Field>
-          {genGrain === "unit_quiz" && (
+          {genTestType === "unit_quiz" && (
             <Field label="Unit">
               <Select value={genUnitId} onChange={(e) => setGenUnitId(e.target.value)}>
                 <option value="">— pick a unit —</option>
@@ -621,7 +627,7 @@ export function BlueprintEditorScreen({
           <Button
             onClick={generateFromCurriculum}
             disabled={!genCourseId || generateBp.isPending ||
-              (genGrain === "unit_quiz" && !genUnitId)}
+              (genTestType === "unit_quiz" && !genUnitId)}
           >
             {generateBp.isPending ? "Generating…" : "Generate blueprint"}
           </Button>
@@ -640,6 +646,12 @@ export function BlueprintEditorScreen({
               {genResult.shares.map((s) =>
                 `${s.label ?? s.key}: ${s.count}`).join(" · ")} (Σ ={" "}
               {genResult.shares.reduce((a, s) => a + s.count, 0)})
+              {(genResult.imputed_fraction ?? 0) > 0 && (
+                <span className="text-amber-700">
+                  {" "}· {Math.round((genResult.imputed_fraction ?? 0) * 100)}% of
+                  dimension counts imputed (§6.1) — weights are estimates
+                </span>
+              )}
             </p>
             {!genResult.feasible && (
               <Alert tone="warn" title="Feasibility issues vs the selected pool">

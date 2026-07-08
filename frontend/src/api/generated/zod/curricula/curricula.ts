@@ -12,8 +12,7 @@ import * as zod from 'zod';
  * All curricula available to generate blueprints from.
  * @summary List Curricula
  */
-export const listCurriculaResponseUnitsItemKcsItemNComplicatorsDefault = 0;
-export const listCurriculaResponseUnitsItemKcsItemNComplicatorsMin = 0;
+export const listCurriculaResponseUnitsItemKcsItemNComplicatorsMinOne = 0;
 
 export const listCurriculaResponseItem = zod.object({
   "course_id": zod.string(),
@@ -28,7 +27,11 @@ export const listCurriculaResponseItem = zod.object({
   "kc_id": zod.string(),
   "order": zod.union([zod.number(),zod.null()]).optional(),
   "name": zod.union([zod.string(),zod.null()]).optional(),
-  "n_complicators": zod.number().min(listCurriculaResponseUnitsItemKcsItemNComplicatorsMin).optional()
+  "complicators": zod.array(zod.object({
+  "id": zod.union([zod.string(),zod.null()]).optional(),
+  "n_dimensions": zod.union([zod.number().min(1),zod.null()]).optional()
+}).describe('One complicator in the manifest; ``n_dimensions`` is the §6.1 atomic weight\n(skills inside the complicator, from item-factory\'s kc_config). ``None`` ⇒ not\nyet surfaced upstream — the generator imputes the domain median and reports the\nimputed fraction (spec §6.1).')).optional(),
+  "n_complicators": zod.union([zod.number().min(listCurriculaResponseUnitsItemKcsItemNComplicatorsMinOne),zod.null()]).optional()
 })).min(1)
 }))
 }).describe('One catalog entry for the UI\'s course picker.')
@@ -41,8 +44,7 @@ export const getCurriculumParams = zod.object({
   "course_id": zod.string()
 })
 
-export const getCurriculumResponseUnitsItemKcsItemNComplicatorsDefault = 0;
-export const getCurriculumResponseUnitsItemKcsItemNComplicatorsMin = 0;
+export const getCurriculumResponseUnitsItemKcsItemNComplicatorsMinOne = 0;
 
 export const getCurriculumResponse = zod.object({
   "course_id": zod.string(),
@@ -55,7 +57,11 @@ export const getCurriculumResponse = zod.object({
   "kc_id": zod.string(),
   "order": zod.union([zod.number(),zod.null()]).optional(),
   "name": zod.union([zod.string(),zod.null()]).optional(),
-  "n_complicators": zod.number().min(getCurriculumResponseUnitsItemKcsItemNComplicatorsMin).optional()
+  "complicators": zod.array(zod.object({
+  "id": zod.union([zod.string(),zod.null()]).optional(),
+  "n_dimensions": zod.union([zod.number().min(1),zod.null()]).optional()
+}).describe('One complicator in the manifest; ``n_dimensions`` is the §6.1 atomic weight\n(skills inside the complicator, from item-factory\'s kc_config). ``None`` ⇒ not\nyet surfaced upstream — the generator imputes the domain median and reports the\nimputed fraction (spec §6.1).')).optional(),
+  "n_complicators": zod.union([zod.number().min(getCurriculumResponseUnitsItemKcsItemNComplicatorsMinOne),zod.null()]).optional()
 })).min(1)
 })).min(1)
 }).describe('The minimal curriculum shape the generator reads (derived from unit JSONs).')

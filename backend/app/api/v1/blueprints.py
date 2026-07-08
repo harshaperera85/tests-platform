@@ -52,13 +52,14 @@ def create_blueprint(
 def generate_blueprint_from_curriculum(
     req: GenerateBlueprintRequest,
 ) -> GenerateBlueprintResponse:
-    """Curriculum→blueprint generator (BP-MODES-1 §6).
+    """Curriculum→blueprint generator (BP-MODES-1 §6, rev. 2026-07-09).
 
     Consumes a curriculum manifest (inline, or by ``course_id`` from the catalog)
-    and emits a blueprint: EOC test (grain=eoc, per-unit shares) or unit quiz
-    (grain=unit_quiz, per-KC shares), largest-remainder rounding, authored
-    cognitive profile, per-binding TIF rules. When ``pool_id`` is given the
-    blueprint is validated against that pool's tag counts (the §6 gate). The
+    and emits a blueprint for the requested §6.2 test type (unit_quiz /
+    mid_course / end_of_course / cumulative_final) using §6.1 dimension-sum
+    weights (median imputation, reported), largest-remainder rounding, authored
+    cognitive profile, and per-binding TIF/cell rules. When ``pool_id`` is given
+    the blueprint is validated against that pool's tag counts (the §6 gate). The
     blueprint is returned for review, not stored — persist via ``POST /blueprints``.
     """
     manifest = req.manifest
@@ -70,7 +71,9 @@ def generate_blueprint_from_curriculum(
                 status_code=404, detail=f"unknown course_id {req.course_id!r}"
             )
     try:
-        blueprint, shares, warnings = generate_blueprint(req, manifest)
+        blueprint, shares, imputed_fraction, warnings = generate_blueprint(
+            req, manifest
+        )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
 
@@ -90,6 +93,7 @@ def generate_blueprint_from_curriculum(
     return GenerateBlueprintResponse(
         blueprint=blueprint,
         shares=shares,
+        imputed_fraction=imputed_fraction,
         feasibility_checked=checked,
         feasible=feasible,
         issues=issues,

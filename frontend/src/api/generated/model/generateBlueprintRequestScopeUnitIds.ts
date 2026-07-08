@@ -6,4 +6,4 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type GenerateBlueprintRequestBinding = 'fixed_form' | 'loft' | 'cat' | null;
+export type GenerateBlueprintRequestScopeUnitIds = string[] | null;

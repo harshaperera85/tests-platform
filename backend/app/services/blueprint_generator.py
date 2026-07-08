@@ -1,41 +1,46 @@
-"""Curriculum→blueprint generator (BP-MODES-1 §6).
+"""Curriculum→blueprint generator (BP-MODES-1 §6, rev. 2026-07-09).
 
 Pipeline: item-factory **unit JSONs** → :func:`normalize_unit_documents` → a minimal
 **curriculum manifest** → :func:`generate_blueprint`. The generator reads only
 manifests.
 
-Recipes (shares → whole item counts by **largest-remainder** rounding, summing exactly
-to the requested length). Cell encoding follows the binding unless overridden by
-``constraint_mode``: fixed-form/LOFT get **count min = max** cells (fixed length,
-exact allocation, §2); CAT gets **proportion min = max** cells (length is emergent —
-§3.2 interprets proportions against the realized length with floor/ceil slack,
-whereas count minimums summing to a fixed-form length would be structurally
-impossible under a smaller ``max_items``, §3.4(4)):
+**Weights (§6.1)** — the atomic content unit is the *dimension* (skill) inside a
+complicator; weights are pure sums up the hierarchy::
 
-- **eoc** (end-of-course / mid-course): one constraint per **unit**, share
-  ∝ (KCs + complicators in the unit) / course totals.
-- **unit_quiz**: one constraint per **KC** in the chosen unit, share
-  ∝ (1 + complicators in the KC).
+    w(complicator) = n_dimensions        # ≥ 1 by construction
+    w(KC)          = Σ w(complicators)
+    w(unit)        = Σ w(KCs)
 
-The **cognitive profile** is an authored input (tags are read-only item-factory
-attributes — see ``schemas.generator.COGNITIVE_DIMENSIONS``): a distribution becomes
-marginal proportion constraints (largest-remainder over the length, then
-``count/length`` so the compiler's ``round(p × L)`` recovers the counts exactly);
-per-unit minimums become cross-classified {unit × dimension} count cells.
+Where a complicator's dimension count is not yet surfaced upstream (issue #1 R7),
+the **domain median** of the known counts is imputed (fallback 1.0 when nothing is
+known) and the response carries the ``imputed_fraction`` — blueprints built on
+partly imputed weights are honestly labeled, never silently exact.
 
-Binding rules per §2.1/§4.1: content-only is the default; CAT drops a supplied TIF
-target with a warning; a LOFT target must carry a tolerance (the §4.1 acceptance band)
-or generation is rejected.
+**Test types (§6.2)** — one generator, one weight function, four scopes:
+
+- ``unit_quiz`` (default binding LOFT): per-KC shares within one unit, **plus a
+  per-complicator maximum** so a fixed form cannot drill one complicator.
+- ``mid_course`` (CAT): first-half units. ``end_of_course`` (CAT): second-half
+  units. ``cumulative_final`` (CAT): all units. Per-unit shares ∝ w(unit),
+  renormalized within scope (``scope_unit_ids`` overrides the derived halves).
+
+Shares resolve to whole item counts by **largest-remainder** rounding (sum exactly
+to the requested length). Cell encoding follows the resolved binding unless
+overridden by ``constraint_mode``: fixed-form/LOFT get **count min = max** cells
+(§2 exact cells); CAT gets **proportion min = max** cells (scale-free under
+emergent length, §3.2/§3.4(4)).
 
 Feasibility (§6: generated blueprints MUST pass structural validation against the
-target pool before being offered for delivery): each constraint's resolved minimum is
-checked against the pool's matching-item counts — the same tag-predicate membership
-the assembly compiler uses.
+target pool before being offered for delivery): each constraint's resolved minimum
+is checked against the pool's matching-item counts — the same tag-predicate
+membership the assembly compiler uses.
 """
 
 from __future__ import annotations
 
 import math
+import statistics
+from collections.abc import Sequence
 
 from app.psychometrics.bank import ItemPool
 from app.schemas.blueprint import Blueprint, ContentConstraint
@@ -44,13 +49,14 @@ from app.schemas.generator import (
     CurriculumUnit,
     FeasibilityIssue,
     GenerateBlueprintRequest,
+    ManifestComplicator,
     ManifestKC,
     ManifestUnit,
     ShareLine,
 )
 
 
-def largest_remainder(weights: list[int], total: int) -> list[int]:
+def largest_remainder(weights: Sequence[float], total: int) -> list[int]:
     """Apportion ``total`` into integer counts ∝ ``weights`` (Hamilton method).
 
     Counts sum to exactly ``total``. Ties on the fractional remainder break toward
@@ -79,7 +85,9 @@ def normalize_unit_documents(docs: list[CurriculumUnit]) -> CurriculumManifest:
 
     A course = its unit files sharing ``course_id``; mixed course_ids are rejected.
     Units and KCs are ordered by their export ``order`` (input order breaks ties).
-    Identifiers are carried verbatim.
+    Identifiers are carried verbatim. Per-complicator dimension counts are carried
+    when the export supplies them (``n_dimensions`` / ``dimensions``), else left
+    unknown for §6.1 imputation.
     """
     if not docs:
         raise ValueError("no unit documents supplied")
@@ -107,7 +115,10 @@ def normalize_unit_documents(docs: list[CurriculumUnit]) -> CurriculumManifest:
                     kc_id=kc.id,
                     order=kc.order,
                     name=kc.name,
-                    n_complicators=len(kc.complicators),
+                    complicators=[
+                        ManifestComplicator(id=c.id, n_dimensions=c.dimension_count)
+                        for c in kc.complicators
+                    ],
                 )
                 for kc in sorted(
                     d.knowledge_components,
@@ -124,35 +135,75 @@ def normalize_unit_documents(docs: list[CurriculumUnit]) -> CurriculumManifest:
     )
 
 
-def _share_rows(
-    manifest: CurriculumManifest, req: GenerateBlueprintRequest
-) -> tuple[list[ShareLine], str]:
-    """The §6 recipe: (key, weight) rows for the chosen grain + the tag dimension."""
-    if req.grain == "eoc":
-        rows = [
-            (
-                u.unit_id,
-                u.name,
-                len(u.kcs) + sum(kc.n_complicators for kc in u.kcs),
-            )
-            for u in manifest.units
-        ]
-        tag_dim = req.unit_tag
-    else:  # unit_quiz
-        unit = _resolve_unit(manifest, req)
-        rows = [(kc.kc_id, kc.name, 1 + kc.n_complicators) for kc in unit.kcs]
-        tag_dim = req.kc_tag
+# --------------------------------------------------------------- §6.1 weights
+class _Weights:
+    """Dimension-sum weights over a manifest, with domain-median imputation."""
 
-    weights = [w for _, _, w in rows]
-    if sum(weights) <= 0:
-        raise ValueError("curriculum has no KCs/complicators to weight shares by")
-    counts = largest_remainder(weights, req.length)
-    total = sum(weights)
-    shares = [
-        ShareLine(key=key, label=label, weight=w, share=w / total, count=n)
-        for (key, label, w), n in zip(rows, counts, strict=True)
-    ]
-    return shares, tag_dim
+    def __init__(self, manifest: CurriculumManifest) -> None:
+        known = [
+            c.n_dimensions
+            for u in manifest.units
+            for kc in u.kcs
+            for c in kc.complicators
+            if c.n_dimensions is not None
+        ]
+        #: imputed value for unknown dimension counts: domain median, fallback 1.0
+        self.imputed_value: float = float(statistics.median(known)) if known else 1.0
+
+    def complicator(self, c: ManifestComplicator) -> tuple[float, int]:
+        """(weight, n_imputed) for one complicator."""
+        if c.n_dimensions is not None:
+            return float(c.n_dimensions), 0
+        return self.imputed_value, 1
+
+    def kc(self, kc: ManifestKC) -> tuple[float, int, int]:
+        """(weight, n_imputed, n_complicators) — a KC with no complicators counts
+        as one imputed complicator (w ≥ 1 by construction)."""
+        if not kc.complicators:
+            return self.imputed_value, 1, 1
+        w, imp = 0.0, 0
+        for c in kc.complicators:
+            cw, ci = self.complicator(c)
+            w += cw
+            imp += ci
+        return w, imp, len(kc.complicators)
+
+    def unit(self, u: ManifestUnit) -> tuple[float, int, int]:
+        """(weight, n_imputed, n_complicators) summed over the unit's KCs."""
+        w, imp, n = 0.0, 0, 0
+        for kc in u.kcs:
+            kw, ki, kn = self.kc(kc)
+            w += kw
+            imp += ki
+            n += kn
+        return w, imp, n
+
+
+# ----------------------------------------------------------------- §6.2 scope
+def resolve_scope(
+    manifest: CurriculumManifest, req: GenerateBlueprintRequest
+) -> list[ManifestUnit]:
+    """The units a test draws from, per test_type (explicit scope overrides)."""
+    if req.test_type == "unit_quiz":
+        return [_resolve_unit(manifest, req)]
+    if req.scope_unit_ids is not None:
+        by_id = {u.unit_id: u for u in manifest.units}
+        missing = [i for i in req.scope_unit_ids if i not in by_id]
+        if missing:
+            raise ValueError(f"scope_unit_ids not in the curriculum: {missing}")
+        if not req.scope_unit_ids:
+            raise ValueError("scope_unit_ids must not be empty")
+        return [by_id[i] for i in req.scope_unit_ids]
+    n = len(manifest.units)
+    first_half = manifest.units[: math.ceil(n / 2)]
+    if req.test_type == "mid_course":
+        return first_half
+    if req.test_type == "end_of_course":
+        scope = manifest.units[math.ceil(n / 2) :]
+        if not scope:  # single-unit course: EOC degenerates to the whole course
+            return manifest.units
+        return scope
+    return list(manifest.units)  # cumulative_final
 
 
 def _resolve_unit(
@@ -161,11 +212,48 @@ def _resolve_unit(
     if req.unit_id is None:
         if len(manifest.units) == 1:
             return manifest.units[0]
-        raise ValueError("grain='unit_quiz' with several units needs unit_id")
+        raise ValueError("test_type='unit_quiz' with several units needs unit_id")
     for u in manifest.units:
         if u.unit_id == req.unit_id:
             return u
     raise ValueError(f"unit_id {req.unit_id!r} not found in the curriculum")
+
+
+def _share_rows(
+    manifest: CurriculumManifest, req: GenerateBlueprintRequest
+) -> tuple[list[ShareLine], str, float]:
+    """(share lines, tag dimension, imputed_fraction) for the chosen test type."""
+    weights = _Weights(manifest)
+    scope = resolve_scope(manifest, req)
+
+    rows: list[tuple[str, str | None, float, int, int]] = []
+    if req.test_type == "unit_quiz":
+        unit = scope[0]
+        for kc in unit.kcs:
+            w, imp, n = weights.kc(kc)
+            rows.append((kc.kc_id, kc.name, w, imp, n))
+        tag_dim = req.kc_tag
+    else:
+        for u in scope:
+            w, imp, n = weights.unit(u)
+            rows.append((u.unit_id, u.name, w, imp, n))
+        tag_dim = req.unit_tag
+
+    ws = [w for _, _, w, _, _ in rows]
+    if sum(ws) <= 0:
+        raise ValueError("curriculum has no complicators/dimensions to weight by")
+    counts = largest_remainder(ws, req.length)
+    total_w = sum(ws)
+    shares = [
+        ShareLine(
+            key=key, label=label, weight=w, share=w / total_w, count=c, n_imputed=imp
+        )
+        for (key, label, w, imp, _), c in zip(rows, counts, strict=True)
+    ]
+    n_comp = sum(n for *_, n in rows)
+    n_imp = sum(imp for _, _, _, imp, _ in rows)
+    imputed_fraction = (n_imp / n_comp) if n_comp else 0.0
+    return shares, tag_dim, imputed_fraction
 
 
 def _cognitive_constraints(
@@ -211,29 +299,66 @@ def _cognitive_constraints(
     return out
 
 
+def _complicator_maxima(
+    scope_unit: ManifestUnit, req: GenerateBlueprintRequest
+) -> tuple[list[ContentConstraint], list[str]]:
+    """Unit-quiz §6.2: cap items from any single complicator (id-tagged cells)."""
+    out: list[ContentConstraint] = []
+    n_anonymous = 0
+    for kc in scope_unit.kcs:
+        for c in kc.complicators:
+            if c.id is None:
+                n_anonymous += 1
+                continue
+            out.append(
+                ContentConstraint(
+                    tag_type=req.complicator_tag,
+                    tag_value=c.id,
+                    maximum=req.max_per_complicator,
+                    mode="count",
+                )
+            )
+    warnings = []
+    if n_anonymous:
+        warnings.append(
+            f"{n_anonymous} complicator(s) have no id in the manifest — "
+            "per-complicator maxima were not emitted for them"
+        )
+    return out, warnings
+
+
 def generate_blueprint(
     req: GenerateBlueprintRequest, manifest: CurriculumManifest
-) -> tuple[Blueprint, list[ShareLine], list[str]]:
-    """Generate one blueprint; returns (blueprint, share breakdown, warnings).
+) -> tuple[Blueprint, list[ShareLine], float, list[str]]:
+    """Generate one blueprint; returns (blueprint, shares, imputed_fraction,
+    warnings).
 
     ``manifest`` is the resolved curriculum (inline or from the catalog — the
     caller resolves ``course_id``). Raises ``ValueError`` on structural problems
-    (unknown unit_id, LOFT target without tolerance, unweightable curriculum).
+    (unknown unit_id/scope, LOFT target without tolerance, unweightable
+    curriculum).
     """
     warnings: list[str] = []
-    shares, tag_dim = _share_rows(manifest, req)
+    shares, tag_dim, imputed_fraction = _share_rows(manifest, req)
+    if imputed_fraction > 0:
+        n_imp = sum(s.n_imputed for s in shares)
+        warnings.append(
+            f"{n_imp} in-scope complicator dimension count(s) imputed at the "
+            f"domain median ({imputed_fraction:.0%} of scope) — weights are "
+            "honest estimates, not exact (BP-MODES-1 §6.1)"
+        )
 
-    # Binding rules (§2.1 / §4.1). Content-only is the default — no warning for
-    # fixed-form; LOFT content-only gets the §2.1(2) authoring notice.
+    # Binding rules (§2.1 / §4.1); default binding per test type (§6.2).
+    binding = req.resolved_binding
     target = req.statistical_target
-    if req.binding == "cat":
+    if binding == "cat":
         if target is not None:
             warnings.append(
                 "TIF target present on a blueprint bound to CAT delivery; it will "
                 "not be enforced (BP-MODES-1 §2.1) — emitting content-only."
             )
             target = None
-    elif req.binding == "loft":
+    elif binding == "loft":
         if target is not None and target.tolerance is None:
             raise ValueError(
                 "LOFT binding requires a tolerance on the TIF target "
@@ -247,9 +372,7 @@ def generate_blueprint(
 
     # Cell encoding: counts for fixed-length bindings (§2 exact cells); proportions
     # for CAT (scale-free under emergent length, §3.2). Explicit override wins.
-    cell_mode = req.constraint_mode or (
-        "proportion" if req.binding == "cat" else "count"
-    )
+    cell_mode = req.constraint_mode or ("proportion" if binding == "cat" else "count")
     if cell_mode == "count":
         constraints = [
             ContentConstraint(
@@ -276,15 +399,28 @@ def generate_blueprint(
             )
             for s in shares
         ]
+
+    if req.test_type == "unit_quiz":
+        maxima, w = _complicator_maxima(_resolve_unit(manifest, req), req)
+        constraints.extend(maxima)
+        warnings.extend(w)
+
     constraints.extend(_cognitive_constraints(manifest, req))
 
     if req.name:
         name = req.name
-    elif req.grain == "eoc":
-        name = f"{manifest.course_name or manifest.course_id} — EOC"
     else:
-        unit = _resolve_unit(manifest, req)
-        name = f"{unit.name or unit.unit_id} — quiz"
+        course = manifest.course_name or manifest.course_id
+        if req.test_type == "unit_quiz":
+            unit = _resolve_unit(manifest, req)
+            name = f"{unit.name or unit.unit_id} — quiz"
+        else:
+            suffix = {
+                "mid_course": "mid-course",
+                "end_of_course": "end-of-course",
+                "cumulative_final": "cumulative final",
+            }[req.test_type]
+            name = f"{course} — {suffix}"
 
     blueprint = Blueprint(
         name=name,
@@ -293,7 +429,7 @@ def generate_blueprint(
         content_constraints=constraints,
         statistical_target=target,
     )
-    return blueprint, shares, warnings
+    return blueprint, shares, imputed_fraction, warnings
 
 
 def check_feasibility(

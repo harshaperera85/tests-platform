@@ -9,6 +9,10 @@ import type { ShareLineLabel } from './shareLineLabel';
 
 /**
  * How one unit/KC's item share was derived (weight → share → count).
+
+``weight`` is the §6.1 dimension sum (float: the domain-median imputation for
+unknown counts can be fractional). ``n_imputed`` says how many of the row's
+complicators had their dimension count imputed rather than known.
  */
 export interface ShareLine {
   key: string;
@@ -16,4 +20,5 @@ export interface ShareLine {
   weight: number;
   share: number;
   count: number;
+  n_imputed?: number;
 }

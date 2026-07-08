@@ -1,4 +1,5 @@
-"""POST /blueprints/generate + GET /curricula — §6 generator endpoints."""
+"""POST /blueprints/generate + GET /curricula — §6 generator endpoints
+(rev. 2026-07-09: test types, dimension weights, imputation reporting)."""
 
 from __future__ import annotations
 
@@ -39,22 +40,42 @@ def test_curricula_catalog(client: TestClient) -> None:
     assert client.get("/api/v1/curricula/nope").status_code == 404
 
 
-def test_generate_eoc_from_catalog_course(client: TestClient) -> None:
+def test_generate_cumulative_final_from_catalog(client: TestClient) -> None:
     resp = client.post(
         "/api/v1/blueprints/generate",
-        json={"course_id": PRE_ALGEBRA, "grain": "eoc", "length": 60},
+        json={"course_id": PRE_ALGEBRA, "test_type": "cumulative_final", "length": 60},
     )
     assert resp.status_code == 200, resp.text
     body = resp.json()
-    assert [s["count"] for s in body["shares"]] == [6, 5, 9, 4, 6, 6, 6, 4, 6, 5, 3]
+    # §6.1 degenerate case (no dimension data): weights = complicator counts
+    assert [s["count"] for s in body["shares"]] == [6, 5, 10, 3, 6, 6, 6, 4, 6, 5, 3]
+    assert body["imputed_fraction"] == 1.0
+    assert any("imputed" in w for w in body["warnings"])
     bp = body["blueprint"]
     assert bp["schema_version"] == 2
-    assert bp["statistical_target"] is None
-    assert all(c["mode"] == "count" for c in bp["content_constraints"])
+    assert bp["statistical_target"] is None  # CAT default: content-only
+    # CAT binding -> proportion cells (scale-free under emergent length)
+    assert all(c["mode"] == "proportion" for c in bp["content_constraints"])
     assert body["feasibility_checked"] is False  # no pool_id supplied
     # not auto-saved: the blueprint round-trips through explicit create
     created = client.post("/api/v1/blueprints", json=bp)
     assert created.status_code == 201, created.text
+
+
+def test_generate_mid_and_end_of_course_scopes(client: TestClient) -> None:
+    mid = client.post(
+        "/api/v1/blueprints/generate",
+        json={"course_id": PRE_ALGEBRA, "test_type": "mid_course", "length": 30},
+    ).json()
+    eoc = client.post(
+        "/api/v1/blueprints/generate",
+        json={"course_id": PRE_ALGEBRA, "test_type": "end_of_course", "length": 30},
+    ).json()
+    assert [s["count"] for s in mid["shares"]] == [5, 4, 8, 3, 5, 5]  # units 1–6
+    assert [s["count"] for s in eoc["shares"]] == [8, 5, 7, 6, 4]  # units 7–11
+    assert {s["label"] for s in mid["shares"]}.isdisjoint(
+        {s["label"] for s in eoc["shares"]}
+    )
 
 
 def test_generate_quiz_inline_manifest_with_gate(client: TestClient) -> None:
@@ -62,9 +83,10 @@ def test_generate_quiz_inline_manifest_with_gate(client: TestClient) -> None:
         "/api/v1/blueprints/generate",
         json={
             "manifest": MANIFEST,
-            "grain": "unit_quiz",
+            "test_type": "unit_quiz",
             "length": 10,
             "kc_tag": "KC",
+            "binding": "fixed_form",
             "pool_id": "small_2pl",
             "cognitive_profile": {
                 "dimension": "bloom_process",
@@ -90,24 +112,37 @@ def test_generate_validation_errors(client: TestClient) -> None:
         "/api/v1/blueprints/generate",
         json={
             "manifest": MANIFEST,
+            "test_type": "unit_quiz",
             "length": 10,
             "cognitive_profile": {"dimension": "dok", "distribution": {"1": 1.0}},
         },
     )
     assert resp.status_code == 422
 
-    # LOFT target without tolerance -> 422 (§4.1)
+    # LOFT (unit-quiz default) target without tolerance -> 422 (§4.1)
     resp = client.post(
         "/api/v1/blueprints/generate",
         json={
             "manifest": MANIFEST,
+            "test_type": "unit_quiz",
             "length": 10,
-            "binding": "loft",
             "statistical_target": {"theta_points": [0], "target_info": [5]},
         },
     )
     assert resp.status_code == 422
     assert "tolerance" in resp.json()["detail"]
+
+    # unknown scope unit -> 422
+    resp = client.post(
+        "/api/v1/blueprints/generate",
+        json={
+            "manifest": MANIFEST,
+            "test_type": "cumulative_final",
+            "scope_unit_ids": ["ghost"],
+            "length": 10,
+        },
+    )
+    assert resp.status_code == 422
 
     # exactly one curriculum source
     resp = client.post(
@@ -126,6 +161,11 @@ def test_generate_validation_errors(client: TestClient) -> None:
     assert resp.status_code == 404
     resp = client.post(
         "/api/v1/blueprints/generate",
-        json={"manifest": MANIFEST, "length": 10, "pool_id": "nope"},
+        json={
+            "manifest": MANIFEST,
+            "test_type": "unit_quiz",
+            "length": 10,
+            "pool_id": "nope",
+        },
     )
     assert resp.status_code == 404

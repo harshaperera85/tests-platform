@@ -12,6 +12,7 @@ import type { FeasibilityIssue } from './feasibilityIssue';
 export interface GenerateBlueprintResponse {
   blueprint: Blueprint;
   shares: ShareLine[];
+  imputed_fraction?: number;
   feasibility_checked: boolean;
   feasible: boolean;
   issues: FeasibilityIssue[];

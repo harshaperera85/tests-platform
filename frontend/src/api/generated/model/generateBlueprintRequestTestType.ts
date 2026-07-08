@@ -6,11 +6,13 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type GenerateBlueprintRequestGrain = typeof GenerateBlueprintRequestGrain[keyof typeof GenerateBlueprintRequestGrain];
+export type GenerateBlueprintRequestTestType = typeof GenerateBlueprintRequestTestType[keyof typeof GenerateBlueprintRequestTestType];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GenerateBlueprintRequestGrain = {
-  eoc: 'eoc',
+export const GenerateBlueprintRequestTestType = {
   unit_quiz: 'unit_quiz',
+  mid_course: 'mid_course',
+  end_of_course: 'end_of_course',
+  cumulative_final: 'cumulative_final',
 } as const;

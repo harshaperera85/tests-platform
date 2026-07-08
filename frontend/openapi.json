@@ -490,7 +490,7 @@
           "blueprints"
         ],
         "summary": "Generate Blueprint From Curriculum",
-        "description": "Curriculum\u2192blueprint generator (BP-MODES-1 \u00a76).\n\nConsumes a curriculum manifest (inline, or by ``course_id`` from the catalog)\nand emits a blueprint: EOC test (grain=eoc, per-unit shares) or unit quiz\n(grain=unit_quiz, per-KC shares), largest-remainder rounding, authored\ncognitive profile, per-binding TIF rules. When ``pool_id`` is given the\nblueprint is validated against that pool's tag counts (the \u00a76 gate). The\nblueprint is returned for review, not stored \u2014 persist via ``POST /blueprints``.",
+        "description": "Curriculum\u2192blueprint generator (BP-MODES-1 \u00a76, rev. 2026-07-09).\n\nConsumes a curriculum manifest (inline, or by ``course_id`` from the catalog)\nand emits a blueprint for the requested \u00a76.2 test type (unit_quiz /\nmid_course / end_of_course / cumulative_final) using \u00a76.1 dimension-sum\nweights (median imputation, reported), largest-remainder rounding, authored\ncognitive profile, and per-binding TIF/cell rules. When ``pool_id`` is given\nthe blueprint is validated against that pool's tag counts (the \u00a76 gate). The\nblueprint is returned for review, not stored \u2014 persist via ``POST /blueprints``.",
         "operationId": "generate_blueprint_from_curriculum",
         "requestBody": {
           "content": {
@@ -2745,14 +2745,16 @@
             ],
             "title": "Course Id"
           },
-          "grain": {
+          "test_type": {
             "type": "string",
             "enum": [
-              "eoc",
-              "unit_quiz"
+              "unit_quiz",
+              "mid_course",
+              "end_of_course",
+              "cumulative_final"
             ],
-            "title": "Grain",
-            "default": "eoc"
+            "title": "Test Type",
+            "default": "cumulative_final"
           },
           "unit_id": {
             "anyOf": [
@@ -2764,6 +2766,20 @@
               }
             ],
             "title": "Unit Id"
+          },
+          "scope_unit_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Unit Ids"
           },
           "length": {
             "type": "integer",
@@ -2788,14 +2804,27 @@
             "title": "Name"
           },
           "binding": {
-            "type": "string",
-            "enum": [
-              "fixed_form",
-              "loft",
-              "cat"
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fixed_form",
+                  "loft",
+                  "cat"
+                ]
+              },
+              {
+                "type": "null"
+              }
             ],
-            "title": "Binding",
-            "default": "fixed_form"
+            "title": "Binding"
+          },
+          "max_per_complicator": {
+            "type": "integer",
+            "maximum": 2.0,
+            "minimum": 1.0,
+            "title": "Max Per Complicator",
+            "default": 2
           },
           "constraint_mode": {
             "anyOf": [
@@ -2832,6 +2861,11 @@
             "title": "Kc Tag",
             "default": "kc"
           },
+          "complicator_tag": {
+            "type": "string",
+            "title": "Complicator Tag",
+            "default": "complicator"
+          },
           "cognitive_profile": {
             "anyOf": [
               {
@@ -2859,7 +2893,7 @@
           "length"
         ],
         "title": "GenerateBlueprintRequest",
-        "description": "Inputs for one generated blueprint.\n\nThe curriculum comes either inline (``manifest``) or from the server catalog\n(``course_id``, see ``GET /curricula``) \u2014 exactly one. ``grain`` picks the \u00a76\nrecipe: ``eoc`` = end-of-course / mid-course test (one count constraint per\n**unit**, share \u221d KCs + complicators in the unit); ``unit_quiz`` = one\nconstraint per **KC** within ``unit_id`` (share \u221d 1 + complicators).\nContent-only by default; ``statistical_target`` optionally attaches a TIF\ntemplate for fixed-form/LOFT bindings (LOFT requires a tolerance, \u00a74.1)."
+        "description": "Inputs for one generated blueprint (\u00a76.2: one generator, one weight\nfunction, four scopes).\n\nThe curriculum comes either inline (``manifest``) or from the server catalog\n(``course_id``, see ``GET /curricula``) \u2014 exactly one. ``test_type`` picks the\n\u00a76.2 shape:\n\n- ``unit_quiz`` \u2014 one unit (``unit_id``): per-KC shares \u221d w(KC), plus a\n  per-complicator **maximum** so a form cannot drill one complicator.\n  Default binding: LOFT.\n- ``mid_course`` \u2014 first-half units; ``end_of_course`` \u2014 second-half units;\n  ``cumulative_final`` \u2014 all units: per-unit shares \u221d w(unit), renormalized\n  within scope. Default binding: CAT. ``scope_unit_ids`` overrides the\n  derived scope for any of the three.\n\nWeights follow \u00a76.1 (dimension sums with median imputation). Content-only by\ndefault; ``statistical_target`` optionally attaches a TIF template for\nfixed-form/LOFT bindings (LOFT requires a tolerance, \u00a74.1)."
       },
       "GenerateBlueprintResponse": {
         "properties": {
@@ -2872,6 +2906,11 @@
             },
             "type": "array",
             "title": "Shares"
+          },
+          "imputed_fraction": {
+            "type": "number",
+            "title": "Imputed Fraction",
+            "default": 0.0
           },
           "feasibility_checked": {
             "type": "boolean",
@@ -3025,6 +3064,36 @@
         ],
         "title": "KeyBalance"
       },
+      "ManifestComplicator": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "n_dimensions": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Dimensions"
+          }
+        },
+        "type": "object",
+        "title": "ManifestComplicator",
+        "description": "One complicator in the manifest; ``n_dimensions`` is the \u00a76.1 atomic weight\n(skills inside the complicator, from item-factory's kc_config). ``None`` \u21d2 not\nyet surfaced upstream \u2014 the generator imputes the domain median and reports the\nimputed fraction (spec \u00a76.1)."
+      },
       "ManifestKC": {
         "properties": {
           "kc_id": {
@@ -3053,11 +3122,24 @@
             ],
             "title": "Name"
           },
+          "complicators": {
+            "items": {
+              "$ref": "#/components/schemas/ManifestComplicator"
+            },
+            "type": "array",
+            "title": "Complicators"
+          },
           "n_complicators": {
-            "type": "integer",
-            "minimum": 0.0,
-            "title": "N Complicators",
-            "default": 0
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Complicators"
           }
         },
         "type": "object",
@@ -3880,7 +3962,7 @@
             "title": "Label"
           },
           "weight": {
-            "type": "integer",
+            "type": "number",
             "title": "Weight"
           },
           "share": {
@@ -3890,6 +3972,11 @@
           "count": {
             "type": "integer",
             "title": "Count"
+          },
+          "n_imputed": {
+            "type": "integer",
+            "title": "N Imputed",
+            "default": 0
           }
         },
         "type": "object",
@@ -3900,7 +3987,7 @@
           "count"
         ],
         "title": "ShareLine",
-        "description": "How one unit/KC's item share was derived (weight \u2192 share \u2192 count)."
+        "description": "How one unit/KC's item share was derived (weight \u2192 share \u2192 count).\n\n``weight`` is the \u00a76.1 dimension sum (float: the domain-median imputation for\nunknown counts can be fractional). ``n_imputed`` says how many of the row's\ncomplicators had their dimension count imputed rather than known."
       },
       "SimulationRead": {
         "properties": {

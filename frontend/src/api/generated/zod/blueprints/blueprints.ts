@@ -53,18 +53,19 @@ export const createBlueprintBody = zod.object({
 }).describe('Full assembly specification for one (or several parallel) forms.\n\nDelivery-mode-agnostic (BP-MODES-1): one blueprint is satisfiable by fixed-form,\nLOFT, and CAT. ``statistical_target`` is **optional** — a blueprint with none is a\n*content-only* blueprint (fixed-form then assembles for feasibility only, still\nreporting realized TIF; see ``docs/blueprint-delivery-mode-semantics.md`` §2.1).')
 
 /**
- * Curriculum→blueprint generator (BP-MODES-1 §6).
+ * Curriculum→blueprint generator (BP-MODES-1 §6, rev. 2026-07-09).
 
 Consumes a curriculum manifest (inline, or by ``course_id`` from the catalog)
-and emits a blueprint: EOC test (grain=eoc, per-unit shares) or unit quiz
-(grain=unit_quiz, per-KC shares), largest-remainder rounding, authored
-cognitive profile, per-binding TIF rules. When ``pool_id`` is given the
-blueprint is validated against that pool's tag counts (the §6 gate). The
+and emits a blueprint for the requested §6.2 test type (unit_quiz /
+mid_course / end_of_course / cumulative_final) using §6.1 dimension-sum
+weights (median imputation, reported), largest-remainder rounding, authored
+cognitive profile, and per-binding TIF/cell rules. When ``pool_id`` is given
+the blueprint is validated against that pool's tag counts (the §6 gate). The
 blueprint is returned for review, not stored — persist via ``POST /blueprints``.
  * @summary Generate Blueprint From Curriculum
  */
-export const generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsDefault = 0;
-export const generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsMin = 0;export const generateBlueprintFromCurriculumBodyGrainDefault = "eoc";export const generateBlueprintFromCurriculumBodyNumFormsDefault = 1;export const generateBlueprintFromCurriculumBodyBindingDefault = "fixed_form";export const generateBlueprintFromCurriculumBodyStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumBodyUnitTagDefault = "unit";export const generateBlueprintFromCurriculumBodyKcTagDefault = "kc";
+export const generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsMinOne = 0;export const generateBlueprintFromCurriculumBodyTestTypeDefault = "cumulative_final";export const generateBlueprintFromCurriculumBodyNumFormsDefault = 1;export const generateBlueprintFromCurriculumBodyMaxPerComplicatorDefault = 2;
+export const generateBlueprintFromCurriculumBodyMaxPerComplicatorMax = 2;export const generateBlueprintFromCurriculumBodyStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumBodyUnitTagDefault = "unit";export const generateBlueprintFromCurriculumBodyKcTagDefault = "kc";export const generateBlueprintFromCurriculumBodyComplicatorTagDefault = "complicator";
 
 export const generateBlueprintFromCurriculumBody = zod.object({
   "manifest": zod.union([zod.object({
@@ -78,17 +79,23 @@ export const generateBlueprintFromCurriculumBody = zod.object({
   "kc_id": zod.string(),
   "order": zod.union([zod.number(),zod.null()]).optional(),
   "name": zod.union([zod.string(),zod.null()]).optional(),
-  "n_complicators": zod.number().min(generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsMin).optional()
+  "complicators": zod.array(zod.object({
+  "id": zod.union([zod.string(),zod.null()]).optional(),
+  "n_dimensions": zod.union([zod.number().min(1),zod.null()]).optional()
+}).describe('One complicator in the manifest; ``n_dimensions`` is the §6.1 atomic weight\n(skills inside the complicator, from item-factory\'s kc_config). ``None`` ⇒ not\nyet surfaced upstream — the generator imputes the domain median and reports the\nimputed fraction (spec §6.1).')).optional(),
+  "n_complicators": zod.union([zod.number().min(generateBlueprintFromCurriculumBodyManifestUnitsItemKcsItemNComplicatorsMinOne),zod.null()]).optional()
 })).min(1)
 })).min(1)
 }).describe('The minimal curriculum shape the generator reads (derived from unit JSONs).'),zod.null()]).optional(),
   "course_id": zod.union([zod.string(),zod.null()]).optional(),
-  "grain": zod.enum(['eoc', 'unit_quiz']).default(generateBlueprintFromCurriculumBodyGrainDefault),
+  "test_type": zod.enum(['unit_quiz', 'mid_course', 'end_of_course', 'cumulative_final']).default(generateBlueprintFromCurriculumBodyTestTypeDefault),
   "unit_id": zod.union([zod.string(),zod.null()]).optional(),
+  "scope_unit_ids": zod.union([zod.array(zod.string()),zod.null()]).optional(),
   "length": zod.number(),
   "num_forms": zod.number().min(1).default(generateBlueprintFromCurriculumBodyNumFormsDefault),
   "name": zod.union([zod.string(),zod.null()]).optional(),
-  "binding": zod.enum(['fixed_form', 'loft', 'cat']).default(generateBlueprintFromCurriculumBodyBindingDefault),
+  "binding": zod.union([zod.enum(['fixed_form', 'loft', 'cat']),zod.null()]).optional(),
+  "max_per_complicator": zod.number().min(1).max(generateBlueprintFromCurriculumBodyMaxPerComplicatorMax).default(generateBlueprintFromCurriculumBodyMaxPerComplicatorDefault),
   "constraint_mode": zod.union([zod.enum(['count', 'proportion']),zod.null()]).optional(),
   "statistical_target": zod.union([zod.object({
   "theta_points": zod.array(zod.number()).min(1),
@@ -99,6 +106,7 @@ export const generateBlueprintFromCurriculumBody = zod.object({
 }).describe('Target test information at a set of theta points.\n\n``method`` selects the assembly objective: ``minimax`` (drive actual TIF to the\ntarget, minimizing the worst-point absolute miss — the default for parallel\nforms) or ``maximin`` (maximize information at the worst theta point — there is\n**no target** under maximin, so ``target_info``/``tolerance``/``weights`` are\nignored). ``tolerance`` is an optional absolute band; when set, the compiler adds\nhard ``|actual - target| <= tolerance`` constraints in addition to the objective.\n\n``weights`` (minimax only) give a per-theta multiplier on the deviation term, so\nthe objective minimizes ``max_k w_k·|TIF_k − target_k|``. Default all 1.0 (exactly\nthe unweighted minimax). Raise a point\'s weight to **protect fit there** (e.g. a\ncut score) when the pool forces tradeoffs — orthogonal to target height: height\nsets the desired curve *shape*; weight sets *where not to compromise*.'),zod.null()]).optional(),
   "unit_tag": zod.string().default(generateBlueprintFromCurriculumBodyUnitTagDefault),
   "kc_tag": zod.string().default(generateBlueprintFromCurriculumBodyKcTagDefault),
+  "complicator_tag": zod.string().default(generateBlueprintFromCurriculumBodyComplicatorTagDefault),
   "cognitive_profile": zod.union([zod.object({
   "dimension": zod.enum(['bloom_process', 'bloom_knowledge', 'timss']),
   "distribution": zod.union([zod.record(zod.string(), zod.number()),zod.null()]).optional(),
@@ -109,10 +117,10 @@ export const generateBlueprintFromCurriculumBody = zod.object({
 }).describe('A cross-classified cell minimum: at least ``minimum`` items in ``unit_id``\ncarrying ``value`` on the profile\'s dimension.')).optional()
 }).describe('Authored cognitive requirements (never derived from the curriculum).\n\n``distribution`` (value → share of the form, shares summing to 1) is emitted as\nmarginal proportion constraints; ``per_unit_minimums`` as cross-classified\n{unit × dimension} count minimums. ``dimension`` and every value are validated\nagainst the pinned :data:`COGNITIVE_DIMENSIONS` contract.'),zod.null()]).optional(),
   "pool_id": zod.union([zod.string(),zod.null()]).optional()
-}).describe('Inputs for one generated blueprint.\n\nThe curriculum comes either inline (``manifest``) or from the server catalog\n(``course_id``, see ``GET /curricula``) — exactly one. ``grain`` picks the §6\nrecipe: ``eoc`` = end-of-course / mid-course test (one count constraint per\n**unit**, share ∝ KCs + complicators in the unit); ``unit_quiz`` = one\nconstraint per **KC** within ``unit_id`` (share ∝ 1 + complicators).\nContent-only by default; ``statistical_target`` optionally attaches a TIF\ntemplate for fixed-form/LOFT bindings (LOFT requires a tolerance, §4.1).')
+}).describe('Inputs for one generated blueprint (§6.2: one generator, one weight\nfunction, four scopes).\n\nThe curriculum comes either inline (``manifest``) or from the server catalog\n(``course_id``, see ``GET /curricula``) — exactly one. ``test_type`` picks the\n§6.2 shape:\n\n- ``unit_quiz`` — one unit (``unit_id``): per-KC shares ∝ w(KC), plus a\n  per-complicator **maximum** so a form cannot drill one complicator.\n  Default binding: LOFT.\n- ``mid_course`` — first-half units; ``end_of_course`` — second-half units;\n  ``cumulative_final`` — all units: per-unit shares ∝ w(unit), renormalized\n  within scope. Default binding: CAT. ``scope_unit_ids`` overrides the\n  derived scope for any of the three.\n\nWeights follow §6.1 (dimension sums with median imputation). Content-only by\ndefault; ``statistical_target`` optionally attaches a TIF template for\nfixed-form/LOFT bindings (LOFT requires a tolerance, §4.1).')
 
 export const generateBlueprintFromCurriculumResponseBlueprintSchemaVersionDefault = 2;export const generateBlueprintFromCurriculumResponseBlueprintNameDefault = "untitled-blueprint";export const generateBlueprintFromCurriculumResponseBlueprintNumFormsDefault = 1;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMinimumMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemMaximumMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintContentConstraintsItemModeDefault = "count";export const generateBlueprintFromCurriculumResponseBlueprintStatisticalTargetMethodDefault = "minimax";export const generateBlueprintFromCurriculumResponseBlueprintEnemyPolicyEnforceDefault = true;export const generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxExposureRateMaxOne = 1;export const generateBlueprintFromCurriculumResponseBlueprintExposureTargetMaxPairwiseOverlapMinOne = 0;export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackPreferUnderusedDefault = false;export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightDefault = 0;
-export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightMin = 0;
+export const generateBlueprintFromCurriculumResponseBlueprintExposureFeedbackUnderuseWeightMin = 0;export const generateBlueprintFromCurriculumResponseSharesItemNImputedDefault = 0;export const generateBlueprintFromCurriculumResponseImputedFractionDefault = 0;
 
 export const generateBlueprintFromCurriculumResponse = zod.object({
   "blueprint": zod.object({
@@ -157,8 +165,10 @@ export const generateBlueprintFromCurriculumResponse = zod.object({
   "label": zod.union([zod.string(),zod.null()]).optional(),
   "weight": zod.number(),
   "share": zod.number(),
-  "count": zod.number()
-}).describe('How one unit/KC\'s item share was derived (weight → share → count).')),
+  "count": zod.number(),
+  "n_imputed": zod.number().optional()
+}).describe('How one unit/KC\'s item share was derived (weight → share → count).\n\n``weight`` is the §6.1 dimension sum (float: the domain-median imputation for\nunknown counts can be fractional). ``n_imputed`` says how many of the row\'s\ncomplicators had their dimension count imputed rather than known.')),
+  "imputed_fraction": zod.number().optional(),
   "feasibility_checked": zod.boolean(),
   "feasible": zod.boolean(),
   "issues": zod.array(zod.object({

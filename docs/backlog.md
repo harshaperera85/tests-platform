@@ -24,9 +24,13 @@ Durable to-do list. Status as of the latest commit on `main`.
   amendments (optional TIF target ⇒ content-only blueprints w/ feasibility-only
   assembly; `schema_version: 2`; reserved `segments`), content-only authoring UI,
   and the **§6 curriculum→blueprint generator** (`POST /blueprints/generate`:
-  item-factory unit JSON → manifest → EOC / unit-quiz blueprints, largest-remainder
-  shares, authored cognitive profile per the pinned tag contract, feasibility gate
-  vs pool). **§3 (CAT conformance enforcement) is Ignite-owned** — implemented in
+  item-factory unit JSON → manifest → blueprints; **rev. 2026-07-09 implemented**:
+  §6.1 dimension-sum weights w/ median imputation + reported `imputed_fraction`
+  (dimension counts not in today's export — issue #1 R7; fully-imputed = the
+  degenerate complicator-count case), §6.2 test types unit_quiz/mid_course/
+  end_of_course/cumulative_final w/ scope + per-complicator maxima, binding
+  defaults per type w/ binding-aware cell encoding, authored cognitive profile
+  per the pinned tag contract, feasibility gate vs pool). **§3 (CAT conformance enforcement) is Ignite-owned** — implemented in
   the Ignite CAT platform, arrives with the CAT-module merge; do not build it here.
   §4 (LOFT engine) remains a later phase in this repo.
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
