@@ -45,7 +45,7 @@ from pathlib import Path
 
 import yaml
 
-from app.psychometrics.bank import ItemPool
+from app.psychometrics.bank import FieldPool, ItemPool
 from app.schemas.blueprint import Blueprint, ContentConstraint
 from app.schemas.generator import (
     CurriculumManifest,
@@ -483,7 +483,7 @@ def generate_blueprint(
 
 
 def check_feasibility(
-    blueprint: Blueprint, pool: ItemPool
+    blueprint: Blueprint, pool: ItemPool | FieldPool
 ) -> tuple[bool, list[FeasibilityIssue], list[str]]:
     """Structural feasibility of a blueprint against a pool (§6 gate).
 

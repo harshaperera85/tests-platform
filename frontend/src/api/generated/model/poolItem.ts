@@ -5,6 +5,11 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
+import type { PoolItemA } from './poolItemA';
+import type { PoolItemD } from './poolItemD';
+import type { PoolItemB } from './poolItemB';
+import type { PoolItemScalingD } from './poolItemScalingD';
+import type { PoolItemCalibratedAnchor } from './poolItemCalibratedAnchor';
 import type { PoolItemTags } from './poolItemTags';
 import type { PoolItemSeA } from './poolItemSeA';
 import type { PoolItemSeD } from './poolItemSeD';
@@ -15,12 +20,13 @@ import type { PoolItemAnswerKey } from './poolItemAnswerKey';
 
 export interface PoolItem {
   item_id: string;
-  a: number;
-  d: number;
+  a?: PoolItemA;
+  d?: PoolItemD;
   c?: number;
   u?: number;
-  b: number;
-  scaling_d: number;
+  b?: PoolItemB;
+  scaling_d?: PoolItemScalingD;
+  calibrated_anchor?: PoolItemCalibratedAnchor;
   tags?: PoolItemTags;
   enemy_of?: string[];
   se_a?: PoolItemSeA;

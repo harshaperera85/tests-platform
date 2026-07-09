@@ -64,7 +64,7 @@ def execute_job(db: Session, job: AssemblyJobRow) -> AssemblyJobRow:
     params = job.params or {}
     try:
         blueprint = Blueprint.model_validate(bp_row.spec)
-        pool = pools.load_pool_by_id(job.pool_id)
+        pool = pools.load_assembly_pool(job.pool_id)
         # Longitudinal-exposure feedback (opt-in): load cumulative usage only when
         # the blueprint declares it, so default assembly is unchanged.
         exposure_counts = None

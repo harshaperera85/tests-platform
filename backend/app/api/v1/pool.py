@@ -72,7 +72,11 @@ def get_pool_catalog() -> PoolCatalog:
                 pool_id=entry.pool_id,
                 title=entry.title,
                 description=entry.description,
-                model=doc.get("metric", {}).get("model", "2PL"),
+                model=(
+                    "none (uncalibrated)"
+                    if doc.get("field_pool")
+                    else doc.get("metric", {}).get("model", "2PL")
+                ),
                 simulated=bool(doc.get("simulated", False)),
                 n_items=len(raw),
                 n_3pl=sum(1 for it in raw if it.get("c", 0.0) > 0),
@@ -91,6 +95,45 @@ def get_pool_items(
         raise HTTPException(status_code=404, detail=f"unknown pool_id {pool_id!r}")
     doc = pools.load_document_by_id(pool_id)
     raw_items = doc["items"]
+
+    # Content-only field-study pools: items carry tags/content but NO parameters —
+    # served with a/d/b None (honestly absent) so the editor's availability hints
+    # and the viewer work; nothing psychometric can be computed from this document.
+    if pools.is_field_pool(pool_id):
+        items = [
+            PoolItem(
+                item_id=it["item_id"],
+                tags=it.get("tags", {}),
+                enemy_of=it.get("enemy_of", []),
+                calibrated_anchor=bool(it.get("calibrated", False)),
+                stem=it.get("stem"),
+                options=it.get("options", []),
+                answer_key=it.get("answer_key"),
+            )
+            for it in raw_items
+        ]
+        tag_summary_f: dict[str, dict[str, int]] = {}
+        dims = sorted({k for it in raw_items for k in it.get("tags", {})})
+        for dim in dims:
+            counts = Counter(
+                it["tags"][dim] for it in raw_items if dim in it.get("tags", {})
+            )
+            if counts:
+                tag_summary_f[dim] = dict(sorted(counts.items()))
+        return PoolDocument(
+            pool_id=pool_id,
+            simulated=False,
+            provenance=doc.get("provenance"),
+            model="none (uncalibrated)",
+            scaling_d=None,
+            form="none",
+            kind="field",
+            pool_kind="field",
+            n_items=len(items),
+            tag_summary=tag_summary_f,
+            items=items,
+        )
+
     # Enforce the metric contract (no silent default; raises on undeclared metric).
     metric = require_metric(doc.get("metric"), where=f"pool {pool_id!r}")
 
@@ -126,7 +169,10 @@ def get_pool_items(
     ]
 
     tag_summary: dict[str, dict[str, int]] = {}
-    for dim in _TAG_DIMENSIONS:
+    extra_dims = sorted(
+        {k for it in raw_items for k in it.get("tags", {})} - set(_TAG_DIMENSIONS)
+    )
+    for dim in (*_TAG_DIMENSIONS, *extra_dims):
         counts = Counter(
             it["tags"][dim] for it in raw_items if dim in it.get("tags", {})
         )

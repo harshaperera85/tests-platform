@@ -61,26 +61,28 @@ export const getPoolItemsQueryParams = zod.object({
   "pool_id": zod.string().default(getPoolItemsQueryPoolIdDefault)
 })
 
-export const getPoolItemsResponseItemsItemCDefault = 0;export const getPoolItemsResponseItemsItemUDefault = 1;export const getPoolItemsResponseItemsItemTagsDefault = {  };export const getPoolItemsResponseItemsItemEnemyOfDefault = [];export const getPoolItemsResponseItemsItemOptionsDefault = [];
+export const getPoolItemsResponsePoolKindDefault = "parametric";export const getPoolItemsResponseItemsItemCDefault = 0;export const getPoolItemsResponseItemsItemUDefault = 1;export const getPoolItemsResponseItemsItemTagsDefault = {  };export const getPoolItemsResponseItemsItemEnemyOfDefault = [];export const getPoolItemsResponseItemsItemOptionsDefault = [];
 
 export const getPoolItemsResponse = zod.object({
   "pool_id": zod.string(),
   "simulated": zod.boolean(),
   "provenance": zod.union([zod.string(),zod.null()]).optional(),
   "model": zod.string(),
-  "scaling_d": zod.number(),
+  "scaling_d": zod.union([zod.number(),zod.null()]).optional(),
   "form": zod.string(),
   "kind": zod.string(),
   "n_items": zod.number(),
+  "pool_kind": zod.string().default(getPoolItemsResponsePoolKindDefault),
   "tag_summary": zod.record(zod.string(), zod.record(zod.string(), zod.number())),
   "items": zod.array(zod.object({
   "item_id": zod.string(),
-  "a": zod.number(),
-  "d": zod.number(),
+  "a": zod.union([zod.number(),zod.null()]).optional(),
+  "d": zod.union([zod.number(),zod.null()]).optional(),
   "c": zod.number().optional(),
   "u": zod.number().default(getPoolItemsResponseItemsItemUDefault),
-  "b": zod.number(),
-  "scaling_d": zod.number(),
+  "b": zod.union([zod.number(),zod.null()]).optional(),
+  "scaling_d": zod.union([zod.number(),zod.null()]).optional(),
+  "calibrated_anchor": zod.union([zod.boolean(),zod.null()]).optional(),
   "tags": zod.record(zod.string(), zod.string()).default(getPoolItemsResponseItemsItemTagsDefault),
   "enemy_of": zod.array(zod.string()).default(getPoolItemsResponseItemsItemEnemyOfDefault),
   "se_a": zod.union([zod.number(),zod.null()]).optional(),

@@ -9,6 +9,7 @@ import type { AnswerKeyEntry } from './answerKeyEntry';
 import type { KeyBalance } from './keyBalance';
 import type { CoverageRow } from './coverageRow';
 import type { QAPsychometricPoint } from './qAPsychometricPoint';
+import type { FormQAReportMarginalReliability } from './formQAReportMarginalReliability';
 import type { TIFActualTarget } from './tIFActualTarget';
 
 export interface FormQAReport {
@@ -20,10 +21,6 @@ export interface FormQAReport {
   key_balance: KeyBalance;
   coverage: CoverageRow[];
   curve: QAPsychometricPoint[];
-  /**
-   * @minimum 0
-   * @maximum 1
-   */
-  marginal_reliability: number;
+  marginal_reliability?: FormQAReportMarginalReliability;
   tif_actual_vs_target: TIFActualTarget[];
 }

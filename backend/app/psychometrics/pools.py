@@ -11,7 +11,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from app.psychometrics.bank import ItemPool, load_bank_document, load_pool
+from app.psychometrics.bank import (
+    FieldPool,
+    ItemPool,
+    load_bank_document,
+    load_field_pool,
+    load_pool,
+)
 
 _FIXTURES = Path(__file__).parent / "fixtures"
 
@@ -25,6 +31,8 @@ class PoolEntry:
     title: str
     description: str
     path: Path
+    #: "parametric" (standard pool doc) or "field" (content-only field-study pool)
+    kind: str = "parametric"
 
 
 _CATALOG: dict[str, PoolEntry] = {
@@ -71,6 +79,20 @@ def _imported_entries() -> dict[str, PoolEntry]:
                 ),
                 path=pool_path,
             )
+        field_path = bank_dir / "field_pool.json"
+        field_id = f"{bank_dir.name}-field"
+        if field_path.is_file() and field_id not in _CATALOG:
+            out[field_id] = PoolEntry(
+                pool_id=field_id,
+                title=f"Field-study pool: {bank_dir.name}",
+                description=(
+                    "field-eligible items (editorial live/pilot) from an imported "
+                    "bank — CONTENT-ONLY: no parameters; assembles feasibility-only "
+                    "forms for calibration field studies"
+                ),
+                path=field_path,
+                kind="field",
+            )
     return out
 
 
@@ -85,8 +107,31 @@ def is_known(pool_id: str) -> bool:
     return pool_id in _CATALOG or pool_id in _imported_entries()
 
 
+def is_field_pool(pool_id: str) -> bool:
+    try:
+        return resolve(pool_id).kind == "field"
+    except KeyError:
+        return False
+
+
 def load_pool_by_id(pool_id: str = DEFAULT_POOL_ID) -> ItemPool:
-    return load_pool(resolve(pool_id).path)
+    entry = resolve(pool_id)
+    if entry.kind == "field":
+        raise ValueError(
+            f"pool {pool_id!r} is a content-only field-study pool — it has no "
+            "parameters; use load_assembly_pool for assembly or GET /item-bank "
+            "for the record"
+        )
+    return load_pool(entry.path)
+
+
+def load_assembly_pool(pool_id: str = DEFAULT_POOL_ID) -> ItemPool | FieldPool:
+    """The assembly-path resolver: parametric pools load as :class:`ItemPool`,
+    field-study pools as :class:`FieldPool` (content-only assembly)."""
+    entry = resolve(pool_id)
+    if entry.kind == "field":
+        return load_field_pool(entry.path)
+    return load_pool(entry.path)
 
 
 def load_document_by_id(pool_id: str = DEFAULT_POOL_ID) -> dict:

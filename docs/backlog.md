@@ -52,6 +52,18 @@ Durable to-do list. Status as of the latest commit on `main`.
   a form from imported real-UUID items with exact allocation. Follow-ups: UI
   upload affordance; DB-backed bank post-campaign; field-study assembly on
   uncalibrated items (needs an info-less assembly path).
+- **Field-study assembly path** — the calibration bootstrap's missing middle:
+  imported banks derive a second, **content-only field pool** (`<bank>-field`,
+  editorial live+pilot, NO parameters exposed — anchors flagged but numbers stay in
+  the bank of record). `FieldPool` is a distinct type so parametric paths fail
+  loudly instead of fabricating; the compiler accepts it only with content-only
+  blueprints (pure feasibility, no info computed, no TIF reported). Assembly (both
+  strategies + async worker), the generator's feasibility gate, the pool viewer
+  (paramless items), and the editor all consume field pools; QA degrades to
+  content-only (reliability None), tif-curve empty, simulate/compare/walkthrough
+  guarded 422. E2E: mixed pilot+anchor import → generated content-only quiz →
+  assembled field form. Next in the loop: administer via Sessions → responses →
+  scoring-r `/calibrate` → write-back (item-factory schema pending).
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
 
 ## Next up

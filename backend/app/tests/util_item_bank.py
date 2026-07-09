@@ -100,3 +100,18 @@ def build_stage_a_export(bank_id: str = "pa-authoring-1") -> dict[str, Any]:
         it["calibration_status"] = "uncalibrated"
     doc["metric"] = None
     return doc
+
+
+def build_field_study_export(bank_id: str = "pa-pilot-1") -> dict[str, Any]:
+    """A mixed field-study bank over the real Exponents unit: mostly PILOT
+    (uncalibrated) items plus a few LIVE calibrated anchors — the standard
+    field-form design (pilots ride alongside anchors). Post-epoch hashes."""
+    doc = build_calibrated_export(bank_id=bank_id, items_per_kc=4)
+    for i, it in enumerate(doc["items"]):
+        if i % 5 == 0:
+            continue  # every 5th item stays a live, calibrated anchor
+        it["status"] = "pilot"
+        it["calibration_status"] = "uncalibrated"
+        for k in ("a", "d", "c", "u", "se_a", "se_d", "cov_ad", "calibration"):
+            it[k] = None
+    return doc

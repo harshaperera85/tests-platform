@@ -54,13 +54,17 @@ export const importItemBankBody = zod.object({
 }).describe('One exported item. ``instance_id`` is accepted as an alias of ``item_id``\nand carried verbatim — never re-minted (R4).')).min(1)
 }).describe('One item-bank export document, as POSTed to ``/item-bank/import``.')
 
+export const importItemBankResponseNFieldEligibleDefault = 0;
+
 export const importItemBankResponse = zod.object({
   "bank_id": zod.string(),
   "n_items": zod.number(),
   "n_administrable": zod.number(),
+  "n_field_eligible": zod.number().optional(),
   "editorial_counts": zod.record(zod.string(), zod.number()),
   "calibration_counts": zod.record(zod.string(), zod.number()),
   "pool_id": zod.union([zod.string(),zod.null()]).optional(),
+  "field_pool_id": zod.union([zod.string(),zod.null()]).optional(),
   "warnings": zod.array(zod.string())
 })
 
@@ -68,6 +72,8 @@ export const importItemBankResponse = zod.object({
  * All imported banks with their two-axis status breakdowns.
  * @summary Get Item Banks
  */
+export const getItemBanksResponseNFieldEligibleDefault = 0;
+
 export const getItemBanksResponseItem = zod.object({
   "bank_id": zod.string(),
   "imported_at": zod.union([zod.string(),zod.null()]).optional(),
@@ -75,9 +81,11 @@ export const getItemBanksResponseItem = zod.object({
   "export_version": zod.union([zod.string(),zod.number(),zod.null()]).optional(),
   "n_items": zod.number(),
   "n_administrable": zod.number(),
+  "n_field_eligible": zod.number().optional(),
   "editorial_counts": zod.record(zod.string(), zod.number()),
   "calibration_counts": zod.record(zod.string(), zod.number()),
-  "pool_id": zod.union([zod.string(),zod.null()]).optional()
+  "pool_id": zod.union([zod.string(),zod.null()]).optional(),
+  "field_pool_id": zod.union([zod.string(),zod.null()]).optional()
 })
 export const getItemBanksResponse = zod.array(getItemBanksResponseItem)
 

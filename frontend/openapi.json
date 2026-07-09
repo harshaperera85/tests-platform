@@ -1718,6 +1718,11 @@
             "type": "integer",
             "title": "N Administrable"
           },
+          "n_field_eligible": {
+            "type": "integer",
+            "title": "N Field Eligible",
+            "default": 0
+          },
           "editorial_counts": {
             "additionalProperties": {
               "type": "integer"
@@ -1742,6 +1747,17 @@
               }
             ],
             "title": "Pool Id"
+          },
+          "field_pool_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field Pool Id"
           },
           "warnings": {
             "items": {
@@ -2026,6 +2042,11 @@
             "type": "integer",
             "title": "N Administrable"
           },
+          "n_field_eligible": {
+            "type": "integer",
+            "title": "N Field Eligible",
+            "default": 0
+          },
           "editorial_counts": {
             "additionalProperties": {
               "type": "integer"
@@ -2050,6 +2071,17 @@
               }
             ],
             "title": "Pool Id"
+          },
+          "field_pool_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Field Pool Id"
           }
         },
         "type": "object",
@@ -3100,9 +3132,16 @@
             "title": "Curve"
           },
           "marginal_reliability": {
-            "type": "number",
-            "maximum": 1.0,
-            "minimum": 0.0,
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Marginal Reliability"
           },
           "tif_actual_vs_target": {
@@ -3122,7 +3161,6 @@
           "key_balance",
           "coverage",
           "curve",
-          "marginal_reliability",
           "tif_actual_vs_target"
         ],
         "title": "FormQAReport"
@@ -3877,7 +3915,14 @@
             "title": "Model"
           },
           "scaling_d": {
-            "type": "number",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Scaling D"
           },
           "form": {
@@ -3891,6 +3936,11 @@
           "n_items": {
             "type": "integer",
             "title": "N Items"
+          },
+          "pool_kind": {
+            "type": "string",
+            "title": "Pool Kind",
+            "default": "parametric"
           },
           "tag_summary": {
             "additionalProperties": {
@@ -3915,7 +3965,6 @@
           "pool_id",
           "simulated",
           "model",
-          "scaling_d",
           "form",
           "kind",
           "n_items",
@@ -3960,11 +4009,25 @@
             "title": "Item Id"
           },
           "a": {
-            "type": "number",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "A"
           },
           "d": {
-            "type": "number",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "D"
           },
           "c": {
@@ -3978,12 +4041,37 @@
             "default": 1.0
           },
           "b": {
-            "type": "number",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "B"
           },
           "scaling_d": {
-            "type": "number",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Scaling D"
+          },
+          "calibrated_anchor": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibrated Anchor"
           },
           "tags": {
             "additionalProperties": {
@@ -4067,11 +4155,7 @@
         },
         "type": "object",
         "required": [
-          "item_id",
-          "a",
-          "d",
-          "b",
-          "scaling_d"
+          "item_id"
         ],
         "title": "PoolItem"
       },

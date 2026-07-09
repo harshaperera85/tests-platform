@@ -85,7 +85,7 @@ def generate_blueprint_from_curriculum(
                 status_code=404, detail=f"unknown pool_id {req.pool_id!r}"
             )
         feasible, issues, notes = check_feasibility(
-            blueprint, pools.load_pool_by_id(req.pool_id)
+            blueprint, pools.load_assembly_pool(req.pool_id)
         )
         warnings.extend(notes)
         checked = True

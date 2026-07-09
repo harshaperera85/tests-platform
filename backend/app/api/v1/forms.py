@@ -68,6 +68,14 @@ def compare_forms(
         row = db.get(FormRow, fid)
         if row is None:
             raise HTTPException(status_code=404, detail=f"form not found: {fid}")
+        if pools.is_field_pool(row.pool_id):
+            raise HTTPException(
+                status_code=422,
+                detail=(
+                    f"form {fid} is a field-study form (uncalibrated items) — "
+                    "psychometric comparability requires parameters"
+                ),
+            )
         forms.append(row)
     return form_comparability.build_comparability_report(
         db,
@@ -309,6 +317,13 @@ def get_form_tif_curve(
         raise HTTPException(status_code=404, detail="blueprint not found")
     target = Blueprint.model_validate(bp_row.spec).statistical_target
 
+    # Field-study forms have no parameters: no information exists to plot —
+    # return an honestly empty curve rather than fabricating one.
+    if pools.is_field_pool(row.pool_id):
+        return TIFCurve(
+            theta_points=[], target_info=[], tolerance=None, method="none", curve=[]
+        )
+
     pool = pools.load_pool_by_id(row.pool_id)
     items = pool.subset(row.item_ids)
     step = (theta_max - theta_min) / (n - 1)
@@ -342,6 +357,15 @@ def simulate_form(
     if row is None:
         raise HTTPException(status_code=404, detail="form not found")
 
+    if pools.is_field_pool(row.pool_id):
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "field-study forms cannot be simulated: their items are "
+                "uncalibrated (no parameters). Simulation becomes possible after "
+                "calibration writes parameters back."
+            ),
+        )
     pool = pools.load_pool_by_id(row.pool_id)
     result = simulate_linear(pool, row.item_ids, theta, seed=seed)
     return SimulationRead(

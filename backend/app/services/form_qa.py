@@ -13,6 +13,7 @@ the conditional SE curve ``SE(θ)=1/√I(θ)``, the test characteristic curve
 from __future__ import annotations
 
 from collections import Counter
+from typing import cast
 
 from sqlalchemy.orm import Session
 
@@ -63,8 +64,14 @@ def build_qa_report(db: Session, form: FormRow) -> FormQAReport:
 
     doc = pools.load_document_by_id(form.pool_id)
     keys_by_id = {it["item_id"]: it.get("answer_key") for it in doc["items"]}
-    pool = pools.load_pool_by_id(form.pool_id)
-    items = pool.subset(form.item_ids)  # canonical params + tags, in form order
+    # Field-study forms: uncalibrated items — content QA only, no psychometrics
+    # (SE/TCC/reliability need parameters that honestly do not exist yet).
+    is_field = pools.is_field_pool(form.pool_id)
+    if is_field:
+        items = pools.load_assembly_pool(form.pool_id).subset(form.item_ids)
+    else:
+        pool = pools.load_pool_by_id(form.pool_id)
+        items = pool.subset(form.item_ids)  # canonical params + tags, in form order
 
     # answer key + balance
     answer_key = [
@@ -93,12 +100,26 @@ def build_qa_report(db: Session, form: FormRow) -> FormQAReport:
             )
         )
 
-    # psychometric curves on the canonical metric
+    # psychometric curves on the canonical metric (skipped for field forms)
     curve: list[QAPsychometricPoint] = []
+    if is_field:
+        return FormQAReport(
+            form_id=form.id,
+            lifecycle_state=form.lifecycle_state,
+            n_items=length,
+            metric="none (uncalibrated field-study form)",
+            answer_key=answer_key,
+            key_balance=key_balance,
+            coverage=coverage,
+            curve=[],
+            marginal_reliability=None,
+            tif_actual_vs_target=[],
+        )
+    cal_items = cast("list", items)  # not a field form past this point
     for theta in _THETA_GRID:
-        info = test_information(items, theta)
+        info = test_information(cal_items, theta)
         se = standard_error(info)
-        tcc = sum(prob_correct(it, theta) for it in items)
+        tcc = sum(prob_correct(it, theta) for it in cal_items)
         curve.append(
             QAPsychometricPoint(
                 theta=theta,
@@ -112,7 +133,7 @@ def build_qa_report(db: Session, form: FormRow) -> FormQAReport:
     nodes, weights = _quadrature(41, -4.0, 4.0)
     err_var = 0.0
     for theta, w in zip(nodes, weights, strict=True):
-        info = test_information(items, theta)
+        info = test_information(cal_items, theta)
         err_var += w * (1.0 / info if info > 1e-9 else 1e6)
     marginal_reliability = max(0.0, min(1.0, 1.0 - err_var))
 

@@ -54,6 +54,11 @@ BANKS_DIR = Path(__file__).parent.parent / "data" / "item_banks"
 #: Fixture pool ids that imports may never shadow.
 _RESERVED_POOL_IDS = frozenset({"small_2pl", "demo_mixed"})
 
+#: Editorial statuses eligible for FIELD-STUDY administration (axis A only — the
+#: whole point of a field form is administering not-yet-calibrated items; 'pilot'
+#: is item-factory's field-testing stage).
+FIELD_ELIGIBLE_EDITORIAL = frozenset({"live", "pilot"})
+
 
 class BankIngestError(ValueError):
     """Fatal ingest problem — nothing was persisted."""
@@ -225,6 +230,7 @@ def ingest_export(
     # ---- normalize + partition ---------------------------------------------
     bank_items: list[dict] = []
     pool_items: list[dict] = []
+    field_items: list[dict] = []
     editorial_counts: Counter[str] = Counter()
     calibration_counts: Counter[str] = Counter()
 
@@ -270,6 +276,21 @@ def ingest_export(
         }
         bank_items.append(record)
 
+        if item.status in FIELD_ELIGIBLE_EDITORIAL:
+            field_items.append(
+                {
+                    "item_id": item.item_id,
+                    "tags": item.tags,
+                    "enemy_of": item.enemy_ids,
+                    "calibrated": item.has_params,
+                    "stem": item.stem,
+                    "options": _normalize_options(item.options),
+                    "answer_key": (
+                        str(item.answer_key) if item.answer_key is not None else None
+                    ),
+                }
+            )
+
         if _is_administrable(item.status, calibration, item.has_params):
             pool_items.append(
                 {
@@ -300,6 +321,7 @@ def ingest_export(
         "metric": doc.metric,
         "n_items": len(bank_items),
         "n_administrable": len(pool_items),
+        "n_field_eligible": len(field_items),
         "editorial_counts": dict(editorial_counts),
         "calibration_counts": dict(calibration_counts),
         "items": bank_items,
@@ -308,6 +330,24 @@ def ingest_export(
     bank_dir = base / doc.bank_id
     bank_dir.mkdir(parents=True, exist_ok=True)
     (bank_dir / "bank.json").write_text(json.dumps(bank_doc, indent=1) + "\n")
+
+    field_pool_id: str | None = None
+    field_path = bank_dir / "field_pool.json"
+    if field_items:
+        field_doc = {
+            "field_pool": True,
+            "bank_id": doc.bank_id,
+            "provenance": (
+                f"field-study derivation of imported bank {doc.bank_id!r} "
+                f"({imported_at}); editorial∈{sorted(FIELD_ELIGIBLE_EDITORIAL)}; "
+                "content-only — NO parameters exposed"
+            ),
+            "items": field_items,
+        }
+        field_path.write_text(json.dumps(field_doc, indent=1) + "\n")
+        field_pool_id = f"{doc.bank_id}-field"
+    elif field_path.is_file():
+        field_path.unlink()
 
     pool_id: str | None = None
     pool_path = bank_dir / "pool.json"
@@ -345,9 +385,11 @@ def ingest_export(
         bank_id=doc.bank_id,
         n_items=len(bank_items),
         n_administrable=len(pool_items),
+        n_field_eligible=len(field_items),
         editorial_counts=dict(editorial_counts),
         calibration_counts=dict(calibration_counts),
         pool_id=pool_id,
+        field_pool_id=field_pool_id,
         warnings=warnings,
     )
 
@@ -370,9 +412,15 @@ def list_banks(*, banks_dir: Path | None = None) -> list[BankSummary]:
                 export_version=doc.get("export_version"),
                 n_items=doc.get("n_items", len(doc.get("items", []))),
                 n_administrable=doc.get("n_administrable", 0),
+                n_field_eligible=doc.get("n_field_eligible", 0),
                 editorial_counts=doc.get("editorial_counts", {}),
                 calibration_counts=doc.get("calibration_counts", {}),
                 pool_id=doc["bank_id"] if (bank_dir / "pool.json").is_file() else None,
+                field_pool_id=(
+                    f"{doc['bank_id']}-field"
+                    if (bank_dir / "field_pool.json").is_file()
+                    else None
+                ),
             )
         )
     return out

@@ -178,7 +178,12 @@ function QAReport({ formId }: { formId: string }) {
         <Pill tone={r.key_balance.imbalanced ? "warn" : "ok"}>
           key balance: {r.key_balance.imbalanced ? "⚠ " : "✓ "}{r.key_balance.note}
         </Pill>
-        <Pill tone="info">marginal reliability {r.marginal_reliability.toFixed(3)}</Pill>
+        <Pill tone="info">
+          marginal reliability{" "}
+          {r.marginal_reliability != null
+            ? r.marginal_reliability.toFixed(3)
+            : "— (uncalibrated field form)"}
+        </Pill>
         {Object.entries(r.key_balance.counts).map(([k, n]) => (
           <Pill key={k}>{k}: {n}</Pill>
         ))}

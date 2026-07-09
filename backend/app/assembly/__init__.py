@@ -13,13 +13,13 @@ from __future__ import annotations
 from app.assembly.blueprint_compiler import CompiledProblem, compile_blueprint
 from app.assembly.result import AssemblyResult, FormSolution
 from app.assembly.strategies import available_strategies, get_assembly_strategy
-from app.psychometrics.bank import ItemPool
+from app.psychometrics.bank import FieldPool, ItemPool
 from app.schemas.blueprint import Blueprint
 
 
 def assemble(
     blueprint: Blueprint,
-    pool: ItemPool,
+    pool: ItemPool | FieldPool,
     *,
     strategy: str = "mip",
     time_limit_s: float = 10.0,

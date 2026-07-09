@@ -16,11 +16,13 @@ It performs no solving; it owns the *translation* only.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Literal, cast
 
-from app.psychometrics.bank import ItemPool
+from app.psychometrics.bank import FieldItem, FieldPool, ItemPool
 from app.psychometrics.information import information_matrix
+from app.psychometrics.params import ItemParameters
 from app.schemas.blueprint import Blueprint
 
 #: Theta grid used to *report* realized TIF for a content-only blueprint (one with no
@@ -94,32 +96,57 @@ class CompiledProblem:
 
 def compile_blueprint(
     blueprint: Blueprint,
-    pool: ItemPool,
+    pool: ItemPool | FieldPool,
     *,
     exposure_counts: dict[str, int] | None = None,
 ) -> CompiledProblem:
     """Translate a blueprint + pool into a :class:`CompiledProblem`.
 
+    A :class:`FieldPool` (content-only field-study pool, no parameters) is
+    accepted ONLY with a content-only blueprint: assembly is pure feasibility,
+    no information is computed (none exists), and no realized TIF is reported —
+    honestly absent rather than fabricated.
+
     ``exposure_counts`` (cumulative usage per item_id) is only consulted when the
     blueprint declares ``exposure_feedback``; otherwise the compiled problem is
     identical to a no-exposure compile (assembly behavior unchanged).
     """
-    items = list(pool.items)
+    items: Sequence[ItemParameters | FieldItem] = list(pool.items)
     item_ids = tuple(it.item_id for it in items)
     index_of = {iid: i for i, iid in enumerate(item_ids)}
 
-    # Content-only blueprint (no TIF target): assemble for feasibility only, but
-    # still report realized TIF at a default grid. Targeted blueprints are unchanged.
+    is_field = isinstance(pool, FieldPool)
     tgt = blueprint.statistical_target
+    if is_field and tgt is not None:
+        raise ValueError(
+            "field-study pools are content-only: they carry no parameters, so a "
+            "blueprint with a statistical (TIF) target cannot be assembled from "
+            "one — remove the target (content-only blueprint) or use a "
+            "calibrated pool"
+        )
+
+    # Content-only blueprint (no TIF target): assemble for feasibility only, but
+    # still report realized TIF at a default grid — except on field pools, where
+    # no parameters exist and nothing is reported. Targeted blueprints unchanged.
     feasibility_only = tgt is None
-    if tgt is None:
-        theta_points = DEFAULT_REPORT_THETA
+    info: tuple[tuple[float, ...], ...]
+    params: tuple[tuple[float, float, float, float], ...]
+    if is_field:
+        theta_points: tuple[float, ...] = ()
         target_info: tuple[float, ...] = ()
+        info = tuple(() for _ in items)
+        params = ()
     else:
-        theta_points = tuple(tgt.theta_points)
-        target_info = tuple(tgt.target_info)
-    info_rows = information_matrix(items, theta_points)
-    info = tuple(tuple(row) for row in info_rows)
+        cal_items = cast("list[ItemParameters]", items)
+        if tgt is None:
+            theta_points = DEFAULT_REPORT_THETA
+            target_info = ()
+        else:
+            theta_points = tuple(tgt.theta_points)
+            target_info = tuple(tgt.target_info)
+        info_rows = information_matrix(cal_items, theta_points)
+        info = tuple(tuple(row) for row in info_rows)
+        params = tuple((it.a, it.d, it.c, it.u) for it in cal_items)
 
     warnings: list[str] = []
 
@@ -204,7 +231,7 @@ def compile_blueprint(
         max_pairwise_overlap=max_pairwise_overlap,
         weights=tgt.resolved_weights if tgt is not None else (),
         warnings=tuple(warnings),
-        params=tuple((it.a, it.d, it.c, it.u) for it in items),
+        params=params,
         excluded_indices=excluded_indices,
         exposure=exposure_vec,
         underuse_weight=underuse_weight,

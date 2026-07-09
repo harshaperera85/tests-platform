@@ -92,9 +92,11 @@ export function PoolBrowserScreen() {
                 {shown.map((it) => (
                   <tr key={it.item_id} className="border-t border-ink-100 tabular-nums">
                     <td className="px-3 py-1.5 font-medium">{it.item_id}</td>
-                    <td className="px-3 py-1.5 text-right">{it.a}</td>
-                    <td className="px-3 py-1.5 text-right">{it.d}</td>
-                    <td className="px-3 py-1.5 text-right">{it.b.toFixed(3)}</td>
+                    <td className="px-3 py-1.5 text-right">{it.a ?? "—"}</td>
+                    <td className="px-3 py-1.5 text-right">{it.d ?? "—"}</td>
+                    <td className="px-3 py-1.5 text-right">
+                      {it.b != null ? it.b.toFixed(3) : "—"}
+                    </td>
                     <td className="px-3 py-1.5 text-right">{it.c}</td>
                     <td className="px-3 py-1.5">{it.tags?.KC ?? "—"}</td>
                     <td className="px-3 py-1.5">{it.tags?.Bloom ?? "—"}</td>

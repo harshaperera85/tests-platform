@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { PoolDocumentProvenance } from './poolDocumentProvenance';
+import type { PoolDocumentScalingD } from './poolDocumentScalingD';
 import type { PoolDocumentTagSummary } from './poolDocumentTagSummary';
 import type { PoolItem } from './poolItem';
 
@@ -14,10 +15,11 @@ export interface PoolDocument {
   simulated: boolean;
   provenance?: PoolDocumentProvenance;
   model: string;
-  scaling_d: number;
+  scaling_d?: PoolDocumentScalingD;
   form: string;
   kind: string;
   n_items: number;
+  pool_kind?: string;
   tag_summary: PoolDocumentTagSummary;
   items: PoolItem[];
 }

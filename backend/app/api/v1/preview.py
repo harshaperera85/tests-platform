@@ -78,6 +78,14 @@ def start_preview(
             status_code=422, detail="provide either blueprint_id or form_id"
         )
 
+    if pools.is_field_pool(pool_id):
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "field-study pools cannot be walked/previewed interactively: "
+                "their items are uncalibrated (no parameters for scoring)"
+            ),
+        )
     state = strategy.initialize(LinearConfig(), pools.load_pool_by_id(pool_id), context)
     return _step(strategy, state)
 

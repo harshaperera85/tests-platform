@@ -11,6 +11,7 @@ import type { BankSummaryExportVersion } from './bankSummaryExportVersion';
 import type { BankSummaryEditorialCounts } from './bankSummaryEditorialCounts';
 import type { BankSummaryCalibrationCounts } from './bankSummaryCalibrationCounts';
 import type { BankSummaryPoolId } from './bankSummaryPoolId';
+import type { BankSummaryFieldPoolId } from './bankSummaryFieldPoolId';
 
 export interface BankSummary {
   bank_id: string;
@@ -19,7 +20,9 @@ export interface BankSummary {
   export_version?: BankSummaryExportVersion;
   n_items: number;
   n_administrable: number;
+  n_field_eligible?: number;
   editorial_counts: BankSummaryEditorialCounts;
   calibration_counts: BankSummaryCalibrationCounts;
   pool_id?: BankSummaryPoolId;
+  field_pool_id?: BankSummaryFieldPoolId;
 }

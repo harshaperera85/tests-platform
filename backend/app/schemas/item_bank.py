@@ -113,11 +113,15 @@ class BankIngestReport(BaseModel):
     bank_id: str
     n_items: int
     n_administrable: int
+    #: items eligible for field-study (content-only) assembly — editorial live/pilot
+    n_field_eligible: int = 0
     #: two-axis breakdowns
     editorial_counts: dict[str, int]
     calibration_counts: dict[str, int]
     #: pool id registered in the catalog (only when n_administrable > 0)
     pool_id: str | None = None
+    #: field-study pool id (only when n_field_eligible > 0)
+    field_pool_id: str | None = None
     warnings: list[str]
 
 
@@ -128,6 +132,8 @@ class BankSummary(BaseModel):
     export_version: str | int | None = None
     n_items: int
     n_administrable: int
+    n_field_eligible: int = 0
     editorial_counts: dict[str, int]
     calibration_counts: dict[str, int]
     pool_id: str | None = None
+    field_pool_id: str | None = None

@@ -135,8 +135,8 @@ export const getFormQaReportParams = zod.object({
   "form_id": zod.string()
 })
 
-export const getFormQaReportResponseMetricDefault = "logistic-D1-slope-intercept";export const getFormQaReportResponseMarginalReliabilityMin = 0;
-export const getFormQaReportResponseMarginalReliabilityMax = 1;
+export const getFormQaReportResponseMetricDefault = "logistic-D1-slope-intercept";export const getFormQaReportResponseMarginalReliabilityMinOne = 0;
+export const getFormQaReportResponseMarginalReliabilityMaxOne = 1;
 
 export const getFormQaReportResponse = zod.object({
   "form_id": zod.string(),
@@ -167,7 +167,7 @@ export const getFormQaReportResponse = zod.object({
   "se": zod.union([zod.number(),zod.null()]),
   "tcc": zod.number()
 })),
-  "marginal_reliability": zod.number().min(getFormQaReportResponseMarginalReliabilityMin).max(getFormQaReportResponseMarginalReliabilityMax),
+  "marginal_reliability": zod.union([zod.number().min(getFormQaReportResponseMarginalReliabilityMinOne).max(getFormQaReportResponseMarginalReliabilityMaxOne),zod.null()]).optional(),
   "tif_actual_vs_target": zod.array(zod.object({
   "theta": zod.number(),
   "target": zod.number(),

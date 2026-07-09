@@ -82,5 +82,6 @@ class FormQAReport(BaseModel):
     coverage: list[CoverageRow]
     #: SE(θ)=1/√I(θ) + TCC(θ)=Σ Pᵢ(θ) + information across the θ grid
     curve: list[QAPsychometricPoint]
-    marginal_reliability: float = Field(ge=0.0, le=1.0)
+    #: None on field-study (uncalibrated) forms — no parameters, no reliability
+    marginal_reliability: float | None = Field(default=None, ge=0.0, le=1.0)
     tif_actual_vs_target: list[TIFActualTarget]

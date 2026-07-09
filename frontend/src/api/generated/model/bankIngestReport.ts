@@ -8,13 +8,16 @@
 import type { BankIngestReportEditorialCounts } from './bankIngestReportEditorialCounts';
 import type { BankIngestReportCalibrationCounts } from './bankIngestReportCalibrationCounts';
 import type { BankIngestReportPoolId } from './bankIngestReportPoolId';
+import type { BankIngestReportFieldPoolId } from './bankIngestReportFieldPoolId';
 
 export interface BankIngestReport {
   bank_id: string;
   n_items: number;
   n_administrable: number;
+  n_field_eligible?: number;
   editorial_counts: BankIngestReportEditorialCounts;
   calibration_counts: BankIngestReportCalibrationCounts;
   pool_id?: BankIngestReportPoolId;
+  field_pool_id?: BankIngestReportFieldPoolId;
   warnings: string[];
 }
