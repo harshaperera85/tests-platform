@@ -48,7 +48,7 @@ fit_joint <- function(long, itemtype = "2PL", ncycles = 4000) {
        dropped = as.list(dropped),
        convergence = list(converged = extract.mirt(fit, "converged"),
                           n_persons = nrow(mat), n_items = ncol(mat)),
-       metric = list(scaling_d = 1, form = "slope-intercept",
+       metric = list(scaling_d = 1, form = "slope_intercept",
                      kind = "calibrated"))
 }
 
@@ -94,7 +94,7 @@ update_item <- function(a, responses, prior,
   list(a = a, d = d_hat, se_d = se_d,
        b = -d_hat / a, se_b = se_d / a,          # exact for fixed a
        n_responses = nrow(responses),
-       metric = list(scaling_d = 1, form = "slope-intercept",
+       metric = list(scaling_d = 1, form = "slope_intercept",
                      kind = "posterior-fixed-a"))
 }
 
