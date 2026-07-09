@@ -33,6 +33,12 @@ Durable to-do list. Status as of the latest commit on `main`.
   per the pinned tag contract, feasibility gate vs pool). **§3 (CAT conformance enforcement) is Ignite-owned** — implemented in
   the Ignite CAT platform, arrives with the CAT-module merge; do not build it here.
   §4 (LOFT engine) remains a later phase in this repo.
+- **Analysis-module seed** (PR #1 from the `item-calibration` repo, reviewed + merged) —
+  `scoring-r` gains `/calibrate`, `/score`, `/update-item` (fixed-a posterior,
+  `se_b = se_d/a` exact), `/link`; build-time selftests; full-precision serialization
+  (review fix). scoring-r = the Analysis-module home; calibration-engine ownership =
+  **tests-platform** (decided 2026-07-09). Follow-up: backend wrappers + OpenAPI +
+  `posterior-fixed-a` in `PoolKind`.
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
 
 ## Next up
