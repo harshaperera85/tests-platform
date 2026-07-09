@@ -100,8 +100,13 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   calibration join keys (supersedes the earlier "adopt verbatim now" note; adoption holds
   from the epoch, verified via the new content hash). Calibration-engine ownership still
   open (options tabled; item-factory owns the write-back schema regardless). **Importer
-  (#9) is now buildable against the pinned contract** with fixtures; real complete data
-  arrives post-campaign. To pin, still need: a real sample export +
+  (#9) BUILT**; real complete data arrives post-campaign. **R7 DELIVERED 2026-07-09**
+  (inline `n_dimensions` in unit JSONs; catalog refreshed, kc_configs kept as fallback).
+  **Field studies gated on an EXPLICIT GO SIGNAL from item-factory** (stronger than
+  campaign-completion: never key field data to pre-epoch instance_ids). **CA unit JSONs
+  = a course-platform data delivery** (third system), not item-factory code — direct
+  that ask to the course platform. **DOK decision due BEFORE the campaign** (authored
+  ≈ free now; retroactive = whole-bank re-review). To pin, still need: a real sample export +
   confirmation of the asks; and the downstream **calibration-engine ownership** decision
   (`common_item_bank_design.md` §10). **Decided:** adopt `instance_id` as canonical `item_id`
   verbatim, never re-mint (single join key for parameter write-back).

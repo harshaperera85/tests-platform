@@ -13,7 +13,8 @@
     {
      "id": "4f708a66-ef81-4451-9e20-685adcac9a33",
      "order": 1,
-     "name": "Find square roots of perfect square integers"
+     "name": "Find square roots of perfect square integers",
+     "n_dimensions": 6
     },
     {
      "id": "6b9813dc-c903-430d-a209-d61c61b0f0c2",

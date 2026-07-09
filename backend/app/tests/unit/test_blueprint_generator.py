@@ -98,10 +98,12 @@ def test_manifest_derivation_from_raw_unit_json() -> None:
     assert unit.unit_id == raw["unit_id"]  # identifier carried verbatim
     assert unit.name == "Exponents" and unit.order == 9
     assert [len(kc.complicators) for kc in unit.kcs] == [5, 3, 3, 3, 5]
-    # complicator ids carried; dimension counts unknown (not in today's export)
-    assert all(
-        c.id and c.n_dimensions is None for kc in unit.kcs for c in kc.complicators
-    )
+    # complicator ids carried; R7 inline n_dimensions present where kc_configs
+    # exist (unit 9: KC1 c1=6, c2=5; KC3 c1=6), None elsewhere (imputation's job)
+    assert all(c.id for kc in unit.kcs for c in kc.complicators)
+    inline = [c.n_dimensions for kc in unit.kcs for c in kc.complicators]
+    assert inline.count(None) == 16  # 19 complicators, 3 config-backed
+    assert [d for d in inline if d is not None] == [6, 5, 6]
     assert [kc.kc_id for kc in unit.kcs] == [
         k["id"] for k in raw["knowledge_components"]
     ]
@@ -159,8 +161,30 @@ def test_real_dimension_weights_with_median_5(pre_algebra: CurriculumManifest) -
 
 def test_without_kc_configs_fully_imputed_degenerate_case() -> None:
     """No dimension data at all ⇒ every complicator imputed at the fallback 1.0 —
-    the spec's degenerate case where weights reduce to complicator counts."""
-    manifest = normalize_unit_documents(_raw_units())  # no kc_configs_dir
+    the spec's degenerate case where weights reduce to complicator counts.
+    (The real fixtures now carry inline R7 dims, so strip them to simulate a
+    dimension-free curriculum.)"""
+    stripped = [
+        u.model_copy(
+            update={
+                "knowledge_components": [
+                    kc.model_copy(
+                        update={
+                            "complicators": [
+                                c.model_copy(
+                                    update={"n_dimensions": None, "dimensions": None}
+                                )
+                                for c in kc.complicators
+                            ]
+                        }
+                    )
+                    for kc in u.knowledge_components
+                ]
+            }
+        )
+        for u in _raw_units()
+    ]
+    manifest = normalize_unit_documents(stripped)  # no kc_configs_dir
     req = GenerateBlueprintRequest(
         manifest=manifest, test_type="cumulative_final", length=60
     )

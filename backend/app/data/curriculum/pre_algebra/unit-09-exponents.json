@@ -13,12 +13,14 @@
     {
      "id": "bf715cff-c21b-43a8-9ee1-1630aab62e96",
      "order": 1,
-     "name": "When multiplying terms of the same base with no coefficients, the expanded multiplication shows why the exponents get added."
+     "name": "When multiplying terms of the same base with no coefficients, the expanded multiplication shows why the exponents get added.",
+     "n_dimensions": 6
     },
     {
      "id": "d341e37d-399d-477e-b42e-5e9b5fd5147c",
      "order": 2,
-     "name": "When multiplying terms of the same base with one coefficient, the coefficient does not get exponentiated."
+     "name": "When multiplying terms of the same base with one coefficient, the coefficient does not get exponentiated.",
+     "n_dimensions": 5
     },
     {
      "id": "2e467b1b-b197-4e92-ac72-08ea0ee18b29",
@@ -67,7 +69,8 @@
     {
      "id": "5e115ac3-7db5-425b-8e26-4c985d5b0ee2",
      "order": 1,
-     "name": "When dividing terms of the same base (where the exponent degree of the numerator is the same or larger than the exponent degree of the denominator), the bases cancel out, which is why you can subtract the exponents."
+     "name": "When dividing terms of the same base (where the exponent degree of the numerator is the same or larger than the exponent degree of the denominator), the bases cancel out, which is why you can subtract the exponents.",
+     "n_dimensions": 6
     },
     {
      "id": "d53cce16-f006-4d81-ba8a-3190d1cf8312",

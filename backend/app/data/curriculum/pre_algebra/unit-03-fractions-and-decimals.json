@@ -175,7 +175,8 @@
     {
      "id": "60cc2790-b3d0-453e-8770-cc66b3259804",
      "order": 1,
-     "name": "Translate between decimals and their fraction equivalents using place value understanding"
+     "name": "Translate between decimals and their fraction equivalents using place value understanding",
+     "n_dimensions": 4
     },
     {
      "id": "d5045d81-ee1d-4c1d-b7a7-db2a041448db",

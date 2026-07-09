@@ -30,7 +30,8 @@
     {
      "id": "f0e1b76e-7bc2-41a3-abd9-f28f3ad4fb8d",
      "order": 1,
-     "name": "Represent negative rational values in a model "
+     "name": "Represent negative rational values in a model ",
+     "n_dimensions": 4
     },
     {
      "id": "6647d570-55eb-4fee-a374-04b91819dd14",
@@ -84,7 +85,8 @@
     {
      "id": "88910b98-3146-4f04-83ef-6406a008b187",
      "order": 1,
-     "name": "Apply sign rules for multiplication and division with two factors"
+     "name": "Apply sign rules for multiplication and division with two factors",
+     "n_dimensions": 5
     },
     {
      "id": "c70d8044-f02f-4504-a4df-05adf1a3ad1d",

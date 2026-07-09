@@ -67,7 +67,8 @@
     {
      "id": "fccce6d1-9fdf-4510-ad29-1206d8d3c4f9",
      "order": 1,
-     "name": "Multiply monomials by applying coefficient multiplication and exponent addition rules from previous exponent knowledge"
+     "name": "Multiply monomials by applying coefficient multiplication and exponent addition rules from previous exponent knowledge",
+     "n_dimensions": 4
     },
     {
      "id": "a807dd2e-1386-41ab-b6b9-61189e8ff030",

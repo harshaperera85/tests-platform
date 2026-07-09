@@ -13,22 +13,26 @@
     {
      "id": "89328044-c92c-48e9-86df-bceafd86abb2",
      "order": 1,
-     "name": "Identify place value positions and understand that each position represents a power of 10"
+     "name": "Identify place value positions and understand that each position represents a power of 10",
+     "n_dimensions": 6
     },
     {
      "id": "001a4f8c-c8f6-4873-a3df-3f46e25b9d7b",
      "order": 2,
-     "name": "Multiplying by ten increases the value of a number and dividing by ten decreases the value of a number. When doing so, the digits do not change, just their value."
+     "name": "Multiplying by ten increases the value of a number and dividing by ten decreases the value of a number. When doing so, the digits do not change, just their value.",
+     "n_dimensions": 6
     },
     {
      "id": "0fa92af9-d6e3-4140-a1d6-f033d558328b",
      "order": 3,
-     "name": "Compare relative values of same digits in different positions using multiplicative relationships"
+     "name": "Compare relative values of same digits in different positions using multiplicative relationships",
+     "n_dimensions": 3
     },
     {
      "id": "487ab034-cbfe-4bc4-a897-bdb212d130b4",
      "order": 4,
-     "name": "Fluently manipulate, utilize, and compare numbers based on an understanding of place value."
+     "name": "Fluently manipulate, utilize, and compare numbers based on an understanding of place value.",
+     "n_dimensions": 4
     }
    ]
   },
@@ -45,7 +49,8 @@
     {
      "id": "6cee2175-ae83-4377-b2bb-76c00684bc6f",
      "order": 2,
-     "name": "Apply standard rounding rules for whole numbers and decimals to specified place values and determine which place value is best to use"
+     "name": "Apply standard rounding rules for whole numbers and decimals to specified place values and determine which place value is best to use",
+     "n_dimensions": 6
     },
     {
      "id": "f73a7903-e91f-469e-a829-33c71c73d7b2",
@@ -62,7 +67,8 @@
     {
      "id": "dbb91724-ee9e-44d7-bf8c-de6d5e71e5aa",
      "order": 1,
-     "name": "Apply identity properties with 0 and 1 in computational contexts"
+     "name": "Apply identity properties with 0 and 1 in computational contexts",
+     "n_dimensions": 5
     },
     {
      "id": "11cd3f5a-c56d-42a3-a7d3-395d4e6d2ff0",
@@ -89,7 +95,8 @@
     {
      "id": "a5c5c214-84b6-47ba-a925-744e031dc6aa",
      "order": 1,
-     "name": "Practice the area model with partial products to see the distributive property work visually (up to three additive terms)"
+     "name": "Practice the area model with partial products to see the distributive property work visually (up to three additive terms)",
+     "n_dimensions": 5
     },
     {
      "id": "ab265690-18a1-46ea-9550-b36469d971a2",
@@ -128,7 +135,8 @@
     {
      "id": "5410e374-55ee-440f-a48c-ae3c4cf248b8",
      "order": 1,
-     "name": "Apply PEMDAS to expressions with parentheses and basic operations."
+     "name": "Apply PEMDAS to expressions with parentheses and basic operations.",
+     "n_dimensions": 5
     },
     {
      "id": "ba917820-df16-40ec-bf14-194cc5027eb6",
