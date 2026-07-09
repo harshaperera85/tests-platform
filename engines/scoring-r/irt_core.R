@@ -18,7 +18,9 @@ fit_joint <- function(long, itemtype = "2PL", ncycles = 4000) {
   wide$person <- NULL
   colnames(wide) <- sub("^u\\.", "", colnames(wide))
   mat <- as.matrix(wide)
-  # mirt hard-errors on single-category items; drop with report
+  # Drop near-degenerate items (any response category observed < 5 times) with
+  # report — this covers mirt's hard error on single-category items and also
+  # items too sparse for a stable 2PL fit.
   minc <- apply(mat, 2, function(x) min(table(factor(x, levels = 0:1))))
   dropped <- colnames(mat)[minc < 5]
   mat <- mat[, minc >= 5, drop = FALSE]

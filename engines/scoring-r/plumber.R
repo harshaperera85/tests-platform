@@ -13,7 +13,7 @@ library(mirt)
 
 #* Liveness check
 #* @get /health
-#* @serializer unboxedJSON
+#* @serializer unboxedJSON list(digits = 15)
 function() {
   list(
     status = "ok",
@@ -28,7 +28,7 @@ function() {
 #* with delta-method SE(b), computed by mirt::DeltaMethod (authoritative).
 #* Body: {a, d, var_a, var_d, cov_ad}. b = -d/a.
 #* @post /convert-difficulty
-#* @serializer unboxedJSON
+#* @serializer unboxedJSON list(digits = 15)
 function(req) {
   body <- fromJSON(req$postBody)
   a <- as.numeric(body$a)
@@ -63,7 +63,7 @@ source("/app/irt_core.R")
 #* Returns canonical (a, d) + SEs + covariance elements per item, dropped
 #* items, and an HONEST convergence report.
 #* @post /calibrate
-#* @serializer unboxedJSON
+#* @serializer unboxedJSON list(digits = 15)
 function(req) {
   body <- fromJSON(req$postBody)
   long <- as.data.frame(body$responses)
@@ -77,7 +77,7 @@ function(req) {
 #* EAP person scoring under fixed canonical params.
 #* Body: {params: [{item, a, d}], responses: [{item, u}]}
 #* @post /score
-#* @serializer unboxedJSON
+#* @serializer unboxedJSON list(digits = 15)
 function(req) {
   body <- fromJSON(req$postBody)
   eap_score(as.data.frame(body$params), as.data.frame(body$responses))
@@ -88,7 +88,7 @@ function(req) {
 #* Body: {a, responses: [{theta, u}], prior: {mu_d, sd_d} or {mu_b, sd_b}}
 #* se_b = se_d / a exactly (a fixed) — a valid difficulty-view SE.
 #* @post /update-item
-#* @serializer unboxedJSON
+#* @serializer unboxedJSON list(digits = 15)
 function(req) {
   body <- fromJSON(req$postBody)
   if (is.null(body$a) || body$a <= 0) return(list(error = "require a > 0"))
@@ -99,7 +99,7 @@ function(req) {
 #* Scale-linking diagnostics between two canonical parameter sets.
 #* Body: {set_x: [{item, a, d}], set_y: [{item, a, d}]}
 #* @post /link
-#* @serializer unboxedJSON
+#* @serializer unboxedJSON list(digits = 15)
 function(req) {
   body <- fromJSON(req$postBody)
   link_stats(as.data.frame(body$set_x), as.data.frame(body$set_y))

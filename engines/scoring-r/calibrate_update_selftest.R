@@ -19,6 +19,10 @@ stopifnot(res$convergence$converged)
 a_hat <- sapply(res$items, `[[`, "a"); d_hat <- sapply(res$items, `[[`, "d")
 stopifnot(cor(a_hat, a_true) > 0.9, cor(d_hat, d_true) > 0.95)
 stopifnot(all(sapply(res$items, function(x) x$var_a > 0 && x$var_d > 0)))
+# vcov-alignment proof: coef()'s SEs must equal sqrt of the vcov diagonals we
+# indexed per item — a row/item misalignment would break this, not just >0.
+stopifnot(all(sapply(res$items, function(x)
+  abs(x$se_a - sqrt(x$var_a)) < 1e-6 && abs(x$se_d - sqrt(x$var_d)) < 1e-6)))
 stopifnot(res$metric$form == "slope-intercept", res$metric$scaling_d == 1)
 cat("selftest 1 (joint recovery): a_r =", round(cor(a_hat, a_true), 3),
     "d_r =", round(cor(d_hat, d_true), 3), "OK\n")
