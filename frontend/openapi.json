@@ -636,6 +636,74 @@
         }
       }
     },
+    "/api/v1/item-bank/import": {
+      "post": {
+        "tags": [
+          "item-bank"
+        ],
+        "summary": "Import Item Bank",
+        "description": "Validate + ingest one export document. Fatal problems (duplicate ids,\npartial parameters, undeclared metric with parameters present, reserved\nbank id) return 422 with nothing persisted; data-quality findings come back\nas warnings on the report. Re-importing a bank_id replaces it (content-hash\nchanges under unchanged ids are reported \u2014 identity-contract violations).",
+        "operationId": "import_item_bank",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ItemBankExportIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BankIngestReport"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/item-bank": {
+      "get": {
+        "tags": [
+          "item-bank"
+        ],
+        "summary": "Get Item Banks",
+        "description": "All imported banks with their two-axis status breakdowns.",
+        "operationId": "get_item_banks",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BankSummary"
+                  },
+                  "type": "array",
+                  "title": "Response Get Item Banks"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/assembly-jobs": {
       "post": {
         "tags": [
@@ -1636,6 +1704,364 @@
         ],
         "title": "AuditEventRead"
       },
+      "BankIngestReport": {
+        "properties": {
+          "bank_id": {
+            "type": "string",
+            "title": "Bank Id"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "n_administrable": {
+            "type": "integer",
+            "title": "N Administrable"
+          },
+          "editorial_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Editorial Counts"
+          },
+          "calibration_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Calibration Counts"
+          },
+          "pool_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pool Id"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bank_id",
+          "n_items",
+          "n_administrable",
+          "editorial_counts",
+          "calibration_counts",
+          "warnings"
+        ],
+        "title": "BankIngestReport"
+      },
+      "BankItemIn": {
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "radical_config": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Radical Config"
+          },
+          "content_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Hash"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "unknown"
+          },
+          "calibration_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration Status"
+          },
+          "stem": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stem"
+          },
+          "options": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Options"
+          },
+          "answer_key": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Answer Key"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Tags"
+          },
+          "enemy_of": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/EnemyRef"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Enemy Of"
+          },
+          "a": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "A"
+          },
+          "d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "D"
+          },
+          "c": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "C"
+          },
+          "u": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "U"
+          },
+          "se_a": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se A"
+          },
+          "se_d": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se D"
+          },
+          "cov_ad": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cov Ad"
+          },
+          "se_b": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Se B"
+          },
+          "calibration": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calibration"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_id"
+        ],
+        "title": "BankItemIn",
+        "description": "One exported item. ``instance_id`` is accepted as an alias of ``item_id``\nand carried verbatim \u2014 never re-minted (R4)."
+      },
+      "BankSummary": {
+        "properties": {
+          "bank_id": {
+            "type": "string",
+            "title": "Bank Id"
+          },
+          "imported_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Imported At"
+          },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "export_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Version"
+          },
+          "n_items": {
+            "type": "integer",
+            "title": "N Items"
+          },
+          "n_administrable": {
+            "type": "integer",
+            "title": "N Administrable"
+          },
+          "editorial_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Editorial Counts"
+          },
+          "calibration_counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Calibration Counts"
+          },
+          "pool_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pool Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bank_id",
+          "n_items",
+          "n_administrable",
+          "editorial_counts",
+          "calibration_counts"
+        ],
+        "title": "BankSummary"
+      },
       "Blueprint": {
         "properties": {
           "schema_version": {
@@ -2443,6 +2869,45 @@
         "title": "EnemyPolicy",
         "description": "How to honor ``enemy_of`` relations from the bank.\n\nWhen ``enforce`` is true, two items that are enemies of each other may not both\nappear in the same form (declared one-directionally in the bank; the compiler\nsymmetrizes)."
       },
+      "EnemyRef": {
+        "properties": {
+          "enemy_id": {
+            "type": "string",
+            "title": "Enemy Id"
+          },
+          "reasons": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reasons"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enemy_id"
+        ],
+        "title": "EnemyRef",
+        "description": "item-factory's structured enemy entry (R5); bare-string ids also accepted."
+      },
       "ExposureFeedback": {
         "properties": {
           "count_contexts": {
@@ -2987,6 +3452,89 @@
           "environment"
         ],
         "title": "HealthResponse"
+      },
+      "ItemBankExportIn": {
+        "properties": {
+          "bank_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$",
+            "title": "Bank Id"
+          },
+          "export_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Export Version"
+          },
+          "domain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Domain"
+          },
+          "generated_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Generated At"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provenance"
+          },
+          "metric": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BankItemIn"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bank_id",
+          "items"
+        ],
+        "title": "ItemBankExportIn",
+        "description": "One item-bank export document, as POSTed to ``/item-bank/import``."
       },
       "ItemExposure": {
         "properties": {

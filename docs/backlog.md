@@ -39,6 +39,19 @@ Durable to-do list. Status as of the latest commit on `main`.
   (review fix). scoring-r = the Analysis-module home; calibration-engine ownership =
   **tests-platform** (decided 2026-07-09). Follow-up: backend wrappers + OpenAPI +
   `posterior-fixed-a` in `PoolKind`.
+- **Real pool importer (#9)** — `POST /item-bank/import` ingests the pinned
+  item-factory CAT-ready contract: `instance_id` verbatim (R4), R3 flat tags w/
+  UUID unit/kc join keys, structured/bare `enemy_of`, **nullable IRT** (Stage-A
+  banks import as record-only), rule-4 metric enforcement + D-rescaling at ingest,
+  identity-epoch policy (pre-epoch warning; content-hash-change violation reports
+  on re-import). Two artifacts per bank (`bank.json` superset record +
+  administrable `pool.json` derivation); the derived pool is a first-class catalog
+  pool — blueprint editor, assembly (incl. async worker), QA all consume it with
+  zero changes. Administrability DERIVED from both axes (editorial live ∧
+  field_calibrated ∧ params). E2E-proven: curriculum-generated blueprint assembled
+  a form from imported real-UUID items with exact allocation. Follow-ups: UI
+  upload affordance; DB-backed bank post-campaign; field-study assembly on
+  uncalibrated items (needs an info-less assembly path).
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
 
 ## Next up

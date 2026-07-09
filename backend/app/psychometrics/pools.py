@@ -48,15 +48,41 @@ _CATALOG: dict[str, PoolEntry] = {
 }
 
 
+#: Imported item banks (backlog #9): each ``app/data/item_banks/<bank_id>/pool.json``
+#: is an administrable derivation written by ``services/item_bank.ingest_export`` in
+#: the standard pool-document format. Scanned per call (no cache): imports become
+#: visible immediately in every process sharing the volume (API + worker).
+IMPORTED_BANKS_DIR = Path(__file__).parent.parent / "data" / "item_banks"
+
+
+def _imported_entries() -> dict[str, PoolEntry]:
+    out: dict[str, PoolEntry] = {}
+    if not IMPORTED_BANKS_DIR.is_dir():
+        return out
+    for bank_dir in sorted(p for p in IMPORTED_BANKS_DIR.iterdir() if p.is_dir()):
+        pool_path = bank_dir / "pool.json"
+        if pool_path.is_file() and bank_dir.name not in _CATALOG:
+            out[bank_dir.name] = PoolEntry(
+                pool_id=bank_dir.name,
+                title=f"Imported bank: {bank_dir.name}",
+                description=(
+                    "administrable items from an imported item-factory bank "
+                    "(see GET /item-bank for the full two-axis record)"
+                ),
+                path=pool_path,
+            )
+    return out
+
+
 def resolve(pool_id: str) -> PoolEntry:
-    try:
-        return _CATALOG[pool_id]
-    except KeyError as exc:
-        raise KeyError(f"unknown pool_id {pool_id!r}") from exc
+    entry = _CATALOG.get(pool_id) or _imported_entries().get(pool_id)
+    if entry is None:
+        raise KeyError(f"unknown pool_id {pool_id!r}")
+    return entry
 
 
 def is_known(pool_id: str) -> bool:
-    return pool_id in _CATALOG
+    return pool_id in _CATALOG or pool_id in _imported_entries()
 
 
 def load_pool_by_id(pool_id: str = DEFAULT_POOL_ID) -> ItemPool:
@@ -68,4 +94,4 @@ def load_document_by_id(pool_id: str = DEFAULT_POOL_ID) -> dict:
 
 
 def catalog() -> list[PoolEntry]:
-    return list(_CATALOG.values())
+    return [*_CATALOG.values(), *_imported_entries().values()]
