@@ -109,11 +109,16 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
     availability flag ("N match in pool") refresh when the bank changes — invalidate the
     `getPoolItems` query on import (or set a `staleTime`/`refetchInterval`). With today's
     static fixtures it's refresh-bounded (mount / refocus / pool switch), which is fine.
-- **CAT platform endpoints** → Phase 2 on-ramp. **Org repo (`outsmart-college`).**
-  *Trigger:* committing to Phase 2 **and** ready for org involvement (note: repos move to
-  `outsmart-college` only at v1-finalized). To pin, need: OpenAPI / endpoint shapes
-  (start-session → next-item → respond → score → stop), the CAT `TestConfig` schema, the
-  θ scaling it returns, and auth.
+- **CAT platform endpoints** → Phase 2 on-ramp. **CONTRACT PACK RECEIVED (2026-07-09):**
+  `docs/ignite-contracts/ignite-2026-07-08-e080009/` (from cat-platform @ `e080009`) carries
+  the full Ignite OpenAPI snapshot (CI-gated byte-identical to live), the `TestConfig`
+  schema incl. `blueprint_binding` (BP-MODES-1 §5), the item-ingest contract (tags map
+  matches our pinned dims), the session surface incl. the §3.5 `blueprint_conformance`
+  record, and the §7 verification report (merge-gate evidence). θ scaling already verified
+  D=1 (below). **Still open:** auth story; and the `vendored-blueprint-schema.sha256`
+  canonicalization recipe (ask cat-platform what exactly is hashed so drift checks work).
+  Phase 2 adapter work is now unblocked on contracts — remaining gate is the walkthrough +
+  the user's merge trigger.
 
 ### Pinned metric fact — CAT platform = mirt 1.46.1 = **D = 1 (logistic)**
 *Verified empirically* (throwaway container, R 4.4.2 + mirt 1.46.1, params passed straight

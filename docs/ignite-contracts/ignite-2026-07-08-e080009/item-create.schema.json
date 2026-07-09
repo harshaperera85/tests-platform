@@ -1,0 +1,205 @@
+{
+  "$defs": {
+    "CalibrationStatus": {
+      "description": "How an item's IRT parameters were determined.\n\nThe boundary between item-factory / analysis-engine / CAT-platform is\nthis field: ingestion validates which sources are acceptable; the\nCAT engine optionally refuses items whose status isn't in the test\nconfig's allow_calibration_statuses list.",
+      "enum": [
+        "uncalibrated",
+        "provisional_ai",
+        "provisional_sme",
+        "field_calibrated"
+      ],
+      "title": "CalibrationStatus",
+      "type": "string"
+    },
+    "IRTModelType": {
+      "description": "IRT models supported by mirt/mirtCAT (full enumeration).\n\nReference: mirt package reference, generate.mirt_object() and mirt()\nitemtype argument. Each value passes directly to mirtcat-service which\nuses mirt's `generate.mirt_object(parameters, itemtype=...)`.",
+      "enum": [
+        "Rasch",
+        "1PL",
+        "2PL",
+        "3PL",
+        "3PLu",
+        "4PL",
+        "graded",
+        "grsm",
+        "gpcm",
+        "gpcmIRT",
+        "rsm",
+        "nominal",
+        "partcomp",
+        "PC3PL",
+        "ideal",
+        "sequential",
+        "2PLNRM",
+        "3PLNRM",
+        "lca",
+        "custom"
+      ],
+      "title": "IRTModelType",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "item_index": {
+      "minimum": 1,
+      "title": "Item Index",
+      "type": "integer"
+    },
+    "itemtype": {
+      "$ref": "#/$defs/IRTModelType"
+    },
+    "n_categories": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "N Categories"
+    },
+    "parameters": {
+      "additionalProperties": {
+        "type": "number"
+      },
+      "title": "Parameters",
+      "type": "object"
+    },
+    "content_category": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Category"
+    },
+    "question_text": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Question Text"
+    },
+    "question_format": {
+      "default": "radio",
+      "title": "Question Format",
+      "type": "string"
+    },
+    "options": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "object"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Options"
+    },
+    "correct_answer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Correct Answer"
+    },
+    "metadata": {
+      "default": {},
+      "title": "Metadata",
+      "type": "object"
+    },
+    "tags": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {},
+      "title": "Tags",
+      "type": "object"
+    },
+    "calibration_status": {
+      "$ref": "#/$defs/CalibrationStatus",
+      "default": "field_calibrated"
+    },
+    "parameter_se": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parameter Se"
+    },
+    "calibration_n": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Calibration N"
+    },
+    "calibration_date": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Calibration Date"
+    },
+    "calibration_model": {
+      "anyOf": [
+        {
+          "maxLength": 50,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Calibration Model"
+    }
+  },
+  "required": [
+    "item_index",
+    "itemtype",
+    "parameters"
+  ],
+  "title": "ItemCreate",
+  "type": "object"
+}
