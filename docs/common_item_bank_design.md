@@ -264,11 +264,14 @@ parameters there).
 
 ## 10. Open questions / ownership (updated after the issue-#1 reply, 2026-07-09)
 
-1. **Who runs the calibration stage** (field responses → mirt → write-back)? **STILL OPEN** — the
-   reply lays out the three options (item-factory / tests-platform / standalone) with pros/cons and
-   commits that item-factory owns the item-identity contract and a **parameter write-back schema**
-   in its bank (a/d/c/u + SEs + calibration metadata, keyed to item_id) regardless of who owns the
-   engine. Human decision pending.
+1. **Who runs the calibration stage** (field responses → mirt → write-back)? **DECIDED
+   (2026-07-09): tests-platform owns the calibration engine.** Rationale: responses are born
+   here (the Linear field-study loop is ours end-to-end); the mirt machinery already runs here
+   (`engines/scoring-r`); and the write-back boundary is neutralized because item-factory owns
+   a defined **parameter write-back schema** in its bank regardless. The engine seeds as an
+   **Analysis module on `scoring-r`** (single response-based-IRT source of truth; first brick =
+   the `p2-analysis-module-seed` PR from the item-calibration repo), with a standalone service
+   as a later refactor only if scale demands it.
 2. **Where do parameters get joined onto item ids** — **ANSWERED in part:** item-factory will define
    the write-back schema in its bank; the engine (wherever it lives) writes to that defined place.
 3. **Which artifact do we ingest** — **ANSWERED: the SQLite-derived CAT-ready export.** It is
