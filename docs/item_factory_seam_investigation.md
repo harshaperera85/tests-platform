@@ -218,6 +218,39 @@ columns (or a join table) need adding to the SQLite schema and threading through
 
 ---
 
+## 7. CONTRACT RESOLUTION — item-factory's reply to issue #1 (2026-07-09)
+
+The change-request (`docs/item_factory_change_request.md`, sent as
+`outsmart-college/item-factory-source#1`) was answered in full; every claim in this report was
+re-verified by the item-factory side. The pinned outcomes:
+
+- **The export contract is the SQLite-derived CAT-ready export** (R1 accepted via option (a):
+  columns + Phase-6 threading). Rationale: cumulative across runs, carries the item **status
+  lifecycle** that determines administrability, and is the write-back home for calibration
+  parameters. `item_bank.json` is demoted to a per-run diagnostic snapshot (non-contractual) —
+  §5/§6 of this report describe the pre-fix state.
+- **Identity epoch (R4, supersedes §3's stable-id assumption):** `instance_id` is currently
+  `{template_id}_{selection_index}` — NOT immutable across regenerations — and a planned
+  **purge + full-regeneration campaign** re-mints the whole bank. From the post-campaign epoch:
+  ids globally unique + immutable, regeneration mints new ids with provenance links, and a
+  **content hash** exports alongside for verification. **Pre-epoch ids must never be calibration
+  join keys.**
+- **R2 better than reported:** the TIMSS level is a first-class authored field on `TemplateSpec`
+  (`timss_tag`, alongside `bloom_tag`) — surfacing is a stamp-through at instance generation.
+- **R3 accepted verbatim:** flat tag dict `{domain, unit, kc, complicator, bloom_process,
+  bloom_knowledge, timss}` with `unit`/`kc` carrying the unit-JSON UUIDs (mapped internally from
+  dot-notation via `order`). No `template_id` parsing; no `dok`.
+- **R6 corrected:** the per-unit JSONs are **produced by the course platform**, not item-factory
+  (both repos consume them). item-factory commits to change-notice on its checked-in copies; the
+  true producer belongs in any future shape conversation.
+- **R7 accepted, spelling `n_dimensions`** (integer count only; dimension texts stay internal),
+  omitted where no kc_config exists — matches our importer, which already accepts it. Landing:
+  days. Authoring coverage of the remaining kc_configs accelerates during the campaign.
+- **Timing:** R7 days; R1+R2+R3 bundled into regeneration-campaign prep (weeks, dates pinned when
+  the gating recalibration is scheduled); campaign completion = the identity epoch.
+- **Calibration-engine ownership: still open** (options tabled in the reply); item-factory owns
+  the identity contract + a parameter **write-back schema** in its bank regardless.
+
 ## Implications for tests-platform & the common-dataset design
 
 - **The common item bank is a two-stage lifecycle, and item-factory owns Stage A.** Authoring

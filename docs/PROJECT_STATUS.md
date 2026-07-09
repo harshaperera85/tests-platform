@@ -83,9 +83,13 @@ Walkthrough expanded to full end-to-end guide (linear + governance + exposure) i
   (content + tags + `enemy_of` + status; **no IRT params**). **Design captured** in
   `docs/common_item_bank_design.md` (shared bank = two-stage lifecycle; two-axis item status —
   editorial vs calibration; Linear is the field-test/calibration instrument; immutable single
-  `item_id`). **Asks to item-factory** SENT 2026-07-08 as
-  `outsmart-college/item-factory-source#1` (`docs/item_factory_change_request.md`);
-  awaiting: contract artifact, timing per ask, calibration-ownership opener. Open: a downstream **calibration-engine** (field responses → mirt → write-back) — owner
+  `item_id`). **Asks to item-factory** SENT as
+  `outsmart-college/item-factory-source#1` and **ANSWERED 2026-07-09** (recorded in
+  `item_factory_seam_investigation.md` §7): contract = **SQLite CAT-ready export**;
+  R1–R3 land with the regeneration campaign; **identity epoch** = post-campaign
+  (pre-epoch `instance_id`s never calibration keys; content-hash verification);
+  R7 `n_dimensions` in days. Calibration-engine ownership still open. Real pool
+  importer now buildable against the pinned contract. Open: a downstream **calibration-engine** (field responses → mirt → write-back) — owner
   TBD (`common_item_bank_design.md` §10). All design-only; **nothing built, nothing unparked**.
 - **CAT platform endpoint seam** — Phase 2 on-ramp (org repo). Parked until committing to
   Phase 2 + ready for org involvement. To pin: endpoint shapes

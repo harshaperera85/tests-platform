@@ -178,12 +178,25 @@ The rename `instance_id → item_id` is trivial; the **identity contract** is lo
 > One id, born at generation, carried unchanged through authoring → field study → calibration →
 > ingestion → administration → exposure tracking → Sessions. It is the single join key.
 
+**AMENDED by item-factory's issue-#1 reply (2026-07-09) — the identity epoch.** Today's
+`instance_id` is minted as `{template_id}_{selection_index}`: unique within an export but **not
+immutable across regenerations**, and a planned **purge + full-regeneration campaign** will re-mint
+the entire bank. The contract therefore starts at the **post-campaign identity epoch**:
+- **Pre-epoch ids (anything exported today) must never be used as calibration join keys.**
+- From the epoch onward item-factory guarantees global uniqueness + immutability (regeneration
+  mints a NEW id + provenance link, never reuses one), and exports a **content hash** alongside —
+  a defense-in-depth check that an id still denotes the same content. Ingest SHOULD verify it.
+- Field studies / calibration therefore begin only on the post-epoch bank (this composes with
+  §11's Linear-first bootstrap — no schedule change, just an explicit starting line).
+
 The danger is **re-identification**, not the name: if ingestion mints a new id, the calibration
 engine can't find the item to attach numbers to, and exposure/results can't be traced back. Carry
 alongside the unique id:
 - **`template_id`** — the family/parent the item came from.
 - **`radical_config`** key — the isomorph/"calibration grouping": clones that may calibrate together
   and that you may want to dedupe/co-constrain when banks are combined.
+- **content hash** (post-epoch) — verify on ingest; a changed hash under an unchanged id is a
+  contract violation to surface, never to silently accept.
 
 ---
 
@@ -249,15 +262,20 @@ parameters there).
 
 ---
 
-## 10. Open questions / ownership (to decide before building)
+## 10. Open questions / ownership (updated after the issue-#1 reply, 2026-07-09)
 
-1. **Who runs the calibration stage** (field responses → mirt → write-back)? A tests-platform
-   analysis engine, a separate service, or part of item-factory? This stage does not exist yet.
-2. **Where do parameters get joined onto item ids** — inside item-factory (add Stage-B columns there)
-   or in tests-platform at ingest?
-3. **Which artifact do we ingest** — item-factory's `item_bank.json` (authoritative today) or its
-   SQLite CAT-ready export (incomplete until the §6 split-brain in the investigation report is
-   fixed)?
+1. **Who runs the calibration stage** (field responses → mirt → write-back)? **STILL OPEN** — the
+   reply lays out the three options (item-factory / tests-platform / standalone) with pros/cons and
+   commits that item-factory owns the item-identity contract and a **parameter write-back schema**
+   in its bank (a/d/c/u + SEs + calibration metadata, keyed to item_id) regardless of who owns the
+   engine. Human decision pending.
+2. **Where do parameters get joined onto item ids** — **ANSWERED in part:** item-factory will define
+   the write-back schema in its bank; the engine (wherever it lives) writes to that defined place.
+3. **Which artifact do we ingest** — **ANSWERED: the SQLite-derived CAT-ready export.** It is
+   cumulative across runs, carries the item **status lifecycle** (administrability), and is where
+   calibration parameters write back; `item_bank.json` is demoted to a per-run diagnostic snapshot
+   (non-contractual). The split-brain fix (R1a: columns + Phase-6 threading) lands with the
+   regeneration campaign, so the schema arrives on an empty bank — born complete, no backfill.
 4. **Provisional-parameter policy** — do/which programs permit field-test rough targets or CAT warm
    starts on `ai_predicted` numbers?
 5. **Data-layer reality** — "common dataset" as one shared DB, or one canonical schema + an
