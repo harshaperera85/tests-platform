@@ -14,10 +14,13 @@ RUN R -e "install.packages('remotes', repos='https://cloud.r-project.org')" \
  && R -e "remotes::install_version('mirt', version='1.46.1', repos='https://cloud.r-project.org', upgrade='never')"
 
 WORKDIR /app
-COPY plumber.R convert_difficulty_selftest.R /app/
+COPY plumber.R irt_core.R convert_difficulty_selftest.R calibrate_update_selftest.R /app/
 
-# Fail the build if the delta-method SE(b) ever diverges from mirt's IRTpars SE(b).
-RUN Rscript /app/convert_difficulty_selftest.R
+# Fail the build if the delta-method SE(b) ever diverges from mirt's IRTpars SE(b),
+# or if the Analysis-seed estimators (joint calibrate / EAP / fixed-a update /
+# link) fail their recovery selftests.
+RUN Rscript /app/convert_difficulty_selftest.R \
+ && Rscript /app/calibrate_update_selftest.R
 
 EXPOSE 8000
 CMD ["/app/plumber.R"]
