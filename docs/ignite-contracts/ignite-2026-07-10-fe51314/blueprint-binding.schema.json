@@ -1,0 +1,35 @@
+{
+  "description": "Attach a tests-platform blueprint to a CAT config (BP-MODES-1 \u00a75).\n\nThe blueprint JSON is EMBEDDED verbatim at config-creation time (fetched\nfrom tests-platform /api/v1/blueprints/{id} or pasted) \u2014 never referenced\nlive \u2014 so Ignite runs without a live tests-platform and configs are\nself-describing for replay and simulation. Validated on save against the\nvendored contract schema (app.contracts).\n\n`on_nonconformant` is the scoring policy when a session completes with an\nunsatisfiable minimum at max_items (spec \u00a73.4(2)): 'flag' keeps the score\nand marks the record; 'invalidate_score' additionally withholds the\nscaled-score report.",
+  "properties": {
+    "blueprint_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Blueprint Id"
+    },
+    "blueprint": {
+      "title": "Blueprint",
+      "type": "object"
+    },
+    "on_nonconformant": {
+      "default": "flag",
+      "enum": [
+        "flag",
+        "invalidate_score"
+      ],
+      "title": "On Nonconformant",
+      "type": "string"
+    }
+  },
+  "required": [
+    "blueprint"
+  ],
+  "title": "BlueprintBinding",
+  "type": "object"
+}

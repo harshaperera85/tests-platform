@@ -1,0 +1,960 @@
+{
+  "$defs": {
+    "BlueprintBinding": {
+      "description": "Attach a tests-platform blueprint to a CAT config (BP-MODES-1 \u00a75).\n\nThe blueprint JSON is EMBEDDED verbatim at config-creation time (fetched\nfrom tests-platform /api/v1/blueprints/{id} or pasted) \u2014 never referenced\nlive \u2014 so Ignite runs without a live tests-platform and configs are\nself-describing for replay and simulation. Validated on save against the\nvendored contract schema (app.contracts).\n\n`on_nonconformant` is the scoring policy when a session completes with an\nunsatisfiable minimum at max_items (spec \u00a73.4(2)): 'flag' keeps the score\nand marks the record; 'invalidate_score' additionally withholds the\nscaled-score report.",
+      "properties": {
+        "blueprint_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Blueprint Id"
+        },
+        "blueprint": {
+          "title": "Blueprint",
+          "type": "object"
+        },
+        "on_nonconformant": {
+          "default": "flag",
+          "enum": [
+            "flag",
+            "invalidate_score"
+          ],
+          "title": "On Nonconformant",
+          "type": "string"
+        }
+      },
+      "required": [
+        "blueprint"
+      ],
+      "title": "BlueprintBinding",
+      "type": "object"
+    },
+    "ConstraintsConfig": {
+      "description": "Item-level constraints.",
+      "properties": {
+        "excluded": {
+          "default": [],
+          "items": {
+            "type": "integer"
+          },
+          "title": "Excluded",
+          "type": "array"
+        },
+        "not_scored": {
+          "default": [],
+          "items": {
+            "type": "integer"
+          },
+          "title": "Not Scored",
+          "type": "array"
+        },
+        "ordered_groups": {
+          "default": [],
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Ordered Groups",
+          "type": "array"
+        },
+        "unordered_groups": {
+          "default": [],
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Unordered Groups",
+          "type": "array"
+        },
+        "independent_groups": {
+          "default": [],
+          "items": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array"
+          },
+          "title": "Independent Groups",
+          "type": "array"
+        }
+      },
+      "title": "ConstraintsConfig",
+      "type": "object"
+    },
+    "ContentBalancingConfig": {
+      "description": "Content balancing configuration.",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "categories": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Categories"
+        },
+        "target_proportions": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Proportions"
+        }
+      },
+      "title": "ContentBalancingConfig",
+      "type": "object"
+    },
+    "EstimationConfig": {
+      "description": "Theta estimation parameters.",
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/EstimationMethod",
+          "default": "MAP"
+        },
+        "quadpts": {
+          "default": 61,
+          "maximum": 121,
+          "minimum": 11,
+          "title": "Quadpts",
+          "type": "integer"
+        },
+        "theta_range": {
+          "items": {
+            "type": "number"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "title": "Theta Range",
+          "type": "array"
+        }
+      },
+      "title": "EstimationConfig",
+      "type": "object"
+    },
+    "EstimationMethod": {
+      "description": "Theta estimation methods - mirtCAT 'method' parameter.",
+      "enum": [
+        "MAP",
+        "EAP",
+        "ML",
+        "WLE",
+        "fixed"
+      ],
+      "title": "EstimationMethod",
+      "type": "string"
+    },
+    "ExposureConfig": {
+      "description": "Exposure control configuration.",
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/ExposureMethod",
+          "default": "none"
+        },
+        "sh_rates": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sh Rates"
+        },
+        "randomesque_n": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Randomesque N"
+        }
+      },
+      "title": "ExposureConfig",
+      "type": "object"
+    },
+    "ExposureMethod": {
+      "description": "Exposure control methods.",
+      "enum": [
+        "none",
+        "sympson_hetter",
+        "randomesque"
+      ],
+      "title": "ExposureMethod",
+      "type": "string"
+    },
+    "FusionType": {
+      "description": "Hybrid neural-IRT fusion weight function shape.",
+      "enum": [
+        "logistic",
+        "linear",
+        "step"
+      ],
+      "title": "FusionType",
+      "type": "string"
+    },
+    "HybridConfig": {
+      "description": "Hybrid neural-IRT estimation configuration.",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "neural_model_id": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Neural Model Id"
+        },
+        "fusion_type": {
+          "$ref": "#/$defs/FusionType",
+          "default": "logistic"
+        },
+        "fusion_n0": {
+          "default": 5.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Fusion N0",
+          "type": "number"
+        },
+        "fusion_k": {
+          "default": 0.5,
+          "exclusiveMinimum": 0.0,
+          "title": "Fusion K",
+          "type": "number"
+        }
+      },
+      "title": "HybridConfig",
+      "type": "object"
+    },
+    "IRTModelConfig": {
+      "description": "IRT model specification.",
+      "properties": {
+        "model_type": {
+          "$ref": "#/$defs/IRTModelType"
+        },
+        "n_dimensions": {
+          "default": 1,
+          "maximum": 10,
+          "minimum": 1,
+          "title": "N Dimensions",
+          "type": "integer"
+        },
+        "latent_means": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Latent Means"
+        },
+        "latent_covariance": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Latent Covariance"
+        }
+      },
+      "required": [
+        "model_type"
+      ],
+      "title": "IRTModelConfig",
+      "type": "object"
+    },
+    "IRTModelType": {
+      "description": "IRT models supported by mirt/mirtCAT (full enumeration).\n\nReference: mirt package reference, generate.mirt_object() and mirt()\nitemtype argument. Each value passes directly to mirtcat-service which\nuses mirt's `generate.mirt_object(parameters, itemtype=...)`.",
+      "enum": [
+        "Rasch",
+        "1PL",
+        "2PL",
+        "3PL",
+        "3PLu",
+        "4PL",
+        "graded",
+        "grsm",
+        "gpcm",
+        "gpcmIRT",
+        "rsm",
+        "nominal",
+        "partcomp",
+        "PC3PL",
+        "ideal",
+        "sequential",
+        "2PLNRM",
+        "3PLNRM",
+        "lca",
+        "custom"
+      ],
+      "title": "IRTModelType",
+      "type": "string"
+    },
+    "PreCATConfig": {
+      "description": "Pre-CAT block configuration.",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "min_items": {
+          "default": 0,
+          "title": "Min Items",
+          "type": "integer"
+        },
+        "max_items": {
+          "default": 0,
+          "title": "Max Items",
+          "type": "integer"
+        },
+        "criteria": {
+          "$ref": "#/$defs/SelectionCriterion",
+          "default": "random"
+        },
+        "method": {
+          "$ref": "#/$defs/EstimationMethod",
+          "default": "MAP"
+        },
+        "response_variance": {
+          "default": false,
+          "title": "Response Variance",
+          "type": "boolean"
+        }
+      },
+      "title": "PreCATConfig",
+      "type": "object"
+    },
+    "PresentationConfig": {
+      "description": "Examinee-facing UI settings that don't affect the psychometrics.\n\nKept as a separate block so it's clear these are display concerns,\nnot engine concerns. Values are consumed by the frontend only.",
+      "properties": {
+        "math_enabled": {
+          "default": false,
+          "title": "Math Enabled",
+          "type": "boolean"
+        },
+        "confirm_before_submit": {
+          "default": false,
+          "title": "Confirm Before Submit",
+          "type": "boolean"
+        }
+      },
+      "title": "PresentationConfig",
+      "type": "object"
+    },
+    "ProficiencyBand": {
+      "description": "One band in a proficiency/letter-grade scale.\n\nA band claims everything from theta_min upward UNTIL the next band's\ntheta_min. The lowest band typically has theta_min=None (= -infinity).",
+      "properties": {
+        "label": {
+          "maxLength": 20,
+          "minLength": 1,
+          "title": "Label",
+          "type": "string"
+        },
+        "theta_min": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Theta Min"
+        },
+        "score_min": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Score Min"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "ProficiencyBand",
+      "type": "object"
+    },
+    "ScoreReportingConfig": {
+      "description": "How to transform theta into the examinee-facing scaled score.\n\nDefault: linear transform `score = scale_mean + scale_sd * theta`, clipped\nto [scale_min, scale_max]. With defaults (mean=75, sd=10, range 0-100),\ntheta=0 -> 75 (C+ in the default band table), theta=+1.8 -> 93 (A+).",
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "scale_type": {
+          "default": "linear",
+          "enum": [
+            "linear",
+            "iq",
+            "tscore",
+            "percentile"
+          ],
+          "title": "Scale Type",
+          "type": "string"
+        },
+        "scale_mean": {
+          "default": 75.0,
+          "title": "Scale Mean",
+          "type": "number"
+        },
+        "scale_sd": {
+          "default": 10.0,
+          "title": "Scale Sd",
+          "type": "number"
+        },
+        "scale_min": {
+          "default": 0.0,
+          "title": "Scale Min",
+          "type": "number"
+        },
+        "scale_max": {
+          "default": 100.0,
+          "title": "Scale Max",
+          "type": "number"
+        },
+        "decimal_places": {
+          "default": 0,
+          "maximum": 3,
+          "minimum": 0,
+          "title": "Decimal Places",
+          "type": "integer"
+        },
+        "show_ci": {
+          "default": true,
+          "title": "Show Ci",
+          "type": "boolean"
+        },
+        "ci_confidence": {
+          "default": 0.95,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Ci Confidence",
+          "type": "number"
+        },
+        "proficiency_bands": {
+          "items": {
+            "$ref": "#/$defs/ProficiencyBand"
+          },
+          "title": "Proficiency Bands",
+          "type": "array"
+        }
+      },
+      "title": "ScoreReportingConfig",
+      "type": "object"
+    },
+    "SelectionConfig": {
+      "description": "Item selection parameters.",
+      "properties": {
+        "criteria": {
+          "$ref": "#/$defs/SelectionCriterion",
+          "default": "MI"
+        },
+        "start_item": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "default": "MI",
+          "title": "Start Item"
+        },
+        "weights": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Weights"
+        },
+        "kl_delta": {
+          "default": 0.1,
+          "exclusiveMinimum": 0.0,
+          "title": "Kl Delta",
+          "type": "number"
+        }
+      },
+      "title": "SelectionConfig",
+      "type": "object"
+    },
+    "SelectionCriterion": {
+      "description": "All item selection criteria from mirtCAT 'criteria' parameter (page 21-22).",
+      "enum": [
+        "MI",
+        "MEPV",
+        "MLWI",
+        "MPWI",
+        "MEI",
+        "IKL",
+        "IKLP",
+        "IKLn",
+        "IKLPn",
+        "KL",
+        "KLn",
+        "Drule",
+        "Trule",
+        "Arule",
+        "Erule",
+        "Wrule",
+        "DPrule",
+        "TPrule",
+        "APrule",
+        "EPrule",
+        "WPrule",
+        "seq",
+        "random"
+      ],
+      "title": "SelectionCriterion",
+      "type": "string"
+    },
+    "StoppingConfig": {
+      "description": "Stopping criteria - any combination can be active simultaneously.",
+      "properties": {
+        "min_sem": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": [
+            0.3
+          ],
+          "title": "Min Sem"
+        },
+        "delta_thetas": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delta Thetas"
+        },
+        "min_items": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Min Items",
+          "type": "integer"
+        },
+        "max_items": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Items"
+        },
+        "max_time_seconds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Time Seconds"
+        },
+        "classify_thresholds": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Classify Thresholds"
+        },
+        "classify_ci": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Classify Ci"
+        },
+        "sprt_lower": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sprt Lower"
+        },
+        "sprt_upper": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sprt Upper"
+        },
+        "sprt_alpha": {
+          "default": 0.05,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Sprt Alpha",
+          "type": "number"
+        },
+        "sprt_beta": {
+          "default": 0.05,
+          "exclusiveMaximum": 1.0,
+          "exclusiveMinimum": 0.0,
+          "title": "Sprt Beta",
+          "type": "number"
+        },
+        "allow_constrain_breaks": {
+          "default": false,
+          "title": "Allow Constrain Breaks",
+          "type": "boolean"
+        }
+      },
+      "title": "StoppingConfig",
+      "type": "object"
+    }
+  },
+  "description": "Complete test configuration. Stored as JSONB and passed to mirtCAT.",
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "description": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Description"
+    },
+    "item_bank_id": {
+      "title": "Item Bank Id",
+      "type": "integer"
+    },
+    "irt_model": {
+      "$ref": "#/$defs/IRTModelConfig"
+    },
+    "estimation": {
+      "$ref": "#/$defs/EstimationConfig",
+      "default": {
+        "method": "MAP",
+        "quadpts": 61,
+        "theta_range": [
+          -6.0,
+          6.0
+        ]
+      }
+    },
+    "selection": {
+      "$ref": "#/$defs/SelectionConfig",
+      "default": {
+        "criteria": "MI",
+        "start_item": "MI",
+        "weights": null,
+        "kl_delta": 0.1
+      }
+    },
+    "stopping": {
+      "$ref": "#/$defs/StoppingConfig",
+      "default": {
+        "min_sem": [
+          0.3
+        ],
+        "delta_thetas": null,
+        "min_items": 1,
+        "max_items": null,
+        "max_time_seconds": null,
+        "classify_thresholds": null,
+        "classify_ci": null,
+        "sprt_lower": null,
+        "sprt_upper": null,
+        "sprt_alpha": 0.05,
+        "sprt_beta": 0.05,
+        "allow_constrain_breaks": false
+      }
+    },
+    "exposure": {
+      "$ref": "#/$defs/ExposureConfig",
+      "default": {
+        "method": "none",
+        "sh_rates": null,
+        "randomesque_n": null
+      }
+    },
+    "content_balancing": {
+      "$ref": "#/$defs/ContentBalancingConfig",
+      "default": {
+        "enabled": false,
+        "categories": null,
+        "target_proportions": null
+      }
+    },
+    "constraints": {
+      "$ref": "#/$defs/ConstraintsConfig",
+      "default": {
+        "excluded": [],
+        "not_scored": [],
+        "ordered_groups": [],
+        "unordered_groups": [],
+        "independent_groups": []
+      }
+    },
+    "hybrid": {
+      "$ref": "#/$defs/HybridConfig",
+      "default": {
+        "enabled": false,
+        "neural_model_id": null,
+        "fusion_type": "logistic",
+        "fusion_n0": 5.0,
+        "fusion_k": 0.5
+      }
+    },
+    "precat": {
+      "$ref": "#/$defs/PreCATConfig",
+      "default": {
+        "enabled": false,
+        "min_items": 0,
+        "max_items": 0,
+        "criteria": "random",
+        "method": "MAP",
+        "response_variance": false
+      }
+    },
+    "score_reporting": {
+      "$ref": "#/$defs/ScoreReportingConfig",
+      "default": {
+        "enabled": false,
+        "scale_type": "linear",
+        "scale_mean": 75.0,
+        "scale_sd": 10.0,
+        "scale_min": 0.0,
+        "scale_max": 100.0,
+        "decimal_places": 0,
+        "show_ci": true,
+        "ci_confidence": 0.95,
+        "proficiency_bands": [
+          {
+            "label": "F",
+            "score_min": 0.0,
+            "theta_min": null
+          },
+          {
+            "label": "D",
+            "score_min": 60.0,
+            "theta_min": -1.5
+          },
+          {
+            "label": "D+",
+            "score_min": 63.0,
+            "theta_min": -1.2
+          },
+          {
+            "label": "C-",
+            "score_min": 67.0,
+            "theta_min": -0.8
+          },
+          {
+            "label": "C",
+            "score_min": 70.0,
+            "theta_min": -0.5
+          },
+          {
+            "label": "C+",
+            "score_min": 73.0,
+            "theta_min": -0.2
+          },
+          {
+            "label": "B-",
+            "score_min": 77.0,
+            "theta_min": 0.2
+          },
+          {
+            "label": "B",
+            "score_min": 80.0,
+            "theta_min": 0.5
+          },
+          {
+            "label": "B+",
+            "score_min": 83.0,
+            "theta_min": 0.8
+          },
+          {
+            "label": "A-",
+            "score_min": 87.0,
+            "theta_min": 1.2
+          },
+          {
+            "label": "A",
+            "score_min": 90.0,
+            "theta_min": 1.5
+          },
+          {
+            "label": "A+",
+            "score_min": 93.0,
+            "theta_min": 1.8
+          }
+        ]
+      }
+    },
+    "presentation": {
+      "$ref": "#/$defs/PresentationConfig"
+    },
+    "allow_resume": {
+      "default": true,
+      "title": "Allow Resume",
+      "type": "boolean"
+    },
+    "allow_calibration_statuses": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Allow Calibration Statuses",
+      "type": "array"
+    },
+    "blueprint_binding": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BlueprintBinding"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "name",
+    "item_bank_id",
+    "irt_model"
+  ],
+  "title": "TestConfig",
+  "type": "object"
+}
