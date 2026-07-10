@@ -9,8 +9,14 @@ import { getAssemblyJob } from "../../api/generated/endpoints/assembly-jobs/asse
 import { useGenerateBlueprintFromCurriculum } from "../../api/generated/endpoints/blueprints/blueprints";
 import { useGenerateLoftSessions } from "../../api/generated/endpoints/loft/loft";
 import { useCreateBlueprint } from "../../api/generated/endpoints/blueprints/blueprints";
+import { useImportItemBank } from "../../api/generated/endpoints/item-bank/item-bank";
 import { useListCurricula } from "../../api/generated/endpoints/curricula/curricula";
-import { useGetPoolCatalog, useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
+import {
+  getGetPoolCatalogQueryKey,
+  getGetPoolItemsQueryKey,
+  useGetPoolCatalog,
+  useGetPoolItems,
+} from "../../api/generated/endpoints/pool/pool";
 import { useListScenarios } from "../../api/generated/endpoints/scenarios/scenarios";
 import {
   getGetTestQueryKey,
@@ -202,6 +208,14 @@ export function BlueprintEditorScreen({
   );
   const [loftResult, setLoftResult] = useState<LoftSessionsRead | null>(null);
   const [loftError, setLoftError] = useState<string | null>(null);
+
+  // --- import affordances: bank upload + blueprint-JSON paste ---
+  const importBank = useImportItemBank();
+  const [importMsg, setImportMsg] = useState<string | null>(null);
+  const [importErr, setImportErr] = useState<string | null>(null);
+  const [showJsonPaste, setShowJsonPaste] = useState(false);
+  const [jsonText, setJsonText] = useState("");
+  const [jsonErr, setJsonErr] = useState<string | null>(null);
 
   const qc = useQueryClient();
   const catalog = useGetPoolCatalog();
@@ -450,6 +464,54 @@ export function BlueprintEditorScreen({
     };
   }
 
+  async function uploadBankFile(file: File) {
+    setImportErr(null);
+    setImportMsg(null);
+    try {
+      const doc = JSON.parse(await file.text());
+      const report = await importBank.mutateAsync({ data: doc });
+      // pools are dynamic now — refresh every pool-derived cache immediately
+      qc.invalidateQueries({ queryKey: getGetPoolCatalogQueryKey() });
+      qc.invalidateQueries({ queryKey: getGetPoolItemsQueryKey() });
+      const bits = [
+        `${report.n_items} items`,
+        `${report.n_administrable} administrable`,
+        report.pool_id ? `pool '${report.pool_id}'` : null,
+        report.field_pool_id ? `field pool '${report.field_pool_id}'` : null,
+      ].filter(Boolean);
+      setImportMsg(`Imported bank '${report.bank_id}': ${bits.join(" · ")}${
+        report.warnings.length ? ` · ${report.warnings.length} warning(s)` : ""
+      }`);
+      if (report.pool_id) setPoolId(report.pool_id);
+    } catch (e) {
+      const detail = (
+        e as { response?: { data?: { detail?: unknown } } }
+      )?.response?.data?.detail;
+      setImportErr(
+        typeof detail === "string"
+          ? detail
+          : e instanceof Error
+            ? e.message
+            : "Import failed.",
+      );
+    }
+  }
+
+  function applyPastedBlueprint() {
+    setJsonErr(null);
+    try {
+      const bp = JSON.parse(jsonText) as Blueprint;
+      if (typeof bp.length !== "number") {
+        throw new Error("not a blueprint document (missing numeric 'length')");
+      }
+      applyFields(fieldsFromBlueprint(bp), bp.name ?? "imported-blueprint");
+      setShowJsonPaste(false);
+      setJsonText("");
+    } catch (e) {
+      setJsonErr(e instanceof Error ? e.message : "Invalid JSON.");
+    }
+  }
+
   async function previewLoftSessions() {
     setLoftError(null);
     setLoftResult(null);
@@ -597,6 +659,46 @@ export function BlueprintEditorScreen({
             {pool.data.simulated ? "Simulated bank" : "Bank"}: {pool.data.n_items} items
             {tagSummary?.domain && " · domains " + Object.keys(tagSummary.domain).join(", ")}
           </p>
+        )}
+        <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-ink-100 pt-3">
+          <label className="cursor-pointer text-sm text-brand-600 hover:underline">
+            {importBank.isPending ? "Importing…" : "Import item bank (JSON export)…"}
+            <input
+              type="file"
+              accept="application/json,.json"
+              className="hidden"
+              disabled={importBank.isPending}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) uploadBankFile(f);
+                e.target.value = "";
+              }}
+            />
+          </label>
+          <Button variant="ghost" onClick={() => setShowJsonPaste((v) => !v)}>
+            {showJsonPaste ? "Cancel paste" : "Paste blueprint JSON…"}
+          </Button>
+        </div>
+        {importMsg && <Alert tone="info" title="Bank imported">{importMsg}</Alert>}
+        {importErr && <Alert tone="error" title="Import failed">{importErr}</Alert>}
+        {showJsonPaste && (
+          <div className="mt-3 space-y-2">
+            <textarea
+              className="h-40 w-full rounded-lg border border-ink-200 p-2 font-mono text-xs"
+              placeholder='{"length": 20, "content_constraints": [...], ...}'
+              value={jsonText}
+              onChange={(e) => setJsonText(e.target.value)}
+            />
+            <div className="flex items-center gap-2">
+              <Button variant="secondary" onClick={applyPastedBlueprint}>
+                Load into editor
+              </Button>
+              <span className="text-xs text-ink-400">
+                validates on save/assemble; ids and tags are used verbatim
+              </span>
+            </div>
+            {jsonErr && <Alert tone="error" title="Invalid blueprint JSON">{jsonErr}</Alert>}
+          </div>
         )}
       </Card>
 

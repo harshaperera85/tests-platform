@@ -1,5 +1,9 @@
 # Tests Platform — operational walkthrough (end-to-end)
 
+> Covers the linear path + governance + exposure (§§0–10) and the BP-MODES-1 era
+> (§§11–15): content-only blueprints, the curriculum→blueprint generator, item-bank
+> import, field-study pools, and LOFT session preview.
+
 A hands-on script to **drive the platform as built** and verify it operates correctly —
 not just trust green CI. Covers the full delivered feature set, in order:
 1. Blueprint editor → assemble → form preview (actual-vs-target TIF) → step-through navigator
@@ -588,6 +592,113 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST $BASE/blueprints \
 ```
 
 ---
+
+## 11. Content-only blueprints (BP-MODES-1 §2.1)
+
+A blueprint with **no TIF target** is a first-class object: assembly is
+*feasibility-only* (content/enemy/length/exposure constraints enforced, no
+information objective), and the realized TIF is still reported.
+
+1. Assembly tab → **Statistical target (TIF)** card → untick **"set a statistical
+   (TIF) target"**. The fields disappear and an info panel explains the trade
+   (forms parallel in *content only*; fine for low-stakes forms).
+2. **Assemble.** Expect `optimal` with **no objective value** and no target curve.
+3. Open the form preview: the pill reads **"content-only — no TIF target"**, the
+   chart shows the achieved TIF alone, and the per-θ table is absent.
+4. QA report (Review tab): actual-vs-target section says *content-only — no TIF
+   target to compare against*; everything else (key balance, coverage) is normal.
+
+**Checkpoints:** re-ticking the checkbox restores defaults; a TIF-bearing blueprint
+still assembles exactly as before (nothing regressed for the targeted path).
+
+## 12. Generate a blueprint from the curriculum (BP-MODES-1 §6)
+
+The **Generate from curriculum** card derives blueprints from the real pre-algebra
+course (11 units / 60 KCs / 199 complicators, shipped in-repo).
+
+1. Pick **Pre-Algebra New**, test type **Unit quiz**, unit **Exponents**, length 12.
+2. **Generate blueprint.** Expect the share summary (per-KC counts summing to 12),
+   an **amber imputation note** (~84–92% of dimension counts imputed at the domain
+   median — honest §6.1 labeling), and the editor below repopulated with count
+   cells keyed on the curriculum's **UUIDs** plus per-complicator maxima.
+3. Try **Cumulative final** at length 60: per-unit counts `6/5/10/3/6/6/6/4/6/5/3`,
+   proportion cells (CAT-bound by default → scale-free encoding).
+4. Note the **feasibility verdict pill**: against the simulated pools the UUID
+   cells flag *infeasible* — expected (demo items don't carry curriculum ids);
+   against an imported bank (§13) it goes green.
+
+**Checkpoints:** counts always sum to the requested length; unit-quiz cells are
+`count` mode, CAT-shape cells are `proportion` mode; an authored cognitive profile
+with an off-contract dimension (e.g. `dok`) is rejected.
+
+## 13. Import a real item bank (backlog #9)
+
+`POST /item-bank/import` ingests the pinned item-factory contract; the UI's pool
+dropdown picks up imported banks automatically.
+
+1. Import the shaped demo export (from the repo, on the instance):
+
+```bash
+cd backend && python3 - <<'PY'
+import json, urllib.request, sys
+sys.path.insert(0, ".")
+from app.tests.util_item_bank import build_calibrated_export
+req = urllib.request.Request("http://localhost:8000/api/v1/item-bank/import",
+    data=json.dumps(build_calibrated_export(bank_id="walkthrough-bank")).encode(),
+    headers={"Content-Type": "application/json"})
+print(json.loads(urllib.request.urlopen(req).read()))
+PY
+```
+
+2. Expect the report: 20 items, 20 administrable, two-axis counts, pool id
+   `walkthrough-bank`. Refresh the editor: the pool dropdown now lists
+   **Imported bank: walkthrough-bank**.
+3. Select it, generate the Exponents unit quiz against it (§12 step 1 with
+   `pool_id` = the bank) — the feasibility pill goes **green**: generated UUID
+   cells join imported UUID tags with zero mapping. Assemble; the form draws only
+   imported items.
+4. Re-import the same export with one `content_hash` altered: the report carries an
+   **IDENTITY-CONTRACT VIOLATION** warning (the R4 defense-in-depth check).
+
+**Checkpoints:** a Stage-A (uncalibrated, hash-less) export imports as
+record-only — PRE-EPOCH warning, no pool derived; parameters + no metric → 422.
+
+## 14. Field-study pools (the calibration bootstrap)
+
+Imported banks with `live`/`pilot` items derive a **content-only field pool**
+(`<bank>-field`) so Linear can assemble the forms whose responses feed calibration.
+
+1. Import the mixed fixture (`build_field_study_export()` — 16 pilots + 4 live
+   anchors, same script pattern as §13). Report shows `n_field_eligible: 20`,
+   `field_pool_id: pa-pilot-1-field`.
+2. The pool dropdown gains **Field-study pool: pa-pilot-1**; the pool viewer shows
+   items with **a/d/b = —** (parameters honestly absent, `calibrated_anchor`
+   flagged on the 4 anchors).
+3. Generate a **content-only** quiz against the field pool and assemble it: works
+   (feasibility-only). A TIF-bearing blueprint against it → clear 422.
+4. Degraded-but-honest reporting: QA has no psychometric curves
+   (reliability **—**), TIF curve empty, **Walk/simulate refuse with a 422**
+   ("uncalibrated — no parameters").
+
+## 15. LOFT session preview (BP-MODES-1 §4)
+
+The **LOFT session preview** card (bottom of the Assembly tab) draws unique
+conforming forms per session.
+
+1. Author a LOFT-able blueprint: length 12, target `4.5, 5.5, 4.5` at `-1, 0, 1`
+   with **tolerance 1.5** (the §4.1 band is mandatory for LOFT when a target is
+   set), constraints algebra 2–5 / geometry ≥ 2, **max exposure rate 0.6**.
+2. **Draw LOFT sessions** (10, randomized search). Expect the pill:
+   `10 sessions · N distinct forms · max rate ≤ 0.6 · 100% conformant`.
+3. Switch the engine to **CP-SAT** and redraw: same guarantees, band held as hard
+   constraints (works even with tight tolerances where random search fails).
+4. Remove the tolerance and redraw → clear error (**LOFT requires a tolerance**);
+   set an impossible target (info 40, tol 0.1) → the session start fails loudly
+   (never a non-conforming form).
+
+**Checkpoints:** every session's record shows `blueprint_conformant: true`, per-cell
+realized counts within bounds, and TIF within ±tolerance at every θ; empirical max
+rate stays ≤ rate + 1/n.
 
 ## What to look for — genuine bugs vs. cosmetic polish
 
