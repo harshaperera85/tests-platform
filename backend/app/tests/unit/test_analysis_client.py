@@ -52,7 +52,7 @@ def fake_service(monkeypatch):
     return install
 
 
-METRIC = {"scaling_d": 1, "form": "slope-intercept", "kind": "posterior-fixed-a"}
+METRIC = {"scaling_d": 1, "form": "slope_intercept", "kind": "posterior-fixed-a"}
 
 
 # ------------------------------------------------------------------ ItemPrior
@@ -114,7 +114,7 @@ def _calibration_body(converged: bool) -> dict:
         ],
         "dropped": ["it99"],
         "convergence": {"converged": converged, "n_persons": 1500, "n_items": 29},
-        "metric": {"scaling_d": 1, "form": "slope-intercept", "kind": "calibrated"},
+        "metric": {"scaling_d": 1, "form": "slope_intercept", "kind": "calibrated"},
     }
 
 
