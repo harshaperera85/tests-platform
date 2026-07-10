@@ -39,8 +39,10 @@ Form = Literal["slope_intercept", "traditional"]
 #: Canonical parameterization form: slope-intercept (a, d), mirt-native.
 CANONICAL_FORM: Form = "slope_intercept"
 
-#: Whether a pool carries calibration uncertainty.
-PoolKind = Literal["synthetic", "calibrated"]
+#: Parameter provenance: synthetic (point estimates, no SEs), calibrated (joint
+#: fit with covariance — mirt MML), or posterior-fixed-a (per-item grid posterior
+#: over d with a held fixed — scoring-r /update-item; exact se_b = se_d/a).
+PoolKind = Literal["synthetic", "calibrated", "posterior-fixed-a"]
 
 #: Tolerance for the on-load b ≈ -d/a consistency check.
 B_CONSISTENCY_TOL: float = 1e-6
