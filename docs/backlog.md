@@ -32,7 +32,7 @@ Durable to-do list. Status as of the latest commit on `main`.
   defaults per type w/ binding-aware cell encoding, authored cognitive profile
   per the pinned tag contract, feasibility gate vs pool). **§3 (CAT conformance enforcement) is Ignite-owned** — implemented in
   the Ignite CAT platform, arrives with the CAT-module merge; do not build it here.
-  §4 (LOFT engine) remains a later phase in this repo.
+  §4 (LOFT engine) BUILT — see the LOFT entry below.
 - **Analysis-module seed** (PR #1 from the `item-calibration` repo, reviewed + merged) —
   `scoring-r` gains `/calibrate`, `/score`, `/update-item` (fixed-a posterior,
   `se_b = se_d/a` exact), `/link`; build-time selftests; full-precision serialization
@@ -64,6 +64,20 @@ Durable to-do list. Status as of the latest commit on `main`.
   guarded 422. E2E: mixed pilot+anchor import → generated content-only quiz →
   assembled field form. Next in the loop: administer via Sessions → responses →
   scoring-r `/calibrate` → write-back (item-factory schema pending).
+- **§4 LOFT engine** (the CAT-merge-gate precondition, per cat-platform) —
+  `LoftStrategy` (registered, config branch, linear-style delivery/EAP scoring) +
+  `assembly/loft.py` per-session conforming assembly: §4.1 TIF tolerance band as
+  HARD acceptance (target w/o tolerance rejected at binding; content-only legal w/
+  notice), §4.2 batch exposure fields ignored w/ warning + `max_exposure_rate` as a
+  running cap against supplied usage state (live ledger recording arrives with
+  Sessions), §4.3 engines (a) seeded random search w/ acceptance retry and (b)
+  per-session CP-SAT w/ band-hard + randomized diversity objective, §4.4
+  conformance record true by construction (failures fail the session start).
+  `POST /loft/sessions` = preview + §7-shaped verification surface (running cap
+  across the batch); editor gains a LOFT-preview panel. Verified: CI-sized §7 run
+  (150 sessions: 100% conformant, band held at every θ, empirical exposure ≤
+  rate+ε, forms diverse) + live smoke (50 sessions, 50 distinct forms, rate 0.58
+  under 0.6 cap).
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
 
 ## Next up

@@ -120,3 +120,36 @@ def add_maximin_objective(am: AtaModel) -> tuple[cp_model.IntVar, int]:
     pen = _underuse_penalty(am, INFO_SCALE)
     m.maximize(t if pen is None else t - pen)
     return t, INFO_SCALE
+
+
+def add_randomized_band_objective(
+    am: AtaModel, seed: int
+) -> tuple[cp_model.IntVar | None, int]:
+    """LOFT per-session objective (BP-MODES-1 §4.3(b)).
+
+    When the problem carries a target + tolerance, the §4.1 band is added as
+    HARD constraints (``|TIF_k − target_k| ≤ tol`` at every θ point — acceptance
+    by construction). The objective itself is a seeded random weighting over the
+    decision variables, so successive sessions draw *different* conforming forms
+    instead of the one deterministic optimum. Returns ``(None, 1)`` — the
+    objective value is deliberately meaningless (diversity, not optimality).
+    """
+    import random as _random
+
+    m = am.model
+    p = am.problem
+    if p.target_info and p.tolerance is not None:
+        tol_scaled = round(p.tolerance * INFO_SCALE)
+        for f in range(p.num_forms):
+            for k in range(len(p.theta_points)):
+                dev = am.form_info[f][k] - am.scaled_target[k]
+                m.add(dev <= tol_scaled)
+                m.add(-dev <= tol_scaled)
+    rng = _random.Random(seed)
+    coeffs = [rng.randint(1, 1000) for _ in range(p.n_items)]
+    m.maximize(
+        cp_model.LinearExpr.weighted_sum(
+            [am.x[(i, 0)] for i in range(p.n_items)], coeffs
+        )
+    )
+    return None, 1

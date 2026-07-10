@@ -7,6 +7,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { getAssemblyJob } from "../../api/generated/endpoints/assembly-jobs/assembly-jobs";
 import { useGenerateBlueprintFromCurriculum } from "../../api/generated/endpoints/blueprints/blueprints";
+import { useGenerateLoftSessions } from "../../api/generated/endpoints/loft/loft";
+import { useCreateBlueprint } from "../../api/generated/endpoints/blueprints/blueprints";
 import { useListCurricula } from "../../api/generated/endpoints/curricula/curricula";
 import { useGetPoolCatalog, useGetPoolItems } from "../../api/generated/endpoints/pool/pool";
 import { useListScenarios } from "../../api/generated/endpoints/scenarios/scenarios";
@@ -20,6 +22,7 @@ import {
 import type {
   Blueprint,
   GenerateBlueprintResponse,
+  LoftSessionsRead,
   ScenarioRead,
 } from "../../api/generated/model";
 import { Alert, Button, Card, Field, Pill, Select, Spinner, TextInput } from "../../components/ui";
@@ -189,6 +192,16 @@ export function BlueprintEditorScreen({
   const [genShares, setGenShares] = useState<Record<string, string>>({});
   const [genResult, setGenResult] = useState<GenerateBlueprintResponse | null>(null);
   const [genError, setGenError] = useState<string | null>(null);
+
+  // --- LOFT session preview (BP-MODES-1 §4) ---
+  const loftSessions = useGenerateLoftSessions();
+  const createBlueprintRow = useCreateBlueprint();
+  const [loftN, setLoftN] = useState("10");
+  const [loftEngine, setLoftEngine] = useState<"random_constrained" | "cp_sat">(
+    "random_constrained",
+  );
+  const [loftResult, setLoftResult] = useState<LoftSessionsRead | null>(null);
+  const [loftError, setLoftError] = useState<string | null>(null);
 
   const qc = useQueryClient();
   const catalog = useGetPoolCatalog();
@@ -435,6 +448,36 @@ export function BlueprintEditorScreen({
         })
         .filter((c): c is NonNullable<typeof c> => c !== null),
     };
+  }
+
+  async function previewLoftSessions() {
+    setLoftError(null);
+    setLoftResult(null);
+    try {
+      // snapshot the current editor state as a blueprint row, then draw sessions
+      const row = await createBlueprintRow.mutateAsync({ data: buildBlueprint() });
+      const res = await loftSessions.mutateAsync({
+        data: {
+          blueprint_id: row.id,
+          pool_id: poolId,
+          n_sessions: Number(loftN) || 10,
+          seed: 0,
+          engine: loftEngine,
+        },
+      });
+      setLoftResult(res);
+    } catch (e) {
+      const detail = (
+        e as { response?: { data?: { detail?: unknown } } }
+      )?.response?.data?.detail;
+      setLoftError(
+        typeof detail === "string"
+          ? detail
+          : e instanceof Error
+            ? e.message
+            : "LOFT preview failed.",
+      );
+    }
   }
 
   async function persistDraft() {
@@ -896,6 +939,48 @@ export function BlueprintEditorScreen({
             statistically; realized TIF is still computed and reported. Fine for
             low-stakes forms — set a target when score comparability across forms
             matters.
+          </Alert>
+        )}
+      </Card>
+
+      <Card
+        title="LOFT session preview (§4)"
+        subtitle="Draw unique conforming forms per session from this blueprint: TIF tolerance band as hard acceptance, running exposure-rate cap, conformance record per session. LOFT-bound blueprints need a tolerance on the target."
+      >
+        <div className="flex flex-wrap items-end gap-3">
+          <Field label="Sessions">
+            <TextInput type="number" min={1} max={500} className="w-24"
+              value={loftN} onChange={(e) => setLoftN(e.target.value)} />
+          </Field>
+          <Field label="Engine" hint="random search vs per-session CP-SAT">
+            <Select value={loftEngine}
+              onChange={(e) =>
+                setLoftEngine(e.target.value as typeof loftEngine)
+              }>
+              <option value="random_constrained">randomized search</option>
+              <option value="cp_sat">CP-SAT (band as hard constraints)</option>
+            </Select>
+          </Field>
+          <Button variant="secondary" onClick={previewLoftSessions}
+            disabled={!valid || loftSessions.isPending}>
+            {loftSessions.isPending ? "Drawing sessions…" : "Draw LOFT sessions"}
+          </Button>
+          {loftResult && (
+            <Pill tone="ok">
+              {loftResult.n_sessions} sessions · {loftResult.n_distinct_forms} distinct
+              forms · max rate {loftResult.max_empirical_rate.toFixed(2)} · 100%
+              conformant
+            </Pill>
+          )}
+        </div>
+        {loftError && (
+          <Alert tone="error" title="LOFT session generation failed">{loftError}</Alert>
+        )}
+        {loftResult && loftResult.warnings.length > 0 && (
+          <Alert tone="info" title="LOFT notes">
+            <ul className="list-disc pl-4">
+              {loftResult.warnings.map((w, i) => <li key={i}>{w}</li>)}
+            </ul>
           </Alert>
         )}
       </Card>

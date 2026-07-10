@@ -53,10 +53,30 @@ class CatConfig(BaseModel):
     max_items: int | None = None
 
 
-# Extend this union as models land (LoftConfig, MstConfig, ...). The discriminator
+class LoftConfig(BaseModel):
+    """LOFT configuration (BP-MODES-1 §4): a unique conforming form is assembled
+    per examinee at session start — content constraints + enemy policy exactly as
+    fixed form, the TIF tolerance band as a HARD acceptance criterion (§4.1), and
+    ``max_exposure_rate`` reinterpreted as a running cap against the exposure
+    ledger (§4.2). Delivery/scoring of the assembled form is linear-style."""
+
+    administration_model: Literal["loft"] = "loft"
+    #: §4.3 engine: (a) seeded randomized feasibility search with the band
+    #: acceptance test, or (b) per-session CP-SAT with the band as hard
+    #: constraints + a randomized objective for form diversity.
+    engine: Literal["random_constrained", "cp_sat"] = "random_constrained"
+    #: engine (a): acceptance retries before the session start fails loudly
+    max_attempts: int = Field(default=60, ge=1, le=1000)
+    #: engine (b): per-session solver budget
+    time_limit_s: float = Field(default=5.0, gt=0.0)
+    navigation: LinearNavigationConfig = Field(default_factory=LinearNavigationConfig)
+    scoring: LinearScoringConfig = Field(default_factory=LinearScoringConfig)
+
+
+# Extend this union as models land (MstConfig, ...). The discriminator
 # lets FastAPI/Orval generate the correct branch automatically.
 TestConfig = Annotated[
-    LinearConfig | CatConfig,
+    LinearConfig | CatConfig | LoftConfig,
     Field(discriminator="administration_model"),
 ]
 

@@ -8,6 +8,9 @@ this package registers all built-in strategies, so the engine can resolve them b
 
 from __future__ import annotations
 
-from app.engine.strategies import linear  # noqa: F401  (registers LinearStrategy)
+from app.engine.strategies import (
+    linear,  # noqa: F401  (registers LinearStrategy)
+    loft,  # noqa: F401  (registers LoftStrategy)
+)
 
-__all__ = ["linear"]
+__all__ = ["linear", "loft"]

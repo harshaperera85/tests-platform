@@ -16,6 +16,7 @@ from app.api.v1 import (
     forms,
     health,
     item_bank,
+    loft,
     pool,
     preview,
     scenarios,
@@ -29,6 +30,7 @@ api_router.include_router(audit.router)
 api_router.include_router(blueprints.router)
 api_router.include_router(curricula.router)
 api_router.include_router(item_bank.router)
+api_router.include_router(loft.router)
 api_router.include_router(assembly_jobs.router)
 api_router.include_router(forms.router)
 api_router.include_router(pool.router)

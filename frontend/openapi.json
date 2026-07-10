@@ -704,6 +704,47 @@
         }
       }
     },
+    "/api/v1/loft/sessions": {
+      "post": {
+        "tags": [
+          "loft"
+        ],
+        "summary": "Generate Loft Sessions",
+        "operationId": "generate_loft_sessions",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoftSessionsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoftSessionsRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/assembly-jobs": {
       "post": {
         "tags": [
@@ -3649,6 +3690,148 @@
           "note"
         ],
         "title": "KeyBalance"
+      },
+      "LoftSessionRead": {
+        "properties": {
+          "session_index": {
+            "type": "integer",
+            "title": "Session Index"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "item_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Item Ids"
+          },
+          "tif_actual": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Tif Actual"
+          },
+          "record": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Record"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_index",
+          "seed",
+          "item_ids",
+          "tif_actual",
+          "record"
+        ],
+        "title": "LoftSessionRead"
+      },
+      "LoftSessionsRead": {
+        "properties": {
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "engine": {
+            "type": "string",
+            "title": "Engine"
+          },
+          "n_sessions": {
+            "type": "integer",
+            "title": "N Sessions"
+          },
+          "sessions": {
+            "items": {
+              "$ref": "#/components/schemas/LoftSessionRead"
+            },
+            "type": "array",
+            "title": "Sessions"
+          },
+          "exposure": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Exposure"
+          },
+          "max_empirical_rate": {
+            "type": "number",
+            "title": "Max Empirical Rate"
+          },
+          "n_distinct_forms": {
+            "type": "integer",
+            "title": "N Distinct Forms"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blueprint_id",
+          "pool_id",
+          "engine",
+          "n_sessions",
+          "sessions",
+          "exposure",
+          "max_empirical_rate",
+          "n_distinct_forms",
+          "warnings"
+        ],
+        "title": "LoftSessionsRead"
+      },
+      "LoftSessionsRequest": {
+        "properties": {
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "n_sessions": {
+            "type": "integer",
+            "maximum": 2000.0,
+            "minimum": 1.0,
+            "title": "N Sessions",
+            "default": 1
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 0
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "random_constrained",
+              "cp_sat"
+            ],
+            "title": "Engine",
+            "default": "random_constrained"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blueprint_id",
+          "pool_id"
+        ],
+        "title": "LoftSessionsRequest",
+        "description": "Generate ``n_sessions`` unique conforming forms for a LOFT-bound blueprint.\n\nSessions are generated sequentially with the \u00a74.2 running exposure-rate cap\napplied across the batch (session *i* is masked by the usage of sessions\n1..i\u22121) \u2014 the same shape as the \u00a77 verification protocol. Live\nper-administration ledger recording arrives with the Sessions module."
       },
       "ManifestComplicator": {
         "properties": {

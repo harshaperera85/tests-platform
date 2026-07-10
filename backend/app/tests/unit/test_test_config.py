@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pydantic import TypeAdapter
 
-from app.schemas.test_config import CatConfig, LinearConfig, TestConfig
+from app.schemas.test_config import CatConfig, LinearConfig, LoftConfig, TestConfig
 
 _adapter = TypeAdapter(TestConfig)
 
@@ -21,9 +21,15 @@ def test_cat_branch_resolves() -> None:
     assert cfg.max_items == 30
 
 
+def test_loft_branch_resolves() -> None:
+    cfg = _adapter.validate_python({"administration_model": "loft", "engine": "cp_sat"})
+    assert isinstance(cfg, LoftConfig)
+    assert cfg.engine == "cp_sat"
+
+
 def test_unknown_model_rejected() -> None:
     import pytest
     from pydantic import ValidationError
 
     with pytest.raises(ValidationError):
-        _adapter.validate_python({"administration_model": "loft"})
+        _adapter.validate_python({"administration_model": "mst"})

@@ -10,7 +10,10 @@ configure the administration model (item selection, stopping rule, exposure, rou
 
 ## Scope right now (v1)
 - **Build:** Linear fixed-form, and CAT (via adapter to the existing CAT platform).
-- **Do NOT build yet:** LOFT, MST, hybrids. They are fast-follow. The architecture must *accommodate*
+- **LOFT: BUILT (2026-07-10)** per BP-MODES-1 §4 as a CAT-merge-gate precondition
+  (`engine/strategies/loft.py` + `assembly/loft.py`: per-session conforming assembly, TIF
+  tolerance band as hard acceptance, running exposure-rate cap, §4.4 conformance records).
+- **Do NOT build yet:** MST, hybrids. They are fast-follow. The architecture must *accommodate*
   them, but no v1 implementation.
 
 ## Dev environment
