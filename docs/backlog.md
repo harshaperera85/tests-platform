@@ -131,8 +131,14 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
     availability flag ("N match in pool") refresh when the bank changes — invalidate the
     `getPoolItems` query on import (or set a `staleTime`/`refetchInterval`). With today's
     static fixtures it's refresh-bounded (mount / refocus / pool switch), which is fine.
-- **CAT platform endpoints** → Phase 2 on-ramp. **CONTRACT PACK RECEIVED (2026-07-09):**
-  `docs/ignite-contracts/ignite-2026-07-08-e080009/` (from cat-platform @ `e080009`) carries
+- **CAT platform endpoints** → Phase 2 on-ramp. **CONTRACT PACKS RECEIVED** (additive history — never delete old packs):
+  **`ignite-2026-07-10-fe51314/` is current** — its schemas (test-config,
+  blueprint-binding, item-create, session-public) SUPERSEDE the 2026-07-08 copies for
+  any cross-platform validation, and it adds `simulation-lane-conventions.md`
+  (co-designed; our linear/LOFT harness adopts the §4 shared verification-report
+  format + conventions C1/C3 — one boundary predicate per fast path; fast paths are
+  optimizations of the same code path, never reimplementations).
+  `ignite-2026-07-08-e080009/` (from cat-platform @ `e080009`) carries
   the full Ignite OpenAPI snapshot (CI-gated byte-identical to live), the `TestConfig`
   schema incl. `blueprint_binding` (BP-MODES-1 §5), the item-ingest contract (tags map
   matches our pinned dims), the session surface incl. the §3.5 `blueprint_conformance`

@@ -67,6 +67,17 @@ that runs N simulees ~ p(θ) × R replications through a design and reports:
 - infeasibility frequency + solve-time distribution (TestDesign's
   `freq_infeasible`/`solve_time` pattern).
 
+**Conventions (adopted 2026-07-10, shared with Ignite):** the harness follows
+`docs/ignite-contracts/ignite-2026-07-10-fe51314/simulation-lane-conventions.md` —
+verification reports use the §4 shared format (header block with
+lanes/coverage/seeds, `criterion | target | result` acceptance table,
+reproduction block); **C1** (if a fast path is ever added, ONE boundary
+predicate decides what may run on it — consulted by validator, worker, and
+result stamping alike) and **C3** (fast paths are optimizations of the same
+code path, never a second implementation of assembly/scoring semantics) apply
+to our lanes from day one. Our single in-process lane makes C1 trivially
+satisfied today; the conventions bind the moment that changes.
+
 **ATS as an external simulation oracle (recommended):** ATS consumes trivial TSV
 (items: `id, a1, b1, c`; examinees: `id, theta`; a 10-line syntax file), supports
 `IC> LOG` (our canonical D=1), runs deterministic seeded console simulations, and
