@@ -105,8 +105,11 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   **Field studies gated on an EXPLICIT GO SIGNAL from item-factory** (stronger than
   campaign-completion: never key field data to pre-epoch instance_ids). **CA unit JSONs
   = a course-platform data delivery** (third system), not item-factory code — direct
-  that ask to the course platform. **DOK decision due BEFORE the campaign** (authored
-  ≈ free now; retroactive = whole-bank re-review). To pin, still need: a real sample export +
+  that ask to the course platform. **DOK decision ANSWERED
+  (2026-07-10): YES** — item-factory authors DOK in the campaign; proposed vocab
+  `dok` = "1"|"2"|"3"|"4" (Webb) pending their confirmation; platform keeps
+  rejecting `dok` constraints until the epoch bank ships, then the dimension joins
+  the pinned contract. To pin, still need: a real sample export +
   confirmation of the asks; and the downstream **calibration-engine ownership** decision
   (`common_item_bank_design.md` §10). **Decided:** adopt `instance_id` as canonical `item_id`
   verbatim, never re-mint (single join key for parameter write-back).
