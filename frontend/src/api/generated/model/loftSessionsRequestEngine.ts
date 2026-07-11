@@ -13,4 +13,5 @@ export type LoftSessionsRequestEngine = typeof LoftSessionsRequestEngine[keyof t
 export const LoftSessionsRequestEngine = {
   random_constrained: 'random_constrained',
   cp_sat: 'cp_sat',
+  pregenerated: 'pregenerated',
 } as const;

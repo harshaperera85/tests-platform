@@ -203,9 +203,9 @@ export function BlueprintEditorScreen({
   const loftSessions = useGenerateLoftSessions();
   const createBlueprintRow = useCreateBlueprint();
   const [loftN, setLoftN] = useState("10");
-  const [loftEngine, setLoftEngine] = useState<"random_constrained" | "cp_sat">(
-    "random_constrained",
-  );
+  const [loftEngine, setLoftEngine] = useState<
+    "random_constrained" | "cp_sat" | "pregenerated"
+  >("random_constrained");
   const [loftResult, setLoftResult] = useState<LoftSessionsRead | null>(null);
   const [loftError, setLoftError] = useState<string | null>(null);
 
@@ -525,6 +525,8 @@ export function BlueprintEditorScreen({
           n_sessions: Number(loftN) || 10,
           seed: 0,
           engine: loftEngine,
+          // engine (c): this test's PUBLISHED forms are the pre-generated pool
+          test_id: loftEngine === "pregenerated" ? testId : undefined,
         },
       });
       setLoftResult(res);
@@ -1054,13 +1056,19 @@ export function BlueprintEditorScreen({
             <TextInput type="number" min={1} max={500} className="w-24"
               value={loftN} onChange={(e) => setLoftN(e.target.value)} />
           </Field>
-          <Field label="Engine" hint="random search vs per-session CP-SAT">
+          <Field
+            label="Engine"
+            hint="random search · per-session CP-SAT · draw from this test's published forms"
+          >
             <Select value={loftEngine}
               onChange={(e) =>
                 setLoftEngine(e.target.value as typeof loftEngine)
               }>
               <option value="random_constrained">randomized search</option>
               <option value="cp_sat">CP-SAT (band as hard constraints)</option>
+              <option value="pregenerated">
+                pre-generated pool (published forms)
+              </option>
             </Select>
           </Field>
           <Button variant="secondary" onClick={previewLoftSessions}
@@ -1070,8 +1078,9 @@ export function BlueprintEditorScreen({
           {loftResult && (
             <Pill tone="ok">
               {loftResult.n_sessions} sessions · {loftResult.n_distinct_forms} distinct
-              forms · max rate {loftResult.max_empirical_rate.toFixed(2)} · 100%
-              conformant
+              forms{loftResult.n_pool_forms != null &&
+                ` (pool of ${loftResult.n_pool_forms} published)`} · max rate{" "}
+              {loftResult.max_empirical_rate.toFixed(2)} · 100% conformant
             </Pill>
           )}
         </div>

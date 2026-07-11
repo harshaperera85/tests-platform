@@ -19,7 +19,7 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from app.assembly.loft import assemble_loft_session
+from app.assembly.loft import PoolFormRef, assemble_loft_session
 from app.engine.contract import (
     AdministrationStrategy,
     Navigation,
@@ -50,6 +50,9 @@ class LoftStrategy(AdministrationStrategy):
         ``session_id``, optional ``seed`` (defaults to a stable hash of the
         session id), optional ``usage_counts`` + ``n_prior_sessions`` for the
         §4.2 running exposure-rate mask (supplied by the session layer).
+        Engine (c) additionally needs ``form_pool`` (the published, reviewed
+        candidates as ``{form_id, item_ids}`` dicts) and optionally
+        ``draw_counts`` (per-form draws so far, for rotation).
         """
         cfg = config if isinstance(config, LoftConfig) else LoftConfig()
         pool: ItemPool = (
@@ -68,6 +71,17 @@ class LoftStrategy(AdministrationStrategy):
             # stable, platform-independent per-session seed
             seed = sum((i + 1) * b for i, b in enumerate(session_id.encode())) or 1
 
+        raw_pool = context.get("form_pool")
+        form_pool = (
+            [
+                PoolFormRef(
+                    form_id=str(f["form_id"]), item_ids=tuple(f["item_ids"])
+                )
+                for f in raw_pool
+            ]
+            if raw_pool is not None
+            else None
+        )
         form = assemble_loft_session(
             blueprint,
             pool,
@@ -77,6 +91,8 @@ class LoftStrategy(AdministrationStrategy):
             n_prior_sessions=int(context.get("n_prior_sessions", 0)),
             max_attempts=cfg.max_attempts,
             time_limit_s=cfg.time_limit_s,
+            form_pool=form_pool,
+            draw_counts=context.get("draw_counts"),
         )
         params = pool.subset(form.item_ids)
         return SessionState(

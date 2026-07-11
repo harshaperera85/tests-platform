@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { LoftSessionsRequestEngine } from './loftSessionsRequestEngine';
+import type { LoftSessionsRequestTestId } from './loftSessionsRequestTestId';
 
 /**
  * Generate ``n_sessions`` unique conforming forms for a LOFT-bound blueprint.
@@ -25,4 +26,5 @@ export interface LoftSessionsRequest {
   n_sessions?: number;
   seed?: number;
   engine?: LoftSessionsRequestEngine;
+  test_id?: LoftSessionsRequestTestId;
 }

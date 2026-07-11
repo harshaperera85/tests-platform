@@ -13,4 +13,5 @@ export type LoftDesignEngine = typeof LoftDesignEngine[keyof typeof LoftDesignEn
 export const LoftDesignEngine = {
   random_constrained: 'random_constrained',
   cp_sat: 'cp_sat',
+  pregenerated: 'pregenerated',
 } as const;

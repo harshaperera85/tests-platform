@@ -5,7 +5,11 @@ from __future__ import annotations
 
 import pytest
 
-from app.assembly.loft import LoftAssemblyError, assemble_loft_session
+from app.assembly.loft import (
+    LoftAssemblyError,
+    PoolFormRef,
+    assemble_loft_session,
+)
 from app.engine import registry
 from app.engine.strategies import loft as loft_module  # noqa: F401 (registers)
 from app.schemas.blueprint import (
@@ -153,6 +157,142 @@ def test_conformance_record_contents(default_pool) -> None:
     alg = next(c for c in r["constraints"] if c["key"] == "KC=algebra")
     assert alg["required_min"] == 4 and alg["required_max"] == 8
     assert 4 <= alg["realized"] <= 8
+
+
+# -------------------------------------- §4.3(c) pre-generated form pool (G2)
+def _make_form_pool(default_pool, bp: Blueprint, k: int) -> list[PoolFormRef]:
+    """Conforming candidates via the real per-session engine (distinct seeds)."""
+    refs, seen = [], set()
+    seed = 0
+    while len(refs) < k:
+        ids = tuple(
+            assemble_loft_session(bp, default_pool, seed=seed).item_ids
+        )
+        seed += 1
+        if tuple(sorted(ids)) in seen:
+            continue
+        seen.add(tuple(sorted(ids)))
+        refs.append(PoolFormRef(form_id=f"f-{len(refs)}", item_ids=ids))
+    return refs
+
+
+def test_pregenerated_requires_form_pool(default_pool) -> None:
+    with pytest.raises(LoftAssemblyError, match="form_pool"):
+        assemble_loft_session(
+            _loft_blueprint(), default_pool, engine="pregenerated"
+        )
+
+
+def test_pregenerated_draw_rotates_and_records(default_pool) -> None:
+    bp = _loft_blueprint()
+    refs = _make_form_pool(default_pool, bp, 4)
+    draws: dict[str, int] = {}
+    for _ in range(8):  # 2 full rotations over K=4
+        form = assemble_loft_session(
+            bp,
+            default_pool,
+            engine="pregenerated",
+            seed=9,
+            form_pool=refs,
+            draw_counts=dict(draws),
+        )
+        r = form.record
+        assert r["blueprint_conformant"] is True
+        assert r["engine"] == "pregenerated"
+        assert r["form_id"] in {ref.form_id for ref in refs}
+        assert r["n_pool_forms"] == 4 and r["n_conforming"] == 4
+        draws[r["form_id"]] = draws.get(r["form_id"], 0) + 1
+    # least-drawn rotation: perfectly balanced after 2 rotations
+    assert sorted(draws.values()) == [2, 2, 2, 2]
+
+
+def test_pregenerated_draw_is_deterministic_and_order_independent(
+    default_pool,
+) -> None:
+    bp = _loft_blueprint()
+    refs = _make_form_pool(default_pool, bp, 3)
+    pick = lambda pool_order: assemble_loft_session(  # noqa: E731
+        bp, default_pool, engine="pregenerated", seed=5, form_pool=pool_order
+    ).record["form_id"]
+    assert pick(refs) == pick(list(reversed(refs)))  # C5: seed+form_id only
+
+
+def test_pregenerated_excludes_nonconforming_never_administers(
+    default_pool,
+) -> None:
+    bp = _loft_blueprint()
+    good = _make_form_pool(default_pool, bp, 1)[0]
+    stale = PoolFormRef(form_id="stale", item_ids=good.item_ids[:10])  # short
+    alien = PoolFormRef(form_id="alien", item_ids=("ghost-1",) * 20)
+    form = assemble_loft_session(
+        bp,
+        default_pool,
+        engine="pregenerated",
+        seed=1,
+        form_pool=[stale, alien, good],
+    )
+    assert form.record["form_id"] == good.form_id
+    assert form.record["n_nonconforming"] == 2
+    assert sum("non-conforming" in w for w in form.warnings) == 2
+    with pytest.raises(LoftAssemblyError, match="no conforming form"):
+        assemble_loft_session(
+            bp, default_pool, engine="pregenerated", seed=1,
+            form_pool=[stale, alien],
+        )
+
+
+def test_pregenerated_band_recheck_excludes_out_of_band_form(default_pool) -> None:
+    bp = _loft_blueprint(tolerance=1.0)
+    good = tuple(
+        assemble_loft_session(bp, default_pool, engine="cp_sat", seed=2).item_ids
+    )
+    # a content-feasible but band-agnostic form: assembled content-only, so its
+    # TIF is very unlikely to sit inside the 1.0 band around the target
+    loose = tuple(
+        assemble_loft_session(
+            _loft_blueprint(tolerance=None), default_pool, seed=99
+        ).item_ids
+    )
+    form = assemble_loft_session(
+        bp,
+        default_pool,
+        engine="pregenerated",
+        seed=3,
+        form_pool=[
+            PoolFormRef(form_id="loose", item_ids=loose),
+            PoolFormRef(form_id="good", item_ids=good),
+        ],
+    )
+    assert form.record["form_id"] == "good"
+
+
+def test_pregenerated_rate_cap_masks_forms(default_pool) -> None:
+    bp = _loft_blueprint(exposure_target=ExposureTarget(max_exposure_rate=0.5))
+    refs = _make_form_pool(default_pool, bp, 3)
+    only_in_first = next(
+        (i for i in refs[0].item_ids if all(i not in r.item_ids for r in refs[1:])),
+        None,
+    )
+    if only_in_first is None:
+        pytest.skip("no form-unique item in this draw — pool too overlapping")
+    form = assemble_loft_session(
+        bp,
+        default_pool,
+        engine="pregenerated",
+        seed=4,
+        form_pool=refs,
+        usage_counts={only_in_first: 6},
+        n_prior_sessions=10,  # 0.6 >= 0.5 -> refs[0] masked
+    )
+    assert form.record["form_id"] != refs[0].form_id
+    assert form.record["n_rate_masked"] == 1
+    # cap below the structural floor of a finite pool -> loud failure
+    over_all = {i: 6 for r in refs for i in r.item_ids}
+    with pytest.raises(LoftAssemblyError, match="structural floor"):
+        assemble_loft_session(
+            bp, default_pool, engine="pregenerated", seed=4, form_pool=refs,
+            usage_counts=over_all, n_prior_sessions=10,
+        )
 
 
 # -------------------------------------------------------------- the strategy

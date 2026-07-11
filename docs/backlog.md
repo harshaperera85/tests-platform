@@ -99,6 +99,27 @@ Durable to-do list. Status as of the latest commit on `main`.
   8 integration tests + live smoke (3 conditions × 200 simulees in 13 s: LOFT
   recovery parity with linear at RMSE ≈ 0.42, max exposure 0.5–0.6 vs 1.0,
   200 distinct forms, no significant paired MAE delta).
+- **G2 LOFT engine (c): pre-generated form pool** (2026-07-11, BP-MODES-1
+  §4.3(c) / lit-review G2 — Luecht & Sireci's preferred batch-in-advance
+  variant: "content and measurement experts can review each form"). Composes
+  existing pieces, no new machinery: batch `mip` multi-form assembly → forms
+  pass the **governance lifecycle** → LOFT sessions *draw* instead of solving.
+  `assemble_loft_session(engine="pregenerated", form_pool, draw_counts)`:
+  every candidate is re-verified at draw time (length/content/enemies/band —
+  a stale form is excluded + warned, never administered, §4.3); the §4.2
+  running rate cap masks whole *forms* containing over-exposed items (all
+  masked ⇒ loud structural-floor error); selection = least-drawn-first with a
+  seeded order-independent tie-break (C5) ⇒ rotation drives form rates to 1/K.
+  §4.4 record gains draw provenance (form_id, n_pool_forms/conforming/
+  rate_masked). Surfaces: `POST /loft/sessions` (engine + `test_id` → its
+  PUBLISHED forms are the pool; unpublished never drawable), `LoftConfig`/
+  `LoftStrategy` (context `form_pool`/`draw_counts`), G1 harness
+  (`LoftDesign.engine="pregenerated"` + `n_pool_forms`: pool batch-assembled
+  ONCE by the real `assemble()`, per-simulee cost is the draw — ~0.5 ms vs a
+  solve), editor LOFT-preview engine option. Verified: 7 unit + 2 API + 1
+  harness tests; live smoke (5 forms assembled→published→drawn 25× with exact
+  rotation [5,5,5,5,5], max item rate 0.40; study: pregen K=6 recovery parity
+  with live LOFT, RMSE 0.381 vs 0.393, p=0.92, max rate 0.50 vs 0.61).
 
 ## Next up
 - **Operational walkthrough** — hands-on validation of the linear path on simulated data.

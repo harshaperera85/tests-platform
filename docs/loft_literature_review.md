@@ -94,6 +94,16 @@ runs on macOS/Windows — not Linux, so it's a laptop-side check, not CI.)
 
 ### G2 — Engine (c): batch pre-generated form pool (spec'd, never built)
 
+> **STATUS: BUILT (2026-07-11).** `assemble_loft_session(engine="pregenerated",
+> form_pool=…)` — draw-time full conformance re-check (never administer a stale
+> form), §4.2 rate cap masks whole forms, least-drawn rotation with seeded
+> order-independent tie-break. Wired end-to-end: `POST /loft/sessions`
+> (`test_id` → the test's PUBLISHED forms = the pool, i.e. review/approve/publish
+> before anything is drawable), `LoftConfig`/`LoftStrategy` (context
+> `form_pool`/`draw_counts`), the G1 harness (`LoftDesign.engine="pregenerated"`
+> + `n_pool_forms` — the batch is assembled ONCE by the real `assemble()`), and
+> the editor's LOFT-preview engine select. See `docs/backlog.md` Done entry.
+
 BP-MODES-1 §4.3(c) lists it and marks it "RECOMMENDED where forms must be
 human-reviewed"; Luecht & Sireci *prefer* this variant ("the primary advantage of
 developing the test forms in advance is that content and measurement experts can

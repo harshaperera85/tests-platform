@@ -7,6 +7,7 @@
  */
 import type { LoftSessionRead } from './loftSessionRead';
 import type { LoftSessionsReadExposure } from './loftSessionsReadExposure';
+import type { LoftSessionsReadNPoolForms } from './loftSessionsReadNPoolForms';
 
 export interface LoftSessionsRead {
   blueprint_id: string;
@@ -17,5 +18,6 @@ export interface LoftSessionsRead {
   exposure: LoftSessionsReadExposure;
   max_empirical_rate: number;
   n_distinct_forms: number;
+  n_pool_forms?: LoftSessionsReadNPoolForms;
   warnings: string[];
 }

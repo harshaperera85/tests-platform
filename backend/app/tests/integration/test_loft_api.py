@@ -132,3 +132,111 @@ def test_loft_impossible_band_fails_the_session_start(client: TestClient) -> Non
     )
     assert resp.status_code == 422
     assert "session 1" in resp.json()["detail"]  # failed loudly, nothing returned
+
+
+# ---------------------------------------- §4.3(c) pre-generated pool (G2)
+def _publish(client: TestClient, form_id: str) -> None:
+    for action, kw in [
+        ("submit_for_review", {"actor": "author@x"}),
+        ("approve_content", {"actor": "sme@x", "actor_role": "content_reviewer"}),
+        (
+            "approve_psychometric",
+            {"actor": "psy@x", "actor_role": "psychometrician"},
+        ),
+        ("publish", {"actor": "admin@x", "actor_role": "publisher"}),
+    ]:
+        r = client.post(
+            f"/api/v1/forms/{form_id}/transition", json={"action": action, **kw}
+        )
+        assert r.status_code == 200, r.text
+
+
+def _test_with_published_pool(
+    client: TestClient, n_forms: int = 4, publish: int | None = None
+) -> tuple[str, str, list[str]]:
+    """Create a test, batch-assemble n_forms, publish the first `publish` of
+    them; returns (test_id, blueprint_id of the assembly snapshot, form_ids)."""
+    tid = client.post(
+        "/api/v1/tests", json={"name": "loft-c", "pool_id": "small_2pl"}
+    ).json()["id"]
+    bp = _loft_blueprint_payload()
+    bp["num_forms"] = n_forms
+    bp["exposure_target"] = {"max_use_per_item": 2}  # batch diversity pressure
+    r = client.patch(f"/api/v1/tests/{tid}", json={"blueprint": bp})
+    assert r.status_code == 200, r.text
+    job = client.post(
+        f"/api/v1/tests/{tid}/assemble", json={"strategy": "mip", "time_limit_s": 20}
+    ).json()
+    assert len(job["form_ids"]) == n_forms, job
+    for fid in job["form_ids"][: (publish if publish is not None else n_forms)]:
+        _publish(client, fid)
+    return tid, job["blueprint_id"], job["form_ids"]
+
+
+def test_pregenerated_draws_only_published_reviewed_forms(
+    client: TestClient,
+) -> None:
+    tid, bid, form_ids = _test_with_published_pool(client, n_forms=4, publish=3)
+    resp = client.post(
+        "/api/v1/loft/sessions",
+        json={
+            "blueprint_id": bid,
+            "pool_id": "small_2pl",
+            "engine": "pregenerated",
+            "test_id": tid,
+            "n_sessions": 9,
+            "seed": 7,
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["n_pool_forms"] == 3  # the unpublished 4th form is NOT drawable
+    assert body["engine"] == "pregenerated"
+    drawn = {s["record"]["form_id"] for s in body["sessions"]}
+    assert drawn <= set(form_ids[:3]) and form_ids[3] not in drawn
+    # rotation: 9 sessions over K=3 -> every published form drawn exactly 3×
+    from collections import Counter
+
+    per_form = Counter(s["record"]["form_id"] for s in body["sessions"])
+    assert sorted(per_form.values()) == [3, 3, 3]
+    assert body["n_distinct_forms"] == 3
+    for s in body["sessions"]:
+        assert s["record"]["blueprint_conformant"] is True
+        assert s["record"]["engine"] == "pregenerated"
+
+
+def test_pregenerated_validation_errors(client: TestClient) -> None:
+    bid = _create_blueprint(client)
+    # missing test_id
+    r = client.post(
+        "/api/v1/loft/sessions",
+        json={
+            "blueprint_id": bid,
+            "pool_id": "small_2pl",
+            "engine": "pregenerated",
+        },
+    )
+    assert r.status_code == 422 and "test_id" in r.json()["detail"]
+    # unknown test
+    r = client.post(
+        "/api/v1/loft/sessions",
+        json={
+            "blueprint_id": bid,
+            "pool_id": "small_2pl",
+            "engine": "pregenerated",
+            "test_id": "ghost",
+        },
+    )
+    assert r.status_code == 404
+    # test with no published forms
+    tid, bid2, _ = _test_with_published_pool(client, n_forms=2, publish=0)
+    r = client.post(
+        "/api/v1/loft/sessions",
+        json={
+            "blueprint_id": bid2,
+            "pool_id": "small_2pl",
+            "engine": "pregenerated",
+            "test_id": tid,
+        },
+    )
+    assert r.status_code == 422 and "no published forms" in r.json()["detail"]

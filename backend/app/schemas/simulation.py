@@ -36,11 +36,20 @@ class LinearDesign(BaseModel):
 
 class LoftDesign(BaseModel):
     """A LOFT condition: one conforming form assembled per simulee via the real
-    §4 engine; the running exposure-rate cap accumulates across the condition."""
+    §4 engine; the running exposure-rate cap accumulates across the condition.
+
+    Engine (c) ``pregenerated`` batch-assembles ``n_pool_forms`` forms ONCE via
+    the real production ``assemble()`` (mip), then each simulee *draws* from
+    that pool (least-drawn rotation, seeded tie-break) — the Luecht & Sireci
+    batch-in-advance variant, so a study can compare pool sizes directly."""
 
     kind: Literal["loft"] = "loft"
     blueprint_id: str
-    engine: Literal["random_constrained", "cp_sat"] = "random_constrained"
+    engine: Literal["random_constrained", "cp_sat", "pregenerated"] = (
+        "random_constrained"
+    )
+    #: engine (c) only: size of the batch-assembled pool (K)
+    n_pool_forms: int = Field(default=20, ge=2, le=50)
 
 
 Design = Annotated[LinearDesign | LoftDesign, Field(discriminator="kind")]

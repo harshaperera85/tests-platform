@@ -62,9 +62,13 @@ class LoftConfig(BaseModel):
 
     administration_model: Literal["loft"] = "loft"
     #: §4.3 engine: (a) seeded randomized feasibility search with the band
-    #: acceptance test, or (b) per-session CP-SAT with the band as hard
-    #: constraints + a randomized objective for form diversity.
-    engine: Literal["random_constrained", "cp_sat"] = "random_constrained"
+    #: acceptance test, (b) per-session CP-SAT with the band as hard
+    #: constraints + a randomized objective for form diversity, or
+    #: (c) "pregenerated" — draw from a batch-assembled, human-reviewable form
+    #: pool (session context must supply ``form_pool``: the published forms).
+    engine: Literal["random_constrained", "cp_sat", "pregenerated"] = (
+        "random_constrained"
+    )
     #: engine (a): acceptance retries before the session start fails loudly
     max_attempts: int = Field(default=60, ge=1, le=1000)
     #: engine (b): per-session solver budget

@@ -246,3 +246,42 @@ def test_request_schema_rejects_ambiguous_linear() -> None:
                 ],
             }
         )
+
+
+def test_pregenerated_loft_condition(client: TestClient) -> None:
+    """G2 in the G1 harness: the pool is batch-assembled ONCE by the real
+    assemble(), then simulees draw with rotation — distinct forms ≤ K and
+    recovery stays in the linear ballpark."""
+    payload = _bp_payload()
+    payload["exposure_target"] = {"max_use_per_item": 3}  # batch diversity
+    bid = client.post("/api/v1/blueprints", json=payload).json()["id"]
+    resp = client.post(
+        "/api/v1/simulations",
+        json={
+            "pool_id": "small_2pl",
+            "n_simulees": 90,
+            "seed": 13,
+            "conditions": [
+                {
+                    "name": "loft pregen",
+                    "design": {
+                        "kind": "loft",
+                        "blueprint_id": bid,
+                        "engine": "pregenerated",
+                        "n_pool_forms": 6,
+                    },
+                },
+                {"name": "loft live", "design": {"kind": "loft", "blueprint_id": bid}},
+            ],
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    pre, live = resp.json()["conditions"]
+    assert pre["n_infeasible_sessions"] == 0
+    assert pre["overall"]["n"] == 90 and pre["overall"]["correlation"] > 0.8
+    # a finite pool: at most K distinct forms, rotation -> form rate ≈ 1/K
+    assert 2 <= pre["exposure"]["n_distinct_forms"] <= 6
+    assert live["exposure"]["n_distinct_forms"] > pre["exposure"]["n_distinct_forms"]
+    # the batch-assembly provenance is surfaced, and draws are not solves
+    assert any("batch-assembled" in w for w in pre["warnings"])
+    assert pre["assembly_seconds_mean"] < 0.05  # draw, not solve

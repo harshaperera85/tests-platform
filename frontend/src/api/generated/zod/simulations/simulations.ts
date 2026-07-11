@@ -12,7 +12,9 @@ import * as zod from 'zod';
  * @summary Run Simulation Study
  */
 export const runSimulationStudyBodyConditionsItemNameRegExp = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_ -]{0,39}$');
-export const runSimulationStudyBodyConditionsItemDesignKindDefault = "linear";export const runSimulationStudyBodyConditionsItemDesignAssemblyStrategyDefault = "mip";export const runSimulationStudyBodyConditionsItemDesignKindDefaultOne = "loft";export const runSimulationStudyBodyConditionsItemDesignEngineDefault = "random_constrained";export const runSimulationStudyBodyConditionsMax = 4;export const runSimulationStudyBodyPopulationDistributionDefault = "normal";export const runSimulationStudyBodyPopulationMeanDefault = 0;export const runSimulationStudyBodyPopulationSdDefault = 1;export const runSimulationStudyBodyPopulationLowDefault = -3;export const runSimulationStudyBodyPopulationHighDefault = 3;export const runSimulationStudyBodyNSimuleesDefault = 500;
+export const runSimulationStudyBodyConditionsItemDesignKindDefault = "linear";export const runSimulationStudyBodyConditionsItemDesignAssemblyStrategyDefault = "mip";export const runSimulationStudyBodyConditionsItemDesignKindDefaultOne = "loft";export const runSimulationStudyBodyConditionsItemDesignEngineDefault = "random_constrained";export const runSimulationStudyBodyConditionsItemDesignNPoolFormsDefault = 20;
+export const runSimulationStudyBodyConditionsItemDesignNPoolFormsMin = 2;
+export const runSimulationStudyBodyConditionsItemDesignNPoolFormsMax = 50;export const runSimulationStudyBodyConditionsMax = 4;export const runSimulationStudyBodyPopulationDistributionDefault = "normal";export const runSimulationStudyBodyPopulationMeanDefault = 0;export const runSimulationStudyBodyPopulationSdDefault = 1;export const runSimulationStudyBodyPopulationLowDefault = -3;export const runSimulationStudyBodyPopulationHighDefault = 3;export const runSimulationStudyBodyNSimuleesDefault = 500;
 export const runSimulationStudyBodyNSimuleesMin = 10;
 export const runSimulationStudyBodyNSimuleesMax = 2000;export const runSimulationStudyBodyReplicationsDefault = 1;
 export const runSimulationStudyBodyReplicationsMax = 20;export const runSimulationStudyBodySeedDefault = 0;
@@ -29,8 +31,9 @@ export const runSimulationStudyBody = zod.object({
 }).describe('A fixed-form condition: one form assembled once (or given), walked by all\nsimulees. This is the Embretson-style *baseline* design.'),zod.object({
   "kind": zod.literal("loft").default(runSimulationStudyBodyConditionsItemDesignKindDefaultOne),
   "blueprint_id": zod.string(),
-  "engine": zod.enum(['random_constrained', 'cp_sat']).default(runSimulationStudyBodyConditionsItemDesignEngineDefault)
-}).describe('A LOFT condition: one conforming form assembled per simulee via the real\n§4 engine; the running exposure-rate cap accumulates across the condition.')])
+  "engine": zod.enum(['random_constrained', 'cp_sat', 'pregenerated']).default(runSimulationStudyBodyConditionsItemDesignEngineDefault),
+  "n_pool_forms": zod.number().min(runSimulationStudyBodyConditionsItemDesignNPoolFormsMin).max(runSimulationStudyBodyConditionsItemDesignNPoolFormsMax).default(runSimulationStudyBodyConditionsItemDesignNPoolFormsDefault)
+}).describe('A LOFT condition: one conforming form assembled per simulee via the real\n§4 engine; the running exposure-rate cap accumulates across the condition.\n\nEngine (c) ``pregenerated`` batch-assembles ``n_pool_forms`` forms ONCE via\nthe real production ``assemble()`` (mip), then each simulee *draws* from\nthat pool (least-drawn rotation, seeded tie-break) — the Luecht & Sireci\nbatch-in-advance variant, so a study can compare pool sizes directly.')])
 })).min(1).max(runSimulationStudyBodyConditionsMax),
   "population": zod.object({
   "distribution": zod.enum(['normal', 'uniform']).default(runSimulationStudyBodyPopulationDistributionDefault),

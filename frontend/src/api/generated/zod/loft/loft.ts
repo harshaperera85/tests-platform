@@ -19,7 +19,8 @@ export const generateLoftSessionsBody = zod.object({
   "pool_id": zod.string(),
   "n_sessions": zod.number().min(1).max(generateLoftSessionsBodyNSessionsMax).default(generateLoftSessionsBodyNSessionsDefault),
   "seed": zod.number().optional(),
-  "engine": zod.enum(['random_constrained', 'cp_sat']).default(generateLoftSessionsBodyEngineDefault)
+  "engine": zod.enum(['random_constrained', 'cp_sat', 'pregenerated']).default(generateLoftSessionsBodyEngineDefault),
+  "test_id": zod.union([zod.string(),zod.null()]).optional()
 }).describe('Generate ``n_sessions`` unique conforming forms for a LOFT-bound blueprint.\n\nSessions are generated sequentially with the §4.2 running exposure-rate cap\napplied across the batch (session *i* is masked by the usage of sessions\n1..i−1) — the same shape as the §7 verification protocol. Live\nper-administration ledger recording arrives with the Sessions module.')
 
 export const generateLoftSessionsResponse = zod.object({
@@ -37,6 +38,7 @@ export const generateLoftSessionsResponse = zod.object({
   "exposure": zod.record(zod.string(), zod.number()),
   "max_empirical_rate": zod.number(),
   "n_distinct_forms": zod.number(),
+  "n_pool_forms": zod.union([zod.number(),zod.null()]).optional(),
   "warnings": zod.array(zod.string())
 })
 

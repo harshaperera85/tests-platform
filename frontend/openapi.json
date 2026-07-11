@@ -4020,10 +4020,18 @@
             "type": "string",
             "enum": [
               "random_constrained",
-              "cp_sat"
+              "cp_sat",
+              "pregenerated"
             ],
             "title": "Engine",
             "default": "random_constrained"
+          },
+          "n_pool_forms": {
+            "type": "integer",
+            "maximum": 50.0,
+            "minimum": 2.0,
+            "title": "N Pool Forms",
+            "default": 20
           }
         },
         "type": "object",
@@ -4031,7 +4039,7 @@
           "blueprint_id"
         ],
         "title": "LoftDesign",
-        "description": "A LOFT condition: one conforming form assembled per simulee via the real\n\u00a74 engine; the running exposure-rate cap accumulates across the condition."
+        "description": "A LOFT condition: one conforming form assembled per simulee via the real\n\u00a74 engine; the running exposure-rate cap accumulates across the condition.\n\nEngine (c) ``pregenerated`` batch-assembles ``n_pool_forms`` forms ONCE via\nthe real production ``assemble()`` (mip), then each simulee *draws* from\nthat pool (least-drawn rotation, seeded tie-break) \u2014 the Luecht & Sireci\nbatch-in-advance variant, so a study can compare pool sizes directly."
       },
       "LoftSessionRead": {
         "properties": {
@@ -4113,6 +4121,17 @@
             "type": "integer",
             "title": "N Distinct Forms"
           },
+          "n_pool_forms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Pool Forms"
+          },
           "warnings": {
             "items": {
               "type": "string"
@@ -4161,10 +4180,22 @@
             "type": "string",
             "enum": [
               "random_constrained",
-              "cp_sat"
+              "cp_sat",
+              "pregenerated"
             ],
             "title": "Engine",
             "default": "random_constrained"
+          },
+          "test_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Test Id"
           }
         },
         "type": "object",

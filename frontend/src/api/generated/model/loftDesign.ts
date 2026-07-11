@@ -10,9 +10,19 @@ import type { LoftDesignEngine } from './loftDesignEngine';
 /**
  * A LOFT condition: one conforming form assembled per simulee via the real
 §4 engine; the running exposure-rate cap accumulates across the condition.
+
+Engine (c) ``pregenerated`` batch-assembles ``n_pool_forms`` forms ONCE via
+the real production ``assemble()`` (mip), then each simulee *draws* from
+that pool (least-drawn rotation, seeded tie-break) — the Luecht & Sireci
+batch-in-advance variant, so a study can compare pool sizes directly.
  */
 export interface LoftDesign {
   kind?: 'loft';
   blueprint_id: string;
   engine?: LoftDesignEngine;
+  /**
+   * @minimum 2
+   * @maximum 50
+   */
+  n_pool_forms?: number;
 }

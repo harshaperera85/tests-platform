@@ -20,7 +20,12 @@ class LoftSessionsRequest(BaseModel):
     pool_id: str
     n_sessions: int = Field(default=1, ge=1, le=2000)
     seed: int = 0
-    engine: Literal["random_constrained", "cp_sat"] = "random_constrained"
+    engine: Literal["random_constrained", "cp_sat", "pregenerated"] = (
+        "random_constrained"
+    )
+    #: engine (c) only: the test whose PUBLISHED forms constitute the
+    #: pre-generated pool (batch-assembled, human-reviewed — §4.3(c)).
+    test_id: str | None = None
 
 
 class LoftSessionRead(BaseModel):
@@ -44,4 +49,6 @@ class LoftSessionsRead(BaseModel):
     max_empirical_rate: float
     #: distinct forms drawn (diversity evidence)
     n_distinct_forms: int
+    #: engine (c) only: size of the published pre-generated pool drawn from
+    n_pool_forms: int | None = None
     warnings: list[str]

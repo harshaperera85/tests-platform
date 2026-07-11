@@ -34,7 +34,7 @@ from collections import Counter
 from dataclasses import dataclass, field
 
 from app.assembly import assemble
-from app.assembly.loft import LoftAssemblyError, assemble_loft_session
+from app.assembly.loft import LoftAssemblyError, PoolFormRef, assemble_loft_session
 from app.psychometrics.bank import ItemPool
 from app.psychometrics.information import prob_correct
 from app.psychometrics.params import ItemParameters
@@ -163,6 +163,40 @@ def run_condition(
         ids = _resolve_linear_form(design, pool, blueprint, form_item_ids, seed)
         linear_items = pool.subset(ids)
 
+    # engine (c): batch-assemble the pre-generated pool ONCE via the real
+    # production assemble() (same-engine doctrine), then simulees draw from it.
+    form_pool: list[PoolFormRef] | None = None
+    draws: Counter[str] = Counter()
+    if isinstance(design, LoftDesign) and design.engine == "pregenerated":
+        assert blueprint is not None
+        t0 = time.perf_counter()
+        batch_bp = blueprint.model_copy(update={"num_forms": design.n_pool_forms})
+        batch = assemble(
+            batch_bp, pool, strategy="mip", time_limit_s=30.0, seed=seed,
+            num_workers=1,  # C5: reproducible study (see _resolve_linear_form)
+        )
+        if not batch.feasible or not batch.forms:
+            raise ValueError(
+                f"pregenerated-pool batch assembly was {batch.status}; "
+                "cannot simulate"
+            )
+        form_pool = [
+            PoolFormRef(form_id=f"pool-form-{i:03d}", item_ids=tuple(f.item_ids))
+            for i, f in enumerate(batch.forms)
+        ]
+        run.warnings.append(
+            f"pregenerated pool: batch-assembled {len(form_pool)} forms in "
+            f"{time.perf_counter() - t0:.2f} s (mip, single-worker); per-session "
+            "cost below is the draw, not a solve"
+        )
+        n_distinct_pool = len({tuple(sorted(f.item_ids)) for f in form_pool})
+        if n_distinct_pool < len(form_pool):
+            run.warnings.append(
+                f"pool has only {n_distinct_pool} distinct forms of "
+                f"{len(form_pool)} — add exposure constraints (max_use_per_item "
+                "/ max_pairwise_overlap) to the blueprint for pool diversity"
+            )
+
     for rep in range(replications):
         for j in range(n_simulees):
             idx = rep * n_simulees + j  # global simulee index (C5)
@@ -183,6 +217,8 @@ def run_condition(
                         seed=seed * 1_000_003 + idx,
                         usage_counts=dict(run.usage),
                         n_prior_sessions=len(run.forms),
+                        form_pool=form_pool,
+                        draw_counts=dict(draws),
                     )
                 except LoftAssemblyError as exc:
                     run.n_infeasible += 1
@@ -191,6 +227,8 @@ def run_condition(
                         run.warnings.append(msg)
                     continue
                 run.solve_seconds.append(time.perf_counter() - t0)
+                if "form_id" in form.record:
+                    draws[form.record["form_id"]] += 1
                 items = pool.subset(form.item_ids)
                 for w in form.warnings:
                     if w not in run.warnings and len(run.warnings) < 10:
