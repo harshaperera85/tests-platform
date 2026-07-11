@@ -107,8 +107,19 @@ def run_simulation_study(
         runs.append(run)
 
     results = [
-        summarize(run, cond)
-        for run, cond in zip(runs, payload.conditions, strict=True)
+        summarize(
+            run,
+            cond,
+            cap=(
+                blueprint.exposure_target.max_exposure_rate
+                if blueprint is not None and blueprint.exposure_target is not None
+                else None
+            ),
+            n_simulees=payload.n_simulees,
+        )
+        for run, cond, (blueprint, _) in zip(
+            runs, payload.conditions, resolved, strict=True
+        )
     ]
     comparisons = [
         compare_paired(

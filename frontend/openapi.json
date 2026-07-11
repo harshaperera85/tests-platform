@@ -2474,7 +2474,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_ -]{0,39}$",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_ .=-]{0,39}$",
             "title": "Name"
           },
           "design": {
@@ -2526,9 +2526,17 @@
           "exposure": {
             "$ref": "#/components/schemas/ExposureStats"
           },
+          "diagnostics": {
+            "$ref": "#/components/schemas/ExposureDiagnostics"
+          },
           "n_infeasible_sessions": {
             "type": "integer",
             "title": "N Infeasible Sessions"
+          },
+          "n_infeasible_mask_attributed": {
+            "type": "integer",
+            "title": "N Infeasible Mask Attributed",
+            "default": 0
           },
           "assembly_seconds_mean": {
             "anyOf": [
@@ -3185,6 +3193,118 @@
         ],
         "title": "EnemyRef",
         "description": "item-factory's structured enemy entry (R5); bare-string ids also accepted."
+      },
+      "ExposureDiagnostics": {
+        "properties": {
+          "cap": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cap"
+          },
+          "n_items_near_cap": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Items Near Cap"
+          },
+          "sawtooth_mean_amplitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sawtooth Mean Amplitude"
+          },
+          "sawtooth_max_amplitude": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sawtooth Max Amplitude"
+          },
+          "burn_in_sessions": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Burn In Sessions"
+          },
+          "theta_segments": {
+            "items": {
+              "$ref": "#/components/schemas/ThetaSegmentExposure"
+            },
+            "type": "array",
+            "title": "Theta Segments"
+          },
+          "overlap_rate_gt_020": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overlap Rate Gt 020"
+          },
+          "retake": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RetakeStats"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "mean_masked_per_session": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Masked Per Session"
+          },
+          "max_masked_per_session": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Masked Per Session"
+          }
+        },
+        "type": "object",
+        "title": "ExposureDiagnostics",
+        "description": "G3 exposure-maturity diagnostics (measure BEFORE adopting probabilistic\neligibility \u2014 `docs/loft_literature_review.md` \u00a72-G3)."
       },
       "ExposureFeedback": {
         "properties": {
@@ -5194,6 +5314,30 @@
         ],
         "title": "ReportLane"
       },
+      "RetakeStats": {
+        "properties": {
+          "n_persons": {
+            "type": "integer",
+            "title": "N Persons"
+          },
+          "mean_repeat_rate": {
+            "type": "number",
+            "title": "Mean Repeat Rate"
+          },
+          "max_repeat_rate": {
+            "type": "number",
+            "title": "Max Repeat Rate"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n_persons",
+          "mean_repeat_rate",
+          "max_repeat_rate"
+        ],
+        "title": "RetakeStats",
+        "description": "Per-person cumulative usage across replications (G3.3 retake\nprotection): replication r of simulee j is read as person j's r-th sitting;\nrepeat rate = fraction of their form already seen in earlier sittings."
+      },
       "ReviewEvent": {
         "properties": {
           "id": {
@@ -6052,6 +6196,48 @@
         "type": "object",
         "title": "TestUpdate",
         "description": "PATCH \u2014 only provided fields are applied."
+      },
+      "ThetaSegmentExposure": {
+        "properties": {
+          "lo": {
+            "type": "number",
+            "title": "Lo"
+          },
+          "hi": {
+            "type": "number",
+            "title": "Hi"
+          },
+          "n_sessions": {
+            "type": "integer",
+            "title": "N Sessions"
+          },
+          "max_item_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Item Rate"
+          },
+          "hot_items": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Hot Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lo",
+          "hi",
+          "n_sessions"
+        ],
+        "title": "ThetaSegmentExposure",
+        "description": "Realized exposure conditioned on TRUE examinee \u03b8 (lit-review G3.2):\nmarginal caps can hide segment-hot items, so the evaluation must look."
       },
       "TransitionRequest": {
         "properties": {

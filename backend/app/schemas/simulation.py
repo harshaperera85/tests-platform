@@ -56,7 +56,8 @@ Design = Annotated[LinearDesign | LoftDesign, Field(discriminator="kind")]
 
 
 class Condition(BaseModel):
-    name: str = Field(pattern=r"^[a-zA-Z0-9][a-zA-Z0-9_ -]{0,39}$")
+    #: allows the natural study-naming idioms ("cap 0.55", "pregen K=6")
+    name: str = Field(pattern=r"^[a-zA-Z0-9][a-zA-Z0-9_ .=-]{0,39}$")
     design: Design
 
 
@@ -128,14 +129,64 @@ class ExposureStats(BaseModel):
     rates: dict[str, float]
 
 
+class ThetaSegmentExposure(BaseModel):
+    """Realized exposure conditioned on TRUE examinee θ (lit-review G3.2):
+    marginal caps can hide segment-hot items, so the evaluation must look."""
+
+    lo: float
+    hi: float
+    n_sessions: int
+    max_item_rate: float | None = None
+    #: items whose within-segment rate exceeds their marginal rate by ≥ 0.15
+    #: (top 5, item_id -> segment rate)
+    hot_items: dict[str, float] = Field(default_factory=dict)
+
+
+class RetakeStats(BaseModel):
+    """Per-person cumulative usage across replications (G3.3 retake
+    protection): replication r of simulee j is read as person j's r-th sitting;
+    repeat rate = fraction of their form already seen in earlier sittings."""
+
+    n_persons: int
+    mean_repeat_rate: float
+    max_repeat_rate: float
+
+
+class ExposureDiagnostics(BaseModel):
+    """G3 exposure-maturity diagnostics (measure BEFORE adopting probabilistic
+    eligibility — `docs/loft_literature_review.md` §2-G3)."""
+
+    #: the blueprint's max_exposure_rate (None -> no cap; sawtooth n/a)
+    cap: float | None = None
+    #: items whose final rate reached ≥ 0.8 × cap
+    n_items_near_cap: int | None = None
+    #: sawtooth: max−min of the post-burn-in RUNNING rate, over near-cap items
+    sawtooth_mean_amplitude: float | None = None
+    sawtooth_max_amplitude: float | None = None
+    burn_in_sessions: int | None = None
+    theta_segments: list[ThetaSegmentExposure] = Field(default_factory=list)
+    #: fraction of sampled session pairs with overlap > 0.20 (TestDesign's
+    #: default overlap-rate cap)
+    overlap_rate_gt_020: float | None = None
+    retake: RetakeStats | None = None
+    #: §4.2 shortfall (Luecht & Sireci fn. 3): how much the running mask shrank
+    #: the candidate pool per session (items for live engines, forms for (c))
+    mean_masked_per_session: float | None = None
+    max_masked_per_session: int | None = None
+
+
 class ConditionResult(BaseModel):
     name: str
     kind: str
     overall: OverallStats
     conditional: list[ConditionalBin]
     exposure: ExposureStats
+    diagnostics: ExposureDiagnostics = Field(default_factory=ExposureDiagnostics)
     #: sessions whose assembly failed loudly (LOFT §4.3) — a pool-health metric
     n_infeasible_sessions: int
+    #: of those, failures ATTRIBUTED to the exposure mask (the unmasked pool
+    #: was feasible) — the G3.4 shortfall signal, distinct from a bad blueprint
+    n_infeasible_mask_attributed: int = 0
     assembly_seconds_mean: float | None = None
     assembly_seconds_p95: float | None = None
     warnings: list[str]

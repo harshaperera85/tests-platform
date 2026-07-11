@@ -285,3 +285,126 @@ def test_pregenerated_loft_condition(client: TestClient) -> None:
     # the batch-assembly provenance is surfaced, and draws are not solves
     assert any("batch-assembled" in w for w in pre["warnings"])
     assert pre["assembly_seconds_mean"] < 0.05  # draw, not solve
+
+
+# ------------------------------------------------------ G3 exposure maturity
+def test_exposure_diagnostics_under_a_rate_cap(client: TestClient) -> None:
+    """Sawtooth + θ-segment + overlap-rate + shortfall surfaces (G3.1/2/3/4)."""
+    payload = _bp_payload()
+    payload["exposure_target"] = {"max_exposure_rate": 0.55}
+    bid = client.post("/api/v1/blueprints", json=payload).json()["id"]
+    resp = client.post(
+        "/api/v1/simulations",
+        json={
+            "pool_id": "small_2pl",
+            "n_simulees": 200,
+            "seed": 17,
+            "conditions": [
+                {"name": "capped loft", "design": {"kind": "loft", "blueprint_id": bid}}
+            ],
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    c = resp.json()["conditions"][0]
+    d = c["diagnostics"]
+    assert d["cap"] == 0.55
+    # the cap binds on this small pool: items reach it and the running mask acts
+    assert d["n_items_near_cap"] > 0
+    assert d["sawtooth_mean_amplitude"] is not None
+    assert 0.0 <= d["sawtooth_mean_amplitude"] <= d["sawtooth_max_amplitude"]
+    assert d["burn_in_sessions"] >= 20
+    assert d["mean_masked_per_session"] is not None
+    assert d["max_masked_per_session"] >= 1
+    # realized marginal rate honors the running cap (± one-session granularity)
+    assert c["exposure"]["max_rate"] <= 0.55 + 1.0 / 200 + 1e-9
+    # θ-segment exposure: 5 segments partition all sessions; LOFT cannot
+    # condition on θ, so no segment-hot items are expected
+    segs = d["theta_segments"]
+    assert len(segs) == 5
+    assert sum(s["n_sessions"] for s in segs) == c["overall"]["n"]
+    assert all(s["hot_items"] == {} for s in segs)
+    assert d["overlap_rate_gt_020"] is not None
+    assert 0.0 <= d["overlap_rate_gt_020"] <= 1.0
+
+
+def test_retake_repeat_rates_across_replications(client: TestClient) -> None:
+    """G3.3 retake protection: fixed form ⇒ repeat rate 1.0; LOFT ⇒ lower."""
+    bid = client.post("/api/v1/blueprints", json=_bp_payload()).json()["id"]
+    resp = client.post(
+        "/api/v1/simulations",
+        json={
+            "pool_id": "small_2pl",
+            "n_simulees": 40,
+            "replications": 2,
+            "seed": 3,
+            "conditions": [
+                {"name": "lin", "design": {"kind": "linear", "blueprint_id": bid}},
+                {"name": "loft", "design": {"kind": "loft", "blueprint_id": bid}},
+            ],
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    lin, loft = resp.json()["conditions"]
+    assert lin["diagnostics"]["retake"]["mean_repeat_rate"] == 1.0  # same form
+    rt = loft["diagnostics"]["retake"]
+    assert rt["n_persons"] == 40
+    assert rt["mean_repeat_rate"] < 1.0  # per-person variety is measurable
+    # single-replication studies have no retake surface
+    single = client.post(
+        "/api/v1/simulations",
+        json={
+            "pool_id": "small_2pl",
+            "n_simulees": 20,
+            "conditions": [
+                {"name": "lin", "design": {"kind": "linear", "blueprint_id": bid}}
+            ],
+        },
+    ).json()["conditions"][0]
+    assert single["diagnostics"]["retake"] is None
+
+
+def test_shortfall_attribution_mask_vs_inherent(client: TestClient) -> None:
+    """G3.4: a failure caused by the mask is ATTRIBUTED, not conflated with an
+    inherently infeasible blueprint."""
+    payload = _bp_payload()
+    payload["exposure_target"] = {"max_exposure_rate": 0.05}  # below 1/pool floor
+    bid = client.post("/api/v1/blueprints", json=payload).json()["id"]
+    resp = client.post(
+        "/api/v1/simulations",
+        json={
+            "pool_id": "small_2pl",
+            "n_simulees": 20,
+            "seed": 2,
+            "conditions": [
+                {"name": "starved", "design": {"kind": "loft", "blueprint_id": bid}}
+            ],
+        },
+    )
+    assert resp.status_code == 200, resp.text
+    c = resp.json()["conditions"][0]
+    assert c["n_infeasible_sessions"] > 0
+    assert c["n_infeasible_mask_attributed"] == c["n_infeasible_sessions"]
+    assert any("ATTRIBUTED to the exposure-rate cap" in w for w in c["warnings"])
+    # inherently impossible band: infeasible but NOT mask-attributed
+    bad = _bp_payload(tolerance=0.05)
+    bad["statistical_target"]["target_info"] = [40.0, 40.0, 40.0]
+    bid2 = client.post("/api/v1/blueprints", json=bad).json()["id"]
+    c2 = client.post(
+        "/api/v1/simulations",
+        json={
+            "pool_id": "small_2pl",
+            "n_simulees": 10,
+            "conditions": [
+                {
+                    "name": "impossible",
+                    "design": {
+                        "kind": "loft",
+                        "blueprint_id": bid2,
+                        "engine": "cp_sat",
+                    },
+                }
+            ],
+        },
+    ).json()["conditions"][0]
+    assert c2["n_infeasible_sessions"] == 10
+    assert c2["n_infeasible_mask_attributed"] == 0

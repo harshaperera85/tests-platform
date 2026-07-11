@@ -120,6 +120,21 @@ Durable to-do list. Status as of the latest commit on `main`.
   harness tests; live smoke (5 forms assembled→published→drawn 25× with exact
   rotation [5,5,5,5,5], max item rate 0.40; study: pregen K=6 recovery parity
   with live LOFT, RMSE 0.381 vs 0.393, p=0.92, max rate 0.50 vs 0.61).
+- **G3 exposure-control maturity: diagnostics + determination** (2026-07-11,
+  lit-review G3 — measure BEFORE adopting). `ExposureDiagnostics` per
+  simulation condition: sawtooth (running-rate amplitude over near-cap items,
+  post burn-in), θ-segment-conditional exposure w/ noise-guarded hot flags
+  (dev ≥ 0.15 AND 3.5×SE — the scan covers items×segments cells), overlap-rate
+  > 0.20 fraction (TestDesign norm), per-person retake repeat rates
+  (replications = re-sittings), per-session mask counts, and §4.2 **shortfall
+  attribution**: on LOFT failure one counterfactual unmasked solve labels it
+  mask-attributed vs inherently infeasible (`LoftAssemblyError.mask_attributed`,
+  surfaced as `n_infeasible_mask_attributed`). Condition-name pattern widened
+  ("cap 0.55", "K=6"). **Determination recorded in the review:** at ≥1.3×
+  the structural floor the hard cap is fine (amplitude ≤ 0.09, decaying);
+  near the floor it deadlocks (598/600 fail, all attributed) — probabilistic
+  eligibility + fading DEFERRED w/ explicit triggers (cap < 1.2× floor
+  needed, amplitude > 0.15, or CAT arrival). 3 new integration tests.
 
 ## Next up
 - **Operational walkthrough** — hands-on validation of the linear path on simulated data.

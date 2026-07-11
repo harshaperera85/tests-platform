@@ -11,7 +11,7 @@ import * as zod from 'zod';
 /**
  * @summary Run Simulation Study
  */
-export const runSimulationStudyBodyConditionsItemNameRegExp = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_ -]{0,39}$');
+export const runSimulationStudyBodyConditionsItemNameRegExp = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9_ .=-]{0,39}$');
 export const runSimulationStudyBodyConditionsItemDesignKindDefault = "linear";export const runSimulationStudyBodyConditionsItemDesignAssemblyStrategyDefault = "mip";export const runSimulationStudyBodyConditionsItemDesignKindDefaultOne = "loft";export const runSimulationStudyBodyConditionsItemDesignEngineDefault = "random_constrained";export const runSimulationStudyBodyConditionsItemDesignNPoolFormsDefault = 20;
 export const runSimulationStudyBodyConditionsItemDesignNPoolFormsMin = 2;
 export const runSimulationStudyBodyConditionsItemDesignNPoolFormsMax = 50;export const runSimulationStudyBodyConditionsMax = 4;export const runSimulationStudyBodyPopulationDistributionDefault = "normal";export const runSimulationStudyBodyPopulationMeanDefault = 0;export const runSimulationStudyBodyPopulationSdDefault = 1;export const runSimulationStudyBodyPopulationLowDefault = -3;export const runSimulationStudyBodyPopulationHighDefault = 3;export const runSimulationStudyBodyNSimuleesDefault = 500;
@@ -46,6 +46,8 @@ export const runSimulationStudyBody = zod.object({
   "replications": zod.number().min(1).max(runSimulationStudyBodyReplicationsMax).default(runSimulationStudyBodyReplicationsDefault),
   "seed": zod.number().optional()
 })
+
+export const runSimulationStudyResponseConditionsItemNInfeasibleMaskAttributedDefault = 0;
 
 export const runSimulationStudyResponse = zod.object({
   "report": zod.object({
@@ -94,7 +96,30 @@ export const runSimulationStudyResponse = zod.object({
   "max_pairwise_overlap": zod.union([zod.number(),zod.null()]).optional(),
   "rates": zod.record(zod.string(), zod.number())
 }),
+  "diagnostics": zod.object({
+  "cap": zod.union([zod.number(),zod.null()]).optional(),
+  "n_items_near_cap": zod.union([zod.number(),zod.null()]).optional(),
+  "sawtooth_mean_amplitude": zod.union([zod.number(),zod.null()]).optional(),
+  "sawtooth_max_amplitude": zod.union([zod.number(),zod.null()]).optional(),
+  "burn_in_sessions": zod.union([zod.number(),zod.null()]).optional(),
+  "theta_segments": zod.array(zod.object({
+  "lo": zod.number(),
+  "hi": zod.number(),
+  "n_sessions": zod.number(),
+  "max_item_rate": zod.union([zod.number(),zod.null()]).optional(),
+  "hot_items": zod.record(zod.string(), zod.number()).optional()
+}).describe('Realized exposure conditioned on TRUE examinee θ (lit-review G3.2):\nmarginal caps can hide segment-hot items, so the evaluation must look.')).optional(),
+  "overlap_rate_gt_020": zod.union([zod.number(),zod.null()]).optional(),
+  "retake": zod.union([zod.object({
+  "n_persons": zod.number(),
+  "mean_repeat_rate": zod.number(),
+  "max_repeat_rate": zod.number()
+}).describe('Per-person cumulative usage across replications (G3.3 retake\nprotection): replication r of simulee j is read as person j\'s r-th sitting;\nrepeat rate = fraction of their form already seen in earlier sittings.'),zod.null()]).optional(),
+  "mean_masked_per_session": zod.union([zod.number(),zod.null()]).optional(),
+  "max_masked_per_session": zod.union([zod.number(),zod.null()]).optional()
+}).optional().describe('G3 exposure-maturity diagnostics (measure BEFORE adopting probabilistic\neligibility — `docs/loft_literature_review.md` §2-G3).'),
   "n_infeasible_sessions": zod.number(),
+  "n_infeasible_mask_attributed": zod.number().optional(),
   "assembly_seconds_mean": zod.union([zod.number(),zod.null()]).optional(),
   "assembly_seconds_p95": zod.union([zod.number(),zod.null()]).optional(),
   "warnings": zod.array(zod.string())

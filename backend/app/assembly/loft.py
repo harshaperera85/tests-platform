@@ -52,7 +52,17 @@ LoftEngine = Literal["random_constrained", "cp_sat", "pregenerated"]
 
 
 class LoftAssemblyError(ValueError):
-    """No conforming form exists / could be found — the session start fails."""
+    """No conforming form exists / could be found — the session start fails.
+
+    ``mask_attributed`` is the §4.2 shortfall attribution (Luecht & Sireci
+    fn. 3): True when the failure is due to the running exposure mask — the
+    UNMASKED pool was feasible — as opposed to an inherently infeasible
+    blueprint/pool pairing.
+    """
+
+    def __init__(self, message: str, *, mask_attributed: bool = False) -> None:
+        super().__init__(message)
+        self.mask_attributed = mask_attributed
 
 
 @dataclass(frozen=True)
@@ -366,10 +376,38 @@ def assemble_loft_session(
                 f"exposure-rate cap masked {draw_extra['n_rate_masked']} pool "
                 f"form(s) at rate ≥ {rate} over {n_prior_sessions} session(s)."
             )
-    elif engine == "cp_sat":
-        chosen = _solve_cp_sat(problem, seed, time_limit_s)
     else:
-        chosen = _solve_random(problem, seed, max_attempts)
+        draw_extra = {"n_masked_items": n_masked}
+        try:
+            if engine == "cp_sat":
+                chosen = _solve_cp_sat(problem, seed, time_limit_s)
+            else:
+                chosen = _solve_random(problem, seed, max_attempts)
+        except LoftAssemblyError as exc:
+            if n_masked == 0:
+                raise
+            # §4.2 shortfall attribution (Luecht & Sireci fn. 3): the mask
+            # shrank the pool — was THAT the problem, or is the pairing
+            # inherently infeasible? One counterfactual unmasked solve
+            # (failure path only) answers it.
+            full = compile_blueprint(session_bp, pool, exposure_counts=exposure_counts)
+            try:
+                if engine == "cp_sat":
+                    _solve_cp_sat(full, seed, time_limit_s)
+                else:
+                    _solve_random(full, seed, max_attempts)
+            except LoftAssemblyError:
+                raise LoftAssemblyError(
+                    f"{exc} — infeasible regardless of the exposure mask "
+                    f"({n_masked} item(s) masked; the unmasked pool also fails)"
+                ) from exc
+            raise LoftAssemblyError(
+                f"{exc} — ATTRIBUTED to the exposure-rate cap: the unmasked "
+                f"pool is feasible, but the running mask removed {n_masked} "
+                "item(s) (§4.2 shortfall; raise the cap, enlarge the pool, or "
+                "widen the band)",
+                mask_attributed=True,
+            ) from exc
 
     tif_actual = problem.tif_at(chosen)
     constraints = []

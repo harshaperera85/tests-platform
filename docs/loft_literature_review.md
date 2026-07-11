@@ -118,6 +118,36 @@ difference) is the reference formulation for the batch step.
 
 ### G3 — Exposure-control maturity (TestDesign + Luecht & Sireci)
 
+> **STATUS: MEASURED + DIAGNOSTICS BUILT (2026-07-11); probabilistic
+> eligibility DEFERRED with an explicit trigger.** All four diagnostics below
+> now live in the G1 harness (`ExposureDiagnostics` per condition): sawtooth
+> (running-rate amplitude for near-cap items, post burn-in), θ-segment
+> exposure with statistically-guarded hot-item flags (dev ≥ 0.15 AND 3.5×SE),
+> overlap-rate > 0.20 fraction, per-person retake repeat rates across
+> replications, per-session mask counts, and **§4.2 shortfall attribution**
+> (on failure, one counterfactual unmasked solve decides "mask-attributed"
+> vs "inherently infeasible" — `LoftAssemblyError.mask_attributed`).
+>
+> **Determination (N=600, small_2pl, 20-item forms, floor = 20/48 ≈ 0.417):**
+> - cap 0.55 (≈1.3× floor): sawtooth EXISTS but is small and decaying —
+>   mean amplitude 0.047, max 0.088 (burn-in 120); ~0.9 items masked/session;
+>   0 infeasible; recovery unchanged (RMSE 0.412 vs 0.422 uncapped). The hard
+>   mask is adequate here.
+> - cap 0.45 (≈1.08× floor): **transient deadlock**, the real failure mode —
+>   after 2 sessions every used item sits at rate 0.5 ≥ cap, the mask starves
+>   the pool, 598/600 sessions fail, all correctly mask-attributed. Hard
+>   eligibility cannot recover because failed sessions do not grow the rate
+>   denominator (ledger semantics).
+> - θ-segment-hot items: none (as predicted — LOFT never sees θ); overlap
+>   > 0.20 in ~100% of pairs on this 48-item pool (structural: re-derive the
+>   TestDesign 0.20 norm per pool/length ratio).
+>
+> **Decision:** defer TestDesign-style probabilistic eligibility + fading.
+> Operating guidance instead: keep `max_exposure_rate ≥ ~1.25 × length/pool`.
+> **Adoption triggers** (revisit then): an operational pool must run below
+> ~1.2× floor, or observed post-burn-in sawtooth amplitude > 0.15, or
+> segment-hot items appear once CAT (θ-conditional selection) joins.
+
 1. **Sawtooth risk:** our hard running cap admits an item until it hits the rate,
    then starves it. TestDesign's answer is probabilistic eligibility with a fading
    factor (0.999) so realized rates *converge*. First step: measure (add sawtooth

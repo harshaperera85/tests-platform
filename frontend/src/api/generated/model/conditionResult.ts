@@ -8,6 +8,7 @@
 import type { OverallStats } from './overallStats';
 import type { ConditionalBin } from './conditionalBin';
 import type { ExposureStats } from './exposureStats';
+import type { ExposureDiagnostics } from './exposureDiagnostics';
 import type { ConditionResultAssemblySecondsMean } from './conditionResultAssemblySecondsMean';
 import type { ConditionResultAssemblySecondsP95 } from './conditionResultAssemblySecondsP95';
 
@@ -17,7 +18,9 @@ export interface ConditionResult {
   overall: OverallStats;
   conditional: ConditionalBin[];
   exposure: ExposureStats;
+  diagnostics?: ExposureDiagnostics;
   n_infeasible_sessions: number;
+  n_infeasible_mask_attributed?: number;
   assembly_seconds_mean?: ConditionResultAssemblySecondsMean;
   assembly_seconds_p95?: ConditionResultAssemblySecondsP95;
   warnings: string[];

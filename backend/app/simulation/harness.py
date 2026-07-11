@@ -44,12 +44,15 @@ from app.schemas.simulation import (
     Condition,
     ConditionalBin,
     ConditionResult,
+    ExposureDiagnostics,
     ExposureStats,
     LinearDesign,
     LoftDesign,
     OverallStats,
     PairedComparison,
     Population,
+    RetakeStats,
+    ThetaSegmentExposure,
 )
 
 #: conditional-report bins: width 0.5 over −3…3 (the ATS/QA convention);
@@ -102,6 +105,8 @@ class _SessionOutcome:
     est_theta: float
     se: float
     item_ids: list[str]
+    #: global simulee index (rep * n_simulees + j) — person j, sitting rep
+    sim_index: int = 0
 
 
 @dataclass
@@ -110,7 +115,10 @@ class _ConditionRun:
     usage: Counter[str] = field(default_factory=Counter)
     forms: list[tuple[str, ...]] = field(default_factory=list)
     n_infeasible: int = 0
+    n_infeasible_mask_attributed: int = 0
     solve_seconds: list[float] = field(default_factory=list)
+    #: per successful session: how much the §4.2 mask shrank the candidates
+    masked_counts: list[int] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
 
@@ -222,6 +230,8 @@ def run_condition(
                     )
                 except LoftAssemblyError as exc:
                     run.n_infeasible += 1
+                    if exc.mask_attributed:
+                        run.n_infeasible_mask_attributed += 1
                     msg = f"session {idx}: {exc}"
                     if len(run.warnings) < 3:
                         run.warnings.append(msg)
@@ -229,6 +239,13 @@ def run_condition(
                 run.solve_seconds.append(time.perf_counter() - t0)
                 if "form_id" in form.record:
                     draws[form.record["form_id"]] += 1
+                run.masked_counts.append(
+                    int(
+                        form.record.get(
+                            "n_masked_items", form.record.get("n_rate_masked", 0)
+                        )
+                    )
+                )
                 items = pool.subset(form.item_ids)
                 for w in form.warnings:
                     if w not in run.warnings and len(run.warnings) < 10:
@@ -242,6 +259,7 @@ def run_condition(
                     est_theta=est.theta,
                     se=est.standard_error,
                     item_ids=[it.item_id for it in items],
+                    sim_index=idx,
                 )
             )
             run.usage.update(it.item_id for it in items)
@@ -270,7 +288,119 @@ def _corr(xs: list[float], ys: list[float]) -> float:
     return sxy / math.sqrt(sxx * syy)
 
 
-def summarize(run: _ConditionRun, condition: Condition) -> ConditionResult:
+# -------------------------------------------------- G3 exposure diagnostics
+#: θ segments for conditional exposure (coarser than the recovery bins):
+#: LOFT cannot condition assembly on θ, so segment-hot items are a red flag.
+_SEGMENTS = [(-99.0, -1.5), (-1.5, -0.5), (-0.5, 0.5), (0.5, 1.5), (1.5, 99.0)]
+
+
+def _sawtooth(
+    forms: list[tuple[str, ...]], cap: float | None
+) -> tuple[int | None, float | None, float | None, int | None]:
+    """Running-rate amplitude for items that ended near the cap (G3.1).
+
+    The hard §4.2 mask admits an item until it crosses the cap, then starves
+    it until the growing denominator readmits it — the classic sawtooth. We
+    report (n_items_near_cap, mean amplitude, max amplitude, burn_in) where
+    amplitude = max−min of the running rate after burn-in.
+    """
+    n = len(forms)
+    if cap is None or n < 40:
+        return None, None, None, None
+    final: Counter[str] = Counter()
+    for f in forms:
+        final.update(f)
+    near_cap = {iid for iid, c in final.items() if c / n >= 0.8 * cap}
+    if not near_cap:
+        return 0, None, None, None
+    burn_in = max(20, n // 5)
+    lo = {iid: math.inf for iid in near_cap}
+    hi = {iid: -math.inf for iid in near_cap}
+    running: Counter[str] = Counter()
+    for t, f in enumerate(forms, start=1):
+        running.update(iid for iid in f if iid in near_cap)
+        if t <= burn_in:
+            continue
+        for iid in near_cap:
+            r = running[iid] / t
+            lo[iid] = min(lo[iid], r)
+            hi[iid] = max(hi[iid], r)
+    amps = [hi[iid] - lo[iid] for iid in near_cap]
+    return len(near_cap), sum(amps) / len(amps), max(amps), burn_in
+
+
+def _theta_segment_exposure(
+    outcomes: list[_SessionOutcome], marginal: dict[str, float]
+) -> list[ThetaSegmentExposure]:
+    """Realized exposure by TRUE-θ segment (G3.2) + segment-hot items."""
+    segments: list[ThetaSegmentExposure] = []
+    for lo, hi in _SEGMENTS:
+        members = [o for o in outcomes if lo <= o.true_theta < hi]
+        if not members:
+            segments.append(ThetaSegmentExposure(lo=lo, hi=hi, n_sessions=0))
+            continue
+        seg_usage: Counter[str] = Counter()
+        for o in members:
+            seg_usage.update(o.item_ids)
+        seg_rates = {iid: c / len(members) for iid, c in seg_usage.items()}
+        # hot = deviation clears 0.15 AND 3.5×SE(segment rate): the diagnostic
+        # scans every (item × segment) cell, so a ~2 SE threshold would flag
+        # pure sampling noise somewhere in almost every honest run.
+        n_seg = len(members)
+        hot = {
+            iid: round(r, 4)
+            for iid, r in sorted(
+                seg_rates.items(), key=lambda kv: kv[1], reverse=True
+            )
+            if n_seg >= 30
+            and (dev := r - marginal.get(iid, 0.0)) >= 0.15
+            and dev >= 3.5 * math.sqrt(r * (1.0 - r) / n_seg)
+        }
+        segments.append(
+            ThetaSegmentExposure(
+                lo=lo,
+                hi=hi,
+                n_sessions=len(members),
+                max_item_rate=max(seg_rates.values()),
+                hot_items=dict(list(hot.items())[:5]),
+            )
+        )
+    return segments
+
+
+def _retake_stats(
+    outcomes: list[_SessionOutcome], n_simulees: int | None
+) -> RetakeStats | None:
+    """Per-person cumulative usage across replications (G3.3): repeat rate of
+    sitting r = |form_r ∩ (forms 1..r−1)| / |form_r|."""
+    if not n_simulees:
+        return None
+    seen: dict[int, set[str]] = {}
+    repeats: list[float] = []
+    for o in outcomes:  # outcomes are in (rep, simulee) order
+        person = o.sim_index % n_simulees
+        prior = seen.setdefault(person, set())
+        if o.sim_index >= n_simulees and o.item_ids:  # a re-sitting
+            repeats.append(
+                len(prior & set(o.item_ids)) / len(o.item_ids)
+            )
+        prior.update(o.item_ids)
+    if not repeats:
+        return None
+    return RetakeStats(
+        n_persons=len(seen),
+        mean_repeat_rate=sum(repeats) / len(repeats),
+        max_repeat_rate=max(repeats),
+    )
+
+
+def summarize(
+    run: _ConditionRun,
+    condition: Condition,
+    *,
+    cap: float | None = None,
+    n_simulees: int | None = None,
+) -> ConditionResult:
     out = run.outcomes
     true = [o.true_theta for o in out]
     est = [o.est_theta for o in out]
@@ -327,7 +457,7 @@ def summarize(run: _ConditionRun, condition: Condition) -> ConditionResult:
         sorted(rates.items(), key=lambda kv: kv[1], reverse=True)[:200]
     )
     is_loft = condition.design.kind == "loft"
-    mean_ov = max_ov = None
+    mean_ov = max_ov = ov_gt_020 = None
     n_distinct = None
     if is_loft and n_sessions >= 2:
         n_distinct = len(set(run.forms))
@@ -344,6 +474,8 @@ def summarize(run: _ConditionRun, condition: Condition) -> ConditionResult:
         if overlaps:
             mean_ov = sum(overlaps) / len(overlaps)
             max_ov = max(overlaps)
+            # TestDesign's default overlap-rate cap is 0.20 (G3.3)
+            ov_gt_020 = sum(1 for o in overlaps if o > 0.20) / len(overlaps)
 
     exposure = ExposureStats(
         n_items_used=len(run.usage),
@@ -355,6 +487,27 @@ def summarize(run: _ConditionRun, condition: Condition) -> ConditionResult:
         rates=top_rates,
     )
 
+    # G3 exposure-maturity diagnostics
+    n_cap, saw_mean, saw_max, burn_in = _sawtooth(run.forms, cap if is_loft else None)
+    diagnostics = ExposureDiagnostics(
+        cap=cap if is_loft else None,
+        n_items_near_cap=n_cap,
+        sawtooth_mean_amplitude=saw_mean,
+        sawtooth_max_amplitude=saw_max,
+        burn_in_sessions=burn_in,
+        theta_segments=(
+            _theta_segment_exposure(out, rates) if is_loft and n >= 25 else []
+        ),
+        overlap_rate_gt_020=ov_gt_020,
+        retake=_retake_stats(out, n_simulees),
+        mean_masked_per_session=(
+            sum(run.masked_counts) / len(run.masked_counts)
+            if run.masked_counts
+            else None
+        ),
+        max_masked_per_session=max(run.masked_counts) if run.masked_counts else None,
+    )
+
     solve = sorted(run.solve_seconds)
     return ConditionResult(
         name=condition.name,
@@ -362,7 +515,9 @@ def summarize(run: _ConditionRun, condition: Condition) -> ConditionResult:
         overall=overall,
         conditional=bins,
         exposure=exposure,
+        diagnostics=diagnostics,
         n_infeasible_sessions=run.n_infeasible,
+        n_infeasible_mask_attributed=run.n_infeasible_mask_attributed,
         assembly_seconds_mean=(sum(solve) / len(solve)) if solve else None,
         assembly_seconds_p95=solve[int(0.95 * (len(solve) - 1))] if solve else None,
         warnings=run.warnings,

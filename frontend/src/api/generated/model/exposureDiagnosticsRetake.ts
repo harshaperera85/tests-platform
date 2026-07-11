@@ -5,10 +5,6 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
-import type { ConditionDesign } from './conditionDesign';
+import type { RetakeStats } from './retakeStats';
 
-export interface Condition {
-  /** @pattern ^[a-zA-Z0-9][a-zA-Z0-9_ .=-]{0,39}$ */
-  name: string;
-  design: ConditionDesign;
-}
+export type ExposureDiagnosticsRetake = RetakeStats | null;
