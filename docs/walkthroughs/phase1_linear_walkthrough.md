@@ -1,8 +1,11 @@
 # Tests Platform — operational walkthrough (end-to-end)
 
-> Covers the linear path + governance + exposure (§§0–10) and the BP-MODES-1 era
+> Covers the linear path + governance + exposure (§§0–10), the BP-MODES-1 era
 > (§§11–15): content-only blueprints, the curriculum→blueprint generator, item-bank
-> import, field-study pools, and LOFT session preview.
+> import, field-study pools, and LOFT sessions (all three engines + §4.4 record
+> persistence) — and the G-series (§§16–18, lit-review G1–G5): the TCC
+> expected-score band, delivery options (order randomization + embedded pretest),
+> and the measurement-simulation harness with exposure diagnostics.
 
 A hands-on script to **drive the platform as built** and verify it operates correctly —
 not just trust green CI. Covers the full delivered feature set, in order:
@@ -13,6 +16,12 @@ not just trust green CI. Covers the full delivered feature set, in order:
 4. **Governance** — review → approve → publish + the **form-QA report** (A-038–041).
 5. **Cross-form comparability** (equating evidence).
 6. **Longitudinal item exposure** + opt-in assembly eligibility feedback.
+7. **BP-MODES-1** (§§11–15): content-only blueprints, curriculum→blueprint generator,
+   item-bank import, field-study pools, LOFT sessions (engines a/b/**c** + §4.4
+   record persistence).
+8. **G-series** (§§16–18): TCC expected-score band, delivery options (order
+   randomization + embedded pretest), measurement-simulation studies + exposure
+   diagnostics.
 
 Built-in example data (no real export needed): pools **`demo_mixed`** (252 items · 3 domains ·
 2PL+3PL) and **`small_2pl`** (48 items), plus the one-click **demo scenarios**.
@@ -235,6 +244,13 @@ history) to constrain *this* assembly's eligibility — **distinct** from the wi
 - **Tolerance** — optional hard band: forces `|actual − target| ≤ tolerance` at each θ in
   addition to the objective. Blank = objective only.
 
+### Expected-score band (TCC) card — G4
+- A second, independent card below the TIF card: a **hard band on TCC(θ) = Σ Pᵢ(θ)**
+  (the expected raw score) — *score* comparability, stronger than the TIF *precision*
+  band. **Tolerance is required** (it's a pure band, never an objective; TIF stays the
+  objective). Legal with or without a TIF target; enforced by CP-SAT assembly and every
+  LOFT engine. Target scores are validated ≤ form length. See §16.
+
 ### Actions (bottom of the editor)
 - **Assemble form** — saves the draft, then runs the engine (async): you'll see
   **queued → running**, then the form preview. Disabled while fields are invalid.
@@ -244,10 +260,13 @@ history) to constrain *this* assembly's eligibility — **distinct** from the wi
   **infeasible** (amber) vs **request failed/error** (red) vs **warnings** (blue) banner.
 
 ### Editor header (status workflow)
-- **Lock** — freeze the test (read-only; blocks edit + re-assemble). Requires ≥1 form.
-- **Unlock** — back to draft/editable. **Duplicate** — copy to a new draft test.
+- **Status pill** — derived from the forms' lifecycle (draft / in_review / approved /
+  published). There is **no manual Lock/Unlock** (retired, migration 0008): freezing is
+  the consequence of a form leaving draft; **Return to draft** (Review tab) unfreezes.
+- **Duplicate** — copy to a new draft test.
 - **Tabs** — Assembly (A-031, editor+preview), About (A-032, identity + blueprint
-  summary), Scoring (A-034, the EAP/canonical model), History (A-033, assembled forms).
+  summary), Scoring (A-034, the EAP/canonical model), History (A-033, assembled forms),
+  Review (A-038–041, governance).
 
 ### Form preview
 - **worst |actual − target|** badge (green < 0.5) and **method** / **tolerance** pills.
@@ -680,7 +699,7 @@ Imported banks with `live`/`pilot` items derive a **content-only field pool**
    (reliability **—**), TIF curve empty, **Walk/simulate refuse with a 422**
    ("uncalibrated — no parameters").
 
-## 15. LOFT session preview (BP-MODES-1 §4)
+## 15. LOFT sessions (BP-MODES-1 §4) — three engines + record persistence
 
 The **LOFT session preview** card (bottom of the Assembly tab) draws unique
 conforming forms per session.
@@ -699,6 +718,146 @@ conforming forms per session.
 **Checkpoints:** every session's record shows `blueprint_conformant: true`, per-cell
 realized counts within bounds, and TIF within ±tolerance at every θ; empirical max
 rate stays ≤ rate + 1/n.
+
+### 15b. Engine (c) — pre-generated pool from PUBLISHED forms (G2)
+
+The batch-in-advance LOFT variant: sessions **draw** from human-reviewed forms
+instead of solving. It composes what you already walked: batch assembly (§5) +
+governance (§7).
+
+1. On a test, set **Parallel forms = 4** with **Max use / item = 2** (batch
+   diversity), assemble, then **publish 3 of the 4 forms** through the Review tab
+   (§7 flow). Leave the 4th in draft.
+2. In the LOFT preview card, pick engine **pre-generated pool (published forms)**
+   and draw 9 sessions. Expect: `9 sessions · 3 distinct forms (pool of 3
+   published)` — the **draft form is never drawn**, and draws rotate evenly
+   (least-drawn-first: 3/3/3).
+3. Via the API, each session's record carries draw provenance:
+   `form_id`, `n_pool_forms`, `n_conforming`, `n_rate_masked`.
+4. Failure honesty: a test with **no published forms** → clear 422 ("publish them
+   first"); a published form that no longer conforms to the (edited) blueprint is
+   **excluded with a warning, never administered**.
+
+### 15c. §4.4 record persistence (G5)
+
+Session records can be persisted (append-only, `loft_session_record` — Sessions
+will persist unconditionally per administration; here it's opt-in):
+
+```bash
+BASE=http://localhost:8000/api/v1
+# draw 5 sessions AND persist their conformance records
+curl -s -X POST $BASE/loft/sessions -H 'content-type: application/json' -d "{
+  \"blueprint_id\":\"$BID\",\"pool_id\":\"small_2pl\",\"n_sessions\":5,
+  \"seed\":42,\"persist_records\":true}" \
+  | python3 -c 'import sys,json;print("persisted:",json.load(sys.stdin)["n_records_persisted"])'
+# list them back (newest first)
+curl -s "$BASE/loft/records?blueprint_id=$BID" \
+  | python3 -c 'import sys,json;rs=json.load(sys.stdin);print(len(rs),"records; first:",rs[0]["engine"],rs[0]["record"]["blueprint_conformant"])'
+```
+
+**Checkpoints:** `n_records_persisted` = n_sessions; default (no flag) persists
+nothing; a second persisted batch **appends** (never replaces).
+
+## 16. TCC expected-score band (G4)
+
+The **Expected-score band (TCC)** card pins *score* comparability — a hard band on
+the expected raw score TCC(θ) = Σ Pᵢ(θ) — alongside (or instead of) the TIF band.
+
+1. On a length-20 blueprint with the usual TIF target, tick **set an expected-score
+   (TCC) band**: θ `-1, 0, 1`, target scores `7.5, 10.5, 13.5`, tolerance `0.8`.
+   (Tolerance is **required** — the band is hard; there is no TCC objective.)
+2. **Assemble** → in the QA report's psychometric panel, read the TCC at those θ:
+   each within ±0.8 of its target.
+3. LOFT under the dual band: draw CP-SAT sessions → every record now also carries
+   `tcc_actual / tcc_target / tcc_tolerance`, all in-band. (Random search needs a
+   looser band — tight joint TIF∩TCC acceptance is exactly what CP-SAT is for.)
+4. Failure honesty: target score > length → 422 at authoring; an impossible band
+   (score 20 @ tol 0.05) → assembly `infeasible`.
+5. **Score-parallel-only**: untick the TIF target but keep the TCC band → assembles;
+   LOFT warns "forms are score-parallel … precision is unconstrained".
+
+**Checkpoints:** absent the band, assembly is byte-for-byte unchanged (same seed ⇒
+same form); realized TCC honors the band in every engine that claims it.
+
+## 17. Delivery options — order randomization + embedded pretest (G5)
+
+Delivery-time options on Linear/Loft configs (defaults OFF = unchanged). The
+preview endpoint accepts them, so the walkthrough shows exactly what a session
+would present:
+
+```bash
+# start a preview with seeded order randomization + 2 embedded pretest items
+S=$(curl -s -X POST $BASE/preview/start -H 'content-type: application/json' -d "{
+  \"blueprint_id\":\"$BID\",\"pool_id\":\"small_2pl\",\"session_id\":\"walk-1\",
+  \"delivery\":{\"randomize_item_order\":true,
+                \"pretest\":{\"pool_id\":\"small_2pl\",\"n_items\":2}}}")
+echo "$S" | python3 -c 'import sys,json;d=json.load(sys.stdin)["state"]["data"];print(len(d["item_ids"]),"delivered,",len(d["pretest_item_ids"]),"pretest, seed",d["delivery_seed"])'
+```
+
+Walk it to completion (respond loop as in §10b), then score.
+
+**Checkpoints:** delivered count = length + n_pretest; **score `detail.n_answered`
+= length only** (pretest responses accepted but *unscored*); the same
+`session_id` reproduces the identical delivery order (seeded, order-independent);
+a pretest pool with too few eligible items fails loudly. Option-order scrambling
+is a Sessions rendering concern — `delivery_seed` in the state is its contract.
+
+## 18. Measurement-simulation studies (G1) + exposure diagnostics (G3)
+
+`POST /simulations` runs a population study on the **same-engine lane**: only the
+examinee is simulated (θ ~ population, responses ~ Bernoulli); assembly and
+scoring are the production code paths. Up to 4 named conditions, item-level
+paired (same simulee + item ⇒ same response in every condition).
+
+```bash
+# a 20-item study blueprint (short 12-item forms amplify LOFT's form-to-form
+# variation — at length 20 recovery parity genuinely holds)
+BID18=$(curl -s -X POST $BASE/blueprints -H 'content-type: application/json' -d '{
+  "name":"sim-study","length":20,
+  "statistical_target":{"theta_points":[-1,0,1],"target_info":[5,6.5,5],"tolerance":2.5},
+  "content_constraints":[
+    {"tag_type":"KC","tag_value":"algebra","minimum":4,"maximum":8},
+    {"tag_type":"KC","tag_value":"geometry","minimum":4}]}' \
+  | python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])')
+
+# linear baseline vs live LOFT, 200 simulees, seeded
+curl -s -X POST $BASE/simulations -H 'content-type: application/json' -d "{
+  \"pool_id\":\"small_2pl\",\"n_simulees\":200,\"seed\":5,
+  \"conditions\":[
+    {\"name\":\"linear baseline\",\"design\":{\"kind\":\"linear\",\"blueprint_id\":\"$BID18\"}},
+    {\"name\":\"loft\",\"design\":{\"kind\":\"loft\",\"blueprint_id\":\"$BID18\"}}]}" \
+  | python3 -c '
+import sys,json; d=json.load(sys.stdin)
+for c in d["conditions"]:
+    o,e=c["overall"],c["exposure"]
+    print("%-16s rmse=%.3f r=%.3f maxrate=%.2f forms=%s"
+          % (c["name"], o["rmse"], o["correlation"], e["max_rate"], e["n_distinct_forms"]))
+p=d["comparisons"][0]; print("paired dMAE=%+.4f p=%s" % (p["mean_abs_error_delta"], p["p_value"]))'
+```
+
+**Checkpoints (G1):** recovery parity at length 20 (LOFT RMSE ≈ linear's; paired
+p ≫ 0.05); LOFT max exposure < 1.0 vs linear's 1.0; the `report` block carries
+the §4 shared format (`lane: in_process_same_engine`, seeds, reproduction
+driver); re-POSTing the identical body reproduces identical numbers. (On very
+short forms — e.g. the §15 12-item blueprint — a small significant delta
+favoring the fixed form is *expected*, not a bug: per-session form variation
+costs precision; the study makes that trade measurable.)
+
+**Exposure diagnostics (G3)** — on a blueprint with `max_exposure_rate`, each
+condition's `diagnostics` block reports: sawtooth amplitude over near-cap items
+(post burn-in), θ-segment exposure (5 segments; hot-item flags are noise-guarded —
+expect none for LOFT), overlap-rate > 0.20 fraction, per-person **retake** repeat
+rates when `replications ≥ 2` (fixed form ⇒ 1.0; LOFT < 1.0), per-session mask
+counts — and infeasibility is **attributed**: `n_infeasible_mask_attributed`
+separates "the exposure cap starved the pool" (try rate 0.05 — every failure
+attributed) from "the blueprint is impossible" (info-40 band — none attributed).
+Operating guidance from the G3 determination: keep the cap ≥ ~1.25 × length/pool.
+
+**LOFT variants in a study:** `design.kind: "loft"` accepts `engine:
+"pregenerated"` + `n_pool_forms: K` — the pool is batch-assembled ONCE by the real
+`assemble()`, then simulees draw with rotation; expect `n_distinct_forms ≤ K`,
+recovery parity, and sub-millisecond per-session assembly times (a draw, not a
+solve).
 
 ## What to look for — genuine bugs vs. cosmetic polish
 

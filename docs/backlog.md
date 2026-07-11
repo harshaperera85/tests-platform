@@ -174,9 +174,12 @@ Durable to-do list. Status as of the latest commit on `main`.
   merge in the CAT platform — as the ENTRY GATE to that work (certify a clean `main`
   baseline BEFORE touching any CAT integration, so findings aren't conflated with
   merge regressions).** Until then, correctness is held by the automated gates (test
-  tiers, oracle parity, contract regen, per-phase live smokes). Keep the guide honest
-  as features land — it does not yet cover the content-only TIF toggle or the
-  Generate-from-curriculum flow (BP-MODES-1); add those before the run.
+  tiers, oracle parity, contract regen, per-phase live smokes). **Guide refreshed
+  2026-07-11:** now covers the full delivered surface — BP-MODES-1 (§§11–15 incl.
+  LOFT engines a/b/c + §4.4 record persistence) and the G-series (§§16–18: TCC
+  band, delivery options, simulation studies + exposure diagnostics) — and the
+  stale manual Lock/Unlock reference was corrected to the derived-status model.
+  The guide is run-ready.
 
 ## Parked
 
