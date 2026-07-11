@@ -28,7 +28,13 @@ class AssemblyStrategy(ABC):
         *,
         time_limit_s: float = 10.0,
         seed: int = 0,
+        num_workers: int = 8,
     ) -> AssemblyResult: ...
+
+    # num_workers: CP-SAT search parallelism. 8 (the long-standing default) races
+    # a portfolio, so tie-equivalent optima can differ between identical runs;
+    # pass 1 when exact run-to-run reproducibility matters (e.g. the simulation
+    # harness's C5 guarantee). Non-solver strategies ignore it.
 
 
 _ASSEMBLY_REGISTRY: dict[str, type[AssemblyStrategy]] = {}

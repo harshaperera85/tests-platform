@@ -20,6 +20,7 @@ from app.api.v1 import (
     pool,
     preview,
     scenarios,
+    simulation,
     tests,
 )
 
@@ -35,4 +36,5 @@ api_router.include_router(assembly_jobs.router)
 api_router.include_router(forms.router)
 api_router.include_router(pool.router)
 api_router.include_router(scenarios.router)
+api_router.include_router(simulation.router)
 api_router.include_router(preview.router)

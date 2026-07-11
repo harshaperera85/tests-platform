@@ -1368,6 +1368,47 @@
         }
       }
     },
+    "/api/v1/simulations": {
+      "post": {
+        "tags": [
+          "simulations"
+        ],
+        "summary": "Run Simulation Study",
+        "operationId": "run_simulation_study",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationStudyRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/preview/start": {
       "post": {
         "tags": [
@@ -2429,6 +2470,170 @@
         ],
         "title": "ComparabilityRequest"
       },
+      "Condition": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_ -]{0,39}$",
+            "title": "Name"
+          },
+          "design": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/LinearDesign"
+              },
+              {
+                "$ref": "#/components/schemas/LoftDesign"
+              }
+            ],
+            "title": "Design",
+            "discriminator": {
+              "propertyName": "kind",
+              "mapping": {
+                "linear": "#/components/schemas/LinearDesign",
+                "loft": "#/components/schemas/LoftDesign"
+              }
+            }
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "design"
+        ],
+        "title": "Condition"
+      },
+      "ConditionResult": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "overall": {
+            "$ref": "#/components/schemas/OverallStats"
+          },
+          "conditional": {
+            "items": {
+              "$ref": "#/components/schemas/ConditionalBin"
+            },
+            "type": "array",
+            "title": "Conditional"
+          },
+          "exposure": {
+            "$ref": "#/components/schemas/ExposureStats"
+          },
+          "n_infeasible_sessions": {
+            "type": "integer",
+            "title": "N Infeasible Sessions"
+          },
+          "assembly_seconds_mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assembly Seconds Mean"
+          },
+          "assembly_seconds_p95": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assembly Seconds P95"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "kind",
+          "overall",
+          "conditional",
+          "exposure",
+          "n_infeasible_sessions",
+          "warnings"
+        ],
+        "title": "ConditionResult"
+      },
+      "ConditionalBin": {
+        "properties": {
+          "bin_center": {
+            "type": "number",
+            "title": "Bin Center"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "cbias": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cbias"
+          },
+          "cmae": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cmae"
+          },
+          "csee": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csee"
+          },
+          "crmse": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Crmse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bin_center",
+          "n"
+        ],
+        "title": "ConditionalBin"
+      },
       "ContentConstraint": {
         "properties": {
           "tag_type": {
@@ -3017,6 +3222,70 @@
         "type": "object",
         "title": "ExposureFeedback",
         "description": "**Opt-in, default-off** feedback from *longitudinal* item-exposure history into\nassembly eligibility.\n\nDistinct from :class:`ExposureTarget` (within-batch overlap/use/rate, governing a\nsingle multi-form assembly) and from CAT administration-time exposure control\n(Sympson-Hetter etc.). Uses cumulative usage *across* past assemblies/publications:\n- ``max_cumulative`` \u2014 hard-exclude items already used at least this many times\n  (over-exposure control).\n- ``prefer_underused`` + ``underuse_weight`` \u2014 bias selection toward under-utilized\n  items (bidirectional utilization). ``underuse_weight`` is in objective info-units\n  per unit of cumulative exposure: small = tie-breaker, large = strong preference.\n\nWhen this is absent the assembly is **byte-for-byte unchanged** (no eligibility\nconstraints/terms are added)."
+      },
+      "ExposureStats": {
+        "properties": {
+          "n_items_used": {
+            "type": "integer",
+            "title": "N Items Used"
+          },
+          "max_rate": {
+            "type": "number",
+            "title": "Max Rate"
+          },
+          "mean_rate": {
+            "type": "number",
+            "title": "Mean Rate"
+          },
+          "n_distinct_forms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "N Distinct Forms"
+          },
+          "mean_pairwise_overlap": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Pairwise Overlap"
+          },
+          "max_pairwise_overlap": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Pairwise Overlap"
+          },
+          "rates": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Rates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n_items_used",
+          "max_rate",
+          "mean_rate",
+          "rates"
+        ],
+        "title": "ExposureStats"
       },
       "ExposureTarget": {
         "properties": {
@@ -3691,6 +3960,79 @@
         ],
         "title": "KeyBalance"
       },
+      "LinearDesign": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "linear",
+            "title": "Kind",
+            "default": "linear"
+          },
+          "blueprint_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Blueprint Id"
+          },
+          "form_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Form Id"
+          },
+          "assembly_strategy": {
+            "type": "string",
+            "enum": [
+              "mip",
+              "random_constrained"
+            ],
+            "title": "Assembly Strategy",
+            "default": "mip"
+          }
+        },
+        "type": "object",
+        "title": "LinearDesign",
+        "description": "A fixed-form condition: one form assembled once (or given), walked by all\nsimulees. This is the Embretson-style *baseline* design."
+      },
+      "LoftDesign": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "loft",
+            "title": "Kind",
+            "default": "loft"
+          },
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "engine": {
+            "type": "string",
+            "enum": [
+              "random_constrained",
+              "cp_sat"
+            ],
+            "title": "Engine",
+            "default": "random_constrained"
+          }
+        },
+        "type": "object",
+        "required": [
+          "blueprint_id"
+        ],
+        "title": "LoftDesign",
+        "description": "A LOFT condition: one conforming form assembled per simulee via the real\n\u00a74 engine; the running exposure-rate cap accumulates across the condition."
+      },
       "LoftSessionRead": {
         "properties": {
           "session_index": {
@@ -4025,6 +4367,130 @@
         ],
         "title": "NextAction",
         "description": "What the engine should do next: present item(s)/module, or complete."
+      },
+      "OverallStats": {
+        "properties": {
+          "n": {
+            "type": "integer",
+            "title": "N"
+          },
+          "mean_bias": {
+            "type": "number",
+            "title": "Mean Bias"
+          },
+          "mean_mae": {
+            "type": "number",
+            "title": "Mean Mae"
+          },
+          "rmse": {
+            "type": "number",
+            "title": "Rmse"
+          },
+          "mean_see": {
+            "type": "number",
+            "title": "Mean See"
+          },
+          "correlation": {
+            "type": "number",
+            "title": "Correlation"
+          },
+          "reliability": {
+            "type": "number",
+            "title": "Reliability"
+          },
+          "true_theta_sd": {
+            "type": "number",
+            "title": "True Theta Sd"
+          },
+          "est_theta_sd": {
+            "type": "number",
+            "title": "Est Theta Sd"
+          },
+          "shrinkage_ratio": {
+            "type": "number",
+            "title": "Shrinkage Ratio"
+          },
+          "mean_length": {
+            "type": "number",
+            "title": "Mean Length"
+          }
+        },
+        "type": "object",
+        "required": [
+          "n",
+          "mean_bias",
+          "mean_mae",
+          "rmse",
+          "mean_see",
+          "correlation",
+          "reliability",
+          "true_theta_sd",
+          "est_theta_sd",
+          "shrinkage_ratio",
+          "mean_length"
+        ],
+        "title": "OverallStats"
+      },
+      "PairedComparison": {
+        "properties": {
+          "condition_a": {
+            "type": "string",
+            "title": "Condition A"
+          },
+          "condition_b": {
+            "type": "string",
+            "title": "Condition B"
+          },
+          "n_pairs": {
+            "type": "integer",
+            "title": "N Pairs"
+          },
+          "mean_abs_error_delta": {
+            "type": "number",
+            "title": "Mean Abs Error Delta"
+          },
+          "rmse_a": {
+            "type": "number",
+            "title": "Rmse A"
+          },
+          "rmse_b": {
+            "type": "number",
+            "title": "Rmse B"
+          },
+          "z": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Z"
+          },
+          "p_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "P Value"
+          }
+        },
+        "type": "object",
+        "required": [
+          "condition_a",
+          "condition_b",
+          "n_pairs",
+          "mean_abs_error_delta",
+          "rmse_a",
+          "rmse_b"
+        ],
+        "title": "PairedComparison",
+        "description": "Paired at the simulee level (shared true \u03b8 + item-level response seeds):\n\u0394 = |error|_a \u2212 |error|_b per simulee; negative mean favors condition a."
       },
       "PerUnitCognitiveMinimum": {
         "properties": {
@@ -4412,6 +4878,42 @@
         "title": "PoolSummary",
         "description": "One entry in the pool catalog (no item payload) \u2014 for the pool selector."
       },
+      "Population": {
+        "properties": {
+          "distribution": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "uniform"
+            ],
+            "title": "Distribution",
+            "default": "normal"
+          },
+          "mean": {
+            "type": "number",
+            "title": "Mean",
+            "default": 0.0
+          },
+          "sd": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Sd",
+            "default": 1.0
+          },
+          "low": {
+            "type": "number",
+            "title": "Low",
+            "default": -3.0
+          },
+          "high": {
+            "type": "number",
+            "title": "High",
+            "default": 3.0
+          }
+        },
+        "type": "object",
+        "title": "Population"
+      },
       "PreviewRespondRequest": {
         "properties": {
           "state": {
@@ -4584,6 +5086,82 @@
           "checks"
         ],
         "title": "ReadinessResponse"
+      },
+      "ReportBlock": {
+        "properties": {
+          "protocol": {
+            "type": "string",
+            "title": "Protocol"
+          },
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "engine": {
+            "type": "string",
+            "title": "Engine"
+          },
+          "lanes": {
+            "items": {
+              "$ref": "#/components/schemas/ReportLane"
+            },
+            "type": "array",
+            "title": "Lanes"
+          },
+          "seeds": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Seeds"
+          },
+          "n_per_condition": {
+            "type": "integer",
+            "title": "N Per Condition"
+          },
+          "inputs": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Inputs"
+          },
+          "driver": {
+            "type": "string",
+            "title": "Driver"
+          }
+        },
+        "type": "object",
+        "required": [
+          "protocol",
+          "date",
+          "engine",
+          "lanes",
+          "seeds",
+          "n_per_condition",
+          "inputs",
+          "driver"
+        ],
+        "title": "ReportBlock",
+        "description": "\u00a74 shared verification-report header (simulation-lane conventions)."
+      },
+      "ReportLane": {
+        "properties": {
+          "lane": {
+            "type": "string",
+            "title": "Lane"
+          },
+          "coverage": {
+            "type": "string",
+            "title": "Coverage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lane",
+          "coverage"
+        ],
+        "title": "ReportLane"
       },
       "ReviewEvent": {
         "properties": {
@@ -4863,6 +5441,51 @@
         "title": "SimulationRead",
         "description": "A genuine simulated examinee session over a form (real engine + 2PL model)."
       },
+      "SimulationRequest": {
+        "properties": {
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/components/schemas/Condition"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Conditions"
+          },
+          "population": {
+            "$ref": "#/components/schemas/Population"
+          },
+          "n_simulees": {
+            "type": "integer",
+            "maximum": 2000.0,
+            "minimum": 10.0,
+            "title": "N Simulees",
+            "default": 500
+          },
+          "replications": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "title": "Replications",
+            "default": 1
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "pool_id",
+          "conditions"
+        ],
+        "title": "SimulationRequest"
+      },
       "SimulationStepRead": {
         "properties": {
           "position": {
@@ -4912,6 +5535,52 @@
           "response"
         ],
         "title": "SimulationStepRead"
+      },
+      "SimulationStudyRead": {
+        "properties": {
+          "report": {
+            "$ref": "#/components/schemas/ReportBlock"
+          },
+          "conditions": {
+            "items": {
+              "$ref": "#/components/schemas/ConditionResult"
+            },
+            "type": "array",
+            "title": "Conditions"
+          },
+          "comparisons": {
+            "items": {
+              "$ref": "#/components/schemas/PairedComparison"
+            },
+            "type": "array",
+            "title": "Comparisons"
+          },
+          "scatter": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2
+            },
+            "type": "array",
+            "title": "Scatter"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report",
+          "conditions",
+          "comparisons",
+          "scatter"
+        ],
+        "title": "SimulationStudyRead"
       },
       "TIFActualTarget": {
         "properties": {

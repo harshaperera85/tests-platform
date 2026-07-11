@@ -79,6 +79,26 @@ Durable to-do list. Status as of the latest commit on `main`.
   rate+ε, forms diverse) + live smoke (50 sessions, 50 distinct forms, rate 0.58
   under 0.6 cap).
 - CI green (`CI` + scoped `oracle-parity`). Runs entirely on simulated data, no external deps.
+- **G1 measurement-simulation harness** (2026-07-11, per
+  `docs/loft_literature_review.md` §2-G1) — `POST /simulations`: N simulees ~ p(θ)
+  (normal/uniform) × R replications through up to 4 named conditions (linear
+  blueprint/form × assembly strategy, LOFT × engine) on one pool. **Same-engine
+  doctrine: ONLY the examinee is simulated** — true θ + Bernoulli responses; form
+  assembly is the real `assemble`/`assemble_loft_session`, scoring the real
+  `eap_estimate`. Outputs: overall recovery (bias/MAE/RMSE/r/reliability/mean SE/
+  shrinkage ratio — the Embretson EAP caution), conditional-on-true-θ bins
+  (CBIAS/CMAE/CSEE/CRMSE, 0.5-wide, −3…3), exposure/overlap (distinct forms, rates,
+  sampled pairwise overlap), infeasibility counts + solve-time stats
+  (TestDesign's `freq_infeasible` pattern), item-level-paired condition
+  comparisons (responses keyed by (seed, simulee, item_id) ⇒ paired z on |error|),
+  §4-format report block. Conventions: C5 order-independent seed derivation
+  (drove `num_workers` through assembly strategies — default 8 unchanged in
+  production; harness pins 1 worker + seed since CP-SAT's 8-worker portfolio
+  returns different tie-equivalent optima run-to-run); C1 trivially satisfied
+  (single in-process lane, `requires_full_engine` predicate stubbed in). Verified:
+  8 integration tests + live smoke (3 conditions × 200 simulees in 13 s: LOFT
+  recovery parity with linear at RMSE ≈ 0.42, max exposure 0.5–0.6 vs 1.0,
+  200 distinct forms, no significant paired MAE delta).
 
 ## Next up
 - **Operational walkthrough** — hands-on validation of the linear path on simulated data.

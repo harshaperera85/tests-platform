@@ -27,6 +27,7 @@ class RandomConstrainedStrategy(AssemblyStrategy):
         *,
         time_limit_s: float = 10.0,
         seed: int = 0,
+        num_workers: int = 8,  # solver parallelism; N/A to random search
     ) -> AssemblyResult:
         rng = random.Random(seed)
         n = problem.n_items

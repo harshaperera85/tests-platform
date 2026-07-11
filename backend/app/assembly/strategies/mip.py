@@ -36,6 +36,7 @@ class MipStrategy(AssemblyStrategy):
         *,
         time_limit_s: float = 10.0,
         seed: int = 0,
+        num_workers: int = 8,
     ) -> AssemblyResult:
         am = AtaModel(problem)
         # Content-only blueprint: no TIF objective — a pure feasibility solve over the
@@ -52,7 +53,7 @@ class MipStrategy(AssemblyStrategy):
 
         solver = cp_model.CpSolver()
         solver.parameters.max_time_in_seconds = time_limit_s
-        solver.parameters.num_search_workers = 8
+        solver.parameters.num_search_workers = num_workers
         solver.parameters.random_seed = seed
         status = solver.solve(am.model)
         status_str = _STATUS_MAP.get(status, "error")

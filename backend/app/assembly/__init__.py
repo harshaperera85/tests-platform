@@ -24,6 +24,7 @@ def assemble(
     strategy: str = "mip",
     time_limit_s: float = 10.0,
     seed: int = 0,
+    num_workers: int = 8,
     exposure_counts: dict[str, int] | None = None,
 ) -> AssemblyResult:
     """Compile a blueprint against a pool and assemble form(s) with ``strategy``.
@@ -33,7 +34,7 @@ def assemble(
     """
     problem = compile_blueprint(blueprint, pool, exposure_counts=exposure_counts)
     return get_assembly_strategy(strategy).assemble(
-        problem, time_limit_s=time_limit_s, seed=seed
+        problem, time_limit_s=time_limit_s, seed=seed, num_workers=num_workers
     )
 
 

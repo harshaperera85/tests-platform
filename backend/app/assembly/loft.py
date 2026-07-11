@@ -151,6 +151,9 @@ def _solve_cp_sat(
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_limit_s
     solver.parameters.random_seed = seed % (2**31 - 1)
+    # single worker: per-session solves are small, and parallel portfolio races
+    # break exact seed-reproducibility (lane convention C5)
+    solver.parameters.num_search_workers = 1
     status = solver.solve(am.model)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         raise LoftAssemblyError(

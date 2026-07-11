@@ -49,6 +49,12 @@ un-built engine variant.** Detailed below, converging across sources.
 
 ### G1 — Measurement-simulation harness (the big one; convergent across all four)
 
+> **STATUS: BUILT (2026-07-11).** `POST /simulations` — `app/simulation/harness.py`
+> + `app/schemas/simulation.py` + `app/api/v1/simulation.py`; same-engine doctrine
+> (only the examinee is simulated), item-level-paired comparisons, §4-format
+> report. See `docs/backlog.md` Done entry. The ATS-exporter oracle below remains
+> open (optional follow-up).
+
 We have no population-level θ-recovery simulation for linear or LOFT. Embretson's
 *entire* evidentiary standard is replication-based recovery parity with a linear
 baseline; ATS's entire output surface is recovery + conditional diagnostics;
