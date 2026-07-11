@@ -93,10 +93,15 @@ def _binding_checks(blueprint: Blueprint) -> tuple[Blueprint, list[str]]:
             "§4.1: the band is the hard acceptance criterion — an objective "
             "with no acceptance band is meaningless per-session)"
         )
-    if tgt is None:
+    if tgt is None and blueprint.tcc_target is None:
         warnings.append(
             "content-only LOFT: forms are parallel in content only, not "
             "statistically (BP-MODES-1 §2.1)."
+        )
+    elif tgt is None:
+        warnings.append(
+            "no TIF target: forms are score-parallel via the TCC band (G4) "
+            "but their precision (information) is unconstrained."
         )
     exp = blueprint.exposure_target
     updates: dict[str, Any] = {"num_forms": 1}
@@ -147,7 +152,7 @@ def _rate_mask(
     return ItemPool(eligible, metric=pool.metric), len(pool.items) - len(eligible)
 
 
-def _band_ok(problem: CompiledProblem, chosen: list[int]) -> bool:
+def _tif_band_ok(problem: CompiledProblem, chosen: list[int]) -> bool:
     if not problem.target_info or problem.tolerance is None:
         return True
     tif = problem.tif_at(chosen)
@@ -155,6 +160,21 @@ def _band_ok(problem: CompiledProblem, chosen: list[int]) -> bool:
         abs(actual - target) <= problem.tolerance + 1e-9
         for actual, target in zip(tif, problem.target_info, strict=True)
     )
+
+
+def _tcc_band_ok(problem: CompiledProblem, chosen: list[int]) -> bool:
+    if not problem.tcc_target or problem.tcc_tolerance is None:
+        return True
+    tcc = problem.tcc_at(chosen)
+    return all(
+        abs(actual - target) <= problem.tcc_tolerance + 1e-9
+        for actual, target in zip(tcc, problem.tcc_target, strict=True)
+    )
+
+
+def _band_ok(problem: CompiledProblem, chosen: list[int]) -> bool:
+    """§4.1 acceptance: TIF band AND (G4) TCC band, when each is declared."""
+    return _tif_band_ok(problem, chosen) and _tcc_band_ok(problem, chosen)
 
 
 def _form_violation(problem: CompiledProblem, chosen: list[int]) -> str | None:
@@ -175,8 +195,10 @@ def _form_violation(problem: CompiledProblem, chosen: list[int]) -> str | None:
                 "enemy pair both present "
                 f"({problem.item_ids[i]}, {problem.item_ids[j]})"
             )
-    if not _band_ok(problem, chosen):
+    if not _tif_band_ok(problem, chosen):
         return "TIF outside the tolerance band"
+    if not _tcc_band_ok(problem, chosen):
+        return "TCC (expected score) outside the tolerance band"
     return None
 
 
@@ -279,9 +301,9 @@ def _solve_random(
         if _band_ok(problem, chosen):
             return chosen
     raise LoftAssemblyError(
-        f"no form satisfied the TIF tolerance band in {max_attempts} attempts "
-        "(engine=random_constrained) — widen the tolerance, adjust the target, "
-        "or use the cp_sat engine (band as hard constraints)"
+        f"no form satisfied the statistical band(s) in {max_attempts} attempts "
+        "(engine=random_constrained) — widen the tolerance(s), adjust the "
+        "target(s), or use the cp_sat engine (bands as hard constraints)"
     )
 
 
@@ -300,7 +322,7 @@ def _solve_cp_sat(
     status = solver.solve(am.model)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         raise LoftAssemblyError(
-            "no form satisfies the content constraints + TIF band "
+            "no form satisfies the content constraints + statistical band(s) "
             "(engine=cp_sat) — the blueprint/pool pairing is infeasible for LOFT"
         )
     chosen = [
@@ -437,6 +459,10 @@ def assemble_loft_session(
         "seed": seed,
         **draw_extra,
     }
+    if problem.tcc_target:
+        record["tcc_actual"] = problem.tcc_at(chosen)
+        record["tcc_target"] = list(problem.tcc_target)
+        record["tcc_tolerance"] = problem.tcc_tolerance
     return LoftSessionForm(
         item_ids=[problem.item_ids[i] for i in chosen],
         tif_actual=tif_actual,

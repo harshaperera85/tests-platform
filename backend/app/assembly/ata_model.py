@@ -93,6 +93,31 @@ class AtaModel:
                 for i in excluded:
                     m.add(self.x[(i, f)] == 0)
 
+        # TCC (expected-score) band, G4: hard |Σ xᵢ·Pᵢ(θₖ) − target_k| ≤ tol at
+        # every TCC theta point, per form. TCC is linear in the selection, so it
+        # reuses the info machinery verbatim. Absent target ⇒ nothing added —
+        # the model stays byte-for-byte identical (oracle parity intact).
+        if p.tcc_target and p.tcc_tolerance is not None:
+            scaled_prob = [
+                [round(v * INFO_SCALE) for v in row] for row in p.prob
+            ]
+            # The float band is the §4.1 contract, but the model sees rounded
+            # integers: each selected item contributes up to 0.5 scaled units of
+            # rounding error (plus 0.5 for the rounded target), so a solution on
+            # the scaled boundary can exceed the FLOAT tolerance. Tighten the
+            # scaled band by that worst case so model-feasible ⇒ float-conformant.
+            slop = (p.length + 2) // 2  # ceil((length + 1) × 0.5)
+            for f in range(F):
+                for k in range(len(p.tcc_theta_points)):
+                    tcc_expr = cp_model.LinearExpr.weighted_sum(
+                        [self.x[(i, f)] for i in range(n)],
+                        [scaled_prob[i][k] for i in range(n)],
+                    )
+                    target = round(p.tcc_target[k] * INFO_SCALE)
+                    tol = max(round(p.tcc_tolerance * INFO_SCALE) - slop, 0)
+                    m.add(tcc_expr <= target + tol)
+                    m.add(tcc_expr >= target - tol)
+
         # Realized TIF expressions (scaled) for objective use.
         for f in range(F):
             row = [

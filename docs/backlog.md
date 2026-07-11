@@ -135,6 +135,22 @@ Durable to-do list. Status as of the latest commit on `main`.
   near the floor it deadlocks (598/600 fail, all attributed) — probabilistic
   eligibility + fading DEFERRED w/ explicit triggers (cap < 1.2× floor
   needed, amplitude > 0.15, or CAT arrival). 3 new integration tests.
+- **G4 TCC (expected-score) band** (2026-07-11, lit-review G4 — TestDesign
+  precedent; score comparability is stronger than TIF precision comparability).
+  `Blueprint.tcc_target {theta_points, target_scores, tolerance-required}` —
+  a pure HARD band, no objective change (TIF remains the objective; legal
+  without a TIF target = score-parallel-only, warned). TCC(θ)=Σ Pᵢ(θ) is
+  linear in selection ⇒ the band rides the info machinery: `AtaModel` adds
+  per-form scaled constraints (mip + LOFT cp_sat inherit; the scaled band is
+  tightened by the worst-case rounding slop ceil((L+1)/2) scaled units so
+  model-feasible ⇒ FLOAT-conformant — found via a live §4.1 post-check trip);
+  LOFT engine (a) acceptance loop + engine (c) draw re-check via the shared
+  band predicate; §4.4 record gains tcc_actual/target/tolerance. Absent ⇒
+  compiled model byte-for-byte unchanged (oracle parity intact). Editor gains
+  an expected-score band card. Verified: 9 unit tests + live smoke (40
+  sessions/engine: cp_sat worst |TCC−target| 0.791 @ tol 0.8, random 1.496 @
+  1.5; banded study 150 simulees, 150 distinct forms, 0 infeasible — RMSE
+  0.470 vs ~0.42 unbanded shows the form-space cost honestly).
 
 ## Next up
 - **Operational walkthrough** — hands-on validation of the linear path on simulated data.

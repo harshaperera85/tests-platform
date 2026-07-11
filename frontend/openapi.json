@@ -2217,6 +2217,16 @@
               }
             ]
           },
+          "tcc_target": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TCCTarget"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "enemy_policy": {
             "$ref": "#/components/schemas/EnemyPolicy"
           },
@@ -5756,6 +5766,39 @@
           "scatter"
         ],
         "title": "SimulationStudyRead"
+      },
+      "TCCTarget": {
+        "properties": {
+          "theta_points": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Theta Points"
+          },
+          "target_scores": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Target Scores"
+          },
+          "tolerance": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Tolerance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "theta_points",
+          "target_scores",
+          "tolerance"
+        ],
+        "title": "TCCTarget",
+        "description": "Target expected score (test characteristic curve) band at \u03b8 points (G4).\n\n``TCC(\u03b8) = \u03a3 P\u1d62(\u03b8)`` is the *score*-comparability criterion \u2014 stronger than\nthe TIF band, which controls *precision* comparability. Unlike the TIF\ntarget this is a pure HARD band (no objective; TIF stays the objective):\n``tolerance`` is therefore required \u2014 a TCC target with no band would\nconstrain nothing. Enforced by the CP-SAT strategies (``mip``, LOFT\n``cp_sat``), by LOFT engine (a)'s acceptance loop and engine (c)'s\ndraw-time re-check; ``random_constrained`` reports realized values only\n(same contract as the TIF tolerance)."
       },
       "TIFActualTarget": {
         "properties": {

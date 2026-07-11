@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from typing import Literal, cast
 
 from app.psychometrics.bank import FieldItem, FieldPool, ItemPool
-from app.psychometrics.information import information_matrix
+from app.psychometrics.information import information_matrix, prob_correct
 from app.psychometrics.params import ItemParameters
 from app.schemas.blueprint import Blueprint
 
@@ -81,6 +81,13 @@ class CompiledProblem:
     #: ``theta_points`` is the reporting grid). Default False ⇒ targeted assembly is
     #: byte-for-byte unchanged.
     feasibility_only: bool = False
+    #: expected-score (TCC) band (G4): ``prob[i][k]`` is item i's P(θ) at
+    #: ``tcc_theta_points[k]``; the band is HARD ``|TCC_k − tcc_target_k| ≤
+    #: tcc_tolerance``. All empty/None ⇒ no TCC machinery, model unchanged.
+    prob: tuple[tuple[float, ...], ...] = ()
+    tcc_theta_points: tuple[float, ...] = ()
+    tcc_target: tuple[float, ...] = ()
+    tcc_tolerance: float | None = None
 
     @property
     def n_items(self) -> int:
@@ -91,6 +98,13 @@ class CompiledProblem:
         return [
             sum(self.info[i][k] for i in form_indices)
             for k in range(len(self.theta_points))
+        ]
+
+    def tcc_at(self, form_indices: list[int]) -> list[float]:
+        """Actual expected score at each TCC theta point (empty if no target)."""
+        return [
+            sum(self.prob[i][k] for i in form_indices)
+            for k in range(len(self.tcc_theta_points))
         ]
 
 
@@ -124,6 +138,13 @@ def compile_blueprint(
             "one — remove the target (content-only blueprint) or use a "
             "calibrated pool"
         )
+    tcc = blueprint.tcc_target
+    if is_field and tcc is not None:
+        raise ValueError(
+            "field-study pools are content-only: they carry no parameters, so a "
+            "blueprint with a TCC (expected-score) target cannot be assembled "
+            "from one"
+        )
 
     # Content-only blueprint (no TIF target): assemble for feasibility only, but
     # still report realized TIF at a default grid — except on field pools, where
@@ -147,6 +168,18 @@ def compile_blueprint(
         info_rows = information_matrix(cal_items, theta_points)
         info = tuple(tuple(row) for row in info_rows)
         params = tuple((it.a, it.d, it.c, it.u) for it in cal_items)
+
+    # --- TCC (expected-score) band: per-item P(θ) at the TCC theta points ---
+    prob: tuple[tuple[float, ...], ...] = ()
+    tcc_theta_points: tuple[float, ...] = ()
+    tcc_target_scores: tuple[float, ...] = ()
+    if tcc is not None:
+        cal = cast("list[ItemParameters]", items)
+        tcc_theta_points = tuple(tcc.theta_points)
+        tcc_target_scores = tuple(tcc.target_scores)
+        prob = tuple(
+            tuple(prob_correct(it, t) for t in tcc_theta_points) for it in cal
+        )
 
     warnings: list[str] = []
 
@@ -236,4 +269,8 @@ def compile_blueprint(
         exposure=exposure_vec,
         underuse_weight=underuse_weight,
         feasibility_only=feasibility_only,
+        prob=prob,
+        tcc_theta_points=tcc_theta_points,
+        tcc_target=tcc_target_scores,
+        tcc_tolerance=tcc.tolerance if tcc is not None else None,
     )

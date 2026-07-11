@@ -164,6 +164,17 @@ difference) is the reference formulation for the batch step.
 
 ### G4 — TCC (expected-score) targeting option
 
+> **STATUS: BUILT (2026-07-11).** `Blueprint.tcc_target {theta_points,
+> target_scores, tolerance}` — a pure HARD band (tolerance required; TIF stays
+> the objective). TCC is linear in the selection, so the band rides the info
+> machinery: enforced in `AtaModel` (mip + LOFT cp_sat inherit; scaled band
+> tightened by worst-case integer-rounding slop so model-feasible ⇒
+> float-conformant), in LOFT engine (a)'s acceptance loop and engine (c)'s
+> draw re-check; §4.4 record gains `tcc_actual/tcc_target/tcc_tolerance`.
+> Legal with or without a TIF target (score-parallel-only blueprints warn
+> that precision is unconstrained). Editor gains a TCC band card. Absent ⇒
+> model byte-for-byte unchanged (oracle parity intact).
+
 TestDesign targets TCC as well as TIF. Our band controls *precision*
 comparability; TCC alignment is the stronger criterion for *score* comparability
 across per-examinee forms. We already measure TCC spread post hoc (L2b); offering

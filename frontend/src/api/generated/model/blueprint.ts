@@ -7,6 +7,7 @@
  */
 import type { ContentConstraint } from './contentConstraint';
 import type { BlueprintStatisticalTarget } from './blueprintStatisticalTarget';
+import type { BlueprintTccTarget } from './blueprintTccTarget';
 import type { EnemyPolicy } from './enemyPolicy';
 import type { BlueprintExposureTarget } from './blueprintExposureTarget';
 import type { BlueprintExposureFeedback } from './blueprintExposureFeedback';
@@ -31,6 +32,7 @@ export interface Blueprint {
   num_forms?: number;
   content_constraints?: ContentConstraint[];
   statistical_target?: BlueprintStatisticalTarget;
+  tcc_target?: BlueprintTccTarget;
   enemy_policy?: EnemyPolicy;
   exposure_target?: BlueprintExposureTarget;
   exposure_feedback?: BlueprintExposureFeedback;

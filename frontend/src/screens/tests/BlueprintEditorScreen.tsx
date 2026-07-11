@@ -66,6 +66,10 @@ type Fields = {
   weightsText: string;
   tolerance: string;
   method: Method;
+  hasTcc: boolean;
+  tccThetaText: string;
+  tccScoresText: string;
+  tccTolerance: string;
   constraints: ConstraintRow[];
 };
 
@@ -84,6 +88,10 @@ const DEFAULT_FIELDS: Fields = {
   weightsText: "",
   tolerance: "",
   method: "minimax",
+  hasTcc: false,
+  tccThetaText: "-1, 0, 1",
+  tccScoresText: "",
+  tccTolerance: "1",
   constraints: [
     { predicates: [{ tag_type: "KC", tag_value: "algebra" }], minimum: "4", maximum: "8", mode: "count" },
     { predicates: [{ tag_type: "KC", tag_value: "geometry" }], minimum: "4", maximum: "", mode: "count" },
@@ -133,6 +141,11 @@ function fieldsFromBlueprint(bp: Blueprint): Fields {
     weightsText: (t?.weights ?? []).join(", "),
     tolerance: t?.tolerance != null ? String(t.tolerance) : "",
     method: (t?.method as Method) ?? "minimax",
+    hasTcc: bp.tcc_target != null,
+    tccThetaText: (bp.tcc_target?.theta_points ?? []).join(", "),
+    tccScoresText: (bp.tcc_target?.target_scores ?? []).join(", "),
+    tccTolerance:
+      bp.tcc_target?.tolerance != null ? String(bp.tcc_target.tolerance) : "1",
     constraints: (bp.content_constraints ?? []).map((c) => {
       const predicates: Predicate[] = c.tags
         ? Object.entries(c.tags).map(([tag_type, tag_value]) => ({ tag_type, tag_value }))
@@ -178,6 +191,10 @@ export function BlueprintEditorScreen({
   const [weightsText, setWeightsText] = useState(base.weightsText);
   const [tolerance, setTolerance] = useState(base.tolerance);
   const [method, setMethod] = useState<Method>(base.method);
+  const [hasTcc, setHasTcc] = useState(base.hasTcc);
+  const [tccThetaText, setTccThetaText] = useState(base.tccThetaText);
+  const [tccScoresText, setTccScoresText] = useState(base.tccScoresText);
+  const [tccTolerance, setTccTolerance] = useState(base.tccTolerance);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [infeasible, setInfeasible] = useState<string | null>(null);
@@ -247,6 +264,18 @@ export function BlueprintEditorScreen({
       }
     }
   }
+  const tccTheta = parseNums(tccThetaText);
+  const tccScores = parseNums(tccScoresText);
+  if (hasTcc) {
+    if (tccTheta.length === 0) errors.tccTheta = "Enter at least one θ point.";
+    if (tccScores.length !== tccTheta.length)
+      errors.tccScores = "Score count must match θ points.";
+    else if (tccScores.some((v) => Number.isNaN(v) || v < 0 || v > len))
+      errors.tccScores = "Scores must be in [0, length].";
+    const tccTolNum = numOrUndef(tccTolerance);
+    if (tccTolNum == null || tccTolNum <= 0)
+      errors.tccTolerance = "The TCC band is hard — a tolerance > 0 is required.";
+  }
   const rateNum = numOrUndef(maxRate);
   if (rateNum != null && (rateNum <= 0 || rateNum > 1)) errors.maxRate = "Rate must be in (0, 1].";
   // Live availability: how many pool items match a constraint's predicate(s).
@@ -310,6 +339,10 @@ export function BlueprintEditorScreen({
     setWeightsText(f.weightsText);
     setMethod(f.method);
     setTolerance(f.tolerance);
+    setHasTcc(f.hasTcc);
+    setTccThetaText(f.tccThetaText);
+    setTccScoresText(f.tccScoresText);
+    setTccTolerance(f.tccTolerance);
     setConstraints(f.constraints);
     setInfeasible(null);
     setSubmitError(null);
@@ -439,6 +472,14 @@ export function BlueprintEditorScreen({
             method,
             tolerance: isMinimax ? numOrUndef(tolerance) : undefined,
             weights: weightsClean,
+          }
+        : null,
+      // G4: expected-score (TCC) band — hard constraint, tolerance required
+      tcc_target: hasTcc
+        ? {
+            theta_points: tccTheta,
+            target_scores: tccScores,
+            tolerance: numOrUndef(tccTolerance) ?? 1,
           }
         : null,
       exposure_target: exposure,
@@ -1044,6 +1085,40 @@ export function BlueprintEditorScreen({
             low-stakes forms — set a target when score comparability across forms
             matters.
           </Alert>
+        )}
+      </Card>
+
+      <Card
+        title="Expected-score band (TCC)"
+        subtitle="Hard band on TCC(θ) = Σ Pᵢ(θ) — score comparability across forms/sessions (stronger than the TIF precision band). Enforced by CP-SAT assembly and every LOFT engine."
+      >
+        <label className="mb-3 flex items-center gap-2 text-sm text-ink-700">
+          <input
+            type="checkbox"
+            checked={hasTcc}
+            onChange={(e) => setHasTcc(e.target.checked)}
+          />
+          set an expected-score (TCC) band
+        </label>
+        {hasTcc && (
+          <div className="grid grid-cols-3 gap-4">
+            <Field label="Theta points" hint={errors.tccTheta ?? "comma-separated"}>
+              <TextInput value={tccThetaText} aria-invalid={Boolean(errors.tccTheta)}
+                onChange={(e) => setTccThetaText(e.target.value)} />
+            </Field>
+            <Field label="Target scores"
+              hint={errors.tccScores ?? "expected score per θ, ≤ length"}>
+              <TextInput value={tccScoresText} placeholder="6, 10, 14"
+                aria-invalid={Boolean(errors.tccScores)}
+                onChange={(e) => setTccScoresText(e.target.value)} />
+            </Field>
+            <Field label="Tolerance"
+              hint={errors.tccTolerance ?? "required — the band is hard"}>
+              <TextInput type="number" value={tccTolerance}
+                aria-invalid={Boolean(errors.tccTolerance)}
+                onChange={(e) => setTccTolerance(e.target.value)} />
+            </Field>
+          </div>
         )}
       </Card>
 

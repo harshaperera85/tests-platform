@@ -136,6 +136,34 @@ class TIFTarget(BaseModel):
         return tuple(self.weights)
 
 
+class TCCTarget(BaseModel):
+    """Target expected score (test characteristic curve) band at θ points (G4).
+
+    ``TCC(θ) = Σ Pᵢ(θ)`` is the *score*-comparability criterion — stronger than
+    the TIF band, which controls *precision* comparability. Unlike the TIF
+    target this is a pure HARD band (no objective; TIF stays the objective):
+    ``tolerance`` is therefore required — a TCC target with no band would
+    constrain nothing. Enforced by the CP-SAT strategies (``mip``, LOFT
+    ``cp_sat``), by LOFT engine (a)'s acceptance loop and engine (c)'s
+    draw-time re-check; ``random_constrained`` reports realized values only
+    (same contract as the TIF tolerance).
+    """
+
+    theta_points: list[float] = Field(min_length=1)
+    target_scores: list[float] = Field(min_length=1)
+    tolerance: float = Field(gt=0.0)
+
+    @model_validator(mode="after")
+    def _check_lengths(self) -> TCCTarget:
+        if len(self.theta_points) != len(self.target_scores):
+            raise ValueError(
+                "theta_points and target_scores must be the same length"
+            )
+        if any(v < 0 for v in self.target_scores):
+            raise ValueError("target_scores must be non-negative")
+        return self
+
+
 class EnemyPolicy(BaseModel):
     """How to honor ``enemy_of`` relations from the bank.
 
@@ -239,6 +267,9 @@ class Blueprint(BaseModel):
     content_constraints: list[ContentConstraint] = Field(default_factory=list)
     #: optional (BP-MODES-1 A1): None ⇒ content-only blueprint (no TIF objective).
     statistical_target: TIFTarget | None = None
+    #: optional expected-score band (G4): hard TCC constraints alongside (or
+    #: without) the TIF target — score comparability across forms/sessions.
+    tcc_target: TCCTarget | None = None
     enemy_policy: EnemyPolicy = Field(default_factory=EnemyPolicy)
     exposure_target: ExposureTarget | None = None
     #: opt-in longitudinal-exposure eligibility feedback (default-off)
@@ -265,5 +296,13 @@ class Blueprint(BaseModel):
             if mn is not None and mn > self.length:
                 raise ValueError(
                     f"constraint {c.key} minimum {mn} exceeds form length {self.length}"
+                )
+        if self.tcc_target is not None:
+            # an expected score cannot exceed the number of items
+            worst = max(self.tcc_target.target_scores)
+            if worst > self.length:
+                raise ValueError(
+                    f"tcc_target score {worst} exceeds form length {self.length} "
+                    "(expected score is bounded by the item count)"
                 )
         return self
