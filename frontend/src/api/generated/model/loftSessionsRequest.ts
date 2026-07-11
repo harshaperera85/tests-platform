@@ -27,4 +27,5 @@ export interface LoftSessionsRequest {
   seed?: number;
   engine?: LoftSessionsRequestEngine;
   test_id?: LoftSessionsRequestTestId;
+  persist_records?: boolean;
 }

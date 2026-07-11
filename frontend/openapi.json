@@ -745,6 +745,70 @@
         }
       }
     },
+    "/api/v1/loft/records": {
+      "get": {
+        "tags": [
+          "loft"
+        ],
+        "summary": "List Loft Records",
+        "description": "Persisted \u00a74.4 conformance records (G5), newest first.",
+        "operationId": "list_loft_records",
+        "parameters": [
+          {
+            "name": "blueprint_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Blueprint Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LoftRecordRead"
+                  },
+                  "title": "Response List Loft Records"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/assembly-jobs": {
       "post": {
         "tags": [
@@ -3110,6 +3174,28 @@
         ],
         "title": "CurvePoint"
       },
+      "DeliveryOptions": {
+        "properties": {
+          "randomize_item_order": {
+            "type": "boolean",
+            "title": "Randomize Item Order",
+            "default": false
+          },
+          "pretest": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PretestConfig"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "title": "DeliveryOptions",
+        "description": "Per-session delivery-time options (G5), shared by fixed-order models.\n\n``randomize_item_order`` scrambles the assembled form per session with a\nseeded, order-independent permutation (Luecht & Sireci security method\n(i)); default OFF preserves the assembled order. Option-order scrambling\nis a rendering concern \u2014 the session seed is carried in state so the\nSessions layer can derive per-item option permutations deterministically."
+      },
       "DispersionPoint": {
         "properties": {
           "theta": {
@@ -4171,6 +4257,64 @@
         "title": "LoftDesign",
         "description": "A LOFT condition: one conforming form assembled per simulee via the real\n\u00a74 engine; the running exposure-rate cap accumulates across the condition.\n\nEngine (c) ``pregenerated`` batch-assembles ``n_pool_forms`` forms ONCE via\nthe real production ``assemble()`` (mip), then each simulee *draws* from\nthat pool (least-drawn rotation, seeded tie-break) \u2014 the Luecht & Sireci\nbatch-in-advance variant, so a study can compare pool sizes directly."
       },
+      "LoftRecordRead": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "blueprint_id": {
+            "type": "string",
+            "title": "Blueprint Id"
+          },
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "engine": {
+            "type": "string",
+            "title": "Engine"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "session_index": {
+            "type": "integer",
+            "title": "Session Index"
+          },
+          "item_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Item Ids"
+          },
+          "record": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Record"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "blueprint_id",
+          "pool_id",
+          "engine",
+          "seed",
+          "session_index",
+          "item_ids",
+          "record",
+          "created_at"
+        ],
+        "title": "LoftRecordRead",
+        "description": "One persisted \u00a74.4 conformance record (G5)."
+      },
       "LoftSessionRead": {
         "properties": {
           "session_index": {
@@ -4262,6 +4406,11 @@
             ],
             "title": "N Pool Forms"
           },
+          "n_records_persisted": {
+            "type": "integer",
+            "title": "N Records Persisted",
+            "default": 0
+          },
           "warnings": {
             "items": {
               "type": "string"
@@ -4326,6 +4475,11 @@
               }
             ],
             "title": "Test Id"
+          },
+          "persist_records": {
+            "type": "boolean",
+            "title": "Persist Records",
+            "default": false
           }
         },
         "type": "object",
@@ -5075,6 +5229,27 @@
         "type": "object",
         "title": "Population"
       },
+      "PretestConfig": {
+        "properties": {
+          "pool_id": {
+            "type": "string",
+            "title": "Pool Id"
+          },
+          "n_items": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "title": "N Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pool_id",
+          "n_items"
+        ],
+        "title": "PretestConfig",
+        "description": "Embedded pretest (G5, the ATS ``PRE>`` design): ``n_items`` unscored\npilot items drawn (seeded) from ``pool_id`` \u2014 typically a content-only\nfield pool \u2014 and interleaved at seeded positions. Scoring excludes them;\nthe classic operational alternative to a whole-form field study."
+      },
       "PreviewRespondRequest": {
         "properties": {
           "state": {
@@ -5161,6 +5336,9 @@
               }
             ],
             "title": "Session Id"
+          },
+          "delivery": {
+            "$ref": "#/components/schemas/DeliveryOptions"
           }
         },
         "type": "object",

@@ -12,7 +12,7 @@ import * as zod from 'zod';
  * @summary Generate Loft Sessions
  */
 export const generateLoftSessionsBodyNSessionsDefault = 1;
-export const generateLoftSessionsBodyNSessionsMax = 2000;export const generateLoftSessionsBodySeedDefault = 0;export const generateLoftSessionsBodyEngineDefault = "random_constrained";
+export const generateLoftSessionsBodyNSessionsMax = 2000;export const generateLoftSessionsBodySeedDefault = 0;export const generateLoftSessionsBodyEngineDefault = "random_constrained";export const generateLoftSessionsBodyPersistRecordsDefault = false;
 
 export const generateLoftSessionsBody = zod.object({
   "blueprint_id": zod.string(),
@@ -20,8 +20,11 @@ export const generateLoftSessionsBody = zod.object({
   "n_sessions": zod.number().min(1).max(generateLoftSessionsBodyNSessionsMax).default(generateLoftSessionsBodyNSessionsDefault),
   "seed": zod.number().optional(),
   "engine": zod.enum(['random_constrained', 'cp_sat', 'pregenerated']).default(generateLoftSessionsBodyEngineDefault),
-  "test_id": zod.union([zod.string(),zod.null()]).optional()
+  "test_id": zod.union([zod.string(),zod.null()]).optional(),
+  "persist_records": zod.boolean().optional()
 }).describe('Generate ``n_sessions`` unique conforming forms for a LOFT-bound blueprint.\n\nSessions are generated sequentially with the §4.2 running exposure-rate cap\napplied across the batch (session *i* is masked by the usage of sessions\n1..i−1) — the same shape as the §7 verification protocol. Live\nper-administration ledger recording arrives with the Sessions module.')
+
+export const generateLoftSessionsResponseNRecordsPersistedDefault = 0;
 
 export const generateLoftSessionsResponse = zod.object({
   "blueprint_id": zod.string(),
@@ -39,6 +42,31 @@ export const generateLoftSessionsResponse = zod.object({
   "max_empirical_rate": zod.number(),
   "n_distinct_forms": zod.number(),
   "n_pool_forms": zod.union([zod.number(),zod.null()]).optional(),
+  "n_records_persisted": zod.number().optional(),
   "warnings": zod.array(zod.string())
 })
+
+/**
+ * Persisted §4.4 conformance records (G5), newest first.
+ * @summary List Loft Records
+ */
+export const listLoftRecordsQueryLimitDefault = 100;
+
+export const listLoftRecordsQueryParams = zod.object({
+  "blueprint_id": zod.union([zod.string(),zod.null()]).optional(),
+  "limit": zod.number().default(listLoftRecordsQueryLimitDefault)
+})
+
+export const listLoftRecordsResponseItem = zod.object({
+  "id": zod.string(),
+  "blueprint_id": zod.string(),
+  "pool_id": zod.string(),
+  "engine": zod.string(),
+  "seed": zod.number(),
+  "session_index": zod.number(),
+  "item_ids": zod.array(zod.string()),
+  "record": zod.record(zod.string(), zod.any()),
+  "created_at": zod.string()
+}).describe('One persisted §4.4 conformance record (G5).')
+export const listLoftRecordsResponse = zod.array(listLoftRecordsResponseItem)
 

@@ -9,6 +9,12 @@ When ``Rscript`` or the requested package is missing (e.g. on the host, where R
 lives only in the ``scoring-r`` container), :func:`is_available` returns ``False``
 and the parity test skips. To exercise it, run inside an image that has R +
 ``eatATA``/``TestDesign`` + ``jsonlite`` installed.
+
+**LOFT parity caveat (G5, pinned):** LOFT engines produce *band-feasible*
+forms, deliberately NOT the minimax optimum (their objective is seeded
+diversity). Any future LOFT-vs-TestDesign parity gate must therefore compare
+**feasibility within the tolerance band(s)**, never objective values —
+comparing objectives would flag correct LOFT behavior as a parity failure.
 """
 
 from __future__ import annotations

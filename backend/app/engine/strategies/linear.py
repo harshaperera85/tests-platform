@@ -31,6 +31,7 @@ from app.engine.contract import (
     TerminationDecision,
 )
 from app.engine.registry import register
+from app.engine.strategies.delivery import apply_delivery, session_seed
 from app.psychometrics.bank import ItemPool, load_default_pool
 from app.psychometrics.params import ItemParameters
 from app.psychometrics.scoring import eap_estimate
@@ -66,15 +67,23 @@ class LinearStrategy(AdministrationStrategy):
                 "context['blueprint'] to determine the form"
             )
 
+        session_id = str(context.get("session_id", "linear-session"))
+        # G5 delivery options: seeded order randomization + pretest embedding.
+        # Defaults leave the assembled order byte-for-byte unchanged.
+        seed = session_seed(context, session_id)
+        order, pretest_ids = apply_delivery(list(item_ids), cfg.delivery, seed)
+
         params = pool.subset(item_ids)
         return SessionState(
             model_type=self.model_type,
-            session_id=str(context.get("session_id", "linear-session")),
+            session_id=session_id,
             position=0,
             completed=False,
             data={
-                "item_ids": list(item_ids),
+                "item_ids": order,
                 "item_params": {p.item_id: _dump_params(p) for p in params},
+                "pretest_item_ids": pretest_ids,
+                "delivery_seed": seed,
                 "responses": {},
                 "navigation": cfg.navigation.model_dump(),
                 "scoring_method": cfg.scoring.method,
@@ -118,7 +127,9 @@ class LinearStrategy(AdministrationStrategy):
         item_ids: list[str] = state.data["item_ids"]
         new = state.model_copy(deep=True)
         item_id, value = _parse_response(response, item_ids, state.position)
-        if item_id not in state.data["item_params"]:
+        if item_id not in state.data["item_params"] and item_id not in set(
+            state.data.get("pretest_item_ids", [])
+        ):
             raise ValueError(f"response references unknown item {item_id!r}")
         new.data["responses"][item_id] = value
         new.position = state.position + 1
@@ -133,11 +144,13 @@ class LinearStrategy(AdministrationStrategy):
 
     # ----------------------------------------------------------------- score
     def score(self, state: SessionState) -> ScoreResult:
-        """EAP theta on the canonical metric over the answered items, in order."""
+        """EAP theta on the canonical metric over the answered OPERATIONAL
+        items, in order — embedded pretest items are unscored (G5)."""
         item_ids: list[str] = state.data["item_ids"]
         responses: dict[str, int] = state.data["responses"]
-        answered = [iid for iid in item_ids if iid in responses]
-        items = [_load_params(state.data["item_params"][iid]) for iid in answered]
+        params: dict[str, Any] = state.data["item_params"]
+        answered = [iid for iid in item_ids if iid in responses and iid in params]
+        items = [_load_params(params[iid]) for iid in answered]
         values = [responses[iid] for iid in answered]
 
         est = eap_estimate(items, values)
@@ -149,6 +162,7 @@ class LinearStrategy(AdministrationStrategy):
                 "method": est.method,
                 "n_answered": len(answered),
                 "n_items": len(item_ids),
+                "n_pretest": len(state.data.get("pretest_item_ids", [])),
             },
         )
 

@@ -151,6 +151,21 @@ Durable to-do list. Status as of the latest commit on `main`.
   sessions/engine: cp_sat worst |TCC−target| 0.791 @ tol 0.8, random 1.496 @
   1.5; banded study 150 simulees, 150 distinct forms, 0 infeasible — RMSE
   0.470 vs ~0.42 unbanded shows the form-space cost honestly).
+- **G5 small items** (2026-07-11, lit-review G5; testlets deferred — platform-
+  wide, long-term). (1) **Seeded item-order randomization**: `DeliveryOptions.
+  randomize_item_order` on Linear/Loft configs (default OFF = byte-identical
+  delivery), keyed per (session seed, item_id) — C5 order-independent; preview
+  endpoint accepts `delivery`; option-order = Sessions rendering (seed carried
+  as `delivery_seed`). (2) **§4.4 record persistence**: `loft_session_record`
+  append-only table (migration 0010), `persist_records` flag on POST
+  /loft/sessions + GET /loft/records (Sessions will persist unconditionally).
+  (3) **Pretest embedding** (ATS PRE>): `DeliveryOptions.pretest {pool_id,
+  n_items}` — seeded draw (field/calibrated pool, disjoint from the form),
+  seeded interleave, scoring EXCLUDES pretest (EAP over operational only);
+  assembly untouched. (4) **Oracle caveat pinned** in r_oracle.py: LOFT parity
+  gates compare band-feasibility, never objectives. Verified: 7 delivery unit
+  tests + persistence integration test + live walk (14 delivered = 12 + 2
+  pretest, 12 scored, identical order on same session id) + live persist/list.
 
 ## Next up
 - **Operational walkthrough** — hands-on validation of the linear path on simulated data.

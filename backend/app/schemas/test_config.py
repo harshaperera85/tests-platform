@@ -26,6 +26,30 @@ class LinearScoringConfig(BaseModel):
     method: Literal["eap"] = "eap"
 
 
+class PretestConfig(BaseModel):
+    """Embedded pretest (G5, the ATS ``PRE>`` design): ``n_items`` unscored
+    pilot items drawn (seeded) from ``pool_id`` — typically a content-only
+    field pool — and interleaved at seeded positions. Scoring excludes them;
+    the classic operational alternative to a whole-form field study."""
+
+    pool_id: str
+    n_items: int = Field(ge=1, le=20)
+
+
+class DeliveryOptions(BaseModel):
+    """Per-session delivery-time options (G5), shared by fixed-order models.
+
+    ``randomize_item_order`` scrambles the assembled form per session with a
+    seeded, order-independent permutation (Luecht & Sireci security method
+    (i)); default OFF preserves the assembled order. Option-order scrambling
+    is a rendering concern — the session seed is carried in state so the
+    Sessions layer can derive per-item option permutations deterministically.
+    """
+
+    randomize_item_order: bool = False
+    pretest: PretestConfig | None = None
+
+
 class LinearConfig(BaseModel):
     """Linear fixed-form configuration (Phase 1).
 
@@ -39,6 +63,7 @@ class LinearConfig(BaseModel):
     assembly_request_id: str | None = None
     navigation: LinearNavigationConfig = Field(default_factory=LinearNavigationConfig)
     scoring: LinearScoringConfig = Field(default_factory=LinearScoringConfig)
+    delivery: DeliveryOptions = Field(default_factory=DeliveryOptions)
 
 
 class CatConfig(BaseModel):
@@ -75,6 +100,7 @@ class LoftConfig(BaseModel):
     time_limit_s: float = Field(default=5.0, gt=0.0)
     navigation: LinearNavigationConfig = Field(default_factory=LinearNavigationConfig)
     scoring: LinearScoringConfig = Field(default_factory=LinearScoringConfig)
+    delivery: DeliveryOptions = Field(default_factory=DeliveryOptions)
 
 
 # Extend this union as models land (MstConfig, ...). The discriminator

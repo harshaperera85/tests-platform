@@ -19,5 +19,6 @@ export interface LoftSessionsRead {
   max_empirical_rate: number;
   n_distinct_forms: number;
   n_pool_forms?: LoftSessionsReadNPoolForms;
+  n_records_persisted?: number;
   warnings: string[];
 }

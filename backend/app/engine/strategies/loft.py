@@ -29,6 +29,7 @@ from app.engine.contract import (
     TerminationDecision,
 )
 from app.engine.registry import register
+from app.engine.strategies.delivery import apply_delivery, session_seed
 from app.psychometrics.bank import ItemPool, load_default_pool
 from app.psychometrics.params import ItemParameters
 from app.psychometrics.scoring import eap_estimate
@@ -66,10 +67,7 @@ class LoftStrategy(AdministrationStrategy):
                 "form path"
             )
         session_id = str(context.get("session_id", "loft-session"))
-        seed = context.get("seed")
-        if seed is None:
-            # stable, platform-independent per-session seed
-            seed = sum((i + 1) * b for i, b in enumerate(session_id.encode())) or 1
+        seed = session_seed(context, session_id)
 
         raw_pool = context.get("form_pool")
         form_pool = (
@@ -94,6 +92,18 @@ class LoftStrategy(AdministrationStrategy):
             form_pool=form_pool,
             draw_counts=context.get("draw_counts"),
         )
+        # G5 delivery options: seeded order randomization + pretest embedding.
+        # The §4.4 record stays about the OPERATIONAL form; delivery facts ride
+        # alongside it.
+        order, pretest_ids = apply_delivery(
+            list(form.item_ids), cfg.delivery, int(seed)
+        )
+        record = dict(form.record)
+        record["delivery"] = {
+            "randomized": cfg.delivery.randomize_item_order,
+            "n_pretest": len(pretest_ids),
+        }
+
         params = pool.subset(form.item_ids)
         return SessionState(
             model_type=self.model_type,
@@ -101,10 +111,12 @@ class LoftStrategy(AdministrationStrategy):
             position=0,
             completed=False,
             data={
-                "item_ids": list(form.item_ids),
+                "item_ids": order,
                 "item_params": {p.item_id: _dump_params(p) for p in params},
+                "pretest_item_ids": pretest_ids,
+                "delivery_seed": int(seed),
                 "responses": {},
-                "conformance_record": form.record,
+                "conformance_record": record,
                 "assembly_warnings": form.warnings,
                 "navigation": cfg.navigation.model_dump(),
                 "scoring_method": cfg.scoring.method,
@@ -130,7 +142,9 @@ class LoftStrategy(AdministrationStrategy):
         item_ids: list[str] = state.data["item_ids"]
         new = state.model_copy(deep=True)
         item_id, value = _parse_response(response, item_ids, state.position)
-        if item_id not in state.data["item_params"]:
+        if item_id not in state.data["item_params"] and item_id not in set(
+            state.data.get("pretest_item_ids", [])
+        ):
             raise ValueError(f"response references unknown item {item_id!r}")
         new.data["responses"][item_id] = value
         new.position = state.position + 1
@@ -145,11 +159,13 @@ class LoftStrategy(AdministrationStrategy):
 
     # ----------------------------------------------------------------- score
     def score(self, state: SessionState) -> ScoreResult:
-        """EAP theta on the canonical metric over the answered items."""
+        """EAP theta on the canonical metric over the answered OPERATIONAL
+        items — embedded pretest items are unscored (G5)."""
         item_ids: list[str] = state.data["item_ids"]
         responses: dict[str, int] = state.data["responses"]
-        answered = [iid for iid in item_ids if iid in responses]
-        items = [_load_params(state.data["item_params"][iid]) for iid in answered]
+        params: dict[str, Any] = state.data["item_params"]
+        answered = [iid for iid in item_ids if iid in responses and iid in params]
+        items = [_load_params(params[iid]) for iid in answered]
         values = [responses[iid] for iid in answered]
         est = eap_estimate(items, values)
         return ScoreResult(
@@ -160,6 +176,7 @@ class LoftStrategy(AdministrationStrategy):
                 "method": est.method,
                 "n_answered": len(answered),
                 "n_items": len(item_ids),
+                "n_pretest": len(state.data.get("pretest_item_ids", [])),
                 "blueprint_conformant": state.data["conformance_record"][
                     "blueprint_conformant"
                 ],

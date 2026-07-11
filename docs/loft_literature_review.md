@@ -183,18 +183,31 @@ machinery.
 
 ### G5 — Small items
 
-- **Item/option order randomization** per session (Luecht & Sireci security
-  method (i)) — currently forms deliver in a fixed order.
-- **§4.4 record persistence** — records are returned/carried in session state but
-  not DB-persisted; the spec says persist. Lands naturally with Sessions.
-- **Oracle-parity caveat** (TestDesign): band-feasibility ≠ minimax-optimality —
-  any future LOFT-vs-TestDesign parity gate must compare *feasibility within
-  band*, never objective values.
-- **Pretest embedding** (ATS `PRE>`): n unscored pilot items per operational
-  form — the classic operational alternative to our whole-form field-study path;
-  worth adding to linear/LOFT assembly when the field study design firms up.
-- **Testlets/sets** — absent platform-wide; TestDesign models them fully
-  (stimulus-level variables/exposure). Already on the long-term list.
+> **STATUS: BUILT (2026-07-11), except testlets (deferred, long-term).**
+
+- **Item/option order randomization** — BUILT: `DeliveryOptions.
+  randomize_item_order` on LinearConfig + LoftConfig (default OFF = unchanged),
+  seeded per session with order-independent keys (C5); the preview endpoint
+  accepts `delivery` so the walkthrough shows exactly what a session presents.
+  Option-order scrambling is a rendering concern — the session's
+  `delivery_seed` is carried in state so Sessions can derive per-item option
+  permutations deterministically.
+- **§4.4 record persistence** — BUILT: `loft_session_record` (append-only,
+  migration 0010) + `persist_records` on `POST /loft/sessions` (default off
+  for previews) + `GET /loft/records`. Sessions will persist unconditionally
+  per administration.
+- **Oracle-parity caveat** — PINNED in `assembly/oracles/r_oracle.py`:
+  band-feasibility ≠ minimax-optimality — any LOFT-vs-TestDesign parity gate
+  compares *feasibility within band(s)*, never objective values.
+- **Pretest embedding** (ATS `PRE>`) — BUILT as delivery-time injection:
+  `DeliveryOptions.pretest {pool_id, n_items}` draws seeded pilot items (field
+  or calibrated pool, never overlapping the operational form), interleaves
+  them at seeded positions, and scoring EXCLUDES them (EAP over operational
+  only; `detail.n_pretest` surfaced). Assembly is untouched — the operational
+  form remains fully conformant.
+- **Testlets/sets** — DEFERRED (unchanged): absent platform-wide; TestDesign
+  models them fully (stimulus-level variables/exposure). Long-term list —
+  a bank/assembly/delivery-wide feature, not a small item.
 
 ## 3. Recommended order
 

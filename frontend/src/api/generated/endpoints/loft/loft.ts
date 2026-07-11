@@ -6,17 +6,28 @@
  * OpenAPI spec version: 0.1.0
  */
 import {
-  useMutation
+  useMutation,
+  useQuery
 } from '@tanstack/react-query';
 import type {
+  DataTag,
+  DefinedInitialDataOptions,
+  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult
+  UseMutationResult,
+  UseQueryOptions,
+  UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
   HTTPValidationError,
+  ListLoftRecordsParams,
+  LoftRecordRead,
   LoftSessionsRead,
   LoftSessionsRequest
 } from '../../model';
@@ -93,4 +104,96 @@ export const useGenerateLoftSessions = <TError = ErrorType<HTTPValidationError>,
 
       return useMutation(mutationOptions, queryClient);
     }
+    /**
+ * Persisted §4.4 conformance records (G5), newest first.
+ * @summary List Loft Records
+ */
+export const listLoftRecords = (
+    params?: ListLoftRecordsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<LoftRecordRead[]>(
+      {url: `/api/v1/loft/records`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getListLoftRecordsQueryKey = (params?: ListLoftRecordsParams,) => {
+    return [
+    `/api/v1/loft/records`, ...(params ? [params]: [])
+    ] as const;
+    }
+
     
+export const getListLoftRecordsQueryOptions = <TData = Awaited<ReturnType<typeof listLoftRecords>>, TError = ErrorType<HTTPValidationError>>(params?: ListLoftRecordsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLoftRecords>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListLoftRecordsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listLoftRecords>>> = ({ signal }) => listLoftRecords(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listLoftRecords>>, TError, TData> & { queryKey: DataTag<QueryKey, TData> }
+}
+
+export type ListLoftRecordsQueryResult = NonNullable<Awaited<ReturnType<typeof listLoftRecords>>>
+export type ListLoftRecordsQueryError = ErrorType<HTTPValidationError>
+
+
+export function useListLoftRecords<TData = Awaited<ReturnType<typeof listLoftRecords>>, TError = ErrorType<HTTPValidationError>>(
+ params: undefined |  ListLoftRecordsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLoftRecords>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listLoftRecords>>,
+          TError,
+          Awaited<ReturnType<typeof listLoftRecords>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListLoftRecords<TData = Awaited<ReturnType<typeof listLoftRecords>>, TError = ErrorType<HTTPValidationError>>(
+ params?: ListLoftRecordsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLoftRecords>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listLoftRecords>>,
+          TError,
+          Awaited<ReturnType<typeof listLoftRecords>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+export function useListLoftRecords<TData = Awaited<ReturnType<typeof listLoftRecords>>, TError = ErrorType<HTTPValidationError>>(
+ params?: ListLoftRecordsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLoftRecords>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> }
+/**
+ * @summary List Loft Records
+ */
+
+export function useListLoftRecords<TData = Awaited<ReturnType<typeof listLoftRecords>>, TError = ErrorType<HTTPValidationError>>(
+ params?: ListLoftRecordsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listLoftRecords>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> } {
+
+  const queryOptions = getListLoftRecordsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+

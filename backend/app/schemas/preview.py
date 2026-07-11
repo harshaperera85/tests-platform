@@ -9,9 +9,10 @@ no session storage and no sequencing/scoring logic; all of that stays in
 
 from __future__ import annotations
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.engine.contract import NextAction, SessionState, TerminationDecision
+from app.schemas.test_config import DeliveryOptions
 
 
 class PreviewStartRequest(BaseModel):
@@ -22,6 +23,9 @@ class PreviewStartRequest(BaseModel):
     pool_id: str = "small_2pl"  # used when starting from a blueprint_id
     assembly_strategy: str = "mip"
     session_id: str | None = None
+    #: G5 delivery options (order randomization / embedded pretest) — the
+    #: preview walks exactly what a delivery session would present.
+    delivery: DeliveryOptions = Field(default_factory=DeliveryOptions)
 
 
 class PreviewRespondRequest(BaseModel):

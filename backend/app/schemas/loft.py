@@ -26,6 +26,10 @@ class LoftSessionsRequest(BaseModel):
     #: engine (c) only: the test whose PUBLISHED forms constitute the
     #: pre-generated pool (batch-assembled, human-reviewed — §4.3(c)).
     test_id: str | None = None
+    #: G5: persist the §4.4 conformance records (append-only,
+    #: ``loft_session_record``). Default off for previews; the Sessions module
+    #: will persist unconditionally per administration.
+    persist_records: bool = False
 
 
 class LoftSessionRead(BaseModel):
@@ -51,4 +55,20 @@ class LoftSessionsRead(BaseModel):
     n_distinct_forms: int
     #: engine (c) only: size of the published pre-generated pool drawn from
     n_pool_forms: int | None = None
+    #: G5: number of §4.4 records persisted by this call (0 unless requested)
+    n_records_persisted: int = 0
     warnings: list[str]
+
+
+class LoftRecordRead(BaseModel):
+    """One persisted §4.4 conformance record (G5)."""
+
+    id: str
+    blueprint_id: str
+    pool_id: str
+    engine: str
+    seed: int
+    session_index: int
+    item_ids: list[str]
+    record: dict[str, Any]
+    created_at: str

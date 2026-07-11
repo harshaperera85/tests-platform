@@ -86,7 +86,11 @@ def start_preview(
                 "their items are uncalibrated (no parameters for scoring)"
             ),
         )
-    state = strategy.initialize(LinearConfig(), pools.load_pool_by_id(pool_id), context)
+    state = strategy.initialize(
+        LinearConfig(delivery=payload.delivery),
+        pools.load_pool_by_id(pool_id),
+        context,
+    )
     return _step(strategy, state)
 
 

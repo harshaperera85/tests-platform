@@ -11,14 +11,21 @@ import * as zod from 'zod';
 /**
  * @summary Start Preview
  */
-export const startPreviewBodyPoolIdDefault = "small_2pl";export const startPreviewBodyAssemblyStrategyDefault = "mip";
+export const startPreviewBodyPoolIdDefault = "small_2pl";export const startPreviewBodyAssemblyStrategyDefault = "mip";export const startPreviewBodyDeliveryRandomizeItemOrderDefault = false;export const startPreviewBodyDeliveryPretestNItemsMax = 20;
 
 export const startPreviewBody = zod.object({
   "blueprint_id": zod.union([zod.string(),zod.null()]).optional(),
   "form_id": zod.union([zod.string(),zod.null()]).optional(),
   "pool_id": zod.string().default(startPreviewBodyPoolIdDefault),
   "assembly_strategy": zod.string().default(startPreviewBodyAssemblyStrategyDefault),
-  "session_id": zod.union([zod.string(),zod.null()]).optional()
+  "session_id": zod.union([zod.string(),zod.null()]).optional(),
+  "delivery": zod.object({
+  "randomize_item_order": zod.boolean().optional(),
+  "pretest": zod.union([zod.object({
+  "pool_id": zod.string(),
+  "n_items": zod.number().min(1).max(startPreviewBodyDeliveryPretestNItemsMax)
+}).describe('Embedded pretest (G5, the ATS ``PRE>`` design): ``n_items`` unscored\npilot items drawn (seeded) from ``pool_id`` — typically a content-only\nfield pool — and interleaved at seeded positions. Scoring excludes them;\nthe classic operational alternative to a whole-form field study.'),zod.null()]).optional()
+}).optional().describe('Per-session delivery-time options (G5), shared by fixed-order models.\n\n``randomize_item_order`` scrambles the assembled form per session with a\nseeded, order-independent permutation (Luecht & Sireci security method\n(i)); default OFF preserves the assembled order. Option-order scrambling\nis a rendering concern — the session seed is carried in state so the\nSessions layer can derive per-item option permutations deterministically.')
 }).describe('Start a dry-run from a stored blueprint (assemble now) or a stored form.')
 
 export const startPreviewResponseStatePositionDefault = 0;export const startPreviewResponseStateCompletedDefault = false;export const startPreviewResponseNextActionNavigationCanReviewDefault = false;export const startPreviewResponseNextActionNavigationCanSkipDefault = false;export const startPreviewResponseNextActionNavigationCanNavigateBackDefault = false;export const startPreviewResponseNextActionNavigationFixedLengthDefault = true;

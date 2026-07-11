@@ -18,10 +18,16 @@ from app.assembly.loft import LoftAssemblyError, PoolFormRef, assemble_loft_sess
 from app.core.db import get_db
 from app.models.blueprint import BlueprintRow
 from app.models.form import FormRow
+from app.models.loft_record import LoftSessionRecordRow
 from app.models.test import TestRow
 from app.psychometrics import pools
 from app.schemas.blueprint import Blueprint
-from app.schemas.loft import LoftSessionRead, LoftSessionsRead, LoftSessionsRequest
+from app.schemas.loft import (
+    LoftRecordRead,
+    LoftSessionRead,
+    LoftSessionsRead,
+    LoftSessionsRequest,
+)
 
 router = APIRouter(prefix="/loft", tags=["loft"])
 
@@ -135,6 +141,24 @@ def generate_loft_sessions(
         if "form_id" in form.record:
             draws[form.record["form_id"]] += 1
 
+    # G5: persist the §4.4 records (append-only) when requested.
+    n_persisted = 0
+    if payload.persist_records:
+        for s in sessions:
+            db.add(
+                LoftSessionRecordRow(
+                    blueprint_id=payload.blueprint_id,
+                    pool_id=payload.pool_id,
+                    engine=payload.engine,
+                    seed=s.seed,
+                    session_index=s.session_index,
+                    item_ids=list(s.item_ids),
+                    record=s.record,
+                )
+            )
+            n_persisted += 1
+        db.commit()
+
     max_rate = (
         max(usage.values()) / payload.n_sessions if usage else 0.0
     )
@@ -148,5 +172,37 @@ def generate_loft_sessions(
         max_empirical_rate=max_rate,
         n_distinct_forms=len(distinct),
         n_pool_forms=len(form_pool) if form_pool is not None else None,
+        n_records_persisted=n_persisted,
         warnings=warnings,
     )
+
+
+@router.get("/records", response_model=list[LoftRecordRead])
+def list_loft_records(
+    blueprint_id: str | None = None,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+) -> list[LoftRecordRead]:
+    """Persisted §4.4 conformance records (G5), newest first."""
+    q = db.query(LoftSessionRecordRow)
+    if blueprint_id is not None:
+        q = q.filter(LoftSessionRecordRow.blueprint_id == blueprint_id)
+    rows = (
+        q.order_by(LoftSessionRecordRow.created_at.desc())
+        .limit(max(1, min(limit, 500)))
+        .all()
+    )
+    return [
+        LoftRecordRead(
+            id=r.id,
+            blueprint_id=r.blueprint_id,
+            pool_id=r.pool_id,
+            engine=r.engine,
+            seed=r.seed,
+            session_index=r.session_index,
+            item_ids=list(r.item_ids),
+            record=r.record,
+            created_at=r.created_at.isoformat(),
+        )
+        for r in rows
+    ]

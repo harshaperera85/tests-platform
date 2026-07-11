@@ -8,6 +8,7 @@
 import type { PreviewStartRequestBlueprintId } from './previewStartRequestBlueprintId';
 import type { PreviewStartRequestFormId } from './previewStartRequestFormId';
 import type { PreviewStartRequestSessionId } from './previewStartRequestSessionId';
+import type { DeliveryOptions } from './deliveryOptions';
 
 /**
  * Start a dry-run from a stored blueprint (assemble now) or a stored form.
@@ -18,4 +19,5 @@ export interface PreviewStartRequest {
   pool_id?: string;
   assembly_strategy?: string;
   session_id?: PreviewStartRequestSessionId;
+  delivery?: DeliveryOptions;
 }

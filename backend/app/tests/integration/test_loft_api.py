@@ -240,3 +240,45 @@ def test_pregenerated_validation_errors(client: TestClient) -> None:
         },
     )
     assert r.status_code == 422 and "no published forms" in r.json()["detail"]
+
+
+# ---------------------------------------------- G5: §4.4 record persistence
+def test_records_persist_when_requested(client: TestClient) -> None:
+    bid = _create_blueprint(client)
+    # default: preview only, nothing persisted
+    r = client.post(
+        "/api/v1/loft/sessions",
+        json={"blueprint_id": bid, "pool_id": "small_2pl", "n_sessions": 3},
+    ).json()
+    assert r["n_records_persisted"] == 0
+    assert client.get(f"/api/v1/loft/records?blueprint_id={bid}").json() == []
+    # opt in: append-only rows, queryable
+    r = client.post(
+        "/api/v1/loft/sessions",
+        json={
+            "blueprint_id": bid,
+            "pool_id": "small_2pl",
+            "n_sessions": 4,
+            "seed": 6,
+            "persist_records": True,
+        },
+    ).json()
+    assert r["n_records_persisted"] == 4
+    rows = client.get(f"/api/v1/loft/records?blueprint_id={bid}").json()
+    assert len(rows) == 4
+    for row in rows:
+        assert row["engine"] == "random_constrained"
+        assert row["record"]["blueprint_conformant"] is True
+        assert len(row["item_ids"]) == 12
+    # append-only: a second persisted batch adds, never replaces
+    client.post(
+        "/api/v1/loft/sessions",
+        json={
+            "blueprint_id": bid,
+            "pool_id": "small_2pl",
+            "n_sessions": 2,
+            "seed": 7,
+            "persist_records": True,
+        },
+    )
+    assert len(client.get(f"/api/v1/loft/records?blueprint_id={bid}").json()) == 6
