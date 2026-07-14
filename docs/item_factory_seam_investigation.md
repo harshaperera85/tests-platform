@@ -280,3 +280,41 @@ re-verified by the item-factory side. The pinned outcomes:
 > NB: investigation only. This **does not unpark** the Tier-3 item-factory seam in `docs/backlog.md`
 > — it sharpens what pinning it will require. Relates to [[one-platform-common-bank]] and the
 > cat-platform seam report (`docs/cat_platform_seam_investigation.md`).
+
+## 8. SHAPE-ACK ROUND — export contract v1.0 CONFIRMED (2026-07-13/14)
+
+item-factory implemented the contract (`docs/export_contract.md` there, envelope
+`cat_ready_v1`) and requested a shape ack (issue #1). Round-trip:
+
+- **Our verification found 2 deltas** (comment `4964003828`): **D1** — export
+  `content_hash` per row (their §5 deposit guard protected their bank, but the
+  exported hash is what our R4 identity check verifies downstream); **D2** —
+  `tags.complicator` must be the curriculum `complicators[].id` UUID verbatim
+  (they exported the 1-based int number — breaking the zero-mapping join with
+  the generator's per-complicator constraints, and the tags dict's string
+  typing). Everything else confirmed as-is.
+- **item-factory landed D1+D2** (`e607d27`) with the hash algorithm pinned in
+  their contract §2: sha256 hex over canonical JSON `{key, options, stem}`
+  (sorted keys, compact separators, ensure_ascii=false), recomputed whenever an
+  item's current version changes.
+- **Our absorb-list adapter shipped** (`19b5825`+`9a6e42e`): cat_ready_v1
+  metadata envelope accepted with caller-supplied `?bank_id=`; `key`→
+  `answer_key` alias; `enemy_of:null` + null tag values tolerated; and a
+  content-hash **integrity** check (recompute §2, warn on content↔hash
+  disagreement) alongside the re-import old-vs-new check. Test fixtures
+  generate real §2 hashes, so both platforms compute the algorithm
+  independently.
+- **End-to-end run of their real sample** (`docs/export_samples/
+  pa_cat_ready_sample.json`, 6 pre-#89 legacy rows): clean import as
+  record-only (status `pass`, uncalibrated — two-axis semantics correct),
+  PRE-EPOCH warning fired as intended, and the **zero-mapping join verified:
+  6/6 items' unit/kc/complicator UUIDs found verbatim in our shipped
+  curriculum catalog**.
+- **Confirmed on issue #1** (comment `4964411868`) → item-factory stamps
+  **v1.0**. Additive changes = minor bump; breaking (incl. §3 vocabulary
+  additions) = major + advance notice on the shared issue.
+
+Unchanged gates: pre-epoch ids never calibration join keys; field studies wait
+on the explicit GO signal; dok blueprint constraints rejected until the epoch
+bank; the campaign export (pilot+live, full hashes, populated cognitive tags)
+flips banks from record-only to administrable/field-eligible.

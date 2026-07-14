@@ -204,7 +204,13 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   calibration join keys (supersedes the earlier "adopt verbatim now" note; adoption holds
   from the epoch, verified via the new content hash). Calibration-engine ownership still
   open (options tabled; item-factory owns the write-back schema regardless). **Importer
-  (#9) BUILT**; real complete data arrives post-campaign. **R7 DELIVERED 2026-07-09**
+  (#9) BUILT**; real complete data arrives post-campaign. **EXPORT CONTRACT v1.0
+  CONFIRMED (2026-07-14, seam doc §8):** shape-ack round complete — D1 (exported
+  content_hash) + D2 (complicator UUID in tags) landed their side; our cat_ready_v1
+  envelope adapter + §2 hash-integrity check shipped (`19b5825`); their real sample
+  ran clean end-to-end, zero-mapping join verified 6/6 against the shipped
+  curriculum catalog. The seam SHAPE is pinned; what remains external is the
+  campaign → epoch → GO signal. **R7 DELIVERED 2026-07-09**
   (inline `n_dimensions` in unit JSONs; catalog refreshed, kc_configs kept as fallback).
   **Field studies gated on an EXPLICIT GO SIGNAL from item-factory** (stronger than
   campaign-completion: never key field data to pre-epoch instance_ids). **CA unit JSONs
