@@ -5,6 +5,7 @@
  * Assembly + administration engine for a large testing program.
  * OpenAPI spec version: 0.1.0
  */
+import type { ItemBankExportInBankId } from './itemBankExportInBankId';
 import type { ItemBankExportInExportVersion } from './itemBankExportInExportVersion';
 import type { ItemBankExportInDomain } from './itemBankExportInDomain';
 import type { ItemBankExportInGeneratedAt } from './itemBankExportInGeneratedAt';
@@ -14,10 +15,14 @@ import type { BankItemIn } from './bankItemIn';
 
 /**
  * One item-bank export document, as POSTed to ``/item-bank/import``.
+
+Accepts both the flat legacy shape and item-factory's ``cat_ready_v1``
+envelope (``{"metadata": {...}, "items": [...]}``) — the envelope carries
+no ``bank_id`` (a tests-platform pool-naming concept), so the import
+caller supplies it (``?bank_id=`` on the endpoint).
  */
 export interface ItemBankExportIn {
-  /** @pattern ^[a-z0-9][a-z0-9_-]{1,63}$ */
-  bank_id: string;
+  bank_id?: ItemBankExportInBankId;
   export_version?: ItemBankExportInExportVersion;
   domain?: ItemBankExportInDomain;
   generated_at?: ItemBankExportInGeneratedAt;

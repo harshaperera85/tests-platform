@@ -121,3 +121,75 @@ def test_generated_blueprint_assembles_imported_items(
     for kc_id, want in shares.items():
         got = sum(1 for iid in form["item_ids"] if kc_of[iid] == kc_id)
         assert got == want, (kc_id, got, want)
+
+
+# ---------------------------------------------------- cat_ready_v1 envelope
+def _sample_export() -> dict:
+    """item-factory's REAL sample export (issue #1 shape-ack round, @e607d27):
+    6 pre-#89 legacy rows — metadata envelope, no bank_id, `key` not
+    `answer_key`, null content_hash/enemy_of/cognitive tags, D2 UUID
+    complicator tags, status 'pass', no parameters."""
+    import json
+    from pathlib import Path
+
+    p = Path(__file__).parent.parent / "data" / "pa_cat_ready_sample.json"
+    return json.loads(p.read_text())
+
+
+def test_cat_ready_v1_sample_imports_end_to_end(client, banks_dir) -> None:
+    doc = _sample_export()
+    # no bank_id anywhere -> the caller must supply one
+    r = client.post("/api/v1/item-bank/import", json=doc)
+    assert r.status_code == 422 and "bank_id" in r.json()["detail"]
+
+    r = client.post("/api/v1/item-bank/import?bank_id=pa-sample", json=doc)
+    assert r.status_code == 200, r.text
+    rep = r.json()
+    assert rep["bank_id"] == "pa-sample" and rep["n_items"] == 6
+    # Stage-A legacy rows, status 'pass': record-only on BOTH axes
+    assert rep["n_administrable"] == 0 and rep["pool_id"] is None
+    assert rep["n_field_eligible"] == 0 and rep["field_pool_id"] is None
+    assert rep["editorial_counts"] == {"pass": 6}
+    assert rep["calibration_counts"] == {"uncalibrated": 6}
+    # pre-epoch: no hashes -> the prominent join-key warning
+    assert any("PRE-EPOCH" in w for w in rep["warnings"])
+
+    # the bank of record kept the adapter-normalized shapes
+    banks = client.get("/api/v1/item-bank").json()
+    b = next(x for x in banks if x["bank_id"] == "pa-sample")
+    assert b["export_version"] == "cat_ready_v1"
+
+
+def test_cat_ready_v1_adapter_normalizations() -> None:
+    from app.schemas.item_bank import ItemBankExportIn
+
+    doc = ItemBankExportIn.model_validate(_sample_export())
+    assert doc.bank_id is None
+    assert doc.export_version == "cat_ready_v1"
+    assert doc.generated_at and doc.generated_at.startswith("2026-07-14")
+    it = doc.items[0]
+    assert it.answer_key == "B"  # their `key` field
+    assert it.enemy_of == []  # null -> empty
+    # null tag values dropped; D2 complicator UUID survives as a string
+    assert "bloom_process" not in it.tags and "domain" not in it.tags
+    for k in ("unit", "kc", "complicator"):
+        assert len(it.tags[k]) == 36  # verbatim UUIDs
+
+
+def test_content_hash_integrity_check() -> None:
+    from app.schemas.item_bank import ItemBankExportIn
+    from app.services.item_bank import content_hash_of
+    from app.tests.util_item_bank import (
+        build_calibrated_export,
+        contract_content_hash,
+    )
+
+    doc = build_calibrated_export(bank_id="hash-check")
+    # fixture hashes are the real contract-§2 algorithm
+    parsed = ItemBankExportIn.model_validate(doc)
+    assert parsed.items[0].content_hash == content_hash_of(parsed.items[0])
+    # both computations agree (service vs fixture helper)
+    it = doc["items"][0]
+    assert it["content_hash"] == contract_content_hash(
+        it["stem"], it["options"], it["answer_key"]
+    )

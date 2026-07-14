@@ -27,6 +27,7 @@ that is the contract violation the hash exists to catch.
 
 from __future__ import annotations
 
+import hashlib
 import json
 from collections import Counter
 from datetime import UTC, datetime
@@ -95,6 +96,20 @@ def _normalize_options(options: list | None) -> list[dict]:
     return out
 
 
+def content_hash_of(item: BankItemIn) -> str:
+    """The contract-pinned content hash (export_contract.md §2): sha256 hex over
+    the canonical JSON of ``{"key", "options", "stem"}`` — sorted keys, compact
+    separators, UTF-8, ``ensure_ascii=false``. Computed on the RAW exported
+    values (pre-normalization), which is what item-factory hashed."""
+    canonical = json.dumps(
+        {"key": item.answer_key, "options": item.options, "stem": item.stem},
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
 def _is_administrable(editorial: str, calibration: str, has_params: bool) -> bool:
     return (
         editorial in ADMINISTRABLE_EDITORIAL
@@ -141,6 +156,29 @@ def _validate(doc: ItemBankExportIn) -> list[str]:
             "content_hash — mixed-epoch export; verify upstream."
         )
 
+    # hash INTEGRITY (D1, contract §2): recompute the pinned algorithm over the
+    # raw exported content and compare. A mismatch means the hash and the
+    # content parted ways somewhere between deposit and here.
+    def _looks_contract_hash(h: str) -> bool:
+        h = h.removeprefix("sha256:")
+        return len(h) == 64 and all(c in "0123456789abcdef" for c in h)
+
+    bad_hash = [
+        i.item_id
+        for i in doc.items
+        if i.content_hash
+        and i.stem is not None
+        and _looks_contract_hash(i.content_hash)
+        and i.content_hash.removeprefix("sha256:") != content_hash_of(i)
+    ]
+    if bad_hash:
+        warnings.append(
+            f"CONTENT-HASH MISMATCH: {len(bad_hash)} item(s) whose exported "
+            f"content_hash does not match the contract §2 recomputation (e.g. "
+            f"{bad_hash[:3]}) — content and hash disagree; raise with "
+            "item-factory."
+        )
+
     # R3 tag expectations (warn, never reject — imported data reality)
     n_no_join = sum(
         1 for i in doc.items if "unit" not in i.tags or "kc" not in i.tags
@@ -180,10 +218,18 @@ def ingest_export(
 ) -> BankIngestReport:
     """Validate, normalize, persist; returns the ingest report.
 
+    ``doc.bank_id`` must be resolved by the caller (cat_ready_v1 envelopes
+    carry none — the API layer takes it as a query parameter).
+
     Raises :class:`BankIngestError` (nothing persisted) on fatal problems,
     including a golden-rule-4 violation: parameters present without a declared
     metric.
     """
+    if doc.bank_id is None:
+        raise BankIngestError(
+            "no bank_id resolved — cat_ready_v1 envelopes carry none; the "
+            "caller must supply one"
+        )
     base = banks_dir if banks_dir is not None else BANKS_DIR
     warnings = _validate(doc)
 

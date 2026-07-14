@@ -8,6 +8,8 @@ share in production. Deterministic — no randomness.
 
 from __future__ import annotations
 
+import hashlib
+import json
 from typing import Any
 
 from app.services import curricula
@@ -23,6 +25,18 @@ def exponents_unit():
     manifest = curricula.get_manifest(PRE_ALGEBRA_COURSE)
     assert manifest is not None
     return next(u for u in manifest.units if u.name == "Exponents")
+
+
+def contract_content_hash(stem: str, options: list, key: str) -> str:
+    """The export-contract §2 hash: sha256 hex over canonical JSON of
+    {key, options, stem} — sorted keys, compact separators, ensure_ascii=false."""
+    canonical = json.dumps(
+        {"key": key, "options": options, "stem": stem},
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def build_calibrated_export(
@@ -45,7 +59,8 @@ def build_calibrated_export(
                     "instance_id": f"{bank_id}-it{n:03d}",
                     "template_id": f"tmpl-{kc.kc_id[:8]}-{j % max(len(comp_ids), 1)}",
                     "radical_config": {"slot": j},
-                    "content_hash": f"sha256:{bank_id}-it{n:03d}",
+                    # real contract-§2 hash (computed below, needs stem/options/key)
+                    "content_hash": None,
                     "status": "live",
                     "calibration_status": "field_calibrated",
                     "stem": f"Item {n} on {kc.name or kc.kc_id}",
@@ -78,6 +93,10 @@ def build_calibrated_export(
                     "calibration": {"model": "2PL", "n": 1200, "date": "2026-07-01"},
                 }
             )
+    for it in items:  # post-epoch export: real contract-§2 hashes
+        it["content_hash"] = contract_content_hash(
+            it["stem"], it["options"], it["answer_key"]
+        )
     return {
         "bank_id": bank_id,
         "export_version": 1,

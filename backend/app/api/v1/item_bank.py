@@ -18,12 +18,30 @@ router = APIRouter(prefix="/item-bank", tags=["item-bank"])
 
 
 @router.post("/import", response_model=BankIngestReport)
-def import_item_bank(doc: ItemBankExportIn) -> BankIngestReport:
+def import_item_bank(
+    doc: ItemBankExportIn, bank_id: str | None = None
+) -> BankIngestReport:
     """Validate + ingest one export document. Fatal problems (duplicate ids,
     partial parameters, undeclared metric with parameters present, reserved
     bank id) return 422 with nothing persisted; data-quality findings come back
     as warnings on the report. Re-importing a bank_id replaces it (content-hash
-    changes under unchanged ids are reported — identity-contract violations)."""
+    changes under unchanged ids are reported — identity-contract violations).
+
+    ``cat_ready_v1`` envelopes carry no bank id — supply ``?bank_id=`` (a
+    tests-platform pool-naming concept, not part of the export contract)."""
+    if doc.bank_id is None and bank_id is not None:
+        # route the caller-supplied id through full validation (slug pattern)
+        doc = ItemBankExportIn.model_validate(
+            {**doc.model_dump(by_alias=False), "bank_id": bank_id}
+        )
+    if doc.bank_id is None:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "no bank_id: cat_ready_v1 envelopes don't carry one — pass "
+                "?bank_id=<slug> on the import call"
+            ),
+        )
     try:
         return ingest_export(doc)
     except BankIngestError as exc:

@@ -57,11 +57,35 @@ class BankItemIn(BaseModel):
 
     stem: str | None = None
     options: list[Any] | None = None
-    answer_key: Any | None = None
+    #: item-factory exports this as ``key`` (the answer letter)
+    answer_key: Any | None = Field(
+        default=None, validation_alias=AliasChoices("answer_key", "key")
+    )
 
-    #: R3 flat tag dict: unit/kc/complicator (verbatim ids) + pinned cognitive dims
+    #: R3 flat tag dict: unit/kc/complicator (verbatim ids) + pinned cognitive dims.
+    #: The contract declares values string-or-null; nulls are dropped at ingest.
     tags: dict[str, str] = Field(default_factory=dict)
+    #: null = never populated (legacy deposit) — normalized to empty
     enemy_of: list[EnemyRef | str] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _tolerate_contract_nulls(cls, data: Any) -> Any:
+        """cat_ready_v1 nullability ground rule: legacy (pre-#89) rows carry
+        null where newer rows carry values. Normalize rather than reject."""
+        if not isinstance(data, dict):
+            return data
+        if data.get("enemy_of") is None:
+            data = {**data, "enemy_of": []}
+        tags = data.get("tags")
+        if isinstance(tags, dict):
+            data = {
+                **data,
+                "tags": {
+                    k: str(v) for k, v in tags.items() if v is not None
+                },
+            }
+        return data
 
     # IRT parameters — nullable from birth (Stage A has none)
     a: float | None = None
@@ -97,9 +121,14 @@ class BankItemIn(BaseModel):
 
 
 class ItemBankExportIn(BaseModel):
-    """One item-bank export document, as POSTed to ``/item-bank/import``."""
+    """One item-bank export document, as POSTed to ``/item-bank/import``.
 
-    bank_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_-]{1,63}$")
+    Accepts both the flat legacy shape and item-factory's ``cat_ready_v1``
+    envelope (``{"metadata": {...}, "items": [...]}``) — the envelope carries
+    no ``bank_id`` (a tests-platform pool-naming concept), so the import
+    caller supplies it (``?bank_id=`` on the endpoint)."""
+
+    bank_id: str | None = Field(default=None, pattern=r"^[a-z0-9][a-z0-9_-]{1,63}$")
     export_version: str | int | None = None
     domain: str | None = None
     generated_at: str | None = None
@@ -107,6 +136,26 @@ class ItemBankExportIn(BaseModel):
     #: REQUIRED (rule 4) when any item carries parameters
     metric: dict[str, Any] | None = None
     items: list[BankItemIn] = Field(min_length=1)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _lift_cat_ready_envelope(cls, data: Any) -> Any:
+        """Map the cat_ready_v1 metadata envelope onto the flat fields."""
+        if not isinstance(data, dict):
+            return data
+        meta = data.get("metadata")
+        if not isinstance(meta, dict):
+            return data
+        lifted = {k: v for k, v in data.items() if k != "metadata"}
+        lifted.setdefault("export_version", meta.get("format"))
+        lifted.setdefault("generated_at", meta.get("exported_at"))
+        statuses = meta.get("include_statuses")
+        lifted.setdefault(
+            "provenance",
+            "item-factory cat_ready export"
+            + (f" (statuses: {', '.join(statuses)})" if statuses else ""),
+        )
+        return lifted
 
 
 class BankIngestReport(BaseModel):

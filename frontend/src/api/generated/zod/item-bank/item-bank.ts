@@ -14,13 +14,20 @@ partial parameters, undeclared metric with parameters present, reserved
 bank id) return 422 with nothing persisted; data-quality findings come back
 as warnings on the report. Re-importing a bank_id replaces it (content-hash
 changes under unchanged ids are reported — identity-contract violations).
+
+``cat_ready_v1`` envelopes carry no bank id — supply ``?bank_id=`` (a
+tests-platform pool-naming concept, not part of the export contract).
  * @summary Import Item Bank
  */
-export const importItemBankBodyBankIdRegExp = new RegExp('^[a-z0-9][a-z0-9_-]{1,63}$');
+export const importItemBankQueryParams = zod.object({
+  "bank_id": zod.union([zod.string(),zod.null()]).optional()
+})
+
+export const importItemBankBodyBankIdRegExpOne = new RegExp('^[a-z0-9][a-z0-9_-]{1,63}$');
 export const importItemBankBodyItemsItemStatusDefault = "unknown";
 
 export const importItemBankBody = zod.object({
-  "bank_id": zod.string().regex(importItemBankBodyBankIdRegExp),
+  "bank_id": zod.union([zod.string().regex(importItemBankBodyBankIdRegExpOne),zod.null()]).optional(),
   "export_version": zod.union([zod.string(),zod.number(),zod.null()]).optional(),
   "domain": zod.union([zod.string(),zod.null()]).optional(),
   "generated_at": zod.union([zod.string(),zod.null()]).optional(),
@@ -52,7 +59,7 @@ export const importItemBankBody = zod.object({
   "se_b": zod.union([zod.number(),zod.null()]).optional(),
   "calibration": zod.union([zod.record(zod.string(), zod.any()),zod.null()]).optional()
 }).describe('One exported item. ``instance_id`` is accepted as an alias of ``item_id``\nand carried verbatim — never re-minted (R4).')).min(1)
-}).describe('One item-bank export document, as POSTed to ``/item-bank/import``.')
+}).describe('One item-bank export document, as POSTed to ``/item-bank/import``.\n\nAccepts both the flat legacy shape and item-factory\'s ``cat_ready_v1``\nenvelope (``{\"metadata\": {...}, \"items\": [...]}``) — the envelope carries\nno ``bank_id`` (a tests-platform pool-naming concept), so the import\ncaller supplies it (``?bank_id=`` on the endpoint).')
 
 export const importItemBankResponseNFieldEligibleDefault = 0;
 

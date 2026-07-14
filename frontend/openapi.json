@@ -642,17 +642,35 @@
           "item-bank"
         ],
         "summary": "Import Item Bank",
-        "description": "Validate + ingest one export document. Fatal problems (duplicate ids,\npartial parameters, undeclared metric with parameters present, reserved\nbank id) return 422 with nothing persisted; data-quality findings come back\nas warnings on the report. Re-importing a bank_id replaces it (content-hash\nchanges under unchanged ids are reported \u2014 identity-contract violations).",
+        "description": "Validate + ingest one export document. Fatal problems (duplicate ids,\npartial parameters, undeclared metric with parameters present, reserved\nbank id) return 422 with nothing persisted; data-quality findings come back\nas warnings on the report. Re-importing a bank_id replaces it (content-hash\nchanges under unchanged ids are reported \u2014 identity-contract violations).\n\n``cat_ready_v1`` envelopes carry no bank id \u2014 supply ``?bank_id=`` (a\ntests-platform pool-naming concept, not part of the export contract).",
         "operationId": "import_item_bank",
+        "parameters": [
+          {
+            "name": "bank_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Bank Id"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ItemBankExportIn"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -4020,8 +4038,15 @@
       "ItemBankExportIn": {
         "properties": {
           "bank_id": {
-            "type": "string",
-            "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$",
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Bank Id"
           },
           "export_version": {
@@ -4094,11 +4119,10 @@
         },
         "type": "object",
         "required": [
-          "bank_id",
           "items"
         ],
         "title": "ItemBankExportIn",
-        "description": "One item-bank export document, as POSTed to ``/item-bank/import``."
+        "description": "One item-bank export document, as POSTed to ``/item-bank/import``.\n\nAccepts both the flat legacy shape and item-factory's ``cat_ready_v1``\nenvelope (``{\"metadata\": {...}, \"items\": [...]}``) \u2014 the envelope carries\nno ``bank_id`` (a tests-platform pool-naming concept), so the import\ncaller supplies it (``?bank_id=`` on the endpoint)."
       },
       "ItemExposure": {
         "properties": {

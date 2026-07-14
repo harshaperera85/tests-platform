@@ -28,6 +28,7 @@ import type {
   BankIngestReport,
   BankSummary,
   HTTPValidationError,
+  ImportItemBankParams,
   ItemBankExportIn
 } from '../../model';
 
@@ -45,10 +46,14 @@ partial parameters, undeclared metric with parameters present, reserved
 bank id) return 422 with nothing persisted; data-quality findings come back
 as warnings on the report. Re-importing a bank_id replaces it (content-hash
 changes under unchanged ids are reported — identity-contract violations).
+
+``cat_ready_v1`` envelopes carry no bank id — supply ``?bank_id=`` (a
+tests-platform pool-naming concept, not part of the export contract).
  * @summary Import Item Bank
  */
 export const importItemBank = (
     itemBankExportIn: BodyType<ItemBankExportIn>,
+    params?: ImportItemBankParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
       
@@ -56,7 +61,8 @@ export const importItemBank = (
       return customInstance<BankIngestReport>(
       {url: `/api/v1/item-bank/import`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: itemBankExportIn, signal
+      data: itemBankExportIn,
+        params, signal
     },
       options);
     }
@@ -64,8 +70,8 @@ export const importItemBank = (
 
 
 export const getImportItemBankMutationOptions = <TError = ErrorType<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importItemBank>>, TError,{data: BodyType<ItemBankExportIn>}, TContext>, request?: SecondParameter<typeof customInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof importItemBank>>, TError,{data: BodyType<ItemBankExportIn>}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importItemBank>>, TError,{data: BodyType<ItemBankExportIn>;params?: ImportItemBankParams}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof importItemBank>>, TError,{data: BodyType<ItemBankExportIn>;params?: ImportItemBankParams}, TContext> => {
 
 const mutationKey = ['importItemBank'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -77,10 +83,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importItemBank>>, {data: BodyType<ItemBankExportIn>}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof importItemBank>>, {data: BodyType<ItemBankExportIn>;params?: ImportItemBankParams}> = (props) => {
+          const {data,params} = props ?? {};
 
-          return  importItemBank(data,requestOptions)
+          return  importItemBank(data,params,requestOptions)
         }
 
         
@@ -96,11 +102,11 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
  * @summary Import Item Bank
  */
 export const useImportItemBank = <TError = ErrorType<HTTPValidationError>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importItemBank>>, TError,{data: BodyType<ItemBankExportIn>}, TContext>, request?: SecondParameter<typeof customInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof importItemBank>>, TError,{data: BodyType<ItemBankExportIn>;params?: ImportItemBankParams}, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof importItemBank>>,
         TError,
-        {data: BodyType<ItemBankExportIn>},
+        {data: BodyType<ItemBankExportIn>;params?: ImportItemBankParams},
         TContext
       > => {
 
