@@ -34,6 +34,8 @@ frontend/src/api/generated/   # orval-generated client (regenerated from OpenAPI
 data/
 # re-include the in-repo curriculum catalog (simulated-data phase, not a runtime artifact)
 !backend/app/data/
+# re-include vendored test assets (e.g. the item-factory sample export)
+!backend/app/tests/data/
 # …but imported item banks ARE runtime artifacts — never commit them
 backend/app/data/item_banks/
 *.sqlite

@@ -1,0 +1,403 @@
+{
+  "metadata": {
+    "exported_at": "2026-07-14T00:15:20.058470Z",
+    "format": "cat_ready_v1",
+    "include_statuses": [
+      "pass"
+    ],
+    "n_items": 6,
+    "sample_note": "Real slice of the current cumulative bank for the issue #1 end-to-end importer run. Rows are pre-#89 legacy deposits: content_hash and the stored cognitive-tag columns are null per the contract's nullability ground rule; tags.unit/kc/complicator resolve live from the curriculum JSONs. Status 'pass' (nothing promoted to pilot/live yet pre-campaign)."
+  },
+  "items": [
+    {
+      "item_id": "U01_KC01_C04_TA_0000",
+      "kc_id": "1.1",
+      "complicator": 4,
+      "template_id": "U01_KC01_C04_TA",
+      "status": "pass",
+      "content_hash": null,
+      "asset_path": null,
+      "asset_status": null,
+      "stem": "Ana claims that $0.1$ and $0.10$ represent the same value. Ben claims that $0.10$ is greater than $0.1$ because $10 > 1$. Identify the student whose reasoning is correct.",
+      "options": [
+        "A. Ana is correct because $0.10$ rounds down to $0.1$ in the tenths place.",
+        "B. Ana is correct because the trailing zero in $0.10$ does not change the value; both equal one-tenth.",
+        "C. Ben is correct because $0.10$ has more digits, so it represents a larger number.",
+        "D. Ben is correct because the hundredths digit makes $0.10$ greater than $0.1$."
+      ],
+      "key": "B",
+      "final_cross_review_verdict": "pass",
+      "meta_synthesis_summary": {
+        "cross_review_final_verdict": "pass",
+        "review_synthesis": {
+          "content": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "fairness": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "editorial": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          }
+        },
+        "cross_review_reinforcement_notes": []
+      },
+      "radical_config": null,
+      "incidental_config": null,
+      "enemy_of": null,
+      "bloom_process": null,
+      "bloom_knowledge": null,
+      "timss_classification": null,
+      "dok": null,
+      "misconception_sources": null,
+      "layer2_context": null,
+      "tags": {
+        "domain": null,
+        "unit": "18d04d3e-89d3-4253-bd85-d3d1b9d7a0b7",
+        "kc": "fdc8f58e-01b7-45ec-95b6-19995f8ab022",
+        "complicator": "487ab034-cbfe-4bc4-a897-bdb212d130b4",
+        "bloom_process": null,
+        "bloom_knowledge": null,
+        "timss": null,
+        "dok": null
+      }
+    },
+    {
+      "item_id": "U01_KC01_C03_TA_0003",
+      "kc_id": "1.1",
+      "complicator": 3,
+      "template_id": "U01_KC01_C03_TA",
+      "status": "pass",
+      "content_hash": null,
+      "asset_path": null,
+      "asset_status": null,
+      "stem": "In the number 3,261,862, the value of the 2 in the hundred-thousands place is ___ times the value of the 2 in the ones place.",
+      "options": [
+        "A. 1,000",
+        "B. 1,000,000",
+        "C. 10,000",
+        "D. 100,000"
+      ],
+      "key": "D",
+      "final_cross_review_verdict": "pass",
+      "meta_synthesis_summary": {
+        "cross_review_final_verdict": "pass",
+        "review_synthesis": {
+          "content": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "fairness": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "editorial": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          }
+        },
+        "cross_review_reinforcement_notes": []
+      },
+      "radical_config": null,
+      "incidental_config": null,
+      "enemy_of": null,
+      "bloom_process": null,
+      "bloom_knowledge": null,
+      "timss_classification": null,
+      "dok": null,
+      "misconception_sources": null,
+      "layer2_context": null,
+      "tags": {
+        "domain": null,
+        "unit": "18d04d3e-89d3-4253-bd85-d3d1b9d7a0b7",
+        "kc": "fdc8f58e-01b7-45ec-95b6-19995f8ab022",
+        "complicator": "0fa92af9-d6e3-4140-a1d6-f033d558328b",
+        "bloom_process": null,
+        "bloom_knowledge": null,
+        "timss": null,
+        "dok": null
+      }
+    },
+    {
+      "item_id": "U11_KC03_C01_TA_0000",
+      "kc_id": "11.3",
+      "complicator": 1,
+      "template_id": "U11_KC03_C01_TA",
+      "status": "pass",
+      "content_hash": null,
+      "asset_path": null,
+      "asset_status": null,
+      "stem": "$(2a^{2})(3a^{3})$ = ?",
+      "options": [
+        "A. $5a^{5}$",
+        "B. $5a^{6}$",
+        "C. $6a^{5}$",
+        "D. $6a^{6}$"
+      ],
+      "key": "C",
+      "final_cross_review_verdict": "pass",
+      "meta_synthesis_summary": {
+        "cross_review_final_verdict": "pass",
+        "review_synthesis": {
+          "content": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "fairness": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "editorial": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          }
+        },
+        "cross_review_reinforcement_notes": []
+      },
+      "radical_config": null,
+      "incidental_config": null,
+      "enemy_of": null,
+      "bloom_process": null,
+      "bloom_knowledge": null,
+      "timss_classification": null,
+      "dok": null,
+      "misconception_sources": null,
+      "layer2_context": null,
+      "tags": {
+        "domain": null,
+        "unit": "ea766e01-30be-4174-bbfe-63997d8acee6",
+        "kc": "ab7196e7-28d0-49ff-8b2b-a582728bb6ef",
+        "complicator": "fccce6d1-9fdf-4510-ad29-1206d8d3c4f9",
+        "bloom_process": null,
+        "bloom_knowledge": null,
+        "timss": null,
+        "dok": null
+      }
+    },
+    {
+      "item_id": "U11_KC03_C01_TB_0000",
+      "kc_id": "11.3",
+      "complicator": 1,
+      "template_id": "U11_KC03_C01_TB",
+      "status": "pass",
+      "content_hash": null,
+      "asset_path": null,
+      "asset_status": null,
+      "stem": "$(-2a^{2})(4a^{3})$ = ?",
+      "options": [
+        "A. $-6a^{5}$",
+        "B. $-8a^{5}$",
+        "C. $-8a^{6}$",
+        "D. $2a^{5}$"
+      ],
+      "key": "B",
+      "final_cross_review_verdict": "pass",
+      "meta_synthesis_summary": {
+        "cross_review_final_verdict": "pass",
+        "review_synthesis": {
+          "content": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "fairness": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "editorial": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          }
+        },
+        "cross_review_reinforcement_notes": []
+      },
+      "radical_config": null,
+      "incidental_config": null,
+      "enemy_of": null,
+      "bloom_process": null,
+      "bloom_knowledge": null,
+      "timss_classification": null,
+      "dok": null,
+      "misconception_sources": null,
+      "layer2_context": null,
+      "tags": {
+        "domain": null,
+        "unit": "ea766e01-30be-4174-bbfe-63997d8acee6",
+        "kc": "ab7196e7-28d0-49ff-8b2b-a582728bb6ef",
+        "complicator": "fccce6d1-9fdf-4510-ad29-1206d8d3c4f9",
+        "bloom_process": null,
+        "bloom_knowledge": null,
+        "timss": null,
+        "dok": null
+      }
+    },
+    {
+      "item_id": "U11_KC03_C01_TC_0000",
+      "kc_id": "11.3",
+      "complicator": 1,
+      "template_id": "U11_KC03_C01_TC",
+      "status": "pass",
+      "content_hash": null,
+      "asset_path": null,
+      "asset_status": null,
+      "stem": "$(2a^{2}b^{2})(3a^{3}b)$ = ?",
+      "options": [
+        "A. $5a^{5}b^{3}$",
+        "B. $6a^{5}b^{2}$",
+        "C. $6a^{5}b^{3}$",
+        "D. $6a^{6}b^{2}$"
+      ],
+      "key": "C",
+      "final_cross_review_verdict": "pass",
+      "meta_synthesis_summary": {
+        "cross_review_final_verdict": "pass",
+        "review_synthesis": {
+          "content": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "fairness": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "editorial": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          }
+        },
+        "cross_review_reinforcement_notes": []
+      },
+      "radical_config": null,
+      "incidental_config": null,
+      "enemy_of": null,
+      "bloom_process": null,
+      "bloom_knowledge": null,
+      "timss_classification": null,
+      "dok": null,
+      "misconception_sources": null,
+      "layer2_context": null,
+      "tags": {
+        "domain": null,
+        "unit": "ea766e01-30be-4174-bbfe-63997d8acee6",
+        "kc": "ab7196e7-28d0-49ff-8b2b-a582728bb6ef",
+        "complicator": "fccce6d1-9fdf-4510-ad29-1206d8d3c4f9",
+        "bloom_process": null,
+        "bloom_knowledge": null,
+        "timss": null,
+        "dok": null
+      }
+    },
+    {
+      "item_id": "U11_KC03_C01_TD_0000",
+      "kc_id": "11.3",
+      "complicator": 1,
+      "template_id": "U11_KC03_C01_TD",
+      "status": "pass",
+      "content_hash": null,
+      "asset_path": null,
+      "asset_status": null,
+      "stem": "$(2a^{2}b^{2})(ab^{3})$ = ?",
+      "options": [
+        "A. $2a^{2}b^{6}$",
+        "B. $2a^{3}b^{5}$",
+        "C. $2a^{3}b^{6}$",
+        "D. $3a^{3}b^{5}$"
+      ],
+      "key": "B",
+      "final_cross_review_verdict": "pass",
+      "meta_synthesis_summary": {
+        "cross_review_final_verdict": "pass",
+        "review_synthesis": {
+          "content": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "fairness": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          },
+          "editorial": {
+            "panel_verdict": "pass",
+            "tie_or_escalation": "none",
+            "final_verdict": "pass",
+            "resolution_rationale": "No disagreement: aggregator's panel verdict honored without meta synthesis.",
+            "priority_defects": []
+          }
+        },
+        "cross_review_reinforcement_notes": []
+      },
+      "radical_config": null,
+      "incidental_config": null,
+      "enemy_of": null,
+      "bloom_process": null,
+      "bloom_knowledge": null,
+      "timss_classification": null,
+      "dok": null,
+      "misconception_sources": null,
+      "layer2_context": null,
+      "tags": {
+        "domain": null,
+        "unit": "ea766e01-30be-4174-bbfe-63997d8acee6",
+        "kc": "ab7196e7-28d0-49ff-8b2b-a582728bb6ef",
+        "complicator": "fccce6d1-9fdf-4510-ad29-1206d8d3c4f9",
+        "bloom_process": null,
+        "bloom_knowledge": null,
+        "timss": null,
+        "dok": null
+      }
+    }
+  ]
+}
