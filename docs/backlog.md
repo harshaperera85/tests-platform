@@ -239,10 +239,27 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
   schema incl. `blueprint_binding` (BP-MODES-1 §5), the item-ingest contract (tags map
   matches our pinned dims), the session surface incl. the §3.5 `blueprint_conformance`
   record, and the §7 verification report (merge-gate evidence). θ scaling already verified
-  D=1 (below). **Still open:** auth story; and the `vendored-blueprint-schema.sha256`
-  canonicalization recipe (ask cat-platform what exactly is hashed so drift checks work).
-  Phase 2 adapter work is now unblocked on contracts — remaining gate is the walkthrough +
-  the user's merge trigger.
+  D=1 (below). **Both former open asks RESOLVED (2026-07-16, Ignite #106/#107):**
+  - **Service auth (production-grade, #106):** OAuth2 client-credentials —
+    `POST /auth/token` (`grant_type=client_credentials`, form-encoded or HTTP Basic),
+    bearer JWT `expires_in` 900 s (adapter: proactive refresh + retry-on-401). Scopes
+    granted: `item-banks:ingest item-banks:read sessions:read sessions:write
+    test-configs:read test-configs:write`; all else 403s centrally. Secrets:
+    `SERVICE_CLIENT_ID`/`SERVICE_CLIENT_SECRET`/`SERVICE_CLIENT_SECRET_SECONDARY`
+    env vars on Ignite (Secrets Manager in deployment; both secrets valid during
+    rotation). **Operational foot-gun:** a non-loginable `role=service` principal row
+    is auto-provisioned so sessions/banks have an owning user_id — deactivating it in
+    the admin UI kills the integration (runbook item). `/ready` now genuinely pings
+    postgres/redis/mirtcat/neural (200/503) — safe to health-gate on.
+  - **sha256 recipe (#107):** the hash is over the RAW BYTES of our
+    `backend/app/schemas/blueprint.py` (no canonicalization; their
+    `refresh_blueprint_contract.sh` curls it from this repo). Drift from G4's
+    `tcc_target` re-vendored at `2f3a5675…`; tcc_target blueprints save cleanly and
+    surface a CAT-ignored binding warning (like TIF targets). Any future blueprint.py
+    edit ⇒ notify Ignite to re-run the refresh script.
+  **Next contract pack will carry the updated OpenAPI (incl. /auth/token).** Phase 2
+  adapter work is now FULLY unblocked — remaining gate is the walkthrough + the
+  user's merge trigger.
 
 ### Pinned metric fact — CAT platform = mirt 1.46.1 = **D = 1 (logistic)**
 *Verified empirically* (throwaway container, R 4.4.2 + mirt 1.46.1, params passed straight
