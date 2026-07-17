@@ -257,9 +257,22 @@ swap point, `CatConfig` + the strategy registry are the CAT slot).
     `tcc_target` re-vendored at `2f3a5675…`; tcc_target blueprints save cleanly and
     surface a CAT-ignored binding warning (like TIF targets). Any future blueprint.py
     edit ⇒ notify Ignite to re-run the refresh script.
-  **Next contract pack will carry the updated OpenAPI (incl. /auth/token).** Phase 2
-  adapter work is now FULLY unblocked — remaining gate is the walkthrough + the
-  user's merge trigger.
+  **Pack `ignite-2026-07-16-f1778fe` VENDORED (c950cbd)** — OpenAPI incl.
+  /auth/token; blueprint hash `2f3a5675…` byte-identical to ours (zero drift).
+  **Ignite final ack (2026-07-17, frozen @ 89a46be):**
+  - *Credential handoff:* dev-compose — Ignite mints the secret into its .env at
+    integration-test time; value transferred terminal-to-terminal (NEVER via
+    chat). Deployment — one secret in Secrets Manager, both sides read it;
+    rotation = promote new primary while the old sits in
+    `SERVICE_CLIENT_SECRET_SECONDARY` ≥ 15 min (their max token lifetime).
+  - *Scope string PINNED final for v1:* `item-banks:ingest item-banks:read
+    sessions:read sessions:write test-configs:read test-configs:write`.
+  - *Service-principal deactivation stays possible by design* (the kill
+    switch); UI labeling + consequence-naming confirm = Ignite parked task
+    #108 (next unfreeze). Runbook item on our side stands.
+  Ignite stays frozen until integration testing or the next drift notice.
+  Phase 2 adapter work is FULLY unblocked — remaining gate is the walkthrough +
+  the user's merge trigger.
 
 ### Pinned metric fact — CAT platform = mirt 1.46.1 = **D = 1 (logistic)**
 *Verified empirically* (throwaway container, R 4.4.2 + mirt 1.46.1, params passed straight
