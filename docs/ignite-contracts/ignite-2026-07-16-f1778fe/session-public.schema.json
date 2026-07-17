@@ -1,0 +1,220 @@
+{
+  "$defs": {
+    "ItemPublic": {
+      "description": "Item content returned to the examinee \u2014 never includes correct_answer\nor psychometric parameters.",
+      "properties": {
+        "item_id": {
+          "title": "Item Id",
+          "type": "integer"
+        },
+        "item_index": {
+          "title": "Item Index",
+          "type": "integer"
+        },
+        "question_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Question Text"
+        },
+        "question_format": {
+          "title": "Question Format",
+          "type": "string"
+        },
+        "options": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Options"
+        }
+      },
+      "required": [
+        "item_id",
+        "item_index",
+        "question_text",
+        "question_format",
+        "options"
+      ],
+      "title": "ItemPublic",
+      "type": "object"
+    }
+  },
+  "description": "Session state returned to the examinee/admin UI.",
+  "properties": {
+    "session_id": {
+      "format": "uuid",
+      "title": "Session Id",
+      "type": "string"
+    },
+    "status": {
+      "title": "Status",
+      "type": "string"
+    },
+    "session_type": {
+      "title": "Session Type",
+      "type": "string"
+    },
+    "test_config_id": {
+      "title": "Test Config Id",
+      "type": "integer"
+    },
+    "test_config_name": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Test Config Name"
+    },
+    "test_config_type": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Test Config Type"
+    },
+    "examinee_id": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Examinee Id"
+    },
+    "items_administered": {
+      "title": "Items Administered",
+      "type": "integer"
+    },
+    "theta": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Theta"
+    },
+    "se": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Se"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "completed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Completed At"
+    },
+    "termination_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Termination Reason"
+    },
+    "next_item": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ItemPublic"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "neural_fallback_used": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Neural Fallback Used"
+    },
+    "blueprint_conformance": {
+      "anyOf": [
+        {
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Blueprint Conformance"
+    }
+  },
+  "required": [
+    "session_id",
+    "status",
+    "session_type",
+    "test_config_id",
+    "items_administered",
+    "started_at"
+  ],
+  "title": "SessionPublic",
+  "type": "object"
+}
