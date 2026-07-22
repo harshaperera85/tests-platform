@@ -368,6 +368,17 @@ Depends on the Tier 3 CAT seam.
 ### Depends on seams (Tier 3 / Phase 2 / Sessions)
 - **Item-bank seam contract test** — after the item-factory export is pinned.
 - **Sessions handoff** — the module's exit: contract + handoff of a locked form/config.
+- **θ → scaled-score transformation (Sessions-era, decided 2026-07-22).** The
+  program's reporting model is IRT-only: EAP θ̂ transformed to a digestible
+  scaled score; raw/number-right is never reported (⇒ TCC band = optional
+  policy — experience consistency / raw-anchored cuts — not a fairness
+  requirement; TIF band across the REPORTING θ range is the binding
+  comparability control). Build: a per-test scale definition (linear θ×a+b
+  and/or lookup table, rounding/clamping rules) applied at score-reporting
+  time — ONE shared contract across linear/LOFT/CAT (Ignite's TestConfig
+  already carries a `score_reporting` block; align with it at the merge, do
+  not invent three). Lands with Sessions/score reporting; SE(θ̂) must
+  propagate through the transform so scaled scores carry their precision.
 - **CAT path load test** — mirtCAT/R concurrency ceiling — after Phase 2.
 - **SME / Admin review screens** (A-038..041) and a deeper lock/version/**publish**
   workflow (basic lock landed in Tier 1).
