@@ -314,11 +314,14 @@ def _solve_cp_sat(
     am = AtaModel(problem)
     add_randomized_band_objective(am, seed)
     solver = cp_model.CpSolver()
-    solver.parameters.max_time_in_seconds = time_limit_s
     solver.parameters.random_seed = seed % (2**31 - 1)
     # single worker: per-session solves are small, and parallel portfolio races
     # break exact seed-reproducibility (lane convention C5)
     solver.parameters.num_search_workers = 1
+    # C5 under load: budget in DETERMINISTIC time so truncation (if any) lands
+    # at the same search point on any machine; wall clock is a hang backstop.
+    solver.parameters.max_deterministic_time = time_limit_s
+    solver.parameters.max_time_in_seconds = time_limit_s * 4
     status = solver.solve(am.model)
     if status not in (cp_model.OPTIMAL, cp_model.FEASIBLE):
         raise LoftAssemblyError(

@@ -55,6 +55,16 @@ class MipStrategy(AssemblyStrategy):
         solver.parameters.max_time_in_seconds = time_limit_s
         solver.parameters.num_search_workers = num_workers
         solver.parameters.random_seed = seed
+        if num_workers == 1:
+            # Single-worker mode exists for exact reproducibility (lane
+            # convention C5). A WALL-clock limit breaks that on a loaded
+            # machine: truncation lands at a different search point per run,
+            # yielding different tie-equivalent optima (observed as a CI-only
+            # flake in the G1 pairing test). Budget the search in CP-SAT's
+            # DETERMINISTIC time instead — identical truncation everywhere —
+            # and keep a generous wall limit purely as a hang backstop.
+            solver.parameters.max_deterministic_time = time_limit_s
+            solver.parameters.max_time_in_seconds = time_limit_s * 4
         status = solver.solve(am.model)
         status_str = _STATUS_MAP.get(status, "error")
 
